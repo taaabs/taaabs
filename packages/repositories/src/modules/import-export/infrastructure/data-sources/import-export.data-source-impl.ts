@@ -6,7 +6,8 @@ import { ListBackups_Dto } from '@shared/types/modules/import-export/list-backup
 import { DownloadBackup_Dto } from '@shared/types/modules/import-export/download-backup.dto'
 import { DownloadBackup_Params } from '../../domain/types/download-backup.params'
 import { system_values } from '@shared/constants/system-values'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
+import { SHA256 } from '@repositories/utils/sha256'
 import { KyInstance } from 'ky'
 import pako from 'pako'
 import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
@@ -47,14 +48,14 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
         if (tag.is_public) {
           tags.push({
             is_public: true,
-            hash: await Crypto.SHA256(tag.name.trim(), encryption_key),
+            hash: await SHA256(tag.name.trim(), encryption_key),
             name: tag.name,
           })
         } else {
           tags.push({
             is_public: false,
-            hash: await Crypto.SHA256(tag.name.trim(), encryption_key),
-            name_aes: await Crypto.AES.encrypt(tag.name.trim(), encryption_key),
+            hash: await SHA256(tag.name.trim(), encryption_key),
+            name_aes: await AES.encrypt(tag.name.trim(), encryption_key),
           })
         }
       }
@@ -69,23 +70,23 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           links.push({
             is_public: true,
             url: link.url.trim(),
-            hash: await Crypto.SHA256(link.url.trim(), encryption_key),
+            hash: await SHA256(link.url.trim(), encryption_key),
             site_path: link.site_path,
             open_snapshot: link.open_snapshot,
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
             reader_data: link.reader_data,
             favicon_aes: link.favicon
-              ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+              ? await AES.encrypt(link.favicon, encryption_key)
               : undefined,
           })
         } else {
           const domain = get_domain_from_url(link.url)
           links.push({
             is_public: false,
-            hash: await Crypto.SHA256(link.url.trim(), encryption_key),
-            url_aes: await Crypto.AES.encrypt(link.url.trim(), encryption_key),
-            site_aes: await Crypto.AES.encrypt(
+            hash: await SHA256(link.url.trim(), encryption_key),
+            url_aes: await AES.encrypt(link.url.trim(), encryption_key),
+            site_aes: await AES.encrypt(
               link.site_path ? `${domain}/${link.site_path}` : domain,
               encryption_key,
             ),
@@ -93,10 +94,10 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
             favicon_aes: link.favicon
-              ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+              ? await AES.encrypt(link.favicon, encryption_key)
               : undefined,
             reader_data_aes: link.reader_data
-              ? await Crypto.AES.encrypt(
+              ? await AES.encrypt(
                   btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
                   encryption_key,
                 )
@@ -110,12 +111,12 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
         title: bookmark.is_public ? title : undefined,
         title_aes:
           !bookmark.is_public && title
-            ? await Crypto.AES.encrypt(title, encryption_key)
+            ? await AES.encrypt(title, encryption_key)
             : undefined,
         note: bookmark.is_public ? note : undefined,
         note_aes:
           !bookmark.is_public && note
-            ? await Crypto.AES.encrypt(note, encryption_key)
+            ? await AES.encrypt(note, encryption_key)
             : undefined,
         created_at: bookmark.created_at || created_at_fallback.toISOString(),
         is_public: bookmark.is_public || undefined,
@@ -126,11 +127,11 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
           bookmark.cover && bookmark.is_public ? bookmark.cover : undefined,
         cover_aes:
           bookmark.cover && !bookmark.is_public
-            ? await Crypto.AES.encrypt(bookmark.cover, encryption_key)
+            ? await AES.encrypt(bookmark.cover, encryption_key)
             : undefined,
         blurhash_aes:
           bookmark.blurhash && !bookmark.is_public
-            ? await Crypto.AES.encrypt(bookmark.blurhash, encryption_key)
+            ? await AES.encrypt(bookmark.blurhash, encryption_key)
             : undefined,
         tags,
         links,
@@ -141,7 +142,7 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
       node: SendImportData_Params['tag_hierarchies'][0],
     ): Promise<SendImportData_Dto.Body['tag_hierarchies'][0]> => {
       return {
-        hash: await Crypto.SHA256(node.name, encryption_key),
+        hash: await SHA256(node.name, encryption_key),
         children: await Promise.all(
           node.children.map(
             async (node) => await parse_tag_hierarchy_node(node),

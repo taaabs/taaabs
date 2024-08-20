@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const PreactRefreshPlugin = require('@prefresh/webpack')
 const { HotModuleReplacementPlugin } = require('webpack')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = (env, argv) => {
   const is_production = argv.mode === 'production'
@@ -12,6 +13,7 @@ module.exports = (env, argv) => {
     entry: {
       background: './src/background/main.ts',
       newtab: './src/newtab/app.tsx',
+      popup: './src/popup/popup.tsx',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -19,6 +21,7 @@ module.exports = (env, argv) => {
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
+      plugins: [new TsconfigPathsPlugin()],
     },
     module: {
       rules: [
@@ -63,10 +66,11 @@ module.exports = (env, argv) => {
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
           { from: 'src/options.html', to: 'options.html' },
           { from: 'src/options.js', to: 'options.js' },
+          { from: 'src/popup.html', to: 'popup.html' }, // Add popup HTML
         ],
       }),
       new MiniCssExtractPlugin({
-        filename: 'style.css',
+        filename: '[name].css', // Use [name] to output CSS files with chunk-specific names
       }),
     ],
     devServer: {

@@ -4,7 +4,7 @@ import { GetTagHierarchies_Params } from '../../domain/types/get-tag-hierarchies
 import { UpdateTagHierarchies_Params } from '../../domain/types/update-tag-hierarchies.params'
 import { TagHierarchy_Entity } from '../../domain/entities/tag-hierarchy.entity'
 import { UpdateTagHierarchies_Dto } from '@shared/types/modules/tag-hierarchies/update-tag-hierarchies.dto'
-import { Crypto } from '@repositories/utils/crypto'
+import { SHA256 } from '@repositories/utils/sha256'
 import { KyInstance } from 'ky'
 
 export class TagHierarchies_DataSourceImpl
@@ -55,7 +55,7 @@ export class TagHierarchies_DataSourceImpl
       node: TagHierarchy_Entity,
     ): Promise<UpdateTagHierarchies_Dto.Node> => {
       return {
-        hash: await Crypto.SHA256(node.name, encryption_key),
+        hash: await SHA256(node.name, encryption_key),
         children: await Promise.all(
           node.children.map(async (node) => await parse_node(node)),
         ),

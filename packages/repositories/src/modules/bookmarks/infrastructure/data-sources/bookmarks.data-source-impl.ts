@@ -9,7 +9,8 @@ import { BookmarksByIds_Dto } from '@shared/types/modules/bookmarks/bookmarks-by
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { RecordVisit_Dto } from '@shared/types/modules/bookmarks/record-visit.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
+import { SHA256 } from '@repositories/utils/sha256'
 import { KyInstance } from 'ky'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
@@ -147,7 +148,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const tags: CreateBookmark_Dto.Body['tags'] = []
     for (const tag of params.tags) {
       if (!tag.name.trim().length) continue
-      const hash = await Crypto.SHA256(tag.name, encryption_key)
+      const hash = await SHA256(tag.name, encryption_key)
       if (tags.find((t) => t.hash == hash)) continue
       if (tag.is_public) {
         tags.push({
@@ -159,7 +160,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         tags.push({
           is_public: false,
           hash,
-          name_aes: await Crypto.AES.encrypt(tag.name.trim(), encryption_key),
+          name_aes: await AES.encrypt(tag.name.trim(), encryption_key),
         })
       }
     }
@@ -167,42 +168,42 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     const links: CreateBookmark_Dto.Body['links'] = []
     for (const link of params.links) {
       if (!link.url.trim().length) continue
-      const hash = await Crypto.SHA256(link.url.trim(), encryption_key)
+      const hash = await SHA256(link.url.trim(), encryption_key)
       if (links.find((l) => l.hash == hash)) continue
       const domain = get_domain_from_url(link.url)
       if (link.is_public) {
         links.push({
           is_public: true,
           url: link.url.trim(),
-          hash: await Crypto.SHA256(link.url.trim(), encryption_key),
+          hash: await SHA256(link.url.trim(), encryption_key),
           site_path: link.is_public ? link.site_path : undefined,
           is_pinned: link.is_pinned,
           pin_title: link.pin_title,
           open_snapshot: link.open_snapshot,
           reader_data: link.reader_data,
           favicon_aes: link.favicon
-            ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+            ? await AES.encrypt(link.favicon, encryption_key)
             : undefined,
         })
       } else {
         links.push({
           is_public: false,
-          url_aes: await Crypto.AES.encrypt(link.url.trim(), encryption_key),
-          site_aes: await Crypto.AES.encrypt(
+          url_aes: await AES.encrypt(link.url.trim(), encryption_key),
+          site_aes: await AES.encrypt(
             link.site_path ? `${domain}/${link.site_path}` : domain,
             encryption_key,
           ),
-          hash: await Crypto.SHA256(link.url.trim(), encryption_key),
+          hash: await SHA256(link.url.trim(), encryption_key),
           is_pinned: link.is_pinned,
           pin_title_aes: link.pin_title
-            ? await Crypto.AES.encrypt(link.pin_title, encryption_key)
+            ? await AES.encrypt(link.pin_title, encryption_key)
             : undefined,
           open_snapshot: link.open_snapshot,
           favicon_aes: link.favicon
-            ? await Crypto.AES.encrypt(link.favicon, encryption_key)
+            ? await AES.encrypt(link.favicon, encryption_key)
             : undefined,
           reader_data_aes: link.reader_data
-            ? await Crypto.AES.encrypt(
+            ? await AES.encrypt(
                 btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
                 encryption_key,
               )
@@ -241,7 +242,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           bookmark_id: params.bookmark_id!,
           bookmark_updated_at: '',
         })
-        cover = await Crypto.AES.decrypt(cover_encrypted, encryption_key)
+        cover = await AES.decrypt(cover_encrypted, encryption_key)
       }
     }
 
@@ -250,12 +251,12 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       title: params.is_public ? params.title : undefined,
       title_aes:
         !params.is_public && params.title
-          ? await Crypto.AES.encrypt(params.title, encryption_key)
+          ? await AES.encrypt(params.title, encryption_key)
           : undefined,
       note: params.is_public ? params.note : undefined,
       note_aes:
         !params.is_public && params.note
-          ? await Crypto.AES.encrypt(params.note, encryption_key)
+          ? await AES.encrypt(params.note, encryption_key)
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
@@ -271,11 +272,11 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       cover: params.is_public ? cover : undefined,
       cover_aes:
         !params.is_public && cover
-          ? await Crypto.AES.encrypt(cover, encryption_key)
+          ? await AES.encrypt(cover, encryption_key)
           : undefined,
       blurhash_aes:
         !params.is_public && params.blurhash
-          ? await Crypto.AES.encrypt(params.blurhash, encryption_key)
+          ? await AES.encrypt(params.blurhash, encryption_key)
           : undefined,
     }
 
@@ -325,7 +326,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
     params: FindByUrlHash_Params,
     encryption_key: Uint8Array,
   ): Promise<FindByUrlHash_Dto.Response> {
-    const hash = await Crypto.SHA256(params.url, encryption_key)
+    const hash = await SHA256(params.url, encryption_key)
     return this._ky.get(`v1/bookmarks/find-by-url-hash/${hash}`).json()
   }
 }

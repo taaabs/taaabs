@@ -101,7 +101,7 @@ check_iframe_support().then(async (supports_iframe) => {
       await fill_clipboard(doc);
       const target_url =
         'https://taaabs.com/library#url=' +
-        encodeURIComponent(document.location) +
+        encodeURIComponent(document.location.href) +
         '&title=' +
         encodeURIComponent(doc.title) +
         '&description=' +
@@ -115,7 +115,7 @@ check_iframe_support().then(async (supports_iframe) => {
     await fill_clipboard(document);
     const target_url =
       'https://taaabs.com/library#url=' +
-      encodeURIComponent(document.location) +
+      encodeURIComponent(document.location.href) +
       '&title=' +
       encodeURIComponent(document.title) +
       '&description=' +

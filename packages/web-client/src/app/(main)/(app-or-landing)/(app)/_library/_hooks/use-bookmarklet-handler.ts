@@ -15,6 +15,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { encode } from 'blurhash'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
+import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/get-cover-with-blurhash'
 
 export const use_bookmarklet_handler = (props: {
   dictionary: Dictionary
@@ -106,73 +107,15 @@ export const use_bookmarklet_handler = (props: {
           clipboard_data = JSON.parse(clipboard_value)
         } catch {}
 
-        let og_image: string | undefined = undefined
-        let og_image_blurhash: string | undefined = undefined
+        let cover: string | undefined = undefined
+        let blurhash: string | undefined = undefined
 
         if (clipboard_data?.og_image) {
-          const img = new Image()
-          img.src = clipboard_data.og_image
-
-          await new Promise((resolve) => {
-            img.onload = resolve
-          })
-
-          const original_width = img.width
-          const original_height = img.height
-
-          // Calculate new dimensions
-          const max_width = 1200
-          let new_width = original_width
-          let new_height = original_height
-
-          if (original_width > max_width) {
-            new_width = max_width
-            new_height = Math.round(
-              (original_height / original_width) * max_width,
-            )
-          }
-
-          // Create canvas for full-size image
-          const full_size_canvas = document.createElement('canvas')
-          full_size_canvas.width = new_width
-          full_size_canvas.height = new_height
-          const full_size_ctx = full_size_canvas.getContext('2d')
-          if (!full_size_ctx)
-            throw new Error('Could not get 2D context from full-size canvas.')
-
-          full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
-          og_image = full_size_canvas.toDataURL('image/webp')
-
-          // Create smaller canvas for Blurhash calculation
-          const blurhash_width = 50
-          const blurhash_height = Math.round(
-            (new_height / new_width) * blurhash_width,
+          const cover_with_blurhash = await get_cover_with_blurhash(
+            clipboard_data.og_image,
           )
-
-          const blurhashCanvas = document.createElement('canvas')
-          blurhashCanvas.width = blurhash_width
-          blurhashCanvas.height = blurhash_height
-          const blurhash_ctx = blurhashCanvas.getContext('2d')
-          if (!blurhash_ctx)
-            throw new Error('Could not get 2D context from Blurhash canvas.')
-
-          // Use built-in scaling of drawImage for better quality
-          blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
-
-          // Calculate Blurhash using the resized image
-          const pixels = blurhash_ctx.getImageData(
-            0,
-            0,
-            blurhash_width,
-            blurhash_height,
-          ).data
-          og_image_blurhash = encode(
-            pixels,
-            blurhash_width,
-            blurhash_height,
-            4,
-            3,
-          )
+          cover = cover_with_blurhash.cover.split(',')[1]
+          blurhash = cover_with_blurhash.blurhash
         }
 
         // Some websites do not update title during SPA navigation
@@ -241,7 +184,7 @@ export const use_bookmarklet_handler = (props: {
           links:
             bookmark_url_hash_data.links?.map((link) => {
               const favicon = clipboard_data?.favicon
-                ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
+                ? clipboard_data.favicon.split(',')[1]
                 : undefined
               const reader_data =
                 bookmark_url_hash_data?.links &&
@@ -263,8 +206,8 @@ export const use_bookmarklet_handler = (props: {
               }
             }) || [],
           tags: [],
-          cover: og_image?.split(',')[1],
-          blurhash: og_image_blurhash,
+          cover,
+          blurhash,
         }
         const created_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({

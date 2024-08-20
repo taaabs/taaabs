@@ -1,7 +1,8 @@
 import { KyInstance } from 'ky'
 import { Tags_DataSource } from './tags.data-source'
 import { Rename_Params } from '../domain/rename.params'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
+import { SHA256 } from '@repositories/utils/sha256'
 import { CheckVisibility_Dto } from '@shared/types/modules/tags/check-visibility'
 import { Rename_Dto } from '@shared/types/modules/tags/rename.dto'
 import { Tags_Dto } from '@shared/types/modules/tags/tags.dto'
@@ -17,7 +18,7 @@ export class Tags_DataSourceImpl implements Tags_DataSource {
     params: Rename_Params,
     encryption_key: Uint8Array,
   ): Promise<void> {
-    const hash = await Crypto.SHA256(params.old_name, encryption_key)
+    const hash = await SHA256(params.old_name, encryption_key)
     const check_visibility_body: CheckVisibility_Dto.Request.Body = {
       hash,
     }
@@ -28,10 +29,10 @@ export class Tags_DataSourceImpl implements Tags_DataSource {
       .json()
 
     const body: Rename_Dto.Request.Body = {
-      old_hash: await Crypto.SHA256(params.old_name, encryption_key),
-      new_hash: await Crypto.SHA256(params.new_name, encryption_key),
+      old_hash: await SHA256(params.old_name, encryption_key),
+      new_hash: await SHA256(params.new_name, encryption_key),
       name: visibility_check_result.is_public ? params.new_name : undefined,
-      name_aes: await Crypto.AES.encrypt(
+      name_aes: await AES.encrypt(
         params.new_name.trim(),
         encryption_key,
       ),

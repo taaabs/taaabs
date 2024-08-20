@@ -2,7 +2,7 @@ import { LibrarySearch_Repository } from '../../domain/repositories/library-sear
 import { GetBookmarks_Params } from '../../domain/types/get-bookmarks.params'
 import { GetBookmarks_Ro } from '../../domain/types/get-bookmarks.ro'
 import { LibrarySearch_DataSource } from '../data-sources/library-search.data-source'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 import pako from 'pako'
 
 export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
@@ -28,7 +28,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           id: tag.id,
           name: tag.name
             ? tag.name
-            : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+            : await AES.decrypt(tag.name_aes!, encryption_key),
         })
       }
 
@@ -37,20 +37,20 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         links.push({
           site: link.site
             ? link.site
-            : await Crypto.AES.decrypt(link.site_aes!, encryption_key),
+            : await AES.decrypt(link.site_aes!, encryption_key),
         })
       }
 
       const title = bookmark.title
         ? bookmark.title
         : bookmark.title_aes
-        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+        ? await AES.decrypt(bookmark.title_aes, encryption_key)
         : undefined
 
       const note = bookmark.note
         ? bookmark.note
         : bookmark.note_aes
-        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+        ? await AES.decrypt(bookmark.note_aes, encryption_key)
         : undefined
 
       bookmarks.push({
@@ -126,12 +126,12 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
             title: bookmark.title
               ? bookmark.title
               : bookmark.title_aes
-              ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+              ? await AES.decrypt(bookmark.title_aes, encryption_key)
               : undefined,
             note: bookmark.note
               ? bookmark.note
               : bookmark.note_aes
-              ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+              ? await AES.decrypt(bookmark.note_aes, encryption_key)
               : undefined,
             is_unsorted:
               bookmark.is_unsorted === undefined
@@ -142,7 +142,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
               bookmark.links.map(async (link) => {
                 const site = link.site
                   ? link.site
-                  : await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+                  : await AES.decrypt(link.site_aes!, encryption_key)
                 const reader_data = link.reader_data
                   ? link.reader_data
                   : link.reader_data_aes
@@ -150,7 +150,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                       pako.inflate(
                         Uint8Array.from(
                           atob(
-                            await Crypto.AES.decrypt(
+                            await AES.decrypt(
                               link.reader_data_aes,
                               encryption_key,
                             ),
@@ -168,7 +168,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
                 id: tag.id,
                 name: tag.name
                   ? tag.name
-                  : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+                  : await AES.decrypt(tag.name_aes!, encryption_key),
               })),
             ),
             stars: bookmark.stars || 0,

@@ -1,4 +1,4 @@
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 import { Tags_Ro } from '../domain/tags.ro'
 import { Rename_Params } from '../domain/rename.params'
 import { Tags_Repository } from '../domain/tags.repository'
@@ -17,7 +17,7 @@ export class Tags_RepositoryImpl implements Tags_Repository {
           console.error('Missing name.')
           throw new Error()
         }
-        name = await Crypto.AES.decrypt(tag.name_aes, encryption_key)
+        name = await AES.decrypt(tag.name_aes, encryption_key)
       }
       all_tags.push({ id: tag.id, name })
     }

@@ -4,7 +4,8 @@ import { Pinned_Dto } from '@shared/types/modules/pinned/pinned.dto'
 import { GetPinned_Params } from '../../domain/types/get-pinned.params'
 import { UpdatePinned_Params } from '../../domain/types/update-pinned.params'
 import { UpdatePinned_Dto } from '@shared/types/modules/pinned/update-pinned.dto'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
+import { SHA256 } from '@repositories/utils/sha256'
 
 export class Pinned_DataSourceImpl implements Pinned_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -26,11 +27,11 @@ export class Pinned_DataSourceImpl implements Pinned_DataSource {
     const items: UpdatePinned_Dto.Item[] = []
     for (const item of params.items) {
       items.push({
-        hash: await Crypto.SHA256(item.url.trim(), encryption_key),
+        hash: await SHA256(item.url.trim(), encryption_key),
         title: item.is_public ? item.title : undefined,
         title_aes:
           !item.is_public && item.title
-            ? await Crypto.AES.encrypt(item.title, encryption_key)
+            ? await AES.encrypt(item.title, encryption_key)
             : undefined,
       })
     }

@@ -5,7 +5,7 @@ import { GetTagHierarchies_Ro } from '../../domain/types/get-tag-hierarchies.ro'
 import { TagHierarchies_DataSource } from '../data-sources/tag-hierarchies.data-source'
 import { GetTagHierarchies_Params } from '../../domain/types/get-tag-hierarchies.params'
 import { UpdateTagHierarchies_Params } from '../../domain/types/update-tag-hierarchies.params'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 
 export class TagHierarchies_RepositoryImpl
   implements TagHierarchies_Repository
@@ -23,7 +23,7 @@ export class TagHierarchies_RepositoryImpl
       name: node.name
         ? node.name
         : node.name_aes
-        ? await Crypto.AES.decrypt(node.name_aes, encryption_key)
+        ? await AES.decrypt(node.name_aes, encryption_key)
         : '',
       yields: node.yields,
       children: await Promise.all(

@@ -9,7 +9,7 @@ import { GetBookmarksByIds_Ro } from '../../domain/types/get-bookmarks-by-ids.ro
 import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-ids.params'
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
 import pako from 'pako'
@@ -31,7 +31,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         id: tag.id,
         name: tag.name
           ? tag.name
-          : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+          : await AES.decrypt(tag.name_aes!, encryption_key),
         is_public: tag.is_public,
       })
     }
@@ -42,14 +42,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       if (link.is_public) {
         site_path = link.site_path
       } else {
-        const site = await Crypto.AES.decrypt(link.site_aes!, encryption_key)
+        const site = await AES.decrypt(link.site_aes!, encryption_key)
         const domain = `${get_domain_from_url(site)}/`
         site_path = site.slice(domain.length)
       }
       links.push({
         url: link.is_public
           ? link.url!
-          : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
+          : await AES.decrypt(link.url_aes!, encryption_key),
         site_path,
         is_public: link.is_public || false,
         saves: link.saves,
@@ -57,11 +57,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         pin_title: link.pin_title
           ? link.pin_title
           : link.pin_title_aes
-          ? await Crypto.AES.decrypt(link.pin_title_aes!, encryption_key)
+          ? await AES.decrypt(link.pin_title_aes!, encryption_key)
           : undefined,
         open_snapshot: link.open_snapshot,
         favicon: link.favicon_aes
-          ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+          ? await AES.decrypt(link.favicon_aes, encryption_key)
           : undefined,
         is_parsed: link.is_parsed,
       })
@@ -77,12 +77,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       title: bookmark.title
         ? bookmark.title
         : bookmark.title_aes
-        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+        ? await AES.decrypt(bookmark.title_aes, encryption_key)
         : undefined,
       note: bookmark.note
         ? bookmark.note
         : bookmark.note_aes
-        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+        ? await AES.decrypt(bookmark.note_aes, encryption_key)
         : undefined,
       is_unsorted: bookmark.is_unsorted,
       stars: bookmark.stars || 0,
@@ -94,7 +94,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       blurhash: bookmark.blurhash
         ? bookmark.blurhash
         : bookmark.blurhash_aes
-        ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+        ? await AES.decrypt(bookmark.blurhash_aes, encryption_key)
         : undefined,
     }
   }
@@ -260,7 +260,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       results.push({
         url: link_data.url
           ? link_data.url
-          : await Crypto.AES.decrypt(link_data.url_aes!, encryption_key),
+          : await AES.decrypt(link_data.url_aes!, encryption_key),
         reader_data: link_data.reader_data
           ? link_data.reader_data
           : link_data.reader_data_aes
@@ -268,7 +268,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               pako.inflate(
                 Uint8Array.from(
                   atob(
-                    await Crypto.AES.decrypt(
+                    await AES.decrypt(
                       link_data.reader_data_aes,
                       encryption_key,
                     ),
@@ -321,12 +321,12 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       title: bookmark.title
         ? bookmark.title
         : bookmark.title_aes
-        ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+        ? await AES.decrypt(bookmark.title_aes, encryption_key)
         : undefined,
       note: bookmark.note
         ? bookmark.note
         : bookmark.note_aes
-        ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+        ? await AES.decrypt(bookmark.note_aes, encryption_key)
         : undefined,
       is_unsorted: bookmark.is_unsorted,
       stars: bookmark.stars || 0,
@@ -336,7 +336,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           id: tag.id,
           name: tag.name
             ? tag.name
-            : await Crypto.AES.decrypt(tag.name_aes!, encryption_key),
+            : await AES.decrypt(tag.name_aes!, encryption_key),
           is_public: tag.is_public || false,
         })),
       ),
@@ -346,17 +346,14 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           if (link.is_public) {
             site_path = link.site_path
           } else {
-            const site = await Crypto.AES.decrypt(
-              link.site_aes!,
-              encryption_key,
-            )
+            const site = await AES.decrypt(link.site_aes!, encryption_key)
             const domain = `${get_domain_from_url(site)}/`
             site_path = site.slice(domain.length)
           }
           return {
             url: link.is_public
               ? link.url!
-              : await Crypto.AES.decrypt(link.url_aes!, encryption_key),
+              : await AES.decrypt(link.url_aes!, encryption_key),
             site_path,
             saves: link.saves,
             is_public: link.is_public || false,
@@ -364,11 +361,11 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             pin_title: link.pin_title
               ? link.pin_title
               : link.pin_title_aes
-              ? await Crypto.AES.decrypt(link.pin_title_aes, encryption_key)
+              ? await AES.decrypt(link.pin_title_aes, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot,
             favicon: link.favicon_aes
-              ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+              ? await AES.decrypt(link.favicon_aes, encryption_key)
               : undefined,
             is_parsed: link.is_parsed,
           }
@@ -379,7 +376,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       blurhash: bookmark.blurhash
         ? bookmark.blurhash
         : bookmark.blurhash_aes
-        ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+        ? await AES.decrypt(bookmark.blurhash_aes, encryption_key)
         : undefined,
     }
   }
@@ -393,7 +390,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     encryption_key: Uint8Array,
   ): Promise<string> {
     const cover_aes = await this._bookmarks_data_source.get_cover(params)
-    return await Crypto.AES.decrypt(cover_aes, encryption_key)
+    return await AES.decrypt(cover_aes, encryption_key)
   }
 
   public async record_visit(params: RecordVisit_Params): Promise<void> {
