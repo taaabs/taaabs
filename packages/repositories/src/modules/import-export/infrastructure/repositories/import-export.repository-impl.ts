@@ -4,7 +4,7 @@ import { DownloadBackup_Params } from '../../domain/types/download-backup.params
 import { ListBackups_Ro } from '../../domain/types/list-backups.ro'
 import { SendImportData_Params } from '../../domain/types/send-import-data.params'
 import { ImportExport_DataSource } from '../data-sources/import-export.data-source'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 import { Backup_Ro } from '../../domain/types/backup.ro'
 import pako from 'pako'
 import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
@@ -45,7 +45,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
       return {
         name: node.name
           ? node.name
-          : await Crypto.AES.decrypt(node.name_aes!, encryption_key),
+          : await AES.decrypt(node.name_aes!, encryption_key),
         children,
       }
     }
@@ -61,7 +61,7 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
           })
         } else if (tag.name_aes) {
           tags.push({
-            name: await Crypto.AES.decrypt(tag.name_aes, encryption_key),
+            name: await AES.decrypt(tag.name_aes, encryption_key),
             is_public: false,
           })
         } else {
@@ -83,27 +83,27 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             reader_data: link.reader_data || undefined,
           })
         } else if (link.url_aes && link.site_aes) {
-          const site = await Crypto.AES.decrypt(link.site_aes, encryption_key)
+          const site = await AES.decrypt(link.site_aes, encryption_key)
           const domain = `${get_domain_from_url(site)}/`
           const site_path = site.slice(domain.length)
           links.push({
-            url: await Crypto.AES.decrypt(link.url_aes, encryption_key),
+            url: await AES.decrypt(link.url_aes, encryption_key),
             site_path: site_path || undefined,
             pin_title: link.pin_title_aes
-              ? await Crypto.AES.decrypt(link.pin_title_aes, encryption_key)
+              ? await AES.decrypt(link.pin_title_aes, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot || undefined,
             is_pinned: link.is_pinned || undefined,
             pin_order: link.pin_order || undefined,
             favicon: link.favicon_aes
-              ? await Crypto.AES.decrypt(link.favicon_aes, encryption_key)
+              ? await AES.decrypt(link.favicon_aes, encryption_key)
               : undefined,
             reader_data: link.reader_data_aes
               ? new TextDecoder().decode(
                   pako.inflate(
                     Uint8Array.from(
                       atob(
-                        await Crypto.AES.decrypt(
+                        await AES.decrypt(
                           link.reader_data_aes,
                           encryption_key,
                         ),
@@ -126,12 +126,12 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
         title: bookmark.title
           ? bookmark.title
           : bookmark.title_aes
-          ? await Crypto.AES.decrypt(bookmark.title_aes, encryption_key)
+          ? await AES.decrypt(bookmark.title_aes, encryption_key)
           : undefined,
         note: bookmark.note
           ? bookmark.note
           : bookmark.note_aes
-          ? await Crypto.AES.decrypt(bookmark.note_aes, encryption_key)
+          ? await AES.decrypt(bookmark.note_aes, encryption_key)
           : undefined,
         is_unsorted: bookmark.is_unsorted, // It's important to store 'false' if is there, meaning bookmark is sorted
         is_archived: bookmark.is_archived,
@@ -139,12 +139,12 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
         cover: bookmark.cover
           ? bookmark.cover
           : bookmark.cover_aes
-          ? await Crypto.AES.decrypt(bookmark.cover_aes, encryption_key)
+          ? await AES.decrypt(bookmark.cover_aes, encryption_key)
           : undefined,
         blurhash: bookmark.blurhash
           ? bookmark.blurhash
           : bookmark.blurhash_aes
-          ? await Crypto.AES.decrypt(bookmark.blurhash_aes, encryption_key)
+          ? await AES.decrypt(bookmark.blurhash_aes, encryption_key)
           : undefined,
         tags,
         links,

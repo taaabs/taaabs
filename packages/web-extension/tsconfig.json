@@ -10,8 +10,21 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "strictPropertyInitialization": false,
+    "experimentalDecorators": true,
     "outDir": "./dist",
-    "types": ["jest", "chrome", "node"]
+    "types": ["jest", "chrome", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/src/*"],
+      "@repositories/*": ["../repositories/src/*"]
+    }
   },
-  "include": ["src"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../shared/src/**/*.ts",
+    "../repositories/src/**/*.ts"
+  ]
 }

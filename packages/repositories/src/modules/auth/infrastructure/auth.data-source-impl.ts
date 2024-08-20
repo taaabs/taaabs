@@ -4,7 +4,7 @@ import { LogIn_Dto } from '@shared/types/modules/auth/log-in.dto'
 import { LogIn_Params } from '../domain/types/log-in.params'
 import { SignUp_Dto } from '@shared/types/modules/auth/sign-up.dto'
 import { SignUp_Params } from '../domain/types/sign-up.params'
-import { Crypto } from '@repositories/utils/crypto'
+import { SHA256 } from '@repositories/utils/sha256'
 import { Refresh_Dto } from '@shared/types/modules/auth/refresh.dto'
 import { Refresh_Params } from '../domain/types/refresh.params'
 import { GuestLogIn_Dto } from '@shared/types/modules/auth/guest-log-in.dto'
@@ -33,7 +33,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
     const body: SignUp_Dto.Request.Body = {
       username: params.username,
       email: params.email,
-      password: await Crypto.SHA256(
+      password: await SHA256(
         params.password,
         encoder.encode(params.email),
       ),
@@ -51,7 +51,7 @@ export class Auth_DataSourceImpl implements Auth_DataSource {
   public async log_in(params: LogIn_Params): Promise<LogIn_Dto.Response> {
     const body: LogIn_Dto.Request.Body = {
       email: params.email,
-      password: await Crypto.SHA256(
+      password: await SHA256(
         params.password,
         encoder.encode(params.email),
       ),

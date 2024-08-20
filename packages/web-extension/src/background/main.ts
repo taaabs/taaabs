@@ -42,11 +42,11 @@ chrome.tabs.onCreated.addListener((tab) => {
   if (tab.pendingUrl == 'chrome://newtab/') {
     chrome.storage.sync.get('useCustomNewTab', (data) => {
       if (!data.useCustomNewTab) {
-        chrome.tabs.update(tab.id!, { url: 'chrome://new-tab-page' });
+        chrome.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
       }
-    });
+    })
   }
-});
+})
 
 chrome.webNavigation.onCommitted.addListener(async (details) => {
   if (details.frameId == 0) {

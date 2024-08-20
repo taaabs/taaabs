@@ -2,7 +2,7 @@ import { Counts_Repository } from '../../domain/repositories/counts.repository'
 import { Counts_Params } from '../../domain/types/counts.params'
 import { Counts_Ro } from '../../domain/types/counts.ro'
 import { Counts_DataSource } from '../data-sources/counts.data-source'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 
 export class Counts_RepositoryImpl implements Counts_Repository {
   constructor(private readonly _counts_data_source: Counts_DataSource) {}
@@ -31,7 +31,7 @@ export class Counts_RepositoryImpl implements Counts_Repository {
                       ...tag,
                       name: tag.name
                         ? tag.name
-                        : await Crypto.AES.decrypt(
+                        : await AES.decrypt(
                             tag.name_aes!,
                             encryption_key,
                           ),

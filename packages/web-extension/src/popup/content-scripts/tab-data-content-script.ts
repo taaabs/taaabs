@@ -1,44 +1,4 @@
-import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
-import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/get-cover-with-blurhash'
-import { HtmlParser } from '@shared/utils/html-parser'
-
-export function setup_context_menus() {
-  // chrome.contextMenus.create({
-  //   id: 'save_to_taaabs',
-  //   title: 'Save to taaabs',
-  //   contexts: ['page'],
-  // })
-
-  // chrome.action.onClicked.addListener((tab) => {
-  //   if (
-  //     tab &&
-  //     tab.url &&
-  //     (tab.url.startsWith('https://taaabs.com') ||
-  //       tab.url.startsWith('chrome://'))
-  //   ) {
-  //     chrome.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
-  //     return
-  //   }
-  //   execute_content_script(tab)
-  // })
-
-  // chrome.contextMenus.onClicked.addListener((info, tab) => {
-  //   if (
-  //     tab &&
-  //     tab.url &&
-  //     (tab.url.startsWith('https://taaabs.com') ||
-  //       tab.url.startsWith('chrome://'))
-  //   ) {
-  //     return
-  //   }
-  //   if (info.menuItemId == 'save_to_taaabs') {
-  //     execute_content_script(tab)
-  //   }
-  // })
-}
-
-type ContentScriptBookmark = {
+export type TabData = {
   url: string
   html: string
   title?: string
@@ -47,9 +7,9 @@ type ContentScriptBookmark = {
   favicon?: string
 }
 
-function execute_content_script(tab: any) {
+export const tab_data_content_script = (tab_id: number) => {
   chrome.scripting.executeScript({
-    target: { tabId: tab.id },
+    target: { tabId: tab_id },
     func: async () => {
       const doc_data = async (
         doc: any,
@@ -174,7 +134,7 @@ function execute_content_script(tab: any) {
               doc.querySelector("meta[name='description']") != null
                 ? (doc.querySelector("meta[name='description']") as any).content
                 : ''
-            const bookmark: ContentScriptBookmark = {
+            const bookmark: TabData = {
               url,
               html,
               title,
@@ -183,7 +143,7 @@ function execute_content_script(tab: any) {
               og_image,
             }
             chrome.runtime.sendMessage({
-              action: 'content_script',
+              action: 'tab_data',
               data: bookmark,
             })
             document.body.removeChild(iframe)
@@ -197,7 +157,7 @@ function execute_content_script(tab: any) {
                   .content
               : ''
           const { html, favicon, og_image } = await doc_data(document)
-          const bookmark: ContentScriptBookmark = {
+          const bookmark: TabData = {
             url,
             html,
             title,
@@ -206,7 +166,7 @@ function execute_content_script(tab: any) {
             og_image,
           }
           chrome.runtime.sendMessage({
-            action: 'content_script',
+            action: 'tab_data',
             data: bookmark,
           })
         }
@@ -214,4 +174,3 @@ function execute_content_script(tab: any) {
     },
   })
 }
-

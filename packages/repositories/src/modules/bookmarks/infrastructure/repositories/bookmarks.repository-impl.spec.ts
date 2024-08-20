@@ -1,5 +1,5 @@
 import { Bookmarks_RepositoryImpl } from './bookmarks.repository-impl'
-import { Crypto } from '@repositories/utils/crypto'
+import { AES } from '@repositories/utils/aes'
 import pako from 'pako'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
@@ -64,7 +64,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       data_source_mock.get_bookmarks_on_authorized_user.mockResolvedValue(
         dto_mock,
       )
-      jest.spyOn(Crypto.AES, 'decrypt').mockResolvedValue('decrypted')
+      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted')
 
       const result = await sut.get_bookmarks_on_authorized_user(
         params,
@@ -125,7 +125,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       data_source_mock.get_bookmarks_by_ids_authorized.mockResolvedValue(
         dto_mock,
       )
-      jest.spyOn(Crypto.AES, 'decrypt').mockResolvedValue('decrypted')
+      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted')
 
       const result = await sut.get_bookmarks_by_ids_authorized(
         params,
@@ -180,7 +180,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       ] as LinksData_Dto.Response.Authorized
 
       data_source_mock.get_links_data_authorized.mockResolvedValue(dto_mock)
-      jest.spyOn(Crypto.AES, 'decrypt').mockResolvedValue('decrypted')
+      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted')
       jest
         .spyOn(pako, 'inflate')
         .mockReturnValue(new Uint8Array([104, 101, 108, 108, 111]))
@@ -233,7 +233,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       } as Bookmarks_Dto.Response.AuthorizedBookmark
 
       data_source_mock.upsert_bookmark.mockResolvedValue(dto_mock)
-      jest.spyOn(Crypto.AES, 'decrypt').mockResolvedValue('decrypted')
+      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted')
 
       const result = await sut.upsert_bookmark(params, encryption_key)
 
@@ -266,7 +266,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       const dto_mock = 'encrypted_cover'
 
       data_source_mock.get_cover.mockResolvedValue(dto_mock)
-      jest.spyOn(Crypto.AES, 'decrypt').mockResolvedValue('decrypted_cover')
+      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted_cover')
 
       const result = await sut.get_cover(params, encryption_key)
 
