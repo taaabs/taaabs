@@ -1,13 +1,13 @@
-const path = require('path')
-const CopyWebpackPlugin = require('copy-webpack-plugin')
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PreactRefreshPlugin = require('@prefresh/webpack')
-const { HotModuleReplacementPlugin } = require('webpack')
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PreactRefreshPlugin = require('@prefresh/webpack');
+const { HotModuleReplacementPlugin } = require('webpack');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = (env, argv) => {
-  const is_production = argv.mode === 'production'
+  const is_production = argv.mode === 'production';
 
   return {
     entry: {
@@ -66,7 +66,7 @@ module.exports = (env, argv) => {
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
           { from: 'src/options.html', to: 'options.html' },
           { from: 'src/options.js', to: 'options.js' },
-          { from: 'src/popup.html', to: 'popup.html' }, // Add popup HTML
+          { from: 'src/popup.html', to: 'popup.html' }, 
         ],
       }),
       new MiniCssExtractPlugin({
@@ -77,9 +77,11 @@ module.exports = (env, argv) => {
       static: {
         directory: path.join(__dirname, 'dist'),
       },
-      compress: true,
       port: 9000,
       hot: true,
     },
-  }
-}
+    optimization: {
+      minimize: false,
+    },
+  };
+};

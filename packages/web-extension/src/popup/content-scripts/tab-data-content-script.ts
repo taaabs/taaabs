@@ -134,7 +134,7 @@ export const tab_data_content_script = (tab_id: number) => {
               doc.querySelector("meta[name='description']") != null
                 ? (doc.querySelector("meta[name='description']") as any).content
                 : ''
-            const bookmark: TabData = {
+            const tab_data: TabData = {
               url,
               html,
               title,
@@ -144,7 +144,7 @@ export const tab_data_content_script = (tab_id: number) => {
             }
             chrome.runtime.sendMessage({
               action: 'tab_data',
-              data: bookmark,
+              tab_data,
             })
             document.body.removeChild(iframe)
           })
@@ -157,7 +157,7 @@ export const tab_data_content_script = (tab_id: number) => {
                   .content
               : ''
           const { html, favicon, og_image } = await doc_data(document)
-          const bookmark: TabData = {
+          const tab_data: TabData = {
             url,
             html,
             title,
@@ -167,7 +167,7 @@ export const tab_data_content_script = (tab_id: number) => {
           }
           chrome.runtime.sendMessage({
             action: 'tab_data',
-            data: bookmark,
+            tab_data,
           })
         }
       })

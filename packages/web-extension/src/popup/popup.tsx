@@ -28,32 +28,34 @@ export const Popup: preact.FunctionComponent = () => {
     })
     chrome.runtime.onMessage.addListener(async (request) => {
       if (request.action == 'tab_data') {
-        const data = request.data as TabData
+        const tab_data = request.tab_data as TabData
         const reader_data = HtmlParser.parse({
-          url: data.url,
-          html: data.html,
+          url: tab_data.url,
+          html: tab_data.html,
         })?.reader_data
 
-        const favicon = data?.favicon ? data.favicon.split(',')[1] : undefined
+        const favicon = tab_data?.favicon
+          ? tab_data.favicon.split(',')[1]
+          : undefined
 
         let cover: string | undefined = undefined
         let blurhash: string | undefined = undefined
 
-        if (data?.og_image) {
+        if (tab_data?.og_image) {
           const cover_with_blurhash = await get_cover_with_blurhash(
-            data.og_image,
+            tab_data.og_image,
           )
           cover = cover_with_blurhash.cover.split(',')[1]
           blurhash = cover_with_blurhash.blurhash
         }
 
-        const url = url_cleaner(data.url)
+        const url = url_cleaner(tab_data.url)
 
         const new_bookmark: UpsertBookmark_Params = {
           is_public: false,
           is_archived: false,
-          title: data.title,
-          note: data.description,
+          title: tab_data.title,
+          note: tab_data.description,
           tags: [],
           links: [
             {

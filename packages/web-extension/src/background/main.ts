@@ -26,6 +26,15 @@ chrome.tabs.onCreated.addListener((tab) => {
   }
 })
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action == 'get_auth_data') {
+    chrome.storage.local.get(['auth_data'], (result) => {
+      sendResponse(result.auth_data)
+    })
+    return true // Keep the message channel open for sendResponse
+  }
+})
+
 const update_icon = (tab_id: number, is_saved?: boolean) => {
   let icon_paths = {
     16: 'icons/icon16.png',
