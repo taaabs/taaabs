@@ -3,7 +3,7 @@ import styles from './app.module.scss'
 import { Search } from './components/Search'
 import { Bookmarks } from './components/Bookmarks'
 
-import '../../../web-ui/src/styles/style.scss'
+import '../../../../web-ui/src/styles/style.scss'
 
 export const App: preact.FunctionComponent = () => {
   return (

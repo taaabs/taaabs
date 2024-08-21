@@ -1,22 +1,36 @@
+import ky from 'ky'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { get_is_url_saved } from './get-is-url-saved'
+import { get_auth_data } from '@/helpers/get-auth-data'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
 chrome.action.onClicked.addListener((tab) => {
-  chrome.tabs.sendMessage(tab.id!, { action: 'inject_popup' });
-});
+  chrome.tabs.sendMessage(tab.id!, { action: 'inject_popup' })
+})
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'someAction') {
-    console.log('Received someAction from Preact app:', request.data);
-    // Process the request and prepare a response
-    const response = { status: 'processed', result: 'someResult' };
-    // Send the response back to the content script
-    sendResponse(response);
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  if (request.action == 'someAction') {
+    const auth_data = await get_auth_data()
+    const ky_instance = ky.create({
+      prefixUrl: 'https://api.taaabs.com/',
+      headers: {
+        Authorization: `Bearer ${auth_data.access_token}`,
+      },
+    })
+
+    const created_bookmark = await ky_instance
+      .post('v1/bookmarks', {
+        json: request.data,
+      })
+      .json()
+
+    console.log('Bookmark has been created!', created_bookmark)
+
+    sendResponse()
   }
-});
+})
 
 chrome.contextMenus.create({
   id: 'open_my_library',

@@ -7,14 +7,17 @@ const { HotModuleReplacementPlugin } = require('webpack')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const is_production = argv.mode === 'production'
+  const is_production = argv.mode == 'production'
 
   return {
     entry: {
       background: './src/background/main.ts',
-      newtab: './src/newtab/app.tsx',
-      popup: './src/popup/popup.tsx',
-      'popup-injected': './src/popup-injected.tsx', // Add this entry
+      newtab: './src/views/newtab/app.tsx',
+      popup: './src/views/popup/popup.tsx',
+      'get-auth-data-content-script':
+        './src/content-scripts/get-auth-data-content-script.ts',
+      'inject-popup-content-script':
+        './src/content-scripts/inject-popup-content-script.ts',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -59,20 +62,11 @@ module.exports = (env, argv) => {
         patterns: [
           { from: 'src/manifest.json', to: 'manifest.json' },
           { from: 'src/icons', to: 'icons' },
-          {
-            from: 'src/content-scripts/get-token.js',
-            to: 'content-scripts/get-token.js',
-          },
-          { from: 'src/newtab.html', to: 'newtab.html' },
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
-          { from: 'src/options.html', to: 'options.html' },
-          { from: 'src/options.js', to: 'options.js' },
-          { from: 'src/popup.html', to: 'popup.html' },
-          { from: 'src/popup-injected.html', to: 'popup-injected.html' },
-          {
-            from: 'src/content-scripts/inject-popup.js',
-            to: 'content-scripts/inject-popup.js',
-          },
+          { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
+          { from: 'src/views/options/options.html', to: 'options.html' },
+          { from: 'src/views/options/options.js', to: 'options.js' },
+          { from: 'src/views/popup/popup.html', to: 'popup.html' },
         ],
       }),
       new MiniCssExtractPlugin({

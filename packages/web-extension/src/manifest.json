@@ -20,12 +20,11 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup-injected.html", "popup-injected.bundle.js"],
+      "resources": ["popup.html", "popup.bundle.js"],
       "matches": ["<all_urls>"]
     }
   ],
   "author": "Taaabs, Inc.",
-  "host_permissions": ["https://taaabs.com/*"],
   "permissions": [
     "storage",
     "scripting",
@@ -42,11 +41,11 @@
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
-      "js": ["content-scripts/get-token.js"]
+      "js": ["get-auth-data-content-script.bundle.js"]
     },
     {
       "matches": ["<all_urls>"],
-      "js": ["content-scripts/inject-popup.js"]
+      "js": ["inject-popup-content-script.bundle.js"]
     }
   ],
   "chrome_url_overrides": {

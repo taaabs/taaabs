@@ -1,14 +1,11 @@
 import { render } from 'preact'
-import { useEffect, useState } from 'preact/hooks'
-import styles from './popup/popup.module.scss'
+import { useEffect } from 'preact/hooks'
+import styles from './popup.module.scss'
 
-import '../../web-ui/src/styles/style.scss'
+import '../../../../web-ui/src/styles/style.scss'
 import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/get-cover-with-blurhash'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { HtmlParser } from '@shared/utils/html-parser'
-import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
-import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infrastructure/data-sources/bookmarks.data-source-impl'
-import ky from 'ky'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 
 export type TabData = {
@@ -20,36 +17,22 @@ export type TabData = {
   favicon?: string
 }
 
-const sendMessage = (message:any) => {
-  window.postMessage({ from: 'preactApp', ...message }, '*');
-};
+const sendMessage = (message: any) => {
+  window.postMessage({ from: 'preactApp', ...message }, '*')
+}
 
-export const PopupInjected: preact.FunctionComponent = () => {
-  const [authData, setAuthData] = useState<any>(null)
-
-
-
+export const Popup: preact.FunctionComponent = () => {
   useEffect(() => {
-    // const port = chrome.runtime.connect({ name: 'popup-injected' });
-
-    // port.postMessage({ action: 'test' });
-
-    // port.onMessage.addListener((message) => {
-    //   if (message.action === 'test') {
-    //     console.log('Received response from background:', message.response);
-    //   }
-    // });
-
-    // return () => {
-    //   port.disconnect();
-    // };
-    window.addEventListener('message', event => {
-      if (event.source !== window) return;
+    window.addEventListener('message', (event) => {
+      if (event.source !== window) return
       if (event.data && event.data.from === 'contentScript') {
-        console.log('Received response from background script:', event.data.response);
+        console.log(
+          'Received response from background script:',
+          event.data,
+        )
       }
-    });
-  }, []);
+    })
+  }, [])
 
   const create_bookmark = async () => {
     const x = async (tab_data: TabData) => {
@@ -92,19 +75,7 @@ export const PopupInjected: preact.FunctionComponent = () => {
         blurhash,
       }
 
-      // const ky_instance = ky.create({
-      //   prefixUrl: 'https://api.taaabs.com/',
-      //   headers: {
-      //     Authorization: `Bearer ${authData.access_token}`,
-      //   },
-      // })
-      // const data_source = new Bookmarks_DataSourceImpl(ky_instance)
-      // const repository = new Bookmarks_RepositoryImpl(data_source)
-      // await repository.upsert_bookmark(
-      //   new_bookmark,
-      //   new Uint8Array(authData.encryption_key),
-      // )
-
+      sendMessage({ action: 'someAction', data: new_bookmark })
       console.log('Bookmark created!', new_bookmark)
     }
 
@@ -268,10 +239,7 @@ export const PopupInjected: preact.FunctionComponent = () => {
     <div className={styles.container}>
       hi
       <button
-        onClick={() => {
-          // create_bookmark()
-          sendMessage({ action: 'someAction', data: 'someData' });
-        }}
+        onClick={create_bookmark}
       >
         Save
       </button>
@@ -281,4 +249,4 @@ export const PopupInjected: preact.FunctionComponent = () => {
   )
 }
 
-render(<PopupInjected />, document.getElementById('root-taaabs-popup')!)
+render(<Popup />, document.getElementById('root-taaabs-popup')!)
