@@ -20,23 +20,35 @@ export type TabData = {
   favicon?: string
 }
 
+const sendMessage = (message:any) => {
+  window.postMessage({ from: 'preactApp', ...message }, '*');
+};
+
 export const PopupInjected: preact.FunctionComponent = () => {
   const [authData, setAuthData] = useState<any>(null)
 
+
+
   useEffect(() => {
-    const port = chrome.runtime.connect({ name: 'popup-injected' });
+    // const port = chrome.runtime.connect({ name: 'popup-injected' });
 
-    port.postMessage({ action: 'test' });
+    // port.postMessage({ action: 'test' });
 
-    port.onMessage.addListener((message) => {
-      if (message.action === 'test') {
-        console.log('Received response from background:', message.response);
+    // port.onMessage.addListener((message) => {
+    //   if (message.action === 'test') {
+    //     console.log('Received response from background:', message.response);
+    //   }
+    // });
+
+    // return () => {
+    //   port.disconnect();
+    // };
+    window.addEventListener('message', event => {
+      if (event.source !== window) return;
+      if (event.data && event.data.from === 'contentScript') {
+        console.log('Received response from background script:', event.data.response);
       }
     });
-
-    return () => {
-      port.disconnect();
-    };
   }, []);
 
   const create_bookmark = async () => {
@@ -257,8 +269,8 @@ export const PopupInjected: preact.FunctionComponent = () => {
       hi
       <button
         onClick={() => {
-          create_bookmark()
-          chrome.runtime.sendMessage({ action: 'test' });
+          // create_bookmark()
+          sendMessage({ action: 'someAction', data: 'someData' });
         }}
       >
         Save
@@ -269,4 +281,4 @@ export const PopupInjected: preact.FunctionComponent = () => {
   )
 }
 
-render(<PopupInjected />, document.getElementById('root')!)
+render(<PopupInjected />, document.getElementById('root-taaabs-popup')!)

@@ -1,19 +1,20 @@
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PreactRefreshPlugin = require('@prefresh/webpack');
-const { HotModuleReplacementPlugin } = require('webpack');
-const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const PreactRefreshPlugin = require('@prefresh/webpack')
+const { HotModuleReplacementPlugin } = require('webpack')
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const is_production = argv.mode === 'production';
+  const is_production = argv.mode === 'production'
 
   return {
     entry: {
       background: './src/background/main.ts',
       newtab: './src/newtab/app.tsx',
       popup: './src/popup/popup.tsx',
+      'popup-injected': './src/popup-injected.tsx', // Add this entry
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -66,7 +67,12 @@ module.exports = (env, argv) => {
           { from: 'src/detect-theme.js', to: 'detect-theme.js' },
           { from: 'src/options.html', to: 'options.html' },
           { from: 'src/options.js', to: 'options.js' },
-          { from: 'src/popup.html', to: 'popup.html' }, 
+          { from: 'src/popup.html', to: 'popup.html' },
+          { from: 'src/popup-injected.html', to: 'popup-injected.html' },
+          {
+            from: 'src/content-scripts/inject-popup.js',
+            to: 'content-scripts/inject-popup.js',
+          },
         ],
       }),
       new MiniCssExtractPlugin({
@@ -77,11 +83,12 @@ module.exports = (env, argv) => {
       static: {
         directory: path.join(__dirname, 'dist'),
       },
+      compress: true,
       port: 9000,
       hot: true,
     },
     optimization: {
       minimize: false,
     },
-  };
-};
+  }
+}

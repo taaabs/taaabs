@@ -4,6 +4,20 @@ import { get_is_url_saved } from './get-is-url-saved'
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
+chrome.action.onClicked.addListener((tab) => {
+  chrome.tabs.sendMessage(tab.id!, { action: 'inject_popup' });
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'someAction') {
+    console.log('Received someAction from Preact app:', request.data);
+    // Process the request and prepare a response
+    const response = { status: 'processed', result: 'someResult' };
+    // Send the response back to the content script
+    sendResponse(response);
+  }
+});
+
 chrome.contextMenus.create({
   id: 'open_my_library',
   title: 'Open my library',
