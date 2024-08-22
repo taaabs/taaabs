@@ -26,7 +26,6 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
     date_view_options_hook,
     filter_view_options_hook,
     tag_hierarchies_hook,
-    counts_hook,
 
     username,
     library_updated_at_timestamp,
@@ -101,9 +100,8 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
             }
           }
         }}
-        on_tag_rename_click={(id: number) => {
-          const name = counts_hook.tags![id].name
-          on_tag_rename_click({ name, id })
+        on_tag_rename_click={({ id, name }) => {
+          on_tag_rename_click({ id, name })
         }}
         translations={{
           all_bookmarks: props.dictionary.app.library.all_bookmarks,
