@@ -316,6 +316,9 @@ importers:
       '@mozilla/readability':
         specifier: ^0.5.0
         version: 0.5.0
+      blurhash:
+        specifier: ^2.0.5
+        version: 2.0.5
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
@@ -571,9 +574,6 @@ importers:
       beautiful-react-hooks:
         specifier: ^5.0.2
         version: 5.0.2(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rxjs@7.8.1)
-      blurhash:
-        specifier: ^2.0.5
-        version: 2.0.5
       canvas-confetti:
         specifier: ^1.9.3
         version: 1.9.3

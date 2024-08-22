@@ -39,6 +39,7 @@ const Page: React.FC = () => {
 
       {import_hook.parsed_xml && (
         <>
+          <br />
           <h3>File contents</h3>
           <p>Found {import_hook.parsed_xml.length} bookmarks.</p>
           <p>
@@ -47,6 +48,7 @@ const Page: React.FC = () => {
               adjusted once import is complete.
             </small>
           </p>
+          <br />
           <h3>Summary</h3>
           <p>
             You're about to import {import_hook.parsed_xml.length} bookmarks to

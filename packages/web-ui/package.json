@@ -21,7 +21,6 @@
     "@storybook/react-vite": "^7.6.20",
     "@taaabs/shared": "workspace:*",
     "beautiful-react-hooks": "^5.0.2",
-    "blurhash": "^2.0.5",
     "canvas-confetti": "^1.9.3",
     "classnames": "^2.5.1",
     "dayjs": "^1.11.12",
