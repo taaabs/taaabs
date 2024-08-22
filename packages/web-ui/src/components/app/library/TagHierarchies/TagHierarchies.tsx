@@ -33,7 +33,7 @@ export namespace TagHierarchies {
     dragged_tag?: { id: number; name: string }
     is_read_only?: boolean
     all_bookmarks_yields?: number
-    on_tag_rename_click?: (tag_id: number) => void
+    on_tag_rename_click: (params: { id: number; name: string }) => void
     translations: {
       drag_here: string
       all_bookmarks: string
@@ -46,7 +46,7 @@ export namespace TagHierarchies {
 type Item = {
   id: number
   tag_id: number
-  text: string
+  name: string
   yields?: number
   hierarchy_ids: number[]
   hierarchy_tag_ids: number[]
@@ -72,9 +72,28 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
-            props.on_tag_rename_click!(
-              items.find((i) => i.id == context_menu_of_item_id)!.tag_id,
-            )
+            const traverse_items = (
+              items: Item[],
+              target_id: number,
+            ): Item | undefined => {
+              for (const item of items) {
+                if (item.id == target_id) {
+                  return item
+                }
+                if (item.children.length > 0) {
+                  const result = traverse_items(item.children, target_id)
+                  if (result) {
+                    return result
+                  }
+                }
+              }
+              return undefined
+            }
+            if (!context_menu_of_item_id) return
+            const found_item = traverse_items(items, context_menu_of_item_id)
+            if (found_item) {
+              props.on_tag_rename_click({ id: found_item.tag_id, name: found_item.name })
+            }
           }}
         />
         <Ui_Dropdown_StandardItem
@@ -198,7 +217,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                       children: [
                         {
                           id,
-                          text: props.dragged_tag!.name,
+                          name: props.dragged_tag!.name,
                           tag_id: props.dragged_tag!.id,
                           children: [],
                           hierarchy_ids: [...(item as Item).hierarchy_ids, id],
@@ -242,7 +261,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             }}
           >
             <div>
-              <span>{(item as Item).text}</span>
+              <span>{(item as Item).name}</span>
               {!props.is_updating && (
                 <span>
                   {(item as Item).yields !== undefined
@@ -507,7 +526,7 @@ const tag_to_item = (params: {
     // Nestable requires unique ids for items
     id,
     tag_id: params.node.id,
-    text: params.node.name,
+    name: params.node.name,
     yields: params.node.yields,
     hierarchy_ids,
     hierarchy_tag_ids,
@@ -519,7 +538,7 @@ const tag_to_item = (params: {
 
 const item_to_tag = (item: Item): TagHierarchies.Node => {
   return {
-    name: item.text,
+    name: item.name,
     id: item.tag_id,
     yields: item.yields,
     children: item.children.map((i) => item_to_tag(i)),
