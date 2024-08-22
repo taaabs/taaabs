@@ -23,5 +23,6 @@ export const update_pinned = (params: {
 
     dispatch(pinned_actions.set_items(result))
     dispatch(pinned_actions.set_is_updating(false))
+    dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
   }
 }

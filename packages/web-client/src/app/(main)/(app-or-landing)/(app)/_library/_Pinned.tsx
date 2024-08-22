@@ -43,21 +43,6 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
   const handle_unpin_click = async (
     item: Ui_app_library_PinnedBookmarks.Item,
   ) => {
-    const updated_pinned =
-      pinned_hook.items?.filter((i) => i.url != item.url) || []
-    await dispatch(
-      pinned_actions.update_pinned({
-        update_pinned_params: {
-          items: updated_pinned.map((item) => ({
-            url: item.url,
-            is_public: item.is_public,
-            title: item.title,
-          })),
-        },
-        ky: auth_context.ky_instance,
-        encryption_key: auth_context.auth_data!.encryption_key,
-      }),
-    )
     dispatch(
       bookmarks_actions.set_incoming_bookmarks(
         bookmarks_hook.incoming_bookmarks?.map((bookmark) => {
@@ -74,7 +59,24 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
         }),
       ),
     )
-    dispatch(pinned_actions.set_fetched_at_timestamp(Date.now()))
+
+    const updated_pinned =
+      pinned_hook.items?.filter((i) => i.url != item.url) || []
+
+    await dispatch(
+      pinned_actions.update_pinned({
+        update_pinned_params: {
+          items: updated_pinned.map((item) => ({
+            url: item.url,
+            is_public: item.is_public,
+            title: item.title,
+          })),
+        },
+        ky: auth_context.ky_instance,
+        encryption_key: auth_context.auth_data!.encryption_key,
+      }),
+    )
+
     toast.success(props.dictionary.app.library.pinned_links_has_beed_updated)
   }
 
