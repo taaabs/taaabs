@@ -31,6 +31,7 @@ export namespace PinnedBookmarks {
     on_change: (items: Item[]) => void
     favicon_host: string
     on_reading_mode_click: (item: Item) => void
+    on_video_player_click: (item: Item) => void
     on_link_click: (item: Item) => void
     on_link_middle_click: (item: Item) => void
     on_new_tab_click: (item: Item) => void
@@ -160,6 +161,9 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           }}
           on_reading_mode_click={() => {
             props.on_reading_mode_click(item)
+          }}
+          on_video_player_click={() => {
+            props.on_video_player_click(item)
           }}
           on_is_visible={() => props.on_is_visible(item)}
           should_dim_visited_links={false}

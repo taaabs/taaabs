@@ -17,6 +17,7 @@ import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/ge
 import { PinnedBookmarks as Ui_app_library_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
 import { LibraryContext } from './Library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
+import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
 
 namespace _Pinned {
   export type Props = {
@@ -211,6 +212,13 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
             visited_at: new Date().toISOString(),
           })
         }
+      }}
+      on_video_player_click={(item) => {
+        video_embed_setter({
+          url: item.url,
+          dictionary: props.dictionary,
+          modal_context,
+        })
       }}
       on_is_visible={(item) => {
         if (item.is_parsed) {

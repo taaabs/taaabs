@@ -14,6 +14,7 @@ export namespace _Item {
     menu_slot: React.ReactNode
     favicon_host: string
     on_reading_mode_click: () => void
+    on_video_player_click: () => void
     should_dim_visited_links: boolean
     on_link_click: () => void
     on_link_middle_click: () => void
@@ -74,6 +75,14 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             onClick={() => {
               props.on_reading_mode_click()
             }}
+          >
+            <UiIcon variant="RESIZE" />
+          </button>
+        )}
+        {is_video_url(props.url) && (
+          <button
+            className={styles.item__link__reader}
+            onClick={props.on_video_player_click}
           >
             <UiIcon variant="RESIZE" />
           </button>
@@ -156,5 +165,17 @@ export const _Item: React.FC<_Item.Props> = (props) => {
         </div>
       </div>
     </div>
+  )
+}
+
+// Helper function to check if the URL is a video URL
+const is_video_url = (url: string): boolean => {
+  const youtube_regex = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]+$/
+  const pornhub_regex =
+    /^https:\/\/(?:[a-z]{3}\.)?pornhub\.com\/view_video\.php\?viewkey=[a-zA-Z0-9]+$/
+  const twitch_regex = /^https:\/\/www\.twitch\.tv\/videos\/\d+$/
+
+  return (
+    youtube_regex.test(url) || pornhub_regex.test(url) || twitch_regex.test(url)
   )
 }
