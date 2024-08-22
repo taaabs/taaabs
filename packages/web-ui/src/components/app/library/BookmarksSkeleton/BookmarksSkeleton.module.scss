@@ -7,7 +7,7 @@
   z-index: 1;
   width: 100%;
   @include to992 {
-    gap: 8px;
+    gap: 12px;
   }
   @include at992 {
     gap: 16px;
