@@ -219,6 +219,16 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
           dictionary: props.dictionary,
           modal_context,
         })
+        if (!username) {
+          const data_source = new Bookmarks_DataSourceImpl(
+            auth_context.ky_instance,
+          )
+          const repository = new Bookmarks_RepositoryImpl(data_source)
+          repository.record_visit({
+            bookmark_id: item.bookmark_id,
+            visited_at: new Date().toISOString(),
+          })
+        }
       }}
       on_is_visible={(item) => {
         if (item.is_parsed) {

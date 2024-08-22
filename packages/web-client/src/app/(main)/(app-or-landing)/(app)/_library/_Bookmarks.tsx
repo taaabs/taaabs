@@ -957,6 +957,16 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             dictionary: props.dictionary,
             modal_context,
           })
+          if (!username) {
+            const data_source = new Bookmarks_DataSourceImpl(
+              auth_context.ky_instance,
+            )
+            const repository = new Bookmarks_RepositoryImpl(data_source)
+            repository.record_visit({
+              bookmark_id: bookmark.id,
+              visited_at: new Date().toISOString(),
+            })
+          }
         }}
         on_link_middle_click={() => {
           if (!username) {
