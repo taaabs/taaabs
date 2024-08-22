@@ -20,7 +20,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html", "popup.bundle.js"],
+      "resources": ["popup.html", "popup.js"],
       "matches": ["<all_urls>"]
     }
   ],
@@ -36,16 +36,16 @@
     "alarms"
   ],
   "background": {
-    "service_worker": "background.bundle.js"
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
-      "js": ["get-auth-data-content-script.bundle.js"]
+      "js": ["get-auth-data-content-script.js"]
     },
     {
       "matches": ["<all_urls>"],
-      "js": ["inject-popup-content-script.bundle.js"]
+      "js": ["inject-popup-content-script.js"]
     }
   ],
   "chrome_url_overrides": {

@@ -1,4 +1,5 @@
 import { get_auth_data } from '@/helpers/get-auth-data'
+import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { AES } from '@repositories/utils/aes'
 import { SHA256 } from '@repositories/utils/sha256'
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
@@ -6,38 +7,48 @@ import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import pako from 'pako'
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'inject_popup') {
-    injectPopup()
+  if (request.action == 'inject_popup') {
+    if (!document.getElementById('taaabs-popup')) {
+      inject_popup()
+    } else {
+      console.log('Popup is already injected.')
+    }
+  } else if (request.action == 'close_popup') {
+    close_popup()
   }
 })
 
-const injectPopup = () => {
-  const popupHtml = chrome.runtime.getURL('popup.html')
-  fetch(popupHtml)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`)
-      }
-      return response.text()
-    })
+const inject_popup = () => {
+  const popup_html = chrome.runtime.getURL('popup.html')
+  fetch(popup_html)
+    .then((r) => r.text())
     .then((data) => {
       const container = document.createElement('div')
-      container.id = 'taaabs-popup-container'
+      container.id = 'taaabs-popup'
       container.style.display = 'block'
       container.innerHTML = data
       document.body.appendChild(container)
 
-      // Dynamically inject the script tag
       const script = document.createElement('script')
-      script.src = chrome.runtime.getURL('popup.bundle.js')
+      script.src = chrome.runtime.getURL('popup.js')
       document.body.appendChild(script)
 
+      // Add event listener to close popup when clicking outside
+      document.addEventListener('click', (event) => {
+        const popup = document.getElementById('taaabs-popup')
+        if (popup && !popup.contains(event.target as Node)) {
+          close_popup()
+        }
+      })
+
+      // Injected code creates UpsertBookmark_Params, this content script DTO,
+      // and service worker sends data over to BE because sending here attaches referer header.
       window.addEventListener('message', async (event) => {
         if (event.source !== window) return
         if (event.data && event.data.from == 'preactApp') {
           const auth_data = await get_auth_data()
 
-          const params = event.data.data
+          const params = event.data.data as UpsertBookmark_Params
 
           const tags: CreateBookmark_Dto.Body['tags'] = []
           for (const tag of params.tags) {
@@ -166,4 +177,10 @@ const injectPopup = () => {
     .catch((error) => {
       console.error('Failed to fetch popup-injected.html:', error)
     })
+}
+
+const close_popup = () => {
+  document.getElementById('taaabs-popup')?.remove()
+  const script_src = chrome.runtime.getURL('popup.js')
+  document.querySelector(`script[src="${script_src}"]`)?.remove()
 }

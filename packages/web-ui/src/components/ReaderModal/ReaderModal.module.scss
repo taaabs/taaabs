@@ -14,18 +14,15 @@
   &--visible {
     pointer-events: all;
     opacity: 1;
-    backdrop-filter: var(--backdrop-filter-strong);
-    transition-property: opacity, backdrop-filter;
-    transition-timing-function: var(--transition-timing-function);
-    transition-duration: var(--transition-duration-150ms);
+    background-color: var(--background);
   }
   &__inner {
     overflow: hidden;
     max-width: 840px;
     width: 100%;
     background-color: var(--white);
-    border-left: var(--border-primary);
-    border-right: var(--border-primary);
+    border-left: var(--border-secondary);
+    border-right: var(--border-secondary);
     @include dark {
       background-color: var(--dark100);
     }

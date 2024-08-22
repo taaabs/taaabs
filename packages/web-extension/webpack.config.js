@@ -7,13 +7,37 @@ const { HotModuleReplacementPlugin } = require('webpack')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const is_production = argv.mode == 'production'
+  const is_production = argv.mode === 'production'
+
+  const plugins = [
+    new MiniCssExtractPlugin({
+      filename: '[name].css', // Use [name] to output CSS files with chunk-specific names
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/manifest.json', to: 'manifest.json' },
+        { from: 'src/icons', to: 'icons' },
+        { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
+        { from: 'src/views/options/options.html', to: 'options.html' },
+        { from: 'src/views/options/options.js', to: 'options.js' },
+        { from: 'src/views/popup/popup.html', to: 'popup.html' },
+      ],
+    }),
+    ...(!is_production
+      ? [new HotModuleReplacementPlugin(), new PreactRefreshPlugin()]
+      : []),
+  ]
+
+  if (is_production) {
+    plugins.push(new CleanWebpackPlugin())
+  }
 
   return {
     entry: {
       background: './src/background/main.ts',
       newtab: './src/views/newtab/app.tsx',
       popup: './src/views/popup/popup.tsx',
+      'detect-theme': './src/helpers/detect-theme.ts',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
       'inject-popup-content-script':
@@ -21,7 +45,7 @@ module.exports = (env, argv) => {
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: '[name].bundle.js',
+      filename: '[name].js',
     },
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
@@ -53,26 +77,7 @@ module.exports = (env, argv) => {
         },
       ],
     },
-    plugins: [
-      new CleanWebpackPlugin(),
-      ...(!is_production
-        ? [new HotModuleReplacementPlugin(), new PreactRefreshPlugin()]
-        : []),
-      new CopyWebpackPlugin({
-        patterns: [
-          { from: 'src/manifest.json', to: 'manifest.json' },
-          { from: 'src/icons', to: 'icons' },
-          { from: 'src/detect-theme.js', to: 'detect-theme.js' },
-          { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
-          { from: 'src/views/options/options.html', to: 'options.html' },
-          { from: 'src/views/options/options.js', to: 'options.js' },
-          { from: 'src/views/popup/popup.html', to: 'popup.html' },
-        ],
-      }),
-      new MiniCssExtractPlugin({
-        filename: '[name].css', // Use [name] to output CSS files with chunk-specific names
-      }),
-    ],
+    plugins,
     devServer: {
       static: {
         directory: path.join(__dirname, 'dist'),

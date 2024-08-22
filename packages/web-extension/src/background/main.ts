@@ -88,6 +88,8 @@ const update_icon = (tab_id: number, is_saved?: boolean) => {
   }
 }
 
+let is_handling_tab_change = false
+
 /**
  * Responsibilities:
  *  - updating green tick (saved) indicator,
@@ -125,22 +127,30 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   }
 }
 
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (changeInfo.url) {
+    try {
+      is_handling_tab_change = true
+      await handle_tab_change(tabId, changeInfo.url)
+      chrome.tabs.sendMessage(tabId, { action: 'close_popup' })
+      setTimeout(() => {
+        is_handling_tab_change = false
+      }, 500)
+    } catch (error) {
+      console.error('Error handling tab update:', error)
+    }
+  }
+})
+
+// This listener is needed to handle refresh of the current tab
 chrome.webNavigation.onCommitted.addListener(async (details) => {
+  if (is_handling_tab_change) return
   if (details.frameId == 0) {
     // Ensure it's the main frame
     try {
       await handle_tab_change(details.tabId, details.url)
     } catch (error) {
       console.error('Error handling web navigation commit:', error)
-    }
-  }
-})
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (changeInfo.url) {
-    try {
-      await handle_tab_change(tabId, changeInfo.url)
-    } catch (error) {
-      console.error('Error handling tab update:', error)
     }
   }
 })
