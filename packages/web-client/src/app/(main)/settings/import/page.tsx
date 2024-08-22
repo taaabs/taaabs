@@ -31,9 +31,9 @@ const Page: React.FC = () => {
       </div>
       <p>
         <small>
-          Imported file will be validated and encrypted with your master
-          password locally and won't leave your device until you confirm upload.
-          This ensures the data is accurate and secured.
+          The imported file will be validated and encrypted locally using your
+          master password and will remain on your device until you choose to
+          proceed. This guarantees the accuracy and security of the data.
         </small>
       </p>
 
@@ -71,10 +71,8 @@ const Page: React.FC = () => {
           <h3>File contents</h3>
           <p>Found {import_hook.import_data.bookmarks.length} bookmarks</p>
           <br />
-          <h3>Options</h3>
-          <br />
           <UiCheckbox
-            label="Erase library"
+            label="Erase my library"
             on_click={() => {
               import_hook.set_erase_library(!import_hook.erase_library)
             }}
