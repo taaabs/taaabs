@@ -117,7 +117,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       !pinned_hook.is_updating &&
       !pinned_hook.should_refetch
     ) {
-      console.log('x')
       dispatch(
         bookmarks_actions.set_bookmarks(bookmarks_hook.incoming_bookmarks),
       )
