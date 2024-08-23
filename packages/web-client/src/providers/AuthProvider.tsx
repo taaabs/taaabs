@@ -1,3 +1,5 @@
+'use client'
+
 import { browser_storage } from '@/constants/browser-storage'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
