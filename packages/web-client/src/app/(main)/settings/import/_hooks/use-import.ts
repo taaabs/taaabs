@@ -146,9 +146,6 @@ export const use_import = () => {
         bookmarks,
         tag_hierarchies,
       }
-    } else if (!auth_context.auth_data!.username) {
-      toast.error('Account is needed for JSON file')
-      return
     }
 
     if (!params) return
