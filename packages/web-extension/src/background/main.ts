@@ -28,7 +28,29 @@ chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
 
     console.log('Bookmark has been created!', created_bookmark)
 
-    sendResponse()
+    sendResponse(created_bookmark)
+    return true // Keep the message channel open for sendResponse
+  } else if (request.action == 'get-auth-data') {
+    chrome.storage.local.get(['auth_data'], (result) => {
+      sendResponse(result.auth_data)
+      return true // Keep the message channel open for sendResponse
+    })
+  } else if (request.action == 'theme-changed') {
+    console.log('x')
+    if (
+      request.theme &&
+      (await chrome.storage.local.get('theme'))?.theme != request.theme
+    ) {
+      chrome.storage.local.set({ theme: request.theme }, () => {
+        console.log('Theme saved.', request.theme)
+      })
+    } else {
+      if (await chrome.storage.local.get('theme')) {
+        chrome.storage.local.remove('theme', () => {
+          console.log('Theme removed.')
+        })
+      }
+    }
   }
 })
 
@@ -51,15 +73,6 @@ chrome.tabs.onCreated.addListener((tab) => {
         chrome.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
       }
     })
-  }
-})
-
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action == 'get_auth_data') {
-    chrome.storage.local.get(['auth_data'], (result) => {
-      sendResponse(result.auth_data)
-    })
-    return true // Keep the message channel open for sendResponse
   }
 })
 
@@ -94,6 +107,7 @@ let is_handling_tab_change = false
  * Responsibilities:
  *  - updating green tick (saved) indicator,
  *  - grabbing auth data of logged in user on taaabs.com,
+ *  - grabbing theme if manually set
  */
 const handle_tab_change = async (tab_id: number, url: string) => {
   if (url.startsWith('https://taaabs.com')) {
@@ -102,8 +116,8 @@ const handle_tab_change = async (tab_id: number, url: string) => {
     setTimeout(() => {
       chrome.tabs.sendMessage(
         tab_id,
-        { action: 'read_auth_data_at_taaabs_com' },
-        (auth_data) => {
+        { action: 'get-auth-data' },
+        async (auth_data) => {
           if (auth_data) {
             const parsed_auth_data = JSON.parse(auth_data)
             chrome.storage.local.set({ auth_data: parsed_auth_data }, () => {
@@ -113,7 +127,33 @@ const handle_tab_change = async (tab_id: number, url: string) => {
               )
             })
           } else {
+            if (await chrome.storage.local.get('auth_data')) {
+              chrome.storage.local.remove('auth_data', () => {
+                console.log(
+                  '[handle_tab_change] Old auth data has been deleted.',
+                )
+              })
+            }
             console.log('[handle_tab_change] Auth data not found.')
+          }
+        },
+      )
+      chrome.tabs.sendMessage(
+        tab_id,
+        { action: 'get-theme' },
+        async (response) => {
+          if (response.theme) {
+            if (
+              (await chrome.storage.local.get('theme'))?.theme != response.theme
+            ) {
+              chrome.storage.local.set({ theme: response.theme }, () => {
+                console.log('[handle_tab_change] Theme saved.', response.theme)
+              })
+            }
+          } else if ((await chrome.storage.local.get('theme'))?.theme) {
+            chrome.storage.local.remove('theme', () => {
+              console.log('[handle_tab_change] Theme removed.')
+            })
           }
         },
       )

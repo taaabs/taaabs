@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>New Tab</title>
     <style>
-      :root {
-        --font-family-inter: Inter, sans-serif;
+      html {
+        background-color: #f8f8f8;
+      }
+      html[data-theme='dark'] {
+        background-color: #111827;
       }
     </style>
     <link rel="stylesheet" href="newtab.css" />
     <script src="detect-theme.js"></script>
-    
   </head>
   <body>
     <div id="root"></div>
-    <script src="newtab.js"></script>
+    <script src="load-newtab.js"></script>
   </body>
 </html>

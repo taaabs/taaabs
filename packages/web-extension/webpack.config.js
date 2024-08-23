@@ -18,6 +18,7 @@ module.exports = (env, argv) => {
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
         { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
+        { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
         { from: 'src/views/options/options.js', to: 'options.js' },
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
@@ -35,11 +36,13 @@ module.exports = (env, argv) => {
   return {
     entry: {
       background: './src/background/main.ts',
-      newtab: './src/views/newtab/app.tsx',
+      newtab: './src/views/newtab/newtab.tsx',
       popup: './src/views/popup/popup.tsx',
       'detect-theme': './src/helpers/detect-theme.ts',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
+      'get-theme-content-script':
+        './src/content-scripts/get-theme-content-script.ts',
       'inject-popup-content-script':
         './src/content-scripts/inject-popup-content-script.ts',
     },

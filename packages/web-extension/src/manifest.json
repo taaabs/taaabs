@@ -41,7 +41,7 @@
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
-      "js": ["get-auth-data-content-script.js"]
+      "js": ["get-auth-data-content-script.js", "get-theme-content-script.js"]
     },
     {
       "matches": ["<all_urls>"],
