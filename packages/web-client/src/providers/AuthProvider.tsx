@@ -1,5 +1,3 @@
-'use client'
-
 import { browser_storage } from '@/constants/browser-storage'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
@@ -122,43 +120,48 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                     'true',
                   )
 
-                  const data_source = new Auth_DataSourceImpl(
-                    ky_instance.current,
-                  )
-                  const repository = new Auth_RepositoryImpl(data_source)
-                  const result = await repository.refresh({
-                    access_token: auth_data_to_refresh.access_token,
-                    refresh_token: auth_data_to_refresh.refresh_token,
-                  })
-
-                  if (auth_data_local_storage) {
-                    localStorage.setItem(
-                      browser_storage.local_storage.auth_data,
-                      JSON.stringify({
-                        ...auth_data_local_storage,
-                        access_token: result.access_token,
-                        refresh_token: result.refresh_token,
-                      }),
+                  try {
+                    const data_source = new Auth_DataSourceImpl(
+                      ky_instance.current,
                     )
-                  } else if (guest_auth_data_local_storage) {
-                    localStorage.setItem(
-                      browser_storage.local_storage.guest_auth_data,
-                      JSON.stringify({
-                        ...guest_auth_data_local_storage,
-                        access_token: result.access_token,
-                        refresh_token: result.refresh_token,
-                      }),
+                    const repository = new Auth_RepositoryImpl(data_source)
+                    const result = await repository.refresh({
+                      access_token: auth_data_to_refresh.access_token,
+                      refresh_token: auth_data_to_refresh.refresh_token,
+                    })
+
+                    if (auth_data_local_storage) {
+                      localStorage.setItem(
+                        browser_storage.local_storage.auth_data,
+                        JSON.stringify({
+                          ...auth_data_local_storage,
+                          access_token: result.access_token,
+                          refresh_token: result.refresh_token,
+                        }),
+                      )
+                    } else if (guest_auth_data_local_storage) {
+                      localStorage.setItem(
+                        browser_storage.local_storage.guest_auth_data,
+                        JSON.stringify({
+                          ...guest_auth_data_local_storage,
+                          access_token: result.access_token,
+                          refresh_token: result.refresh_token,
+                        }),
+                      )
+                    }
+
+                    request.headers.set(
+                      'Authorization',
+                      `Bearer ${result.access_token}`,
+                    )
+                  } catch {
+                    // If refreshing the token fails, log the user out
+                    logout()
+                  } finally {
+                    sessionStorage.removeItem(
+                      browser_storage.session_storage.is_refreshing_auth_tokens,
                     )
                   }
-
-                  request.headers.set(
-                    'Authorization',
-                    `Bearer ${result.access_token}`,
-                  )
-
-                  sessionStorage.removeItem(
-                    browser_storage.session_storage.is_refreshing_auth_tokens,
-                  )
                 }
               }
             }
