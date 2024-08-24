@@ -20,7 +20,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.html", "popup.js"],
+      "resources": ["popup.js"],
       "matches": ["<all_urls>"]
     }
   ],
@@ -32,8 +32,7 @@
     "contextMenus",
     "activeTab",
     "tabs",
-    "webNavigation",
-    "alarms"
+    "webNavigation"
   ],
   "background": {
     "service_worker": "background.js"

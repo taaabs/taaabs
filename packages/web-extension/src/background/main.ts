@@ -2,56 +2,77 @@ import ky from 'ky'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { get_is_url_saved } from './get-is-url-saved'
 import { get_auth_data } from '@/helpers/get-auth-data'
+import { update_icon } from './helpers/update-icon'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
 chrome.action.onClicked.addListener((tab) => {
-  chrome.tabs.sendMessage(tab.id!, { action: 'inject_popup' })
+  chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
 })
 
-chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
-  if (request.action == 'someAction') {
-    const auth_data = await get_auth_data()
-    const ky_instance = ky.create({
-      prefixUrl: 'https://api.taaabs.com/',
-      headers: {
-        Authorization: `Bearer ${auth_data.access_token}`,
-      },
-    })
-
-    const created_bookmark = await ky_instance
-      .post('v1/bookmarks', {
-        json: request.data,
+// For sendResponse to work, boolean must be returned synchronously
+chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
+  if (request.action == 'check-url-saved') {
+    ;(async () => {
+      const [currentTab] = await chrome.tabs.query({
+        active: true,
+        currentWindow: true,
       })
-      .json()
+      const badgeText = await chrome.action.getBadgeText({
+        tabId: currentTab.id,
+      })
+      sendResponse({ is_saved: !!badgeText })
+    })()
 
-    console.log('Bookmark has been created!', created_bookmark)
+    return true
+  } else if (request.action == 'create-bookmark') {
+    ;(async () => {
+      const auth_data = await get_auth_data()
+      const ky_instance = ky.create({
+        prefixUrl: 'https://api.taaabs.com/',
+        headers: {
+          Authorization: `Bearer ${auth_data.access_token}`,
+        },
+      })
 
-    sendResponse(created_bookmark)
-    return true // Keep the message channel open for sendResponse
+      const created_bookmark = await ky_instance
+        .post('v1/bookmarks', {
+          json: request.data,
+        })
+        .json()
+
+      console.log('Bookmark has been created!', created_bookmark)
+
+      sendResponse(created_bookmark)
+    })()
+
+    return true
   } else if (request.action == 'get-auth-data') {
     chrome.storage.local.get(['auth_data'], (result) => {
       sendResponse(result.auth_data)
       return true // Keep the message channel open for sendResponse
     })
   } else if (request.action == 'theme-changed') {
-    console.log('x')
-    if (
-      request.theme &&
-      (await chrome.storage.local.get('theme'))?.theme != request.theme
-    ) {
-      chrome.storage.local.set({ theme: request.theme }, () => {
-        console.log('Theme saved.', request.theme)
-      })
-    } else {
-      if (await chrome.storage.local.get('theme')) {
-        chrome.storage.local.remove('theme', () => {
-          console.log('Theme removed.')
+    ;(async () => {
+      if (
+        request.theme &&
+        (await chrome.storage.local.get('theme'))?.theme != request.theme
+      ) {
+        chrome.storage.local.set({ theme: request.theme }, () => {
+          console.log('Theme saved.', request.theme)
         })
+      } else {
+        if (await chrome.storage.local.get('theme')) {
+          chrome.storage.local.remove('theme', () => {
+            console.log('Theme removed.')
+          })
+        }
       }
-    }
+    })()
+    return false
   }
+  return false
 })
 
 chrome.contextMenus.create({
@@ -75,33 +96,6 @@ chrome.tabs.onCreated.addListener((tab) => {
     })
   }
 })
-
-const update_icon = (tab_id: number, is_saved?: boolean) => {
-  let icon_paths = {
-    16: 'icons/icon16.png',
-    48: 'icons/icon48.png',
-    128: 'icons/icon128.png',
-  }
-
-  chrome.action.setIcon({
-    tabId: tab_id,
-    path: icon_paths,
-  })
-
-  if (is_saved) {
-    chrome.action.setBadgeText({
-      tabId: tab_id,
-      text: '✓',
-    })
-  } else {
-    chrome.action.setBadgeText({
-      tabId: tab_id,
-      text: '',
-    })
-  }
-}
-
-let is_handling_tab_change = false
 
 /**
  * Responsibilities:
@@ -167,12 +161,18 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   }
 }
 
+let is_handling_tab_change = false
+
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
   if (changeInfo.url) {
     try {
       is_handling_tab_change = true
       await handle_tab_change(tabId, changeInfo.url)
-      chrome.tabs.sendMessage(tabId, { action: 'close_popup' })
+      try {
+        await chrome.tabs.sendMessage(tabId, { action: 'close-popup' })
+      } catch {
+        // No popup to close
+      }
       setTimeout(() => {
         is_handling_tab_change = false
       }, 500)
@@ -192,15 +192,6 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
     } catch (error) {
       console.error('Error handling web navigation commit:', error)
     }
-  }
-})
-
-// Set an alarm to keep the service worker alive
-chrome.alarms.create('keepAlive', { periodInMinutes: 0.5 })
-
-chrome.alarms.onAlarm.addListener((alarm) => {
-  if (alarm.name == 'keepAlive') {
-    console.log('Service worker is alive.')
   }
 })
 

@@ -1,5 +1,5 @@
 import { render } from 'preact'
-import { useEffect } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import styles from './popup.module.scss'
 
 import '../../../../web-ui/src/styles/style.scss'
@@ -22,20 +22,38 @@ const sendMessage = (message: any) => {
 }
 
 export const Popup: preact.FunctionComponent = () => {
+  const [is_saved, set_is_saved] = useState<boolean>()
+
+  useEffect(() => {
+    // Send message to content script to check if URL is saved
+    window.postMessage({ action: 'check-url-saved' }, '*')
+
+    // Listen for response from content script
+    const handleMessage = (event: MessageEvent) => {
+      if (event.source !== window) return
+      if (event.data && event.data.action === 'url-saved-status') {
+        set_is_saved(event.data.is_saved)
+      }
+    }
+
+    window.addEventListener('message', handleMessage)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+    }
+  }, [])
+
   useEffect(() => {
     window.addEventListener('message', (event) => {
       if (event.source !== window) return
       if (event.data && event.data.from === 'contentScript') {
-        console.log(
-          'Received response from background script:',
-          event.data,
-        )
+        console.log('Received response from background script:', event.data)
       }
     })
   }, [])
 
   const create_bookmark = async () => {
-    const x = async (tab_data: TabData) => {
+    const process_tab_data_and_send = async (tab_data: TabData) => {
       const reader_data = HtmlParser.parse({
         url: tab_data.url,
         html: tab_data.html,
@@ -75,8 +93,12 @@ export const Popup: preact.FunctionComponent = () => {
         blurhash,
       }
 
-      sendMessage({ action: 'someAction', data: new_bookmark })
-      console.log('Bookmark created!', new_bookmark)
+      sendMessage({ action: 'create-bookmark', data: new_bookmark })
+
+      console.log(
+        'create-bookmark action has been invoked with the following data:',
+        new_bookmark,
+      )
     }
 
     const doc_data = async (
@@ -210,7 +232,7 @@ export const Popup: preact.FunctionComponent = () => {
             favicon,
             og_image,
           }
-          x(tab_data)
+          process_tab_data_and_send(tab_data)
           document.body.removeChild(iframe)
         })
       } else {
@@ -230,21 +252,16 @@ export const Popup: preact.FunctionComponent = () => {
           favicon,
           og_image,
         }
-        x(tab_data)
+        process_tab_data_and_send(tab_data)
       }
     })
   }
 
   return (
     <div className={styles.container}>
-      hi
-      <button
-        onClick={create_bookmark}
-      >
-        Save
-      </button>
-      {/* <div>{current_tab_id}</div>
-      <div>{current_url}</div> */}
+      xx
+      {is_saved !== undefined &&
+        (is_saved ? 'saved' : <button onClick={create_bookmark}>Save</button>)}
     </div>
   )
 }
