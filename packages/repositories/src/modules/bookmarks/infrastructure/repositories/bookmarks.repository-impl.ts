@@ -17,6 +17,7 @@ import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindByUrlHash_Ro } from '../../domain/types/find-by-url-hash.ro'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
+import { DeleteBookmarkByUrlHash_Params } from '../../domain/types/delete-bookmark-by-url-hash.params'
 
 export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
   constructor(private readonly _bookmarks_data_source: Bookmarks_DataSource) {}
@@ -407,5 +408,15 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
     )
 
     return this._dto_to_bookmark_entity(bookmark, encryption_key)
+  }
+
+  public async delete_bookmark_by_url_hash(
+    params: DeleteBookmarkByUrlHash_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void> {
+    await this._bookmarks_data_source.delete_bookmark_by_url_hash(
+      params,
+      encryption_key,
+    )
   }
 }

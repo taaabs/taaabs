@@ -8,6 +8,7 @@
   "dependencies": {
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
+    "@taaabs/web-ui": "workspace:*",
     "ky": "^1.5.0",
     "preact": "^10.23.2"
   },

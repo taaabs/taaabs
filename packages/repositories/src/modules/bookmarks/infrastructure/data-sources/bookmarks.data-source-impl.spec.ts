@@ -3,6 +3,7 @@ import { Bookmarks_DataSourceImpl } from './bookmarks.data-source-impl'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 import { ky_instance_mock } from '@repositories/mocks/ky-instance-mock'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
+import { DeleteBookmarkByUrlHash_Params } from '../../domain/types/delete-bookmark-by-url-hash.params'
 
 describe('Bookmarks_DataSourceImpl', () => {
   let sut: Bookmarks_DataSourceImpl
@@ -96,4 +97,14 @@ describe('Bookmarks_DataSourceImpl', () => {
       )
     })
   })
+
+  describe('[delete_bookmark_by_url_hash]', () => {
+    it('calls API correctly', async () => {
+      const params: DeleteBookmarkByUrlHash_Params = { hash: 'test_hash' };
+
+      await sut.delete_bookmark_by_url_hash(params, new Uint8Array());
+
+      expect(ky_instance_mock.delete).toHaveBeenCalledWith(`v1/bookmarks/delete-by-url-hash/mocked_hash`);
+    });
+  });
 })

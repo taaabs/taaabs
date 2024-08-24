@@ -18,7 +18,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@shared/*": ["../shared/src/*"],
-      "@repositories/*": ["../repositories/src/*"]
+      "@repositories/*": ["../repositories/src/*"],
+      "@web-ui/*": ["../web-ui/src/*"]
     }
   },
   "include": [

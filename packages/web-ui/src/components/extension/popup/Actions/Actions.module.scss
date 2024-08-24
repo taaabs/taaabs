@@ -1,0 +1,23 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.actionItem {
+  display: flex;
+  align-items: center;
+  padding: var(--padding-16px);
+  border-radius: var(--border-radius-12px);
+  background-color: var(--background);
+  border: var(--border-primary);
+  gap: var(--padding-8px);
+  color: var(--text-color-normal);
+  text-decoration: none;
+  transition: background-color var(--transition-duration-150ms) ease-in-out;
+
+  &:hover {
+    background-color: var(--hover-background);
+  }
+
+  &.isDanger {
+    color: var(--danger-color);
+  }
+}

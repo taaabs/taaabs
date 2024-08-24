@@ -259,9 +259,22 @@ export const Popup: preact.FunctionComponent = () => {
 
   return (
     <div className={styles.container}>
-      xx
       {is_saved !== undefined &&
-        (is_saved ? 'saved' : <button onClick={create_bookmark}>Save</button>)}
+        (is_saved ? (
+          <>
+            <a
+              href={
+                'https://taaabs.com/library#url=' +
+                encodeURIComponent(location.href)
+              }
+              rel="noreferrer noopener"
+            >
+              Edit
+            </a>
+          </>
+        ) : (
+          <button onClick={create_bookmark}>Save</button>
+        ))}
     </div>
   )
 }

@@ -18,6 +18,7 @@ import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
+import { DeleteBookmarkByUrlHash_Params } from '../../domain/types/delete-bookmark-by-url-hash.params'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -328,5 +329,13 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   ): Promise<FindByUrlHash_Dto.Response> {
     const hash = await SHA256(params.url, encryption_key)
     return this._ky.get(`v1/bookmarks/find-by-url-hash/${hash}`).json()
+  }
+
+  public async delete_bookmark_by_url_hash(
+    params: DeleteBookmarkByUrlHash_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void> {
+    const hash = await SHA256(params.hash, encryption_key)
+    await this._ky.delete(`v1/bookmarks/delete-by-url-hash/${hash}`)
   }
 }

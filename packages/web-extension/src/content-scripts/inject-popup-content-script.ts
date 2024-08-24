@@ -50,10 +50,8 @@ const inject_popup = () => {
   // Listen for messages from popup
   window.addEventListener('message', async (event) => {
     if (event.source !== window) return
-    if (event.data && event.data.action === 'check-url-saved') {
-      const url = window.location.href
-      chrome.runtime.sendMessage({ action: 'check-url-saved', url }, (response) => {
-        console.log(response)
+    if (event.data && event.data.action == 'check-url-saved') {
+      chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
         window.postMessage({ action: 'url-saved-status', is_saved: response.is_saved }, '*')
       })
     }

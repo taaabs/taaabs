@@ -11,6 +11,7 @@ import { GetLinksData_Ro } from '../types/get-links-data.ro'
 import { GetCover_Params } from '../types/get-cover.params'
 import { FindByUrlHash_Params } from '../types/find-by-url-hash.params'
 import { FindByUrlHash_Ro } from '../types/find-by-url-hash.ro'
+import { DeleteBookmarkByUrlHash_Params } from '../types/delete-bookmark-by-url-hash.params'
 
 export type Bookmarks_Repository = {
   get_bookmarks_on_authorized_user(
@@ -58,4 +59,9 @@ export type Bookmarks_Repository = {
     params: FindByUrlHash_Params,
     encryption_key: Uint8Array,
   ): Promise<FindByUrlHash_Ro>
+
+  delete_bookmark_by_url_hash(
+    params: DeleteBookmarkByUrlHash_Params,
+    encryption_key: Uint8Array,
+  ): Promise<void>
 }

@@ -9,6 +9,7 @@ import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { UpsertBookmark_Params } from '../../domain/types/upsert-bookmark.params'
+import { DeleteBookmarkByUrlHash_Params } from '../../domain/types/delete-bookmark-by-url-hash.params'
 
 declare const global: any
 
@@ -30,6 +31,7 @@ describe('Bookmarks_RepositoryImpl', () => {
       get_cover: jest.fn(),
       record_visit: jest.fn(),
       find_by_url_hash: jest.fn(),
+      delete_bookmark_by_url_hash: jest.fn(),
     } as jest.Mocked<Bookmarks_DataSource>
     sut = new Bookmarks_RepositoryImpl(data_source_mock)
 
@@ -322,6 +324,19 @@ describe('Bookmarks_RepositoryImpl', () => {
         encryption_key,
       )
       expect(result).toEqual(dto_mock)
+    })
+  })
+
+  describe('[delete_bookmark_by_url_hash]', () => {
+    it('calls data source correctly', async () => {
+      const params: DeleteBookmarkByUrlHash_Params = { hash: 'test_hash' }
+
+      await sut.delete_bookmark_by_url_hash(params, encryption_key)
+
+      expect(data_source_mock.delete_bookmark_by_url_hash).toHaveBeenCalledWith(
+        params,
+        encryption_key,
+      )
     })
   })
 })
