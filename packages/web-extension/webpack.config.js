@@ -2,7 +2,6 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
-const PreactRefreshPlugin = require('@prefresh/webpack')
 const { HotModuleReplacementPlugin } = require('webpack')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
@@ -11,7 +10,7 @@ module.exports = (env, argv) => {
 
   const plugins = [
     new MiniCssExtractPlugin({
-      filename: '[name].css', // Use [name] to output CSS files with chunk-specific names
+      filename: '[name].css',
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -24,9 +23,7 @@ module.exports = (env, argv) => {
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
       ],
     }),
-    ...(!is_production
-      ? [new HotModuleReplacementPlugin(), new PreactRefreshPlugin()]
-      : []),
+    ...(!is_production ? [new HotModuleReplacementPlugin()] : []),
   ]
 
   if (is_production) {
@@ -53,7 +50,6 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       plugins: [new TsconfigPathsPlugin()],
-      
     },
     module: {
       rules: [

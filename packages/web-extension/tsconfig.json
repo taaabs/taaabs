@@ -2,8 +2,6 @@
   "compilerOptions": {
     "target": "ES2017",
     "lib": ["dom", "es2017"],
-    "jsx": "react-jsx",
-    "jsxImportSource": "preact",
     "module": "commonjs",
     "moduleResolution": "node",
     "strict": true,
@@ -15,18 +13,19 @@
     "outDir": "./dist",
     "types": ["jest", "chrome", "node"],
     "baseUrl": ".",
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "paths": {
       "@/*": ["src/*"],
       "@shared/*": ["../shared/src/*"],
       "@repositories/*": ["../repositories/src/*"],
-      "@web-ui/*": ["../web-ui/src/*"],
+      "@web-ui/*": ["../web-ui/src/*"]
     }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "../shared/src/**/*.ts",
-    "../repositories/src/**/*.ts",
-    "../web-ui/src/**/*.ts"
+    "../repositories/src/**/*.ts"
   ]
 }

@@ -1,11 +1,11 @@
-import { render } from 'preact'
+import ReactDOM from "react-dom/client";
 import styles from './newtab.module.scss'
 import { Search } from './components/Search'
 import { Bookmarks } from './components/Bookmarks'
 
 import '../../../../web-ui/src/styles/style.scss'
 
-export const NewTab: preact.FunctionComponent = () => {
+export const NewTab: React.FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}></div>
@@ -19,4 +19,5 @@ export const NewTab: preact.FunctionComponent = () => {
   )
 }
 
-render(<NewTab />, document.getElementById('root')!)
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+root.render(<NewTab />)

@@ -75,7 +75,7 @@ const inject_popup = () => {
   // and service worker sends data over to BE because sending here attaches referer header.
   window.addEventListener('message', async (event) => {
     if (event.source !== window) return
-    if (event.data && event.data.from == 'preactApp') {
+    if (event.data && event.data.from == 'taaabs-popup') {
       const auth_data = await get_auth_data()
 
       const params = event.data.data as UpsertBookmark_Params
@@ -191,7 +191,7 @@ const inject_popup = () => {
 
       chrome.runtime.sendMessage(
         {
-          from: 'preactApp',
+          from: 'taaabs-popup',
           action: 'create-bookmark',
           data: body,
         },

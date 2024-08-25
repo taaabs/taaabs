@@ -2,8 +2,8 @@ import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/ty
 import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/get-cover-with-blurhash'
 import { HtmlParser } from '@shared/utils/html-parser'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
-import { useEffect } from 'preact/hooks'
 import { send_message } from '../helpers/send-message'
+import { useEffect } from 'react'
 
 export type TabData = {
   url: string

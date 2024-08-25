@@ -1,10 +1,9 @@
-import { render } from 'preact'
 import styles from './popup.module.scss'
-
+import ReactDOM from 'react-dom/client'
 import { use_create_bookmark } from './hooks/use-create-bookmark'
 import { use_saved_check } from './hooks/use-saved-check'
 
-export const Popup: preact.FunctionComponent = () => {
+export const Popup: React.FC = () => {
   const saved_check_hook = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
 
@@ -30,4 +29,5 @@ export const Popup: preact.FunctionComponent = () => {
   )
 }
 
-render(<Popup />, document.getElementById('root-taaabs-popup')!)
+const root = ReactDOM.createRoot(document.getElementById('root-taaabs-popup') as HTMLElement)
+root.render(<Popup />)
