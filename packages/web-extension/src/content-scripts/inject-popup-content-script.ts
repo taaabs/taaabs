@@ -12,9 +12,19 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
     if (!popup) {
       inject_popup()
     } else {
-      popup.style.opacity = '1'
-      popup.style.pointerEvents = 'all'
-      console.log('Popup visibility has been restored.')
+      // Toggle visibility
+      if (
+        (popup.style.opacity == '1' && popup.style.pointerEvents == 'all') ||
+        (popup.style.opacity == '' && popup.style.pointerEvents == '')
+      ) {
+        popup.style.opacity = '0'
+        popup.style.pointerEvents = 'none'
+        console.log('Popup visibility has been hidden.')
+      } else {
+        popup.style.opacity = '1'
+        popup.style.pointerEvents = 'all'
+        console.log('Popup visibility has been restored.')
+      }
     }
   } else if (request.action == 'close-popup') {
     close_popup()
@@ -31,7 +41,8 @@ const inject_popup = () => {
   container.style.width = '350px'
   container.style.margin = '24px'
   container.style.zIndex = '99999'
-  
+  container.style.transition = '150ms opacity ease-in-out'
+
   document.body.appendChild(container)
 
   const script = document.createElement('script')
@@ -52,7 +63,10 @@ const inject_popup = () => {
     if (event.source !== window) return
     if (event.data && event.data.action == 'check-url-saved') {
       chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
-        window.postMessage({ action: 'url-saved-status', is_saved: response.is_saved }, '*')
+        window.postMessage(
+          { action: 'url-saved-status', is_saved: response.is_saved },
+          '*',
+        )
       })
     }
   })

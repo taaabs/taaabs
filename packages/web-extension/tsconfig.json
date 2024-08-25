@@ -19,13 +19,14 @@
       "@/*": ["src/*"],
       "@shared/*": ["../shared/src/*"],
       "@repositories/*": ["../repositories/src/*"],
-      "@web-ui/*": ["../web-ui/src/*"]
+      "@web-ui/*": ["../web-ui/src/*"],
     }
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     "../shared/src/**/*.ts",
-    "../repositories/src/**/*.ts"
+    "../repositories/src/**/*.ts",
+    "../web-ui/src/**/*.ts"
   ]
 }

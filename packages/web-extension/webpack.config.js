@@ -7,7 +7,7 @@ const { HotModuleReplacementPlugin } = require('webpack')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
 
 module.exports = (env, argv) => {
-  const is_production = argv.mode === 'production'
+  const is_production = argv.mode == 'production'
 
   const plugins = [
     new MiniCssExtractPlugin({
@@ -53,6 +53,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.ts', '.tsx', '.js'],
       plugins: [new TsconfigPathsPlugin()],
+      
     },
     module: {
       rules: [

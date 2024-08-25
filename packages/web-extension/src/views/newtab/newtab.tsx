@@ -9,12 +9,7 @@ export const NewTab: preact.FunctionComponent = () => {
   return (
     <div className={styles.container}>
       <div className={styles.header}></div>
-      <div
-        className={styles.wrapper}
-        onClick={() => {
-          document.location = 'https://taaabs.com/library'
-        }}
-      >
+      <div className={styles.wrapper}>
         <div className={styles.inner}>
           <Search />
           <Bookmarks />

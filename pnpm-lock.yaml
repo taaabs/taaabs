@@ -498,6 +498,9 @@ importers:
       '@taaabs/web-ui':
         specifier: workspace:*
         version: link:../web-ui
+      classnames:
+        specifier: ^2.5.1
+        version: 2.5.1
       ky:
         specifier: ^1.5.0
         version: 1.5.0
@@ -4803,9 +4806,6 @@ packages:
 
   classnames@2.3.1:
     resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
-
-  classnames@2.3.2:
-    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
 
   classnames@2.5.1:
     resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
@@ -17826,8 +17826,6 @@ snapshots:
 
   classnames@2.3.1: {}
 
-  classnames@2.3.2: {}
-
   classnames@2.5.1: {}
 
   clean-stack@2.2.0: {}
@@ -23139,7 +23137,7 @@ snapshots:
 
   react-nestable@3.0.2:
     dependencies:
-      classnames: 2.3.2
+      classnames: 2.5.1
       react: 18.3.1
       react-addons-shallow-compare: 15.6.3
       react-addons-update: 15.6.3
