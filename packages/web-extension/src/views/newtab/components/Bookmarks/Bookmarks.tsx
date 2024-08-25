@@ -10,6 +10,7 @@ export const Bookmarks: React.FC = () => {
     >
       <span className={styles.load}>Load library</span>
       <div className={styles.bookmark} />
+      <div className={styles.bookmark} />
     </div>
   )
 }

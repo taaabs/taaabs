@@ -17,7 +17,7 @@
     height: 145px;
     border-radius: var(--border-radius-12px);
   }
-  &::after {
+  &:last-child::after {
     content: '';
     position: absolute;
     width: calc(100% + 2px);
@@ -31,9 +31,18 @@
   position: absolute;
   z-index: 1;
   left: 50%;
-  top: 120px;
+  top: 135px;
   transform: translateX(-50%);
   font-size: var(--font-size-13px);
+  white-space: nowrap;
+  background: linear-gradient(
+    to right,
+    transparent 15%,
+    var(--background) 35%,
+    var(--background) 65%,
+    transparent 85%
+  ); // background occupies 70% width
+  padding: 10px 200px;
   cursor: pointer;
   @include hover {
     @include text-decoration-underlinie-thin;

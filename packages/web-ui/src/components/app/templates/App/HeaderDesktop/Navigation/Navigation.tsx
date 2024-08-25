@@ -4,8 +4,8 @@ import { _Button } from './_Button'
 
 export namespace Navigation {
   export type Item = {
-    icon: Icon.Variant
-    filled_icon: Icon.Variant
+    icon: UiIcon.Variant
+    filled_icon: UiIcon.Variant
     is_active: boolean
     href: string
     on_click?: (e: React.MouseEvent) => void

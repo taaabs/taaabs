@@ -4,26 +4,35 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { HotModuleReplacementPlugin } = require('webpack')
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin')
+const { ProvidePlugin } = require('webpack')
 
-module.exports = (env, argv) => {
+module.exports = (_, argv) => {
   const is_production = argv.mode == 'production'
 
   const plugins = [
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
+    // Fixes error "process is not defined" when importing UI component which imports next/link
+    new ProvidePlugin({
+      process: 'process/browser',
+    }),
     new CopyWebpackPlugin({
       patterns: [
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
         { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
+        { from: 'src/views/newtab/detect-theme.js', to: 'detect-theme.js' },
         { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
         { from: 'src/views/options/options.js', to: 'options.js' },
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
       ],
     }),
-    ...(!is_production ? [new HotModuleReplacementPlugin()] : []),
+    ...(!is_production
+      ? [new ReactRefreshWebpackPlugin(), new HotModuleReplacementPlugin()]
+      : []),
   ]
 
   if (is_production) {
@@ -35,7 +44,6 @@ module.exports = (env, argv) => {
       background: './src/background/main.ts',
       newtab: './src/views/newtab/newtab.tsx',
       popup: './src/views/popup/popup.tsx',
-      'detect-theme': './src/helpers/detect-theme.ts',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
       'get-theme-content-script':
@@ -74,6 +82,11 @@ module.exports = (env, argv) => {
             },
             'sass-loader',
           ],
+        },
+        {
+          test: /\.svg$/i,
+          issuer: /\.[jt]sx?$/,
+          use: ['@svgr/webpack'],
         },
       ],
     },

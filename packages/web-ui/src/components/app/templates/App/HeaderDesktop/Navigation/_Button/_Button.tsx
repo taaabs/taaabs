@@ -5,8 +5,8 @@ import { Icon as UiIcon } from '@web-ui/components/Icon'
 
 export namespace _Button {
   export type Props = {
-    icon: Icon.Variant
-    filled_icon: Icon.Variant
+    icon: UiIcon.Variant
+    filled_icon: UiIcon.Variant
     href: string
     title: string
     on_click?: (e: React.MouseEvent) => void

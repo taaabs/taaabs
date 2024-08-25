@@ -4,7 +4,7 @@ import styles from './_IconButton.module.scss'
 export namespace _IconButton {
   export type Props = {
     on_click: () => void
-    icon_variant: Icon.Variant
+    icon_variant: UiIcon.Variant
     test_id?: string
     aria_label?: string
   }

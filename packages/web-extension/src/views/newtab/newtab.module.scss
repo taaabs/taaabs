@@ -2,12 +2,12 @@
 @use '../../../../web-ui/src/styles/foundation' as *;
 
 .container {
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 .header {
   height: var(--header-desktop-height);
-  border-bottom: var(--border-secondary);
+  background-color: var(--header-background);
+  border-bottom: var(--border-primary);
 }
 .wrapper {
   max-width: var(--site-max-width);

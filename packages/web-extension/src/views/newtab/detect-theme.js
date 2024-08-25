@@ -7,14 +7,10 @@ function detect_system_theme() {
   }
 }
 
-function applyTheme(theme: string) {
-  document.documentElement.setAttribute('data-theme', theme)
-}
-
 // Check storage for theme preference and apply it
-chrome.storage.local.get('theme', (data) => {
+chrome.storage?.local.get('theme', (data) => {
   if (data.theme) {
-    applyTheme(data.theme)
+    document.documentElement.setAttribute('data-theme', data.theme)
   } else {
     detect_system_theme()
   }

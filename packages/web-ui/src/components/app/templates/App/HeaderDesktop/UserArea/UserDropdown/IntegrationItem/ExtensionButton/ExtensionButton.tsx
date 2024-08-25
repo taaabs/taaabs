@@ -2,7 +2,7 @@ import { Icon as UiIcon } from '@web-ui/components/Icon'
 import styles from './ExtensionButton.module.scss'
 
 type Props = {
-  icon: Icon.Variant
+  icon: UiIcon.Variant
   text: string
   subtext: string
   href: string
