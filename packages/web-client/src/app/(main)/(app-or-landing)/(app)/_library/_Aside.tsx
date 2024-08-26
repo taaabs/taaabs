@@ -102,7 +102,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: props.dictionary.app.library.sort_by_options.edited,
+                    label: props.dictionary.app.library.sort_by_options.updated,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by ==
                       SortBy.UPDATED_AT,
@@ -145,7 +145,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                       SortBy.CREATED_AT,
                   },
                   {
-                    label: props.dictionary.app.library.sort_by_options.edited,
+                    label: props.dictionary.app.library.sort_by_options.updated,
                     is_selected:
                       sort_by_view_options_hook.current_sort_by ==
                       SortBy.UPDATED_AT,

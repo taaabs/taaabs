@@ -152,7 +152,7 @@ const handle_tab_change = async (tab_id: number, url: string) => {
         },
       )
     }, 1000)
-  } else if (url.startsWith('chrome://')) {
+  } else if (url.startsWith('chrome://') || url.startsWith('chrome-extension://')) {
     update_icon(tab_id)
   } else {
     const cleaned_url = url_cleaner(url)
@@ -197,5 +197,5 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.sync.set({ use_custom_new_tab: true })
-  chrome.tabs.create({ url: 'options.html' })
+  chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

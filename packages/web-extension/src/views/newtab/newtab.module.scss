@@ -1,13 +1,12 @@
 // @type
 @use '../../../../web-ui/src/styles/foundation' as *;
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+
 .container {
   min-height: 100vh;
-}
-.header {
-  height: var(--header-desktop-height);
-  background-color: var(--header-background);
-  border-bottom: var(--border-primary);
+  animation: fade-in 600ms;
 }
 .wrapper {
   max-width: var(--site-max-width);
@@ -18,6 +17,15 @@
 }
 .inner {
   margin: 0 auto;
-  padding-top: var(--padding-16px);
+  padding-top: calc(var(--padding-16px) + var(--header-desktop-height));
   width: calc(100% - (300px * 2));
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
 }

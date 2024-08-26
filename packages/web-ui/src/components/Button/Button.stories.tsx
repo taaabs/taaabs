@@ -64,3 +64,18 @@ const submit_type_args: Button.Props = {
   children: 'Submit Button',
 }
 SubmitType.args = submit_type_args
+
+export const Outlined = Template.bind({})
+const outlined_args: Button.Props = {
+  is_outlined: true,
+  children: 'Outlined Button',
+}
+Outlined.args = outlined_args
+
+export const OutlinedDanger = Template.bind({})
+const outlined_danger_args: Button.Props = {
+  is_outlined: true,
+  is_danger: true,
+  children: 'Outlined Danger Button',
+}
+OutlinedDanger.args = outlined_danger_args

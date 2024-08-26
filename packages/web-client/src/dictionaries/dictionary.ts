@@ -171,7 +171,7 @@ export type Dictionary = {
         date: string
         the_huggiest: string
         added: string
-        edited: string
+        updated: string
         visited: string
       }
       order_options: {

@@ -7,6 +7,7 @@ export namespace Button {
   export type Props = {
     href?: string
     size?: Size
+    is_outlined?: boolean
     on_click?: () => void
     type?: 'submit'
     children?: React.ReactNode
@@ -24,6 +25,7 @@ export const Button: React.FC<Button.Props> = (props) => {
     props.size && props.size != 'default' && styles[`container--${props.size}`],
     { [styles['container--disabled']]: props.is_disabled },
     { [styles['container--danger']]: props.is_danger },
+    { [styles['container--outlined']]: props.is_outlined },
   ])
 
   if (props.type == 'submit') {

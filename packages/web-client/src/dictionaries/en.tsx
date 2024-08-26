@@ -235,7 +235,7 @@ const dictionary: Dictionary = {
         the_huggiest: 'The huggiest!',
         added: 'added',
         visited: 'visited',
-        edited: 'edited',
+        updated: 'updated',
       },
       order_options: {
         newest: 'Newest',

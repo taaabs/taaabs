@@ -237,10 +237,10 @@ export const dictionary: Dictionary = {
       use_original: 'Oryginalny link został przywrócony',
       sort_by_options: {
         added: 'dodania',
-        edited: 'edycji',
+        updated: 'edycji',
         visited: 'wizyty',
         date: 'Data...',
-        the_huggiest: 'Ilość reakcji',
+        the_huggiest: 'Reakcje',
       },
       order_options: {
         newest: 'Najnowsze',

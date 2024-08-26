@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "incremental": true,
     "baseUrl": ".",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "jsxImportSource": "react",
     "paths": {
       "@web-ui/*": ["src/*"],

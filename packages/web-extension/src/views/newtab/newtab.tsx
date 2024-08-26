@@ -11,46 +11,45 @@ import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@we
 
 export const NewTab: React.FC = () => {
   return (
-    <Ui_app_templates_App
-      slot_bottom_navigation_bar={<></>}
-      slot_header_desktop={
-        <Ui_app_templates_App_HeaderDesktop
-          slot_left={<></>}
-          slot_middle={
-            <Ui_app_templates_App_HeaderDesktop_Navigation
-              items={[
-                {
-                  title: 'Home',
-                  href: '',
-                  icon: 'HOME',
-                  filled_icon: 'HOME',
-                  is_active: false,
-                },
-                {
-                  title: 'Library',
-                  href: '',
-                  icon: 'BOOKMARK',
-                  filled_icon: 'BOOKMARK_FILLED',
-                  is_active: true,
-                },
-              ]}
-            />
-          }
-          slot_right={<></>}
-        />
-      }
-      slot_header_mobile={<></>}
-    >
-      <div className={styles.container}>
-        <div className={styles.header}></div>
+    <div className={styles.container}>
+      <Ui_app_templates_App
+        slot_bottom_navigation_bar={<></>}
+        slot_header_desktop={
+          <Ui_app_templates_App_HeaderDesktop
+            slot_left={<></>}
+            slot_middle={
+              <Ui_app_templates_App_HeaderDesktop_Navigation
+                items={[
+                  {
+                    title: 'Home',
+                    href: 'https://taaabs.com',
+                    icon: 'HOME',
+                    filled_icon: 'HOME',
+                    is_active: false,
+                  },
+                  {
+                    title: 'Library',
+                    href: 'https://taaabs.com/library',
+                    icon: 'BOOKMARK',
+                    filled_icon: 'BOOKMARK_FILLED',
+                    is_active: true,
+                  },
+                ]}
+              />
+            }
+            slot_right={<></>}
+          />
+        }
+        slot_header_mobile={<></>}
+      >
         <div className={styles.wrapper}>
           <div className={styles.inner}>
             <Search />
             <Bookmarks />
           </div>
         </div>
-      </div>
-    </Ui_app_templates_App>
+      </Ui_app_templates_App>
+    </div>
   )
 }
 

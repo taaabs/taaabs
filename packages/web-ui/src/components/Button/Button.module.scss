@@ -67,4 +67,30 @@
     font-size: clamp(var(--font-size-17px), 1.38vw, var(--font-size-22px));
     padding: 0 1.2em;
   }
+  &--outlined {
+    background-color: transparent;
+    border: 1.5px solid var(--border-color-primary);
+    color: var(--black) !important;
+    @include hover {
+      background-color: var(--border-color-primary) !important;
+    }
+    &:focus-visible {
+      outline-color: var(--blue400);
+    }
+    &.container--danger {
+      border-color: var(--red);
+      color: var(--red);
+      @include hover {
+        background-color: var(--red);
+        color: var(--white);
+        @include dark {
+          background-color: var(--red800);
+          color: white;
+        }
+      }
+      &:focus-visible {
+        outline-color: var(--red300);
+      }
+    }
+  }
 }

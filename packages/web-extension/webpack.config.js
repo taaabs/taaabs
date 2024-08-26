@@ -14,7 +14,7 @@ module.exports = (_, argv) => {
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),
-    // Fixes error "process is not defined" when importing UI component which imports next/link
+    // Fixes error "process is not defined" when importing UI component which imports next/link like @web-ui/Button
     new ProvidePlugin({
       process: 'process/browser',
     }),
@@ -97,10 +97,15 @@ module.exports = (_, argv) => {
       },
       compress: true,
       port: 9000,
-      hot: true,
     },
     optimization: {
       minimize: false,
+    },
+    cache: {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename], // This makes all dependencies of this file - build dependencies
+      },
     },
   }
 }
