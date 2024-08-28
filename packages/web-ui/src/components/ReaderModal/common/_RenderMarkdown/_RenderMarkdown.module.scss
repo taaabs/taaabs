@@ -77,10 +77,8 @@
     border-width: 1.5px;
     margin: 0;
     padding: 0 var(--padding-16px);
-    border-top-right-radius: var(--border-radius-20px);
-    border-bottom-right-radius: var(--border-radius-20px);
     @include dark {
-      background-color: var(--dark300);
+      background-color: var(--dark200);
       border-left-color: var(--dark400);
     }
   }

@@ -1,6 +1,26 @@
 // @type
 @use '../../../../web-ui/src/styles/foundation' as *;
 
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap');
+
 .container {
-  background-color: red;
+  --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
+  --font-family-inter: 'Inter', sans-serif;
+  animation: fade-in var(--transition-duration-150ms) ease-in-out;
+  a {
+    text-decoration: none;
+  }
+  button {
+    cursor: pointer;
+    border: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 100;
+  }
 }

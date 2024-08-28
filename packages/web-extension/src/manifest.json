@@ -20,7 +20,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.js"],
+      "resources": ["popup.js", "popup.css"],
       "matches": ["<all_urls>"]
     }
   ],

@@ -8,7 +8,9 @@ chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
 chrome.action.onClicked.addListener((tab) => {
-  chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
+  if (!tab.url?.startsWith('https://taaabs.com')) {
+    chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
+  }
 })
 
 // For sendResponse to work, boolean must be returned synchronously
@@ -51,7 +53,7 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
   } else if (request.action == 'get-auth-data') {
     chrome.storage.local.get(['auth_data'], (result) => {
       sendResponse(result.auth_data)
-      return true // Keep the message channel open for sendResponse
+      return true
     })
   } else if (request.action == 'theme-changed') {
     ;(async () => {
@@ -71,6 +73,8 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
       }
     })()
     return false
+  } else if (request.action == 'open-options-page') {
+    chrome.runtime.openOptionsPage()
   }
   return false
 })
@@ -152,7 +156,10 @@ const handle_tab_change = async (tab_id: number, url: string) => {
         },
       )
     }, 1000)
-  } else if (url.startsWith('chrome://') || url.startsWith('chrome-extension://')) {
+  } else if (
+    url.startsWith('chrome://') ||
+    url.startsWith('chrome-extension://')
+  ) {
     update_icon(tab_id)
   } else {
     const cleaned_url = url_cleaner(url)

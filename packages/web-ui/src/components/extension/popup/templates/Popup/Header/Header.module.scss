@@ -1,0 +1,34 @@
+// @type
+@use '../../../../../../styles/foundation' as *;
+
+.container {
+  background-color: var(--header-background);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  border-bottom: var(--border-primary);
+  > svg {
+    height: 50px;
+    fill: var(--accent-color);
+  }
+}
+.settings {
+  position: absolute;
+  width: var(--button-dimension-34px);
+  height: var(--button-dimension-34px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 10px;
+  right: 10px;
+  border-radius: 50%;
+  @include transition-150ms(background-color);
+  @include hover {
+    background-color: var(--neutral100);
+  }
+  > svg {
+    width: var(--icon-dimension-18px);
+  }
+}

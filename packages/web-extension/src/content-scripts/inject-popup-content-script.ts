@@ -19,11 +19,11 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
       ) {
         popup.style.opacity = '0'
         popup.style.pointerEvents = 'none'
-        console.log('Popup visibility has been hidden.')
+        console.log('Popup visibility has been hidden')
       } else {
         popup.style.opacity = '1'
         popup.style.pointerEvents = 'all'
-        console.log('Popup visibility has been restored.')
+        console.log('Popup visibility has been restored')
       }
     }
   } else if (request.action == 'close-popup') {
@@ -38,7 +38,7 @@ const inject_popup = () => {
   container.style.position = 'fixed'
   container.style.top = '0'
   container.style.right = '0'
-  container.style.width = '350px'
+  container.style.width = '300px'
   container.style.margin = '24px'
   container.style.zIndex = '99999'
   container.style.transition = '150ms opacity ease-in-out'
@@ -48,6 +48,12 @@ const inject_popup = () => {
   const script = document.createElement('script')
   script.src = chrome.runtime.getURL('popup.js')
   document.body.appendChild(script)
+
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.type = 'text/css'
+  link.href = chrome.runtime.getURL('popup.css')
+  document.head.appendChild(link)
 
   // Add event listener to close popup when clicking outside
   document.addEventListener('click', (event) => {
@@ -68,6 +74,8 @@ const inject_popup = () => {
           '*',
         )
       })
+    } else if (event.data && event.data.action == 'open-options-page') {
+      chrome.runtime.sendMessage({ action: 'open-options-page' })
     }
   })
 

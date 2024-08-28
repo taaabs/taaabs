@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom/client'
 import styles from './newtab.module.scss'
 import { Search } from './components/Search'
 import { Bookmarks } from './components/Bookmarks'
-
-import '../../../../web-ui/src/styles/style.scss'
 import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/App'
 import { HeaderDesktop as Ui_app_templates_App_HeaderDesktop } from '@web-ui/components/app/templates/App/HeaderDesktop'
 import { Navigation as Ui_app_templates_App_HeaderDesktop_Navigation } from '@web-ui/components/app/templates/App/HeaderDesktop/Navigation'
+
+import '../../../../web-ui/src/styles/style.scss'
 
 export const NewTab: React.FC = () => {
   return (

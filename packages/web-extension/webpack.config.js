@@ -101,11 +101,11 @@ module.exports = (_, argv) => {
     optimization: {
       minimize: false,
     },
-    cache: {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename], // This makes all dependencies of this file - build dependencies
-      },
-    },
+    // cache: {
+    //   type: 'filesystem',
+    //   buildDependencies: {
+    //     config: [__filename], // This makes all dependencies of this file - build dependencies
+    //   },
+    // },
   }
 }

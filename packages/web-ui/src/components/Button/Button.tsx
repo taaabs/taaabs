@@ -16,6 +16,7 @@ export namespace Button {
     is_disabled?: boolean
     is_danger?: boolean
     auto_focus?: boolean
+    rel?: string
   }
 }
 
@@ -45,6 +46,7 @@ export const Button: React.FC<Button.Props> = (props) => {
         href={props.href}
         onClick={props.on_click}
         autoFocus={props.auto_focus}
+        rel={props.rel}
       >
         <span>{props.children}</span>
       </Link>

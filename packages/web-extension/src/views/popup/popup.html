@@ -12,7 +12,7 @@
         position: fixed;
         top: 0;
         right: 0;
-        width: 350px;
+        width: 300px;
         margin-top: 24px;
         margin-right: 24px;
         z-index: 99999;
@@ -21,9 +21,30 @@
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
+    URL is:
+    <button id="set-saved-true">SAVED</button>
+    <button id="set-saved-false">NOT SAVED</button>
     <div class="popup">
       <div id="root-taaabs-popup"></div>
     </div>
     <script src="popup.js"></script>
+    <script>
+      document
+        .getElementById('set-saved-true')
+        .addEventListener('click', () => {
+          window.postMessage(
+            { action: 'url-saved-status', is_saved: true },
+            '*',
+          )
+        })
+      document
+        .getElementById('set-saved-false')
+        .addEventListener('click', () => {
+          window.postMessage(
+            { action: 'url-saved-status', is_saved: false },
+            '*',
+          )
+        })
+    </script>
   </body>
 </html>

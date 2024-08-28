@@ -1,0 +1,80 @@
+@use 'foundation' as *;
+
+:root {
+  @include variables;
+  @include colors;
+
+  // Colors
+  --white: #fff;
+  --black: var(--neutral900);
+  --red: var(--red600);
+  --yellow: var(--yellow400);
+  --highlight: #ffff00;
+
+  // Text
+  --text-color-normal: var(--black);
+  --text-color-variant: var(--neutral600);
+  --text-color-dimmed: var(--neutral500);
+
+  // Accent
+  --accent-color: var(--blue700);
+
+  // Shared
+  --background: var(--neutral50);
+  --selection-background: var(--accent-color);
+  --selection-foreground: var(--white);
+  --border-color-primary: var(--neutral200);
+  --border-color-secondary: var(--neutral100);
+  --border-color-hover: var(--neutral300);
+  --outlined-button-background: var(--white);
+  --border-primary: 1px solid var(--border-color-primary);
+  --border-secondary: 1px solid var(--border-color-secondary);
+  --border-hover: 1px solid var(--border-color-hover);
+  --header-background: var(--white);
+  --header-transparent-background: rgba(255, 255, 255, 0.8);
+  --transparent-hover-background: rgba(15, 20, 25, 0.05);
+
+  --skeleton-base-color: var(--neutral100);
+  --skeleton-highlight-color: var(--neutral50);
+
+  // Toast overrides
+  --toastify-color-success: var(--accent-color);
+  --toastify-color-info: var(--accent-color);
+  --toastify-color-error: var(--red);
+  --toastify-text-color-light: var(--text-color-normal);
+
+  // Context menu overrides
+  --context-menu-background-color: transparent;
+}
+
+html[data-theme='dark'] {
+  // Colors
+  --white: var(--dark50);
+  --black: var(--dark700);
+  --red: var(--red700);
+  --yellow: var(--yellow500);
+  --highlight: #613214;
+
+  // Text
+  --text-color-normal: var(--dark700);
+  --text-color-variant: var(--dark600);
+  --text-color-dimmed: var(--dark500);
+
+  // Accent
+  --accent-color: var(--blue600);
+
+  // Shared
+  --background: var(--dark50);
+  --selection-background: var(--dark600);
+  --selection-foreground: var(--dark50);
+  --border-color-primary: var(--dark300);
+  --border-color-secondary: var(--dark200);
+  --border-color-hover: var(--dark400);
+  --outlined-button-background: var(--dark50);
+  --header-background: var(--dark100);
+  --header-transparent-background: rgba(23, 30, 45, 0.8);
+  --transparent-hover-background: rgba(156, 163, 175, 0.07);
+
+  --skeleton-base-color: var(--dark100);
+  --skeleton-highlight-color: var(--dark200);
+}

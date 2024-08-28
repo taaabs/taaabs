@@ -9,14 +9,11 @@
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  @include transition-150ms(border-color);
+  @include transition-150ms(background-color);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
   @include hover {
-    background-color: rgba(15, 20, 25, 0.05);
-    @include dark {
-      background-color: rgba(156, 163, 175, 0.07);
-    }
+    background-color: var(--transparent-hover-background);
   }
   svg {
     width: var(--icon-dimension-20px);

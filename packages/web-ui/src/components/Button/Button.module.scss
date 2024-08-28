@@ -15,14 +15,15 @@
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
+  height: var(--button-dimension-40px);
+  padding: 0 16px;
+  font-size: var(--font-size-15px);
   @include hover {
     background-color: var(--blue800);
     @include dark {
       background-color: var(--blue700);
     }
   }
-  height: var(--button-dimension-40px);
-  padding: 0 16px;
   &:focus-visible {
     outline: 1.5px solid var(--blue400);
     outline-offset: 2px;
@@ -68,11 +69,12 @@
     padding: 0 1.2em;
   }
   &--outlined {
-    background-color: transparent;
+    background-color: transparent !important;
     border: 1.5px solid var(--border-color-primary);
     color: var(--black) !important;
+    @include transition-150ms(border-color);
     @include hover {
-      background-color: var(--border-color-primary) !important;
+      border-color: var(--border-color-hover);
     }
     &:focus-visible {
       outline-color: var(--blue400);

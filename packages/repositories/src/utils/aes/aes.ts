@@ -16,7 +16,7 @@ export namespace AES {
       )
 
       const encrypted_data = await window.crypto.subtle.encrypt(
-        { name: 'AES-CBC', iv: iv },
+        { name: 'AES-CBC', iv },
         crypto_key,
         encoded_data,
       )
@@ -60,7 +60,7 @@ export namespace AES {
       )
 
       const decrypted_data = await window.crypto.subtle.decrypt(
-        { name: 'AES-CBC', iv: iv },
+        { name: 'AES-CBC', iv },
         crypto_key,
         encrypted_data,
       )
