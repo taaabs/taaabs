@@ -43,6 +43,9 @@
 .input {
   padding-left: var(--padding-2px);
   width: 150px;
+  &::placeholder {
+    color: var(--text-color-dimmed);
+  }
   &--empty {
     padding-left: var(--padding-4px);
   }
@@ -134,7 +137,7 @@
         @include text-decoration-underlinie-thin;
       }
       &:nth-child(odd) {
-        font-weight: var(--font-weight-inter-semi-bold);
+        font-weight: var(--font-weight-inter-medium);
       }
     }
   }

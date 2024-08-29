@@ -57,6 +57,9 @@
     }
     &::placeholder {
       color: var(--amber500) !important;
+      @include dark {
+        color: var(--amber600) !important;
+      }
     }
   }
   &--disabled {

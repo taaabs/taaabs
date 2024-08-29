@@ -300,15 +300,16 @@ export namespace HtmlParser {
             'text/html',
           )
           const post = new Readability(doc, { keepClasses: true }).parse()!
+          const content = turndown_service.turndown(post.content)
           return {
             reader_data: JSON.stringify({
               type: ReaderData.ContentType.ARTICLE,
               author: author_name,
               site_name: `Reddit - ${subreddit_name}`,
               length: post.length,
-              content: turndown_service.turndown(post.content),
+              content,
             } as ReaderData.Article),
-            plain_text: normalize_whitespace(post.textContent),
+            plain_text: strip_markdown_links(content),
           }
         }
       } else if (
@@ -335,7 +336,7 @@ export namespace HtmlParser {
           concatenated_tweets +=
             turndown_service.turndown(tweet.content) + '\n\n'
         })
-
+        // TODO, twitter to have special output type
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
@@ -343,7 +344,7 @@ export namespace HtmlParser {
             site_name: 'Twitter',
             content: concatenated_tweets,
           } as ReaderData.Article),
-          plain_text: concatenated_tweets,
+          plain_text: strip_markdown_links(concatenated_tweets),
         }
       } else {
         const parser = new DOMParser()
@@ -358,6 +359,7 @@ export namespace HtmlParser {
           }
         })
         const article = new Readability(doc, { keepClasses: true }).parse()!
+        const content = turndown_service.turndown(article.content)
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
@@ -366,9 +368,9 @@ export namespace HtmlParser {
             published_at: article.publishedTime,
             author: article.byline,
             length: article.length,
-            content: turndown_service.turndown(article.content),
+            content,
           } as ReaderData.Article),
-          plain_text: normalize_whitespace(article.textContent),
+          plain_text: strip_markdown_links(content),
         }
       }
     } catch (error) {
@@ -378,6 +380,7 @@ export namespace HtmlParser {
   }
 }
 
-const normalize_whitespace = (text: string) => {
-  return text.replace(/\s{2,}/g, '\n\n').trim()
+// Replace [TEXT](URL) with TEXT
+const strip_markdown_links = (text: string) => {
+  return text.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
 }

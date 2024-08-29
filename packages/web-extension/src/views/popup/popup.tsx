@@ -96,7 +96,7 @@ export const Popup: React.FC = () => {
             }}
             is_outlined={true}
           >
-            TL;DR
+            TL;DR summary
           </UiButton>
           <UiButton
             on_click={() => {
@@ -121,7 +121,7 @@ export const Popup: React.FC = () => {
             }}
             is_outlined={true}
           >
-            Simplify
+            Rewrite simplified
           </UiButton>
           <UiButton
             on_click={() => {
