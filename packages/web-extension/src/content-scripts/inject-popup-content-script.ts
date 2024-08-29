@@ -40,7 +40,7 @@ const inject_popup = () => {
   container.style.right = '0'
   container.style.width = '300px'
   container.style.margin = '24px'
-  container.style.zIndex = '99999'
+  container.style.zIndex = '99999999'
   container.style.transition = '150ms opacity ease-in-out'
 
   document.body.appendChild(container)
@@ -67,15 +67,21 @@ const inject_popup = () => {
   // Listen for messages from popup
   window.addEventListener('message', async (event) => {
     if (event.source !== window) return
-    if (event.data && event.data.action == 'check-url-saved') {
+    if (event.data.action == 'check-url-saved') {
       chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
         window.postMessage(
           { action: 'url-saved-status', is_saved: response.is_saved },
           '*',
         )
       })
-    } else if (event.data && event.data.action == 'open-options-page') {
+    } else if (event.data.action == 'open-options-page') {
       chrome.runtime.sendMessage({ action: 'open-options-page' })
+    } else if (event.data.action == 'send-chatbot-prompt') {
+      chrome.runtime.sendMessage({
+        action: 'send-chatbot-prompt',
+        chatbot_url: event.data.chatbot_url,
+        prompt: event.data.prompt,
+      })
     }
   })
 

@@ -24,6 +24,8 @@
   top: 10px;
   right: 10px;
   border-radius: 50%;
+  border: none;
+  background: none;
   @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral100);

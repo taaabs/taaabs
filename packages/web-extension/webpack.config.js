@@ -50,6 +50,8 @@ module.exports = (_, argv) => {
         './src/content-scripts/get-theme-content-script.ts',
       'inject-popup-content-script':
         './src/content-scripts/inject-popup-content-script.ts',
+      'send-chatbot-prompt-content-script':
+        './src/content-scripts/send-chatbot-prompt-content-script.ts',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -101,11 +103,11 @@ module.exports = (_, argv) => {
     optimization: {
       minimize: false,
     },
-    // cache: {
-    //   type: 'filesystem',
-    //   buildDependencies: {
-    //     config: [__filename], // This makes all dependencies of this file - build dependencies
-    //   },
-    // },
+    cache: {
+      type: 'filesystem',
+      buildDependencies: {
+        config: [__filename], // This makes all dependencies of this file - build dependencies
+      },
+    },
   }
 }

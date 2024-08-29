@@ -75,6 +75,25 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
     return false
   } else if (request.action == 'open-options-page') {
     chrome.runtime.openOptionsPage()
+  } else if (request.action == 'send-chatbot-prompt') {
+    chrome.tabs.create({ url: request.chatbot_url }, (new_tab) => {
+      const listener = (
+        details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
+      ) => {
+        if (
+          details.tabId == new_tab.id &&
+          details.frameId == 0 &&
+          details.url == request.chatbot_url
+        ) {
+          chrome.webNavigation.onCompleted.removeListener(listener)
+          chrome.tabs.sendMessage(new_tab.id!, {
+            action: 'send-chatbot-prompt',
+            prompt: request.prompt,
+          })
+        }
+      }
+      chrome.webNavigation.onCompleted.addListener(listener)
+    })
   }
   return false
 })

@@ -18,6 +18,7 @@
   height: var(--button-dimension-40px);
   padding: 0 16px;
   font-size: var(--font-size-15px);
+  border: none;
   @include hover {
     background-color: var(--blue800);
     @include dark {

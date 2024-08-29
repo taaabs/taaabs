@@ -6,9 +6,11 @@ import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/
 import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/components/extension/popup/templates/Popup/Header'
 import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web-ui/components/extension/popup/templates/Popup/main/Actions'
 import { BottomNavigationBar as Ui_extension_popup_templates_Popup_BottomNavigationBar } from '@web-ui/components/extension/popup/templates/Popup/BottomNavigationBar'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
+import { HtmlParser } from '@shared/utils/html-parser'
+import { get_prompt } from './helpers/get-prompt'
 
 import '../../../../web-ui/src/styles/theme.scss'
 
@@ -24,27 +26,23 @@ export const Popup: React.FC = () => {
     return <></>
   }
 
-  const saved_items = (
-    <>
-      <UiButton
-        href={
-          'https://taaabs.com/library#url=' + encodeURIComponent(location.href)
-        }
-        rel="noreferrer noopener"
-      >
-        Edit
-      </UiButton>
-      <UiButton on_click={() => {}} is_danger={true}>
-        Delete
-      </UiButton>
-    </>
-  )
+  const saved_items = [
+    <UiButton
+      href={
+        'https://taaabs.com/library#url=' + encodeURIComponent(location.href)
+      }
+      rel="noreferrer noopener"
+    >
+      Edit
+    </UiButton>,
+    <UiButton on_click={() => {}} is_danger={true}>
+      Delete
+    </UiButton>,
+  ]
 
-  const unsaved_items = (
-    <>
-      <UiButton on_click={create_bookmark_hook.create_bookmark}>Save</UiButton>
-    </>
-  )
+  const unsaved_items = [
+    <UiButton on_click={create_bookmark_hook.create_bookmark}>Save</UiButton>,
+  ]
 
   return (
     <div className={styles.container}>
@@ -75,6 +73,81 @@ export const Popup: React.FC = () => {
       >
         <Ui_extension_popup_templates_Popup_main_Actions>
           {saved_check_hook.is_saved ? saved_items : unsaved_items}
+          <UiButton
+            on_click={() => {
+              const url = document.location.href
+              const html = document.getElementsByTagName('html')[0].outerHTML
+              const parsed_document = HtmlParser.parse({
+                html,
+                url,
+              })
+              if (parsed_document) {
+                send_message({
+                  action: 'send-chatbot-prompt',
+                  chatbot_url: 'https://chatgpt.com/',
+                  prompt: get_prompt({
+                    task: 'tldr',
+                    content: parsed_document.plain_text,
+                  }),
+                })
+              } else {
+                alert('Unable to parse the document')
+              }
+            }}
+            is_outlined={true}
+          >
+            TL;DR
+          </UiButton>
+          <UiButton
+            on_click={() => {
+              const url = document.location.href
+              const html = document.getElementsByTagName('html')[0].outerHTML
+              const parsed_document = HtmlParser.parse({
+                html,
+                url,
+              })
+              if (parsed_document) {
+                send_message({
+                  action: 'send-chatbot-prompt',
+                  chatbot_url: 'https://chatgpt.com/',
+                  prompt: get_prompt({
+                    task: 'simplify',
+                    content: parsed_document.plain_text,
+                  }),
+                })
+              } else {
+                alert('Unable to parse the document')
+              }
+            }}
+            is_outlined={true}
+          >
+            Simplify
+          </UiButton>
+          <UiButton
+            on_click={() => {
+              const url = document.location.href
+              const html = document.getElementsByTagName('html')[0].outerHTML
+              const parsed_document = HtmlParser.parse({
+                html,
+                url,
+              })
+              if (parsed_document) {
+                send_message({
+                  action: 'send-chatbot-prompt',
+                  chatbot_url: 'https://chatgpt.com/',
+                  prompt: get_prompt({
+                    task: 'pov',
+                    content: parsed_document.plain_text,
+                  }),
+                })
+              } else {
+                alert('Unable to parse the document')
+              }
+            }}
+            is_outlined={true}
+          >
+            Perspectives analysis
+          </UiButton>
         </Ui_extension_popup_templates_Popup_main_Actions>
       </Ui_extension_popup_templates_Popup>
     </div>

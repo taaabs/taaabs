@@ -12,7 +12,7 @@ export const Primary = () => {
   return (
     <div style={{ width: '300px', margin: '50px' }}>
       <Popup
-        header_slot={<Header settings_url="" />}
+        header_slot={<Header settings_on_click={() => {}} />}
         bottom_navigation_bar_slot={
           <BottomNavigationBar
             items={[

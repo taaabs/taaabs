@@ -1,4 +1,3 @@
-// Joplin fork comes with no types
 import type TurndownService from 'turndown'
 import TurndownServiceJoplin from '@joplin/turndown'
 import * as turndownPluginGfm from '@joplin/turndown-plugin-gfm'
@@ -12,6 +11,7 @@ export namespace HtmlParser {
   }
   export type ParsedResult = {
     reader_data: string
+    plain_text: string
   }
 
   const create_turndown_service = (): TurndownService => {
@@ -87,27 +87,44 @@ export namespace HtmlParser {
     user_selector: string
     assistant_selector: string
     turndown_service: TurndownService
-  }): ReaderData.Chat['conversation'] => {
+  }): {
+    messages: ReaderData.Chat['conversation']
+    plain_text: string
+  } => {
     const temp_el = document.createElement('div')
     temp_el.innerHTML = params.html
     const message_divs = temp_el.querySelectorAll<HTMLElement>(
       `${params.user_selector}, ${params.assistant_selector}`,
     )
     const messages: ReaderData.Chat['conversation'] = []
+    let plain_text = ''
     message_divs.forEach((el) => {
       if (el.matches(params.user_selector)) {
-        messages.push({ role: 'user', content: el.textContent?.trim() || '' })
+        const content = el.textContent?.trim() || ''
+        messages.push({ role: 'user', content })
+        plain_text += `**User:** ${content}\n\n`
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
         const article = new Readability(doc, { keepClasses: true }).parse()!
+        const content = params.turndown_service.turndown(article.content)
         messages.push({
           role: 'assistant',
-          content: params.turndown_service.turndown(article.content),
+          content,
         })
+        // Check if the content starts with a special markdown character
+        const markdown_chars = ['#', '*', '`', '>', '-', '+', '1.']
+        const starts_with_markdown = markdown_chars.some((char) =>
+          content.startsWith(char),
+        )
+        if (starts_with_markdown) {
+          plain_text += `**Assistant:**\n${content}\n\n`
+        } else {
+          plain_text += `**Assistant:** ${content}\n\n`
+        }
       }
     })
-    return messages
+    return { messages, plain_text }
   }
 
   export const parse = (params: Params): ParsedResult | undefined => {
@@ -124,7 +141,7 @@ export namespace HtmlParser {
       if (params.url.startsWith('https://chatgpt.com/')) {
         const user_selector = '[data-message-author-role="user"]'
         const assistant_selector = '[data-message-author-role="assistant"]'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -137,12 +154,13 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://gemini.google.com/app/')) {
         const user_selector = '.query-content'
         const assistant_selector = '.response-content'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -155,6 +173,7 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://huggingface.co/chat/')) {
@@ -162,7 +181,7 @@ export namespace HtmlParser {
           '.dark\\:text-gray-400.text-gray-500.py-3\\.5.px-5.bg-inherit.break-words.text-wrap.whitespace-break-spaces.appearance-none.w-full.disabled'
         const assistant_selector =
           '.dark\\:text-gray-300.dark\\:from-gray-800\\/40.dark\\:border-gray-800.prose-pre\\:my-2.text-gray-600.py-3\\.5.px-5.from-gray-50.bg-gradient-to-br.border-gray-100.border.rounded-2xl.break-words.min-w-\\[60px\\].min-h-\\[calc\\(2rem\\+theme\\(spacing\\[3\\.5\\]\\)\\*2\\)\\].relative'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -175,12 +194,13 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://claude.ai/chat/')) {
         const user_selector = '.font-user-message'
         const assistant_selector = '.font-claude-message'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -193,6 +213,7 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://coral.cohere.com/c/')) {
@@ -200,7 +221,7 @@ export namespace HtmlParser {
           '.hover\\:bg-mushroom-50.ease-in-out.transition-colors.md\\:flex-row.text-left.p-2.rounded-md.gap-2.flex-col.w-full.h-fit.flex.group:has(img[alt="Avatar user image"])'
         const assistant_selector =
           '.hover\\:bg-mushroom-50.ease-in-out.transition-colors.md\\:flex-row.text-left.p-2.rounded-md.gap-2.flex-col.w-full.h-fit.flex.group:has(svg[data-component="CoralLogo"])'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -213,6 +234,7 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://chat.mistral.ai/chat/')) {
@@ -220,7 +242,7 @@ export namespace HtmlParser {
           '.gap-2.justify-between.items-stretch.flex-col.min-w-0.w-full.flex'
         const assistant_selector =
           '.font-light.prose-ol\\:pl-8.prose-pre\\:p-0.prose-pre\\:bg-\\[\\#1e1e1e\\].prose-pre\\:m-0.prose-code\\:whitespace-break-spaces.prose-code\\:m-0.prose-p\\:whitespace-break-spaces.dark\\:prose-invert.break-words.text-wrap.overflow-x-auto.select-text.max-w-none.prose-neutral.prose'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -233,6 +255,7 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (
@@ -242,7 +265,7 @@ export namespace HtmlParser {
       ) {
         const user_selector = '#user-message'
         const assistant_selector = '.chat-assistant'
-        const messages = parse_chat_messages({
+        const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
           assistant_selector,
@@ -255,6 +278,7 @@ export namespace HtmlParser {
           }
           return {
             reader_data: JSON.stringify(reader_data),
+            plain_text,
           }
         }
       } else if (params.url.startsWith('https://www.reddit.com/')) {
@@ -284,6 +308,7 @@ export namespace HtmlParser {
               length: post.length,
               content: turndown_service.turndown(post.content),
             } as ReaderData.Article),
+            plain_text: normalize_whitespace(post.textContent),
           }
         }
       } else {
@@ -309,6 +334,7 @@ export namespace HtmlParser {
             length: article.length,
             content: turndown_service.turndown(article.content),
           } as ReaderData.Article),
+          plain_text: normalize_whitespace(article.textContent),
         }
       }
     } catch (error) {
@@ -316,4 +342,8 @@ export namespace HtmlParser {
       return undefined
     }
   }
+}
+
+const normalize_whitespace = (text: string) => {
+  return text.replace(/\s{2,}/g, '\n\n').trim()
 }

@@ -12,7 +12,12 @@
   }
   button {
     cursor: pointer;
-    border: none;
+  }
+  a,
+  button {
+    &:focus {
+      outline: none;
+    }
   }
 }
 
