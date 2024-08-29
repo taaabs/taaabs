@@ -146,7 +146,7 @@ export const Popup: React.FC = () => {
             }}
             is_outlined={true}
           >
-            Perspectives analysis
+            In-depth analysis
           </UiButton>
         </Ui_extension_popup_templates_Popup_main_Actions>
       </Ui_extension_popup_templates_Popup>

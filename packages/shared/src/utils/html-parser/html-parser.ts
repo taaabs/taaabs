@@ -311,6 +311,40 @@ export namespace HtmlParser {
             plain_text: normalize_whitespace(post.textContent),
           }
         }
+      } else if (
+        params.url.startsWith('https://twitter.com/') ||
+        params.url.startsWith('https://x.com/')
+      ) {
+        const temp_el = document.createElement('div')
+        temp_el.innerHTML = params.html
+
+        // Select the main tweet and all tweets that are part of the thread
+        const tweet_elements = temp_el.querySelectorAll<HTMLElement>(
+          'article:has(.r-12kyg2d.css-175oi2r > .r-1wtj0ep.r-18u37iz.r-k4xj1c.css-175oi2r), article:has(.r-14gqq1x.r-16y2uox.r-m5arl1.r-f8sm7e.r-1bnu78o.css-175oi2r), article:has(.r-15zivkp.r-onrtq4.r-1wron08.r-18kxxzh.css-175oi2r)',
+        )
+
+        let concatenated_tweets = ''
+
+        tweet_elements.forEach((tweet_element) => {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(
+            tweet_element.querySelector('[data-testid="tweetText"]')!.innerHTML,
+            'text/html',
+          )
+          const tweet = new Readability(doc, { keepClasses: true }).parse()!
+          concatenated_tweets +=
+            turndown_service.turndown(tweet.content) + '\n\n'
+        })
+
+        return {
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.ARTICLE,
+            title,
+            site_name: 'Twitter',
+            content: concatenated_tweets,
+          } as ReaderData.Article),
+          plain_text: concatenated_tweets,
+        }
       } else {
         const parser = new DOMParser()
         const doc = parser.parseFromString(params.html, 'text/html')
