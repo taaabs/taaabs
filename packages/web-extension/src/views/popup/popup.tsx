@@ -84,7 +84,7 @@ export const Popup: React.FC = () => {
               if (parsed_document) {
                 send_message({
                   action: 'send-chatbot-prompt',
-                  chatbot_url: 'https://chatgpt.com/',
+                  chatbot_url: 'https://gemini.google.com/app',
                   prompt: get_prompt({
                     task: 'tldr',
                     content: parsed_document.plain_text,
@@ -121,7 +121,7 @@ export const Popup: React.FC = () => {
             }}
             is_outlined={true}
           >
-            Rewrite simplified
+            Use simpler language
           </UiButton>
           <UiButton
             on_click={() => {

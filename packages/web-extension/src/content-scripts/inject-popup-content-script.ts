@@ -81,6 +81,8 @@ const inject_popup = () => {
         action: 'send-chatbot-prompt',
         chatbot_url: event.data.chatbot_url,
         prompt: event.data.prompt,
+        window_width: window.outerWidth,
+        window_height: window.outerHeight,
       })
     }
   })
@@ -89,7 +91,11 @@ const inject_popup = () => {
   // and service worker sends data over to BE because sending here attaches referer header.
   window.addEventListener('message', async (event) => {
     if (event.source !== window) return
-    if (event.data && event.data.from == 'taaabs-popup') {
+    if (
+      event.data &&
+      event.data.from == 'taaabs-popup' &&
+      event.data.action == 'create-bookmark'
+    ) {
       const auth_data = await get_auth_data()
 
       const params = event.data.data as UpsertBookmark_Params

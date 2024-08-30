@@ -76,24 +76,56 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
   } else if (request.action == 'open-options-page') {
     chrome.runtime.openOptionsPage()
   } else if (request.action == 'send-chatbot-prompt') {
-    chrome.tabs.create({ url: request.chatbot_url }, (new_tab) => {
-      const listener = (
-        details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
-      ) => {
-        if (
-          details.tabId == new_tab.id &&
-          details.frameId == 0 &&
-          details.url == request.chatbot_url
-        ) {
-          chrome.webNavigation.onCompleted.removeListener(listener)
-          chrome.tabs.sendMessage(new_tab.id!, {
-            action: 'send-chatbot-prompt',
-            prompt: request.prompt,
-          })
+    // TODO let users choose if they want to open it in new tab or new window
+    // chrome.tabs.create({ url: request.chatbot_url }, (new_tab) => {
+    //   const listener = (
+    //     details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
+    //   ) => {
+    //     if (
+    //       details.tabId == new_tab.id &&
+    //       details.frameId == 0 &&
+    //       details.url == request.chatbot_url
+    //     ) {
+    //       chrome.webNavigation.onCompleted.removeListener(listener)
+    //       chrome.tabs.sendMessage(new_tab.id!, {
+    //         action: 'send-chatbot-prompt',
+    //         prompt: request.prompt,
+    //       })
+    //     }
+    //   }
+    //   chrome.webNavigation.onCompleted.addListener(listener)
+    // })
+    const popup_width = 767
+    const window_width = request.window_width
+    const window_height = request.window_height
+
+    chrome.windows.create(
+      {
+        url: request.chatbot_url,
+        type: 'popup',
+        width: popup_width,
+        height: window_height,
+        left: Math.round((window_width - popup_width) / 2),
+      },
+      (new_window) => {
+        const listener = (
+          details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
+        ) => {
+          if (
+            details.tabId == new_window!.tabs![0].id &&
+            details.frameId == 0 &&
+            details.url == request.chatbot_url
+          ) {
+            chrome.webNavigation.onCompleted.removeListener(listener)
+            chrome.tabs.sendMessage(new_window!.tabs![0].id!, {
+              action: 'send-chatbot-prompt',
+              prompt: request.prompt,
+            })
+          }
         }
-      }
-      chrome.webNavigation.onCompleted.addListener(listener)
-    })
+        chrome.webNavigation.onCompleted.addListener(listener)
+      },
+    )
   }
   return false
 })
