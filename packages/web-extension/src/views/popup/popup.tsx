@@ -70,7 +70,11 @@ export const Popup: React.FC = () => {
             { name: 'chatgpt', display_name: 'ChatGPT' },
             { name: 'gemini', display_name: 'Gemini' },
             { name: 'mistral', display_name: 'Mistral' },
-            { name: 'copilot', display_name: 'Copilot' },
+            { name: 'cohere', display_name: 'Cohere' },
+            { name: 'duckduckgo', display_name: 'DuckDuckGo' },
+            { name: 'huggingchat', display_name: 'HuggingChat' },
+            { name: 'aistudio', display_name: 'AI Studio' },
+            { name: 'deepseek', display_name: 'DeepSeek' },
           ]}
           on_chatbot_change={(chatbot_name) => {
             set_selected_chatbot_name(chatbot_name)

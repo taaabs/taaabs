@@ -9,8 +9,16 @@ export const send_chatbot_prompt = () => {
         chatbot_url = 'https://gemini.google.com/app'
       } else if (chatbot_name == 'mistral') {
         chatbot_url = 'https://chat.mistral.ai/chat'
-      } else if (chatbot_name == 'copilot') {
-        chatbot_url = 'https://www.bing.com/chat'
+      } else if (chatbot_name == 'cohere') {
+        chatbot_url = 'https://coral.cohere.com/'
+      } else if (chatbot_name == 'duckduckgo') {
+        chatbot_url = 'https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat'
+      } else if (chatbot_name == 'huggingchat') {
+        chatbot_url = 'https://huggingface.co/chat/'
+      } else if (chatbot_name == 'aistudio') {
+        chatbot_url = 'https://aistudio.google.com/app/prompts/new_chat'
+      } else if (chatbot_name == 'deepseek') {
+        chatbot_url = 'https://chat.deepseek.com/'
       }
 
       chrome.storage.sync.get('open_chatbot_in_new_tab', (data) => {
