@@ -12,7 +12,6 @@ import { useEffect, useState } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
 import { HtmlParser } from '@shared/utils/html-parser'
-import { get_prompt } from './helpers/get-prompt'
 
 import '../../../../web-ui/src/styles/theme.scss'
 
@@ -69,11 +68,11 @@ export const Popup: React.FC = () => {
           chatbots={[
             { name: 'chatgpt', display_name: 'ChatGPT' },
             { name: 'gemini', display_name: 'Gemini' },
-            { name: 'mistral', display_name: 'Mistral' },
-            { name: 'cohere', display_name: 'Cohere' },
+            { name: 'aistudio', display_name: 'AI Studio' },
             { name: 'duckduckgo', display_name: 'DuckDuckGo' },
             { name: 'huggingchat', display_name: 'HuggingChat' },
-            { name: 'aistudio', display_name: 'AI Studio' },
+            { name: 'mistral', display_name: 'Mistral' },
+            { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
           ]}
           on_chatbot_change={(chatbot_name) => {

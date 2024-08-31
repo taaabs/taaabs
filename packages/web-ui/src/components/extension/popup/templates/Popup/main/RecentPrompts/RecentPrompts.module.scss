@@ -16,6 +16,7 @@
     background: none;
     border: none;
     padding: 0;
+    margin: 0;
     color: var(--text-color-dimmed);
     font-size: var(--font-size-15px);
     cursor: pointer;
@@ -37,7 +38,7 @@
     color: var(--text-color-normal);
     font-weight: var(--font-weight-inter-regular);
     height: unset !important;
-    line-height: unset;
+    line-height: 1.4;
     @include hover {
       @include text-decoration-underlinie-thin;
     }
