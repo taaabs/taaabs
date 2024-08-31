@@ -181,6 +181,25 @@ export namespace HtmlParser {
             plain_text,
           }
         }
+      } else if (params.url.startsWith('https://aistudio.google.com/app/prompts/')) {
+        const user_selector = '.chat-turn-container:has(.role-container.user) .prompt-container'
+        const assistant_selector = '.chat-turn-container:has(.role-container.model) .prompt-container'
+        const { messages, plain_text } = parse_chat_messages({
+          html: params.html,
+          user_selector,
+          assistant_selector,
+          turndown_service,
+        })
+        if (messages.length) {
+          const reader_data: ReaderData.Chat = {
+            type: ReaderData.ContentType.CHAT,
+            conversation: messages,
+          }
+          return {
+            reader_data: JSON.stringify(reader_data),
+            plain_text,
+          }
+        }
       } else if (params.url.startsWith('https://huggingface.co/chat/')) {
         const user_selector =
           '.dark\\:text-gray-400.text-gray-500.py-3\\.5.px-5.bg-inherit.break-words.text-wrap.whitespace-break-spaces.appearance-none.w-full.disabled'
