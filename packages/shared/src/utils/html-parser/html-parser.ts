@@ -181,9 +181,13 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://aistudio.google.com/app/prompts/')) {
-        const user_selector = '.chat-turn-container:has(.role-container.user) .prompt-container'
-        const assistant_selector = '.chat-turn-container:has(.role-container.model) .prompt-container'
+      } else if (
+        params.url.startsWith('https://aistudio.google.com/app/prompts/')
+      ) {
+        const user_selector =
+          '.chat-turn-container:has(.role-container.user) .prompt-container'
+        const assistant_selector =
+          '.chat-turn-container:has(.role-container.model) .prompt-container'
         const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
@@ -325,7 +329,9 @@ export namespace HtmlParser {
           )
           const post = new Readability(doc, { keepClasses: true }).parse()!
           const content = turndown_service.turndown(post.content)
-          const plain_text = `${title_element_text ? `# ${title_element_text}\n\n`: ''}${strip_markdown_links(content)}`
+          const plain_text = `${
+            title_element_text ? `# ${title_element_text}\n\n` : ''
+          }${strip_markdown_links(content)}`
           return {
             reader_data: JSON.stringify({
               type: ReaderData.ContentType.ARTICLE,
@@ -350,15 +356,21 @@ export namespace HtmlParser {
           'article:has(.r-12kyg2d.css-175oi2r > .r-1wtj0ep.r-18u37iz.r-k4xj1c.css-175oi2r), article:has(.r-14gqq1x.r-16y2uox.r-m5arl1.r-f8sm7e.r-1bnu78o.css-175oi2r), article:has(.r-15zivkp.r-onrtq4.r-1wron08.r-18kxxzh.css-175oi2r)',
         )
 
+        console.log(tweet_elements)
+
         let concatenated_tweets = ''
 
         tweet_elements.forEach((tweet_element) => {
           const parser = new DOMParser()
+          // const doc = parser.parseFromString(
+          //   DOMPurify.sanitize(
+          //     tweet_element.querySelector('[data-testid="tweetText"]')!
+          //       .innerHTML,
+          //   ),
+          //   'text/html',
+          // )
           const doc = parser.parseFromString(
-            DOMPurify.sanitize(
-              tweet_element.querySelector('[data-testid="tweetText"]')!
-                .innerHTML,
-            ),
+            tweet_element.querySelector('[data-testid="tweetText"]')!.innerHTML,
             'text/html',
           )
           const tweet = new Readability(doc, { keepClasses: true }).parse()!
@@ -393,7 +405,9 @@ export namespace HtmlParser {
         const article = new Readability(doc, { keepClasses: true }).parse()!
         const content = turndown_service.turndown(article.content)
         const title = article.title || title_element_text
-        const plain_text = `${title ? `# ${title}\n\n`: ''}${strip_markdown_links(content)}`
+        const plain_text = `${
+          title ? `# ${title}\n\n` : ''
+        }${strip_markdown_links(content)}`
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,

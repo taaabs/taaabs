@@ -19,6 +19,8 @@ export const send_chatbot_prompt = () => {
         chatbot_url = 'https://aistudio.google.com/app/prompts/new_chat'
       } else if (chatbot_name == 'deepseek') {
         chatbot_url = 'https://chat.deepseek.com/'
+      } else if (chatbot_name == 'claude') {
+        chatbot_url = 'https://claude.ai/new'
       }
 
       chrome.storage.sync.get('open_chatbot_in_new_tab', (data) => {

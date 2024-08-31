@@ -14,18 +14,19 @@ import { send_message } from './helpers/send-message'
 import { HtmlParser } from '@shared/utils/html-parser'
 
 import '../../../../web-ui/src/styles/theme.scss'
+import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 
 export const Popup: React.FC = () => {
-  const [selected_chatbot_name, set_selected_chatbot_name] =
-    useState<string>('chatgpt')
-  const saved_check_hook = use_saved_check()
+  const { is_saved } = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
+  const { selected_chatbot_name, set_selected_chatbot_name } =
+    use_selected_chatbot()
 
   useEffect(() => {
     console.log('Taaabs popup has been initialized')
   }, [])
 
-  if (saved_check_hook.is_saved === undefined) {
+  if (is_saved === undefined || selected_chatbot_name === undefined) {
     return <></>
   }
 
@@ -60,7 +61,7 @@ export const Popup: React.FC = () => {
         footer_slot={<Ui_extension_popup_templates_Popup_Footer />}
       >
         <Ui_extension_popup_templates_Popup_main_Actions>
-          {saved_check_hook.is_saved ? saved_items : unsaved_items}
+          {is_saved ? saved_items : unsaved_items}
         </Ui_extension_popup_templates_Popup_main_Actions>
         <Ui_extension_popup_templates_Popup_main_Separator />
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
@@ -69,6 +70,7 @@ export const Popup: React.FC = () => {
             { name: 'chatgpt', display_name: 'ChatGPT' },
             { name: 'gemini', display_name: 'Gemini' },
             { name: 'aistudio', display_name: 'AI Studio' },
+            { name: 'claude', display_name: 'Claude' },
             { name: 'duckduckgo', display_name: 'DuckDuckGo' },
             { name: 'huggingchat', display_name: 'HuggingChat' },
             { name: 'mistral', display_name: 'Mistral' },

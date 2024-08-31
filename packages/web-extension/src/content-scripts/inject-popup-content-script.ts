@@ -49,11 +49,14 @@ const inject_popup = () => {
   script.src = chrome.runtime.getURL('popup.js')
   document.body.appendChild(script)
 
-  const link = document.createElement('link')
-  link.rel = 'stylesheet'
-  link.type = 'text/css'
-  link.href = chrome.runtime.getURL('popup.css')
-  document.head.appendChild(link)
+  const link_href = chrome.runtime.getURL('popup.css')
+  if (!document.querySelector(`link[href="${link_href}"]`)) {
+    const link = document.createElement('link')
+    link.rel = 'stylesheet'
+    link.type = 'text/css'
+    link.href = link_href
+    document.head.appendChild(link)
+  }
 
   // Add event listener to close popup when clicking outside
   document.addEventListener('click', (event) => {
@@ -83,6 +86,24 @@ const inject_popup = () => {
         prompt: event.data.prompt,
         window_width: window.outerWidth,
         window_height: window.outerHeight,
+      })
+    } else if (event.data.action == 'get-last-used-chatbot-name') {
+      chrome.runtime.sendMessage(
+        { action: 'get-last-used-chatbot-name' },
+        (response) => {
+          window.postMessage(
+            {
+              action: 'last-used-chatbot-name',
+              last_used_chatbot_name: response.last_used_chatbot_name,
+            },
+            '*',
+          )
+        },
+      )
+    } else if (event.data.action == 'set-last-used-chatbot-name') {
+      chrome.runtime.sendMessage({
+        action: 'set-last-used-chatbot-name',
+        last_used_chatbot_name: event.data.last_used_chatbot_name,
       })
     }
   })
