@@ -362,15 +362,11 @@ export namespace HtmlParser {
 
         tweet_elements.forEach((tweet_element) => {
           const parser = new DOMParser()
-          // const doc = parser.parseFromString(
-          //   DOMPurify.sanitize(
-          //     tweet_element.querySelector('[data-testid="tweetText"]')!
-          //       .innerHTML,
-          //   ),
-          //   'text/html',
-          // )
           const doc = parser.parseFromString(
-            tweet_element.querySelector('[data-testid="tweetText"]')!.innerHTML,
+            DOMPurify.sanitize(
+              tweet_element.querySelector('[data-testid="tweetText"]')!
+                .innerHTML,
+            ),
             'text/html',
           )
           const tweet = new Readability(doc, { keepClasses: true }).parse()!

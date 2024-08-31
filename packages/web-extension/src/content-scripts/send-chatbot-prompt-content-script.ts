@@ -46,7 +46,6 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
 
         const form = active_element.closest('form')
         if (form) {
-          // DuckDuckGo requires a fresh frame to submit
           if (
             window.location.href ==
             'https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat'
@@ -67,23 +66,11 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
           window.location.href ==
           'https://aistudio.google.com/app/prompts/new_chat'
         ) {
-          // AI Studio does some work before is ready to take the prompt
-          const try_running = () => {
-            if (
-              document.querySelector(
-                'button[aria-label=Run][aria-disabled="true"]',
-              )
-            ) {
-              setTimeout(() => {
-                try_running()
-              }, 50)
-              return
-            }
+          setTimeout(() => {
             ;(
               document.querySelector('button[aria-label=Run]') as HTMLElement
             )?.click()
-          }
-          try_running()
+          }, 0)
         } else {
           const enter_event = new KeyboardEvent('keydown', {
             key: 'Enter',
@@ -119,6 +106,15 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
       element_to_focus?.focus()
     }
 
-    setTimeout(() => send_prompt(request.prompt), 50)
+    if (
+      window.location.href == 'https://aistudio.google.com/app/prompts/new_chat'
+    ) {
+      // AI Studio does some work before is ready to take the prompt
+      setTimeout(() => {
+        send_prompt(request.prompt)
+      }, 500)
+    } else {
+      setTimeout(() => send_prompt(request.prompt), 50)
+    }
   }
 })
