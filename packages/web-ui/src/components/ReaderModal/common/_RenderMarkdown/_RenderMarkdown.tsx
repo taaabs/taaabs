@@ -8,7 +8,6 @@ import styles from './_RenderMarkdown.module.scss'
 import { Icon as UiCommonParticle_Icon } from '@web-ui/components/Icon'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
-import { language_map } from './language-map'
 
 namespace _RenderMarkdown {
   export type Props = {
@@ -41,20 +40,7 @@ export const _RenderMarkdown: React.FC<_RenderMarkdown.Props> = (props) => {
             }
             return (
               <div className={styles.code}>
-                <div className={styles.code__header}>
-                  <div className={styles.code__header__language}>
-                    {language && <span>{(language_map as any)[language]}</span>}
-                    {language_fallback && (
-                      <>
-                        <span>
-                          {(language_map as any)[language_fallback] ||
-                            language_fallback}
-                          <sup> unsure</sup>
-                        </span>
-                      </>
-                    )}
-                  </div>
-
+                <div className={styles.code__copy}>
                   <button
                     onClick={() => {
                       navigator.clipboard

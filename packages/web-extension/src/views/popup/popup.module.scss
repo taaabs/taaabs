@@ -11,8 +11,9 @@
   a {
     text-decoration: none;
   }
-  button {
+  button,select {
     cursor: pointer;
+    font-family: var(--font-family-inter);
   }
   a,
   button {

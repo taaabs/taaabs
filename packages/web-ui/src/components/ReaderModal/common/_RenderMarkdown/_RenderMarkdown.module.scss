@@ -108,24 +108,11 @@
 .code {
   display: flex;
   flex-direction: column;
-  &__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: var(--border-secondary);
-    padding: var(--padding-8px) 0;
-    &__language {
-      font-family: var(--font-family-inter);
-      > span {
-        font-weight: var(--font-weight-inter-medium);
-        font-size: var(--font-size-14px);
-        > sup {
-          color: var(--text-color-dimmed);
-          font-style: italic;
-          font-weight: var(--font-weight-inter-regular);
-        }
-      }
-    }
+  position: relative;
+  &__copy {
+    position: absolute;
+    top: var(--padding-8px);
+    right: var(--padding-8px);
     > button {
       display: flex;
       align-items: center;
@@ -135,14 +122,10 @@
       border-radius: 50%;
       @include transition-150ms(background-color);
       @include hover {
-        background-color: var(--neutral100);
-        @include dark {
-          background-color: var(--dark300);
-        }
+        background-color: var(--dark400);
       }
       > svg {
-        fill: var(--black);
-        @include transition-150ms(fill);
+        fill: white;
         height: var(--icon-dimension-13px);
       }
     }
@@ -153,5 +136,6 @@
     color: #d1d5db;
     overflow: auto;
     background-color: var(--dark50);
+    border-radius: var(--border-radius-8px);
   }
 }
