@@ -120,6 +120,8 @@
   &__items {
     display: flex;
     flex-wrap: wrap;
+    row-gap: var(--padding-8px);
+    column-gap: var(--padding-12px);
     opacity: 0;
     &--visible {
       opacity: 1;
@@ -131,8 +133,6 @@
       white-space: pre;
       position: relative;
       font-size: var(--font-size-14px);
-      margin-right: var(--padding-12px);
-      margin-bottom: var(--padding-8px);
       @include hover {
         @include text-decoration-underlinie-thin;
       }
@@ -144,7 +144,6 @@
   &__create {
     display: flex;
     font-size: var(--font-size-14px);
-    margin-right: var(--padding-12px);
     @include hover {
       @include text-decoration-underlinie-thin;
     }

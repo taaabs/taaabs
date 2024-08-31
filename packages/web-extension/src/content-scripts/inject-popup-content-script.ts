@@ -79,7 +79,7 @@ const inject_popup = () => {
     } else if (event.data.action == 'send-chatbot-prompt') {
       chrome.runtime.sendMessage({
         action: 'send-chatbot-prompt',
-        chatbot_url: event.data.chatbot_url,
+        chatbot_name: event.data.chatbot_name,
         prompt: event.data.prompt,
         window_width: window.outerWidth,
         window_height: window.outerHeight,

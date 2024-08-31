@@ -11,7 +11,8 @@
     "@taaabs/web-ui": "workspace:*",
     "ky": "^1.5.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
@@ -19,6 +20,7 @@
     "@types/chrome": "^0.0.270",
     "@types/react": "18.2.21",
     "@types/react-dom": "^18.3.0",
+    "@types/uuid": "^10.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.5.1",

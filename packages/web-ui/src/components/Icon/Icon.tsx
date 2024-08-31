@@ -41,6 +41,7 @@ import Settings from '../../assets/icons/settings.svg'
 import Sidebar from '../../assets/icons/sidebar.svg'
 import StarFilled from '../../assets/icons/star-filled.svg'
 import Star from '../../assets/icons/star.svg'
+import Taaabs from '../../assets/icons/taaabs.svg'
 import Tag from '../../assets/icons/tag.svg'
 import ThemeAuto from '../../assets/icons/theme-auto.svg'
 import ThemeDark from '../../assets/icons/theme-dark.svg'
@@ -100,6 +101,7 @@ export namespace Icon {
     | 'SIDEBAR'
     | 'STAR_FILLED'
     | 'STAR'
+    | 'TAAABS'
     | 'TAG'
     | 'THEME_AUTO'
     | 'THEME_DARK'
@@ -266,6 +268,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'STAR':
       icon = <Star />
+      break
+    case 'TAAABS':
+      icon = <Taaabs />
       break
     case 'TAG':
       icon = <Tag />

@@ -1,8 +1,8 @@
-import ky from 'ky'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { get_is_url_saved } from './get-is-url-saved'
-import { get_auth_data } from '@/helpers/get-auth-data'
 import { update_icon } from './helpers/update-icon'
+import { LocalDataStore } from '@/types/local-data-store'
+import { message_listeners } from './message-listeners'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
@@ -13,127 +13,7 @@ chrome.action.onClicked.addListener((tab) => {
   }
 })
 
-// For sendResponse to work, boolean must be returned synchronously
-chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
-  if (request.action == 'check-url-saved') {
-    ;(async () => {
-      const [current_tab] = await chrome.tabs.query({
-        active: true,
-        currentWindow: true,
-      })
-      const has_badge_text = !!(await chrome.action.getBadgeText({
-        tabId: current_tab.id,
-      }))
-      sendResponse({ is_saved: has_badge_text })
-    })()
-
-    return true
-  } else if (request.action == 'create-bookmark') {
-    ;(async () => {
-      const auth_data = await get_auth_data()
-      const ky_instance = ky.create({
-        prefixUrl: 'https://api.taaabs.com/',
-        headers: {
-          Authorization: `Bearer ${auth_data.access_token}`,
-        },
-      })
-
-      const created_bookmark = await ky_instance
-        .post('v1/bookmarks', {
-          json: request.data,
-        })
-        .json()
-
-      console.log('Bookmark has been created!', created_bookmark)
-
-      sendResponse(created_bookmark)
-    })()
-
-    return true
-  } else if (request.action == 'get-auth-data') {
-    chrome.storage.local.get(['auth_data'], (result) => {
-      sendResponse(result.auth_data)
-      return true
-    })
-  } else if (request.action == 'theme-changed') {
-    ;(async () => {
-      if (
-        request.theme &&
-        (await chrome.storage.local.get('theme'))?.theme != request.theme
-      ) {
-        chrome.storage.local.set({ theme: request.theme }, () => {
-          console.log('Theme saved.', request.theme)
-        })
-      } else {
-        if (await chrome.storage.local.get('theme')) {
-          chrome.storage.local.remove('theme', () => {
-            console.log('Theme removed.')
-          })
-        }
-      }
-    })()
-    return false
-  } else if (request.action == 'open-options-page') {
-    chrome.runtime.openOptionsPage()
-  } else if (request.action == 'send-chatbot-prompt') {
-    chrome.storage.sync.get('open_chatbot_in_new_tab', (data) => {
-      const open_in_new_tab = data.open_chatbot_in_new_tab
-      if (open_in_new_tab) {
-        chrome.tabs.create({ url: request.chatbot_url }, (new_tab) => {
-          const listener = (
-            details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
-          ) => {
-            if (
-              details.tabId == new_tab.id &&
-              details.frameId == 0 &&
-              details.url == request.chatbot_url
-            ) {
-              chrome.webNavigation.onCompleted.removeListener(listener)
-              chrome.tabs.sendMessage(new_tab.id!, {
-                action: 'send-chatbot-prompt',
-                prompt: request.prompt,
-              })
-            }
-          }
-          chrome.webNavigation.onCompleted.addListener(listener)
-        })
-      } else {
-        const popup_width = 767
-        const window_width = request.window_width
-        const window_height = request.window_height
-
-        chrome.windows.create(
-          {
-            url: request.chatbot_url,
-            type: 'popup',
-            width: popup_width,
-            height: window_height,
-            left: Math.round((window_width - popup_width) / 2),
-          },
-          (new_window) => {
-            const listener = (
-              details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
-            ) => {
-              if (
-                details.tabId == new_window!.tabs![0].id &&
-                details.frameId == 0 &&
-                details.url == request.chatbot_url
-              ) {
-                chrome.webNavigation.onCompleted.removeListener(listener)
-                chrome.tabs.sendMessage(new_window!.tabs![0].id!, {
-                  action: 'send-chatbot-prompt',
-                  prompt: request.prompt,
-                })
-              }
-            }
-            chrome.webNavigation.onCompleted.addListener(listener)
-          },
-        )
-      }
-    })
-  }
-  return false
-})
+message_listeners()
 
 chrome.contextMenus.create({
   id: 'open_my_library',
@@ -198,13 +78,16 @@ const handle_tab_change = async (tab_id: number, url: string) => {
         async (response) => {
           if (response.theme) {
             if (
-              (await chrome.storage.local.get('theme'))?.theme != response.theme
+              ((await chrome.storage.local.get('theme')) as LocalDataStore)
+                ?.theme != response.theme
             ) {
               chrome.storage.local.set({ theme: response.theme }, () => {
                 console.log('[handle_tab_change] Theme saved.', response.theme)
               })
             }
-          } else if ((await chrome.storage.local.get('theme'))?.theme) {
+          } else if (
+            ((await chrome.storage.local.get('theme')) as LocalDataStore)?.theme
+          ) {
             chrome.storage.local.remove('theme', () => {
               console.log('[handle_tab_change] Theme removed.')
             })

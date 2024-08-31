@@ -1,3 +1,5 @@
+import React from 'react'
+import DOMPurify from 'dompurify'
 import type TurndownService from 'turndown'
 import TurndownServiceJoplin from '@joplin/turndown'
 import * as turndownPluginGfm from '@joplin/turndown-plugin-gfm'
@@ -92,7 +94,7 @@ export namespace HtmlParser {
     plain_text: string
   } => {
     const temp_el = document.createElement('div')
-    temp_el.innerHTML = params.html
+    temp_el.innerHTML = DOMPurify.sanitize(params.html)
     const message_divs = temp_el.querySelectorAll<HTMLElement>(
       `${params.user_selector}, ${params.assistant_selector}`,
     )
@@ -105,7 +107,10 @@ export namespace HtmlParser {
         plain_text += `**User:** ${content}\n\n`
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(el.innerHTML, 'text/html')
+        const doc = parser.parseFromString(
+          DOMPurify.sanitize(el.innerHTML),
+          'text/html',
+        )
         const article = new Readability(doc, { keepClasses: true }).parse()!
         const content = params.turndown_service.turndown(article.content)
         messages.push({
@@ -132,9 +137,9 @@ export namespace HtmlParser {
 
     const titleRegex = /<title>(.*?)<\/title>/
     const match = params.html.match(titleRegex)
-    let title: string = ''
+    let title_element_text: string = ''
     if (match) {
-      title = match[1]
+      title_element_text = match[1]
     }
 
     try {
@@ -283,7 +288,7 @@ export namespace HtmlParser {
         }
       } else if (params.url.startsWith('https://www.reddit.com/')) {
         const temp_el = document.createElement('div')
-        temp_el.innerHTML = params.html
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
         const post_element = temp_el.querySelector<HTMLElement>(
           '.xs\\:px-0.px-md.mb-xs.mb-sm',
         )
@@ -296,20 +301,22 @@ export namespace HtmlParser {
         if (post_element) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(
-            post_element.innerHTML,
+            DOMPurify.sanitize(post_element.innerHTML),
             'text/html',
           )
           const post = new Readability(doc, { keepClasses: true }).parse()!
           const content = turndown_service.turndown(post.content)
+          const plain_text = `${title_element_text ? `# ${title_element_text}\n\n`: ''}${strip_markdown_links(content)}`
           return {
             reader_data: JSON.stringify({
               type: ReaderData.ContentType.ARTICLE,
               author: author_name,
+              title: title_element_text,
               site_name: `Reddit - ${subreddit_name}`,
               length: post.length,
               content,
             } as ReaderData.Article),
-            plain_text: strip_markdown_links(content),
+            plain_text,
           }
         }
       } else if (
@@ -317,7 +324,7 @@ export namespace HtmlParser {
         params.url.startsWith('https://x.com/')
       ) {
         const temp_el = document.createElement('div')
-        temp_el.innerHTML = params.html
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
 
         // Select the main tweet and all tweets that are part of the thread
         const tweet_elements = temp_el.querySelectorAll<HTMLElement>(
@@ -329,7 +336,10 @@ export namespace HtmlParser {
         tweet_elements.forEach((tweet_element) => {
           const parser = new DOMParser()
           const doc = parser.parseFromString(
-            tweet_element.querySelector('[data-testid="tweetText"]')!.innerHTML,
+            DOMPurify.sanitize(
+              tweet_element.querySelector('[data-testid="tweetText"]')!
+                .innerHTML,
+            ),
             'text/html',
           )
           const tweet = new Readability(doc, { keepClasses: true }).parse()!
@@ -340,7 +350,7 @@ export namespace HtmlParser {
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
-            title,
+            title: title_element_text,
             site_name: 'Twitter',
             content: concatenated_tweets,
           } as ReaderData.Article),
@@ -348,7 +358,10 @@ export namespace HtmlParser {
         }
       } else {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(params.html, 'text/html')
+        const doc = parser.parseFromString(
+          DOMPurify.sanitize(params.html),
+          'text/html',
+        )
         if (!isProbablyReaderable(doc)) return
         const links = doc.querySelectorAll('a')
         const url = new URL(params.url)
@@ -360,17 +373,19 @@ export namespace HtmlParser {
         })
         const article = new Readability(doc, { keepClasses: true }).parse()!
         const content = turndown_service.turndown(article.content)
+        const title = article.title || title_element_text
+        const plain_text = `${title ? `# ${title}\n\n`: ''}${strip_markdown_links(content)}`
         return {
           reader_data: JSON.stringify({
             type: ReaderData.ContentType.ARTICLE,
-            title: article.title || title,
+            title,
             site_name: article.siteName,
             published_at: article.publishedTime,
             author: article.byline,
             length: article.length,
             content,
           } as ReaderData.Article),
-          plain_text: strip_markdown_links(content),
+          plain_text,
         }
       }
     } catch (error) {
@@ -380,7 +395,7 @@ export namespace HtmlParser {
   }
 }
 
-// Replace [TEXT](URL) with TEXT
+// Replace "[TEXT](URL)" with "[TEXT]()"
 const strip_markdown_links = (text: string) => {
-  return text.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text) => `[${text}]()`)
 }

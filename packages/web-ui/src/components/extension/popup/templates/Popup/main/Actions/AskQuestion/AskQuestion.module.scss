@@ -1,9 +1,0 @@
-// @type
-@use '../../../../../../../styles/foundation' as *;
-
-.container {
-  display: flex;
-  flex-direction: column;
-  padding: var(--padding-16px);
-  gap: var(--padding-12px);
-}

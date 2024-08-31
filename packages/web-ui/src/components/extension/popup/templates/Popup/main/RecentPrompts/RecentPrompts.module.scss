@@ -1,0 +1,48 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-8px);
+  padding: var(--padding-16px);
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--font-size-14px);
+  color: var(--text-color-dimmed);
+  select {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-15px);
+    cursor: pointer;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+.prompts {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: var(--padding-8px);
+  column-gap: var(--padding-12px);
+  > button {
+    font-size: var(--font-size-14px);
+    border: none;
+    background: none;
+    padding: 0;
+    color: var(--text-color-normal);
+    font-weight: var(--font-weight-inter-regular);
+    height: unset !important;
+    line-height: unset;
+    @include hover {
+      @include text-decoration-underlinie-thin;
+    }
+    &:nth-child(odd) {
+      font-weight: var(--font-weight-inter-medium);
+    }
+  }
+}

@@ -1,0 +1,7 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  height: 1px;
+  background-color: var(--border-color-secondary);
+}

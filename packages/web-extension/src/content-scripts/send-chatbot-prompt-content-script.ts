@@ -1,6 +1,6 @@
 chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
   if (request.action == 'send-chatbot-prompt') {
-    function attemptToSendPrompt() {
+    function attempt_to_send_prompt() {
       if (document.activeElement) {
         const active_element = document.activeElement as HTMLElement
 
@@ -47,13 +47,10 @@ chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
             active_element.dispatchEvent(enter_event)
           }
         }
-      } else {
-        // Retry after 50ms if document.activeElement is not available
-        setTimeout(attemptToSendPrompt, 50)
       }
     }
 
     // Initial attempt to send the prompt
-    setTimeout(attemptToSendPrompt, 50)
+    setTimeout(attempt_to_send_prompt, 100)
   }
 })

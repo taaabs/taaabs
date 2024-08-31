@@ -4,7 +4,7 @@ export namespace Popup {
   export type Props = {
     header_slot: React.ReactNode
     children: React.ReactNode
-    bottom_navigation_bar_slot: React.ReactNode
+    footer_slot: React.ReactNode
   }
 }
 
@@ -13,7 +13,7 @@ export const Popup: React.FC<Popup.Props> = (props) => {
     <div className={styles.container}>
       {props.header_slot}
       {props.children}
-      {props.bottom_navigation_bar_slot}
+      {props.footer_slot}
     </div>
   )
 }
