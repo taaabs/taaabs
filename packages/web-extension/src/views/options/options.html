@@ -20,14 +20,47 @@
     <label>
       <input type="checkbox" id="use_custom_new_tab" /> Use custom new tab page
     </label>
-    <label>
-      <input type="checkbox" id="open_chatbot_in_new_tab" /> Open chatbot in a
-      new tab
-    </label>
+
     <label>
       Custom Chatbot URL:
       <input type="text" id="custom_chatbot_url" />
     </label>
+
+    <label>
+      <input type="checkbox" id="open_chatbot_in_new_tab" /> Open chatbot in a
+      new tab
+    </label>
+
+    <h2>Chatbot Window Position</h2>
+    <label>
+      <input
+        type="radio"
+        id="chatbot_position_left"
+        name="chatbot_position"
+        value="left"
+      />
+      Left
+    </label>
+    <label>
+      <input
+        type="radio"
+        id="chatbot_position_middle"
+        name="chatbot_position"
+        value="middle"
+        checked
+      />
+      Middle
+    </label>
+    <label>
+      <input
+        type="radio"
+        id="chatbot_position_right"
+        name="chatbot_position"
+        value="right"
+      />
+      Right
+    </label>
+
     <script src="options.js"></script>
   </body>
 </html>
