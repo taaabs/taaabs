@@ -1,39 +1,17 @@
 export const send_chatbot_prompt = () => {
-  chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
+  chrome.runtime.onMessage.addListener((request, _, __) => {
     if (request.action == 'send-chatbot-prompt') {
-      let chatbot_url = ''
-      const chatbot_name = request.chatbot_name
-      if (chatbot_name == 'chatgpt') {
-        chatbot_url = 'https://chatgpt.com/'
-      } else if (chatbot_name == 'gemini') {
-        chatbot_url = 'https://gemini.google.com/app'
-      } else if (chatbot_name == 'mistral') {
-        chatbot_url = 'https://chat.mistral.ai/chat'
-      } else if (chatbot_name == 'cohere') {
-        chatbot_url = 'https://coral.cohere.com/'
-      } else if (chatbot_name == 'duckduckgo') {
-        chatbot_url = 'https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat'
-      } else if (chatbot_name == 'huggingchat') {
-        chatbot_url = 'https://huggingface.co/chat/'
-      } else if (chatbot_name == 'aistudio') {
-        chatbot_url = 'https://aistudio.google.com/app/prompts/new_chat'
-      } else if (chatbot_name == 'deepseek') {
-        chatbot_url = 'https://chat.deepseek.com/'
-      } else if (chatbot_name == 'claude') {
-        chatbot_url = 'https://claude.ai/new'
-      }
-
-      chrome.storage.sync.get('open_chatbot_in_new_tab', (data) => {
+      chrome.storage.local.get('open_chatbot_in_new_tab', (data) => {
         const open_in_new_tab = data.open_chatbot_in_new_tab
         if (open_in_new_tab) {
-          chrome.tabs.create({ url: chatbot_url }, (new_tab) => {
+          chrome.tabs.create({ url: request.chatbot_url }, (new_tab) => {
             const listener = (
               details: chrome.webNavigation.WebNavigationFramedCallbackDetails,
             ) => {
               if (
                 details.tabId == new_tab.id &&
                 details.frameId == 0 &&
-                details.url == chatbot_url
+                details.url == request.chatbot_url
               ) {
                 chrome.webNavigation.onCompleted.removeListener(listener)
                 chrome.tabs.sendMessage(new_tab.id!, {
@@ -51,7 +29,7 @@ export const send_chatbot_prompt = () => {
 
           chrome.windows.create(
             {
-              url: chatbot_url,
+              url: request.chatbot_url,
               type: 'popup',
               width: popup_width,
               height: window_height,
@@ -64,7 +42,7 @@ export const send_chatbot_prompt = () => {
                 if (
                   details.tabId == new_window!.tabs![0].id &&
                   details.frameId == 0 &&
-                  details.url == chatbot_url
+                  details.url == request.chatbot_url
                 ) {
                   chrome.webNavigation.onCompleted.removeListener(listener)
                   chrome.tabs.sendMessage(new_window!.tabs![0].id!, {

@@ -1,4 +1,4 @@
-chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
+chrome.runtime.onMessage.addListener((request, _, __) => {
   if (request.action == 'send-chatbot-prompt') {
     function send_prompt(prompt: string) {
       let active_element = document.activeElement as HTMLElement

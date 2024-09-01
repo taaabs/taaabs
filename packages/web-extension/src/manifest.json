@@ -48,6 +48,7 @@
     },
     {
       "matches": [
+        "http://localhost/*",
         "https://chatgpt.com/",
         "https://gemini.google.com/app",
         "https://chat.mistral.ai/chat",
