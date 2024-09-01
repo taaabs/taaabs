@@ -72,6 +72,25 @@ export const send_chatbot_prompt = () => {
                   }
                 }
                 chrome.webNavigation.onCompleted.addListener(listener)
+
+                // Track window size and position changes
+                chrome.windows.onBoundsChanged.addListener((window) => {
+                  if (window.id == new_window!.id) {
+                    let position: 'left' | 'middle' | 'right' = 'middle'
+                    if (window.left! < 100) {
+                      position = 'left'
+                    } else if (
+                      window.left! >
+                      window_width - popup_width - 100
+                    ) {
+                      position = 'right'
+                    }
+                    chrome.storage.local.set({
+                      chatbot_window_position: position,
+                      chatbot_window_width: Math.max(300, window.width!),
+                    })
+                  }
+                })
               },
             )
           }

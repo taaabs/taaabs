@@ -135,9 +135,3 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
     send_prompt(request.prompt)
   }
 })
-
-window.addEventListener('resize', () => {
-  chrome.storage.local.set({
-    chatbot_window_width: Math.max(300, window.outerWidth),
-  })
-})
