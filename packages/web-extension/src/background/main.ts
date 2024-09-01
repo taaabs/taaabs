@@ -29,7 +29,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 
 chrome.tabs.onCreated.addListener((tab) => {
   if (tab.pendingUrl == 'chrome://newtab/') {
-    chrome.storage.sync.get('use_custom_new_tab', (data) => {
+    chrome.storage.local.get('use_custom_new_tab', (data) => {
       if (!data.use_custom_new_tab) {
         chrome.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
       }
@@ -142,7 +142,7 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 })
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.sync.set({ use_custom_new_tab: true })
-  chrome.storage.sync.set({ open_chatbot_in_new_tab: false })
+  chrome.storage.local.set({ use_custom_new_tab: true })
+  chrome.storage.local.set({ open_chatbot_in_new_tab: false })
   chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

@@ -82,7 +82,7 @@ const inject_popup = () => {
     } else if (event.data.action == 'send-chatbot-prompt') {
       chrome.runtime.sendMessage({
         action: 'send-chatbot-prompt',
-        chatbot_name: event.data.chatbot_name,
+        chatbot_url: event.data.chatbot_url,
         prompt: event.data.prompt,
         window_width: window.outerWidth,
         window_height: window.outerHeight,
@@ -105,6 +105,21 @@ const inject_popup = () => {
         action: 'set-last-used-chatbot-name',
         last_used_chatbot_name: event.data.last_used_chatbot_name,
       })
+    } else if (event.data.action == 'get-custom-chatbot-url') {
+      chrome.runtime.sendMessage(
+        {
+          action: 'get-custom-chatbot-url',
+        },
+        (response) => {
+          window.postMessage(
+            {
+              action: 'custom-chatbot-url',
+              custom_chatbot_url: response.custom_chatbot_url,
+            },
+            '*',
+          )
+        },
+      )
     }
   })
 
