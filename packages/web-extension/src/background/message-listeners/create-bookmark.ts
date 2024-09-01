@@ -1,9 +1,12 @@
 import { get_auth_data } from '@/helpers/get-auth-data'
 import ky from 'ky'
+import { is_message } from '@/utils/is-message'
+import { CreateBookmarkResponse } from '@/types/messages'
+import { update_icon } from '../helpers/update-icon'
 
 export const create_bookmark = () => {
-  chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
-    if (request.action == 'create-bookmark') {
+  chrome.runtime.onMessage.addListener((request: any, _, sendResponse) => {
+    if (is_message(request) && request.action == 'create-bookmark') {
       ;(async () => {
         const auth_data = await get_auth_data()
         const ky_instance = ky.create({
@@ -19,9 +22,17 @@ export const create_bookmark = () => {
           })
           .json()
 
-        console.log('Bookmark has been created!', created_bookmark)
+        const response: CreateBookmarkResponse = {
+          bookmark: created_bookmark,
+        }
+        sendResponse(response)
 
-        sendResponse(created_bookmark)
+        // Update the icon upon bookmark creation
+        const [current_tab] = await chrome.tabs.query({
+          active: true,
+          currentWindow: true,
+        })
+        update_icon(current_tab.id!, true)
       })()
       return true
     }

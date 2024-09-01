@@ -1,6 +1,8 @@
+import { is_message } from '@/utils/is-message'
+
 export const send_chatbot_prompt = () => {
   chrome.runtime.onMessage.addListener((request, _, __) => {
-    if (request.action == 'send-chatbot-prompt') {
+    if (is_message(request) && request.action == 'send-chatbot-prompt') {
       chrome.storage.local.get(
         [
           'open_chatbot_in_new_tab',

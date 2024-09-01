@@ -6,6 +6,16 @@ import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookm
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import pako from 'pako'
 
+// Avoid flash of unstyled content
+const link_href = chrome.runtime.getURL('popup.css')
+if (!document.querySelector(`link[href="${link_href}"]`)) {
+  const link = document.createElement('link')
+  link.rel = 'stylesheet'
+  link.type = 'text/css'
+  link.href = link_href
+  document.head.appendChild(link)
+}
+
 chrome.runtime.onMessage.addListener((request, _, __) => {
   if (request.action == 'inject-popup') {
     const popup = document.getElementById('root-taaabs-popup')
@@ -48,15 +58,6 @@ const inject_popup = () => {
   const script = document.createElement('script')
   script.src = chrome.runtime.getURL('popup.js')
   document.body.appendChild(script)
-
-  const link_href = chrome.runtime.getURL('popup.css')
-  if (!document.querySelector(`link[href="${link_href}"]`)) {
-    const link = document.createElement('link')
-    link.rel = 'stylesheet'
-    link.type = 'text/css'
-    link.href = link_href
-    document.head.appendChild(link)
-  }
 
   // Add event listener to close popup when clicking outside
   document.addEventListener('click', (event) => {
@@ -120,21 +121,12 @@ const inject_popup = () => {
           )
         },
       )
-    }
-  })
-
-  // Injected code creates UpsertBookmark_Params, this content script DTO,
-  // and service worker sends data over to BE because sending here attaches referer header.
-  window.addEventListener('message', async (event) => {
-    if (event.source !== window) return
-    if (
-      event.data &&
-      event.data.from == 'taaabs-popup' &&
-      event.data.action == 'create-bookmark'
-    ) {
+    } else if (event.data && event.data.action == 'create-bookmark') {
+      // Injected code creates UpsertBookmark_Params, this content script DTO,
+      // and service worker sends data over to BE because sending here attaches referer header.
       const auth_data = await get_auth_data()
 
-      const params = event.data.data as UpsertBookmark_Params
+      const params = event.data.bookmark as UpsertBookmark_Params
 
       const tags: CreateBookmark_Dto.Body['tags'] = []
       for (const tag of params.tags) {
@@ -247,12 +239,21 @@ const inject_popup = () => {
 
       chrome.runtime.sendMessage(
         {
-          from: 'taaabs-popup',
           action: 'create-bookmark',
           data: body,
         },
-        () => {
-          window.postMessage({ status: 'success' })
+        (response) => {
+          window.postMessage(
+            {
+              action: 'created-bookmark',
+              bookmark: response.bookmark,
+            },
+            '*',
+          )
+          window.postMessage(
+            { action: 'url-saved-status', is_saved: true },
+            '*',
+          )
         },
       )
     }

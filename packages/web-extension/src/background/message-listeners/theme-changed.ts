@@ -1,8 +1,9 @@
 import { LocalDataStore } from '@/types/local-data-store'
+import { is_message } from '@/utils/is-message'
 
 export const theme_changed = () => {
-  chrome.runtime.onMessage.addListener((request, _, sendResponse) => {
-    if (request.action == 'theme-changed') {
+  chrome.runtime.onMessage.addListener((request, _, __) => {
+    if (is_message(request) && request.action == 'theme-changed') {
       ;(async () => {
         if (
           request.theme &&

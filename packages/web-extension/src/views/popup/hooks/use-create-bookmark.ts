@@ -3,7 +3,7 @@ import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/g
 import { HtmlParser } from '@shared/utils/html-parser'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { send_message } from '../helpers/send-message'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export type TabData = {
   url: string
@@ -15,6 +15,8 @@ export type TabData = {
 }
 
 export const use_create_bookmark = () => {
+  const [is_creating_bookmark, set_is_creating_bookmark] = useState<boolean>()
+
   const create_bookmark = async () => {
     const process_tab_data_and_send = async (tab_data: TabData) => {
       const reader_data = HtmlParser.parse({
@@ -39,7 +41,7 @@ export const use_create_bookmark = () => {
 
       const url = url_cleaner(tab_data.url)
 
-      const new_bookmark: UpsertBookmark_Params = {
+      const bookmark: UpsertBookmark_Params = {
         is_public: false,
         is_archived: false,
         title: tab_data.title,
@@ -56,12 +58,8 @@ export const use_create_bookmark = () => {
         blurhash,
       }
 
-      send_message({ action: 'create-bookmark', data: new_bookmark })
-
-      console.log(
-        'create-bookmark action has been invoked with the following data:',
-        new_bookmark,
-      )
+      set_is_creating_bookmark(true)
+      send_message({ action: 'create-bookmark', bookmark })
     }
 
     const doc_data = async (
@@ -221,13 +219,16 @@ export const use_create_bookmark = () => {
   }
 
   useEffect(() => {
-    window.addEventListener('message', (event) => {
+    const listener = (event: MessageEvent) => {
       if (event.source !== window) return
-      if (event.data && event.data.from === 'contentScript') {
-        console.log('Received response from background script:', event.data)
+      if (event.data && event.data.action == 'created-bookmark') {
+        console.log('Received newly created bookmark:', event.data)
       }
-    })
+    }
+
+    window.addEventListener('message', listener)
+    return () => window.removeEventListener('message', listener)
   }, [])
 
-  return { create_bookmark }
+  return { create_bookmark, is_creating_bookmark, set_is_creating_bookmark }
 }

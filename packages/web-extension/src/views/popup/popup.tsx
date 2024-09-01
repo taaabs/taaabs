@@ -16,10 +16,12 @@ import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
 
 import '../../../../web-ui/src/styles/theme.scss'
+import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 
 export const Popup: React.FC = () => {
   const { is_saved } = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
+  const delete_bookmark_hook = use_delete_bookmark()
   const { selected_chatbot_name, set_selected_chatbot_name } =
     use_selected_chatbot()
   const { custom_chatbot_url } = use_custom_chatbot_url()
@@ -27,6 +29,11 @@ export const Popup: React.FC = () => {
   useEffect(() => {
     console.log('Taaabs popup has been initialized')
   }, [])
+
+  useEffect(() => {
+    create_bookmark_hook.set_is_creating_bookmark(false)
+    delete_bookmark_hook.set_is_deleting(false)
+  }, [is_saved])
 
   if (is_saved === undefined || selected_chatbot_name === undefined) {
     return <></>
@@ -50,7 +57,7 @@ export const Popup: React.FC = () => {
     <UiButton on_click={create_bookmark_hook.create_bookmark}>Save</UiButton>,
   ]
 
-  const handleRecentPromptClick = (prompt_id: string) => {
+  const handle_recent_prompt_click = (prompt_id: string) => {
     const url = document.location.href
     const html = document.getElementsByTagName('html')[0].outerHTML
     const parsed_document = HtmlParser.parse({
@@ -143,7 +150,7 @@ export const Popup: React.FC = () => {
             { id: '3', name: 'In-depth analysis' },
             { id: '4', name: 'Reply to the OP' },
           ]}
-          on_recent_prompt_click={handleRecentPromptClick}
+          on_recent_prompt_click={handle_recent_prompt_click}
           translations={{
             heading: 'AI prompts',
           }}
