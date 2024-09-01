@@ -226,8 +226,8 @@ export namespace HtmlParser {
           }
         }
       } else if (params.url.startsWith('https://claude.ai/chat/')) {
-        const user_selector = '.font-user-message'
-        const assistant_selector = '.font-claude-message'
+        const user_selector = 'div.font-user-message'
+        const assistant_selector = 'div.font-claude-message'
         const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
