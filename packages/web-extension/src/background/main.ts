@@ -144,5 +144,5 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ use_custom_new_tab: true })
   chrome.storage.local.set({ open_chatbot_in_new_tab: false })
-  chrome.tabs.create({ url: 'https://taaabs.com/library' })
+  // chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

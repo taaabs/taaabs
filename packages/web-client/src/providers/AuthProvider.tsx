@@ -53,10 +53,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
     ky.create({
       prefixUrl: process.env.NEXT_PUBLIC_API_URL,
       retry: {
-        limit: 100,
-        methods: ['get', 'post', 'put', 'delete'],
+        limit: 20,
+        methods: ['get', 'post', 'put', 'patch', 'delete'],
         backoffLimit: 1000,
-        statusCodes: [401, 429, 502],
+        statusCodes: [429, 502],
       },
       hooks: {
         beforeRequest: [
@@ -156,6 +156,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                       'Authorization',
                       `Bearer ${result.access_token}`,
                     )
+                    ky_instance.current(request)
                   } catch {
                     // If refreshing the token fails, log the user out
                     logout()
