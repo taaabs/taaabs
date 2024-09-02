@@ -22,6 +22,9 @@
       outline: none;
     }
   }
+  button {
+    margin: unset;
+  }
 }
 
 @keyframes fade-in {

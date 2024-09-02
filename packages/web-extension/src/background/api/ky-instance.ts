@@ -8,7 +8,7 @@ export const create_ky_instance = () => {
       limit: 20,
       methods: ['get', 'post', 'put', 'patch', 'delete'],
       backoffLimit: 1000,
-      statusCodes: [429, 502],
+      statusCodes: [401, 429, 502],
     },
     hooks: {
       beforeRequest: [
@@ -72,7 +72,7 @@ export const create_ky_instance = () => {
                 'Authorization',
                 `Bearer ${new_auth_data.access_token}`,
               )
-              
+
               create_ky_instance()(request)
             }
           }
