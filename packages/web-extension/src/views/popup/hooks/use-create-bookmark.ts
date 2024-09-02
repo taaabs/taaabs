@@ -15,9 +15,12 @@ export type TabData = {
 }
 
 export const use_create_bookmark = () => {
-  const [is_creating_bookmark, set_is_creating_bookmark] = useState<boolean>()
+  const [is_creating, set_is_creating] = useState<boolean>()
 
   const create_bookmark = async () => {
+    set_is_creating(true)
+    const before_bookmark_parsed = Date.now()
+
     const process_tab_data_and_send = async (tab_data: TabData) => {
       const reader_data = HtmlParser.parse({
         url: tab_data.url,
@@ -58,7 +61,9 @@ export const use_create_bookmark = () => {
         blurhash,
       }
 
-      set_is_creating_bookmark(true)
+      console.log(
+        `Bookmark parsed in ${Date.now() - before_bookmark_parsed}ms}.`,
+      )
       send_message({ action: 'create-bookmark', bookmark })
     }
 
@@ -230,5 +235,5 @@ export const use_create_bookmark = () => {
     return () => window.removeEventListener('message', listener)
   }, [])
 
-  return { create_bookmark, is_creating_bookmark, set_is_creating_bookmark }
+  return { create_bookmark, is_creating, set_is_creating }
 }

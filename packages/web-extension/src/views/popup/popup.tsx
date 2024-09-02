@@ -31,7 +31,7 @@ export const Popup: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    create_bookmark_hook.set_is_creating_bookmark(false)
+    create_bookmark_hook.set_is_creating(false)
     delete_bookmark_hook.set_is_deleting(false)
   }, [is_saved])
 
@@ -45,16 +45,26 @@ export const Popup: React.FC = () => {
         'https://taaabs.com/library#url=' + encodeURIComponent(location.href)
       }
       rel="noreferrer noopener"
+      is_disabled={delete_bookmark_hook.is_deleting}
     >
       Edit
     </UiButton>,
-    <UiButton on_click={() => {}} is_danger={true}>
+    <UiButton
+      on_click={delete_bookmark_hook.delete_bookmark}
+      is_danger={true}
+      is_disabled={delete_bookmark_hook.is_deleting}
+    >
       Delete
     </UiButton>,
   ]
 
   const unsaved_items = [
-    <UiButton on_click={create_bookmark_hook.create_bookmark}>Save</UiButton>,
+    <UiButton
+      on_click={create_bookmark_hook.create_bookmark}
+      is_disabled={create_bookmark_hook.is_creating}
+    >
+      Save
+    </UiButton>,
   ]
 
   const handle_recent_prompt_click = (prompt_id: string) => {
