@@ -256,6 +256,25 @@ const inject_popup = () => {
           )
         },
       )
+    } else if (event.data && event.data.action == 'delete-bookmark') {
+      chrome.runtime.sendMessage(
+        {
+          action: 'delete-bookmark',
+          data: { url: window.location.href },
+        },
+        () => {
+          window.postMessage(
+            {
+              action: 'bookmark-deleted-successfully',
+            },
+            '*',
+          )
+          window.postMessage(
+            { action: 'url-saved-status', is_saved: false },
+            '*',
+          )
+        },
+      )
     }
   })
 }

@@ -1,5 +1,9 @@
 export type CheckUrlSavedMessage = { action: 'check-url-saved' }
 export type CreateBookmarkMessage = { action: 'create-bookmark'; data: any }
+export type DeleteBookmarkMessage = {
+  action: 'delete-bookmark'
+  data: { url: string }
+}
 export type GetAuthDataMessage = { action: 'get-auth-data' }
 export type GetCustomChatbotUrlMessage = { action: 'get-custom-chatbot-url' }
 export type GetLastUsedChatbotNameMessage = {
@@ -25,6 +29,7 @@ export type ThemeChangedMessage = {
 export type Message =
   | CheckUrlSavedMessage
   | CreateBookmarkMessage
+  | DeleteBookmarkMessage
   | GetAuthDataMessage
   | GetCustomChatbotUrlMessage
   | GetLastUsedChatbotNameMessage
