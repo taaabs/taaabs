@@ -131,7 +131,10 @@ const inject_popup = () => {
       const tags: CreateBookmark_Dto.Body['tags'] = []
       for (const tag of params.tags) {
         if (!tag.name.trim().length) continue
-        const hash = await SHA256(tag.name, new Uint8Array(auth_data.encryption_key))
+        const hash = await SHA256(
+          tag.name,
+          new Uint8Array(auth_data.encryption_key),
+        )
         if (tags.find((t) => t.hash == hash)) continue
         if (tag.is_public) {
           tags.push({
@@ -154,21 +157,30 @@ const inject_popup = () => {
       const links: CreateBookmark_Dto.Body['links'] = []
       for (const link of params.links) {
         if (!link.url.trim().length) continue
-        const hash = await SHA256(link.url.trim(), new Uint8Array(auth_data.encryption_key))
+        const hash = await SHA256(
+          link.url.trim(),
+          new Uint8Array(auth_data.encryption_key),
+        )
         if (links.find((l) => l.hash == hash)) continue
         const domain = get_domain_from_url(link.url)
         if (link.is_public) {
           links.push({
             is_public: true,
             url: link.url.trim(),
-            hash: await SHA256(link.url.trim(), new Uint8Array(auth_data.encryption_key)),
+            hash: await SHA256(
+              link.url.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
             site_path: link.is_public ? link.site_path : undefined,
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
             open_snapshot: link.open_snapshot,
             reader_data: link.reader_data,
             favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, new Uint8Array(auth_data.encryption_key))
+              ? await AES.encrypt(
+                  link.favicon,
+                  new Uint8Array(auth_data.encryption_key),
+                )
               : undefined,
           })
         } else {
@@ -182,14 +194,23 @@ const inject_popup = () => {
               link.site_path ? `${domain}/${link.site_path}` : domain,
               new Uint8Array(auth_data.encryption_key),
             ),
-            hash: await SHA256(link.url.trim(), new Uint8Array(auth_data.encryption_key)),
+            hash: await SHA256(
+              link.url.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
             is_pinned: link.is_pinned,
             pin_title_aes: link.pin_title
-              ? await AES.encrypt(link.pin_title, new Uint8Array(auth_data.encryption_key))
+              ? await AES.encrypt(
+                  link.pin_title,
+                  new Uint8Array(auth_data.encryption_key),
+                )
               : undefined,
             open_snapshot: link.open_snapshot,
             favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, new Uint8Array(auth_data.encryption_key))
+              ? await AES.encrypt(
+                  link.favicon,
+                  new Uint8Array(auth_data.encryption_key),
+                )
               : undefined,
             reader_data_aes: link.reader_data
               ? await AES.encrypt(
@@ -208,12 +229,18 @@ const inject_popup = () => {
         title: params.is_public ? params.title : undefined,
         title_aes:
           !params.is_public && params.title
-            ? await AES.encrypt(params.title, new Uint8Array(auth_data.encryption_key))
+            ? await AES.encrypt(
+                params.title,
+                new Uint8Array(auth_data.encryption_key),
+              )
             : undefined,
         note: params.is_public ? params.note : undefined,
         note_aes:
           !params.is_public && params.note
-            ? await AES.encrypt(params.note, new Uint8Array(auth_data.encryption_key))
+            ? await AES.encrypt(
+                params.note,
+                new Uint8Array(auth_data.encryption_key),
+              )
             : undefined,
         is_public: params.is_public || undefined,
         is_archived: params.is_archived || undefined,
@@ -233,7 +260,10 @@ const inject_popup = () => {
             : undefined,
         blurhash_aes:
           !params.is_public && params.blurhash
-            ? await AES.encrypt(params.blurhash, new Uint8Array(auth_data.encryption_key))
+            ? await AES.encrypt(
+                params.blurhash,
+                new Uint8Array(auth_data.encryption_key),
+              )
             : undefined,
       }
 
