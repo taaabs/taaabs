@@ -1,5 +1,5 @@
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
-import { get_is_url_saved } from './get-is-url-saved'
+import { get_url_is_saved } from './get-url-is-saved'
 import { update_icon } from './helpers/update-icon'
 import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
@@ -8,9 +8,15 @@ chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
 
 chrome.action.onClicked.addListener((tab) => {
-  if (!tab.url?.startsWith('https://taaabs.com')) {
-    chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
-  }
+  chrome.storage.local.get('auth_data', (data) => {
+    if (!data.auth_data) {
+      chrome.tabs.create({ url: 'https://taaabs.com/library' })
+    } else {
+      if (!tab.url?.startsWith('https://taaabs.com')) {
+        chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
+      }
+    }
+  })
 })
 
 message_listeners()
@@ -102,7 +108,7 @@ const handle_tab_change = async (tab_id: number, url: string) => {
     update_icon(tab_id)
   } else {
     const cleaned_url = url_cleaner(url)
-    const is_saved = await get_is_url_saved(cleaned_url)
+    const is_saved = await get_url_is_saved(cleaned_url)
     update_icon(tab_id, is_saved)
   }
 }
@@ -143,6 +149,5 @@ chrome.webNavigation.onCommitted.addListener(async (details) => {
 
 chrome.runtime.onInstalled.addListener(() => {
   chrome.storage.local.set({ use_custom_new_tab: true })
-  chrome.storage.local.set({ open_chatbot_in_new_tab: false })
-  // chrome.tabs.create({ url: 'https://taaabs.com/library' })
+  chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

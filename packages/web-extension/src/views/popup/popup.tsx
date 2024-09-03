@@ -5,7 +5,6 @@ import { use_saved_check } from './hooks/use-saved-check'
 import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
 import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/components/extension/popup/templates/Popup/Header'
 import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web-ui/components/extension/popup/templates/Popup/main/Actions'
-import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
 import { useEffect } from 'react'
@@ -14,6 +13,8 @@ import { send_message } from './helpers/send-message'
 import { HtmlParser } from '@shared/utils/html-parser'
 import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
+import { chatbot_urls } from '@/constants/chatbot-urls'
+import { get_chatbot_prompt } from './helpers/get-chatbot-prompt'
 
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
@@ -75,38 +76,19 @@ export const Popup: React.FC = () => {
       url,
     })
     if (parsed_document) {
-      let prompt = ''
-      if (prompt_id == '1') {
-        prompt = `Summarize all the key points of the passage in bullet points.\n\n-\n\n${parsed_document.plain_text}`
-      } else if (prompt_id == '2') {
-        prompt = `Provide explanation that covers all key points of the passage like I'm five years old.\n\n-\n\n${parsed_document.plain_text}`
-      } else if (prompt_id == '3') {
-        prompt = `Help me explore points of view of the matter the following passage touches.\n\n-\n\n${parsed_document.plain_text}`
-      } else if (prompt_id == '4') {
-        prompt = `Reply to the OP in this forum thread with a thoughtful response addressing their main points.\n\n-\n\n${parsed_document.plain_text}`
-      }
+      const prompt = get_chatbot_prompt({
+        prompt_id,
+        plain_text: parsed_document.plain_text,
+      })
 
-      let chatbot_url = ''
-      if (selected_chatbot_name == 'chatgpt') {
-        chatbot_url = 'https://chatgpt.com/'
-      } else if (selected_chatbot_name == 'gemini') {
-        chatbot_url = 'https://gemini.google.com/app'
-      } else if (selected_chatbot_name == 'mistral') {
-        chatbot_url = 'https://chat.mistral.ai/chat'
-      } else if (selected_chatbot_name == 'cohere') {
-        chatbot_url = 'https://coral.cohere.com/'
-      } else if (selected_chatbot_name == 'duckduckgo') {
-        chatbot_url = 'https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat'
-      } else if (selected_chatbot_name == 'huggingchat') {
-        chatbot_url = 'https://huggingface.co/chat/'
-      } else if (selected_chatbot_name == 'aistudio') {
-        chatbot_url = 'https://aistudio.google.com/app/prompts/new_chat'
-      } else if (selected_chatbot_name == 'deepseek') {
-        chatbot_url = 'https://chat.deepseek.com/'
-      } else if (selected_chatbot_name == 'claude') {
-        chatbot_url = 'https://claude.ai/new'
-      } else if (selected_chatbot_name == 'custom') {
-        chatbot_url = custom_chatbot_url || 'https://chatgpt.com/'
+      let chatbot_url = 'https://chatgpt.com/'
+
+      if (selected_chatbot_name) {
+        if (selected_chatbot_name != 'custom') {
+          chatbot_url = (chatbot_urls as any)[selected_chatbot_name]
+        } else if (custom_chatbot_url) {
+          chatbot_url = custom_chatbot_url
+        }
       }
 
       send_message({
@@ -134,7 +116,6 @@ export const Popup: React.FC = () => {
         <Ui_extension_popup_templates_Popup_main_Actions>
           {is_saved ? saved_items : unsaved_items}
         </Ui_extension_popup_templates_Popup_main_Actions>
-        <Ui_extension_popup_templates_Popup_main_Separator />
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           selected_chatbot_name={selected_chatbot_name}
           chatbots={[
@@ -147,6 +128,7 @@ export const Popup: React.FC = () => {
             { name: 'mistral', display_name: 'Mistral' },
             { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
+            { name: 'phind', display_name: 'Phind' },
             ...(custom_chatbot_url
               ? [{ name: 'custom', display_name: 'Custom' }]
               : []),
@@ -155,10 +137,13 @@ export const Popup: React.FC = () => {
             set_selected_chatbot_name(chatbot_name)
           }}
           recent_prompts={[
-            { id: '1', name: 'TL;DR' },
+            { id: '1', name: 'Summarize' },
             { id: '2', name: "Explain like I'm five" },
             { id: '3', name: 'In-depth analysis' },
             { id: '4', name: 'Reply to the OP' },
+            { id: '5', name: 'Ask question' },
+            { id: '6', name: 'Quiz me!' },
+            { id: '7', name: 'Study guide' },
           ]}
           on_recent_prompt_click={handle_recent_prompt_click}
           translations={{

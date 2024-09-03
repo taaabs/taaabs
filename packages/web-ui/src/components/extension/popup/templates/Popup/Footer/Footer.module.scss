@@ -2,12 +2,12 @@
 @use '../../../../../../styles/foundation' as *;
 
 .container {
-  background-color: var(--header-background);
+  background-color: var(--background);
   display: flex;
   align-items: center;
   justify-content: center;
   height: var(--button-dimension-44px);
-  border-top: var(--border-primary);
+  border-top: var(--border-secondary);
   padding: 0 var(--padding-24px);
 }
 .logo {

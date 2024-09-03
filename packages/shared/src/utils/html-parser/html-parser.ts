@@ -356,8 +356,6 @@ export namespace HtmlParser {
           'article:has(.r-12kyg2d.css-175oi2r > .r-1wtj0ep.r-18u37iz.r-k4xj1c.css-175oi2r), article:has(.r-14gqq1x.r-16y2uox.r-m5arl1.r-f8sm7e.r-1bnu78o.css-175oi2r), article:has(.r-15zivkp.r-onrtq4.r-1wron08.r-18kxxzh.css-175oi2r)',
         )
 
-        console.log(tweet_elements)
-
         let concatenated_tweets = ''
 
         tweet_elements.forEach((tweet_element) => {

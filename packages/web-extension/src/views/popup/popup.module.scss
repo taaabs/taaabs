@@ -6,6 +6,7 @@
 .container {
   --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
   --font-family-inter: 'Inter', sans-serif;
+  --accent-color: var(--blue700) !important; // Fix for youtube
   font-family: var(--font-family-inter);
   animation: fade-in var(--transition-duration-150ms) ease-in-out;
   a {

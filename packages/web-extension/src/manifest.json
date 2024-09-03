@@ -3,7 +3,7 @@
   "name": "Taaabs Web Clipper",
   "short_name": "taaabs",
   "description": "Easy to use, privacy-first way to organize, share and discover web bookmarks.",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "homepage_url": "https://taaabs.com/library",
   "action": {
     "default_icon": {
@@ -57,7 +57,8 @@
         "https://coral.cohere.com/",
         "https://huggingface.co/chat/",
         "https://aistudio.google.com/app/prompts/new_chat",
-        "https://chat.deepseek.com/"
+        "https://chat.deepseek.com/",
+        "https://www.phind.com/agent"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }

@@ -6,4 +6,6 @@
   flex-direction: column;
   padding: var(--padding-16px);
   gap: var(--padding-12px);
+  background-color: var(--header-background);
+  border-bottom: var(--border-primary);
 }
