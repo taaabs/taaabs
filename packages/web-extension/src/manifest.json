@@ -55,10 +55,12 @@
         "https://claude.ai/new",
         "https://duckduckgo.com/?q=DuckDuckGo+AI+Chat&ia=chat",
         "https://coral.cohere.com/",
+        "https://x.com/i/grok",
         "https://huggingface.co/chat/",
         "https://aistudio.google.com/app/prompts/new_chat",
         "https://chat.deepseek.com/",
-        "https://www.phind.com/agent"
+        "https://www.phind.com/agent",
+        "https://poe.com/"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }

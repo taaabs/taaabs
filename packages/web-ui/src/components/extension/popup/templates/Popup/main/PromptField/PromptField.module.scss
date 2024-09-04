@@ -1,0 +1,16 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  padding: var(--padding-16px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-12px);
+  &__header {
+    color: var(--text-color-dimmed);
+  }
+  > div {
+    display: flex;
+    width: 100%;
+  }
+}

@@ -144,6 +144,10 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       scroll_container_selector =
         '[class^="react-scroll-to-bottom--"].h-full > div'
       response_container_selector = 'div[data-message-author-role="assistant"]'
+    } else if (document.location.href.startsWith(chatbot_urls.poe)) {
+      scroll_container_selector =
+        '[class^="ChatMessagesScrollWrapper_scrollableContainerWrapper"]'
+      response_container_selector = '[class^="Message_leftSideMessageBubble"]'
     }
 
     const try_scrolling = () => {
@@ -159,7 +163,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             scroll_container.scrollTop = scroll_container.scrollHeight
           }
 
-          let previous_scroll_top = 0
+          let previous_scroll_top: number | undefined = undefined
           const get_should_keep_scrolling = () => {
             const response_container = document.querySelector(
               response_container_selector,
@@ -167,9 +171,10 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             if (!response_container.textContent) return true
 
             const current_scroll_top = scroll_container.scrollTop
-            console.log(current_scroll_top)
-            console.log(previous_scroll_top)
-            if (current_scroll_top < previous_scroll_top) {
+            if (
+              previous_scroll_top &&
+              current_scroll_top < previous_scroll_top
+            ) {
               clearInterval(scroll_interval)
               return false
             }
@@ -178,7 +183,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             // Check if the model response is almost at the top of the viewport
             const model_response_rect =
               response_container.getBoundingClientRect()
-            const top_threshold = 250 // Adjust the threshold as needed
+            const top_threshold = 300 // Adjust the threshold as needed
 
             if (model_response_rect.top <= top_threshold) {
               clearInterval(scroll_interval)
@@ -198,6 +203,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
           console.error('Could not find scroll container.')
         }
       } else {
+        console.error('Could not find response container.')
         setTimeout(() => {
           try_scrolling()
         }, 100)

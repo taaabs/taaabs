@@ -15,9 +15,11 @@ export namespace Input {
     is_disabled?: boolean
     autofocus?: boolean
     min_lines?: number
+    disable_enter_new_lines?: boolean
     is_note?: boolean
     on_focus?: () => void
     on_blur?: () => void
+    on_enter_pressed?: () => void
     additional_properties?: any
     suffix_action?: { icon_variant: Icon.Variant; on_click?: () => void }
   }
@@ -43,6 +45,12 @@ export const Input: React.FC<Input.Props> = ({
           autoFocus={props.autofocus}
           placeholder={props.placeholder}
           minRows={props.min_lines}
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') {
+              if (props.disable_enter_new_lines) e.preventDefault()
+              props.on_enter_pressed?.()
+            }
+          }}
         />
       ) : (
         <input
@@ -59,6 +67,11 @@ export const Input: React.FC<Input.Props> = ({
           placeholder={props.placeholder}
           onFocus={props.on_focus}
           onBlur={props.on_blur}
+          onKeyDown={(e) => {
+            if (e.key == 'Enter') {
+              props.on_enter_pressed?.()
+            }
+          }}
           {...props.additional_properties}
         />
       )}

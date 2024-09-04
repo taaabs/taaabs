@@ -9,6 +9,7 @@
   --accent-color: var(--blue700) !important; // Fix for youtube
   font-family: var(--font-family-inter);
   animation: fade-in var(--transition-duration-150ms) ease-in-out;
+  font-size: var(--font-size-15px);
   a {
     text-decoration: none;
   }
@@ -20,6 +21,13 @@
   a,
   button {
     &:focus {
+      outline: none;
+    }
+  }
+  textarea {
+    font-family: var(--font-family-inter);
+    font-size: var(--font-size-15px);
+    &:focus-visible {
       outline: none;
     }
   }

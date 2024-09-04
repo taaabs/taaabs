@@ -36,12 +36,20 @@
             { action: 'url-saved-status', is_saved: true },
             '*',
           )
+          window.postMessage(
+            { action: 'last-used-chatbot-name', last_used_chatbot_name: 'chatgpt' },
+            '*',
+          )
         })
       document
         .getElementById('set-saved-false')
         .addEventListener('click', () => {
           window.postMessage(
             { action: 'url-saved-status', is_saved: false },
+            '*',
+          )
+          window.postMessage(
+            { action: 'last-used-chatbot-name', last_used_chatbot_name: 'chatgpt' },
             '*',
           )
         })

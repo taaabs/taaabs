@@ -9,4 +9,6 @@ export const chatbot_urls = {
   deepseek: 'https://chat.deepseek.com/',
   claude: 'https://claude.ai/new',
   phind: 'https://www.phind.com/agent',
+  poe: 'https://poe.com/',
+  grok: 'https://x.com/i/grok',
 }
