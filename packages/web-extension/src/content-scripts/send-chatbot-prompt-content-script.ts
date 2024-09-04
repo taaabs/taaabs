@@ -66,11 +66,6 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             0,
             16000,
           )
-        } else if (current_url == chatbot_urls.chatgpt) {
-          ;(active_element as HTMLTextAreaElement).value = prompt.substring(
-            0,
-            30000,
-          )
         } else {
           ;(active_element as HTMLTextAreaElement).value = prompt
         }

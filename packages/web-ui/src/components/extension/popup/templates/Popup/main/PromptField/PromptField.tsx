@@ -19,7 +19,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         value={props.value}
         on_change={props.on_change}
         min_lines={1}
-        max_lines={4}
+        max_lines={6}
         disable_enter_new_lines={true}
         on_enter_pressed={props.on_enter_pressed}
         placeholder={props.placeholder}

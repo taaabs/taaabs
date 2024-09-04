@@ -164,7 +164,6 @@ export const Popup: React.FC = () => {
           <UiButton
             href={'https://taaabs.com/library'}
             rel="noreferrer noopener"
-            is_disabled={delete_bookmark_hook.is_deleting}
             is_outlined={true}
           >
             Go to library

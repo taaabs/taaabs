@@ -2,6 +2,7 @@ import { get_auth_data } from '@/helpers/get-auth-data'
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { AES } from '@repositories/utils/aes'
 import { SHA256 } from '@repositories/utils/sha256'
+import { system_values } from '@shared/constants/system-values'
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import pako from 'pako'
@@ -224,23 +225,26 @@ const inject_popup = () => {
 
       let cover = params.cover
 
+      const title = params.title?.substring(
+        0,
+        system_values.bookmark.title.max_length,
+      )
+      const note = params.note?.substring(
+        0,
+        system_values.bookmark.note.max_length,
+      )
+
       const body: CreateBookmark_Dto.Body = {
         created_at: params.created_at?.toISOString(),
-        title: params.is_public ? params.title : undefined,
+        title: params.is_public ? title : undefined,
         title_aes:
-          !params.is_public && params.title
-            ? await AES.encrypt(
-                params.title,
-                new Uint8Array(auth_data.encryption_key),
-              )
+          !params.is_public && title
+            ? await AES.encrypt(title, new Uint8Array(auth_data.encryption_key))
             : undefined,
-        note: params.is_public ? params.note : undefined,
+        note: params.is_public ? note : undefined,
         note_aes:
-          !params.is_public && params.note
-            ? await AES.encrypt(
-                params.note,
-                new Uint8Array(auth_data.encryption_key),
-              )
+          !params.is_public && note
+            ? await AES.encrypt(note, new Uint8Array(auth_data.encryption_key))
             : undefined,
         is_public: params.is_public || undefined,
         is_archived: params.is_archived || undefined,

@@ -92,7 +92,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             if (!context_menu_of_item_id) return
             const found_item = traverse_items(items, context_menu_of_item_id)
             if (found_item) {
-              props.on_tag_rename_click({ id: found_item.tag_id, name: found_item.name })
+              props.on_tag_rename_click({
+                id: found_item.tag_id,
+                name: found_item.name,
+              })
             }
           }}
         />
@@ -446,6 +449,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 renderCollapseIcon={({ isCollapsed }) =>
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
+                disableCollapse={true}
                 // Note: "confirmChange" can't be used for validation because it stops firing
                 // deeper in the tree if there is a problem higher up
                 // confirmChange={}

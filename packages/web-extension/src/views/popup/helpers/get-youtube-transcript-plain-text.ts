@@ -32,7 +32,7 @@ export const get_youtube_transcript_plain_text = async (
       caption_track.vssId.startsWith('.en'),
     )
     if (!caption_track) {
-      captions_data.captionTracks?.find((caption_track: any) =>
+      caption_track = captions_data.captionTracks?.find((caption_track: any) =>
         caption_track.vssId.startsWith('a.'),
       )
     }
