@@ -15,6 +15,7 @@ export namespace Input {
     is_disabled?: boolean
     autofocus?: boolean
     min_lines?: number
+    max_lines?: number
     disable_enter_new_lines?: boolean
     is_note?: boolean
     on_focus?: () => void
@@ -45,6 +46,7 @@ export const Input: React.FC<Input.Props> = ({
           autoFocus={props.autofocus}
           placeholder={props.placeholder}
           minRows={props.min_lines}
+          maxRows={props.max_lines}
           onKeyDown={(e) => {
             if (e.key == 'Enter') {
               if (props.disable_enter_new_lines) e.preventDefault()

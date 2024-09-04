@@ -17,10 +17,11 @@ import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
 import { chatbot_urls } from '@/constants/chatbot-urls'
 import { get_chatbot_prompt } from './helpers/get-chatbot-prompt'
-
-import '../../../../web-ui/src/styles/theme.scss'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
+import { get_youtube_transcript_plain_text } from './helpers/get-youtube-transcript-plain-text'
+
+import '../../../../web-ui/src/styles/theme.scss'
 
 export const Popup: React.FC = () => {
   const { is_saved } = use_saved_check()
@@ -69,21 +70,38 @@ export const Popup: React.FC = () => {
       on_click={create_bookmark_hook.create_bookmark}
       is_disabled={create_bookmark_hook.is_creating}
     >
-      Save
+      Save this page
     </UiButton>,
   ]
 
-  const handle_recent_prompt_click = (prompt_id: string) => {
+  const handle_recent_prompt_click = async (prompt_id: string) => {
     const url = document.location.href
     const html = document.getElementsByTagName('html')[0].outerHTML
-    const parsed_document = HtmlParser.parse({
-      html,
-      url,
-    })
-    if (parsed_document) {
+    let plain_text = ''
+    if (url.startsWith('https://www.youtube.com/watch?')) {
+      try {
+        const video_id = new URL(url).searchParams.get('v')
+        if (video_id) {
+          plain_text = await get_youtube_transcript_plain_text(video_id)
+        }
+      } catch (e) {
+        console.error(e)
+        alert("Could't find transcript.")
+      }
+    } else {
+      const parsed_document = HtmlParser.parse({
+        html,
+        url,
+      })
+      if (parsed_document) {
+        plain_text = parsed_document.plain_text
+      }
+    }
+
+    if (plain_text) {
       const prompt = get_chatbot_prompt({
         prompt_id,
-        plain_text: parsed_document.plain_text,
+        plain_text,
       })
 
       let chatbot_url = 'https://chatgpt.com/'
@@ -95,14 +113,13 @@ export const Popup: React.FC = () => {
           chatbot_url = custom_chatbot_url
         }
       }
-
       send_message({
         action: 'send-chatbot-prompt',
         chatbot_url,
         prompt,
       })
     } else {
-      alert('Unable to parse the document')
+      alert('Unable to parse this page.')
     }
   }
 
@@ -125,6 +142,7 @@ export const Popup: React.FC = () => {
               { name: 'aistudio', display_name: 'AI Studio' },
               { name: 'claude', display_name: 'Claude' },
               { name: 'grok', display_name: 'Grok' },
+              { name: 'meta', display_name: 'Meta AI' },
               { name: 'duckduckgo', display_name: 'DuckDuckGo' },
               { name: 'huggingchat', display_name: 'HuggingChat' },
               { name: 'mistral', display_name: 'Mistral' },
@@ -143,10 +161,18 @@ export const Popup: React.FC = () => {
         }
       >
         <Ui_extension_popup_templates_Popup_main_Actions>
+          <UiButton
+            href={'https://taaabs.com/library'}
+            rel="noreferrer noopener"
+            is_disabled={delete_bookmark_hook.is_deleting}
+            is_outlined={true}
+          >
+            Go to library
+          </UiButton>
           {is_saved ? saved_items : unsaved_items}
         </Ui_extension_popup_templates_Popup_main_Actions>
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
-          heading="AI prompts"
+          heading="Page assistant"
           recent_prompts={[
             { id: '1', name: 'Summarize' },
             { id: '2', name: "Explain like I'm five" },

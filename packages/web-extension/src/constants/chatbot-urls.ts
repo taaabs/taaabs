@@ -11,4 +11,5 @@ export const chatbot_urls = {
   phind: 'https://www.phind.com/agent',
   poe: 'https://poe.com/',
   grok: 'https://x.com/i/grok',
+  meta: 'https://www.meta.ai/',
 }

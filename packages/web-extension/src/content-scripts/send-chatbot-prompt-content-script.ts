@@ -116,11 +116,14 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       }
     }
 
-    // Fix for AI Studio and Mistral which has some work to do before being available to take a prompt
-    if (
-      current_url == chatbot_urls.aistudio ||
-      current_url == chatbot_urls.mistral
-    ) {
+    // Fix for AI Studio and Mistral which has some work to do before being able to take a prompt
+    if (current_url == chatbot_urls.aistudio) {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 1000)
+      })
+    } else if (current_url == chatbot_urls.mistral) {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
