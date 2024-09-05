@@ -16,6 +16,7 @@
   row-gap: var(--padding-8px);
   column-gap: var(--padding-12px);
   > button {
+    font-family: unset;
     font-size: var(--font-size-15px);
     border: none;
     background: none;

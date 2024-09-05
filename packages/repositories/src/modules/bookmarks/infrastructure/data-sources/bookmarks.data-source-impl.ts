@@ -19,6 +19,7 @@ import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
 import { DeleteBookmarkByUrlHash_Params } from '../../domain/types/delete-bookmark-by-url-hash.params'
+import { system_values } from '@shared/constants/system-values'
 
 export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
   constructor(private readonly _ky: KyInstance) {}
@@ -247,17 +248,26 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       }
     }
 
+    const title = params.title?.substring(
+      0,
+      system_values.bookmark.title.max_length,
+    )
+    const note = params.note?.substring(
+      0,
+      system_values.bookmark.note.max_length,
+    )
+
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
-      title: params.is_public ? params.title : undefined,
+      title: params.is_public ? title : undefined,
       title_aes:
-        !params.is_public && params.title
-          ? await AES.encrypt(params.title, encryption_key)
+        !params.is_public && title
+          ? await AES.encrypt(title, encryption_key)
           : undefined,
-      note: params.is_public ? params.note : undefined,
+      note: params.is_public ? note : undefined,
       note_aes:
-        !params.is_public && params.note
-          ? await AES.encrypt(params.note, encryption_key)
+        !params.is_public && note
+          ? await AES.encrypt(note, encryption_key)
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,

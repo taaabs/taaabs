@@ -80,10 +80,7 @@ export const Popup: React.FC = () => {
     let plain_text = ''
     if (url.startsWith('https://www.youtube.com/watch?')) {
       try {
-        const video_id = new URL(url).searchParams.get('v')
-        if (video_id) {
-          plain_text = await get_youtube_transcript_plain_text(video_id)
-        }
+        plain_text = await get_youtube_transcript_plain_text(url)
       } catch (e) {
         console.error(e)
         alert("Could't find transcript.")
@@ -171,15 +168,16 @@ export const Popup: React.FC = () => {
           {is_saved ? saved_items : unsaved_items}
         </Ui_extension_popup_templates_Popup_main_Actions>
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
-          heading="Page assistant"
+          heading="Quick prompts"
           recent_prompts={[
-            { id: '1', name: 'Summarize' },
-            { id: '2', name: "Explain like I'm five" },
-            { id: '3', name: 'In-depth analysis' },
-            { id: '4', name: 'Reply to the OP' },
-            { id: '5', name: 'Ask question' },
-            { id: '6', name: 'Quiz me!' },
-            { id: '7', name: 'Study guide' },
+            { id: 'summarize', name: 'Summarize' },
+            { id: 'follow-up-question', name: 'Follow-up question' },
+            { id: 'study-guide', name: 'Study guide' },
+            { id: 'quiz-me', name: 'Quiz me!' },
+            { id: 'eli5', name: "Explain like I'm five" },
+            { id: 'layman', name: "Layman's terms" },
+            { id: 'reply-draft', name: 'Draft a reply' },
+            { id: 'buying-advice', name: 'Buying advice' },
           ]}
           on_recent_prompt_click={handle_recent_prompt_click}
         />
@@ -208,7 +206,7 @@ export const Popup: React.FC = () => {
               prompt: prompt_field_value,
             })
           }}
-          placeholder={'Ask anything!'}
+          placeholder={'Enter a prompt here'}
         />
       </Ui_extension_popup_templates_Popup>
     </div>

@@ -15,7 +15,13 @@ export const Primary = () => {
     <div style={{ width: '300px', margin: '50px' }}>
       <Popup
         header_slot={<Header settings_on_click={() => {}} />}
-        footer_slot={<Footer />}
+        footer_slot={
+          <Footer
+            chatbots={[]}
+            on_chatbot_change={() => {}}
+            selected_chatbot_name=""
+          />
+        }
       >
         <Actions>
           <Button on_click={() => {}}>Test 1</Button>
@@ -25,16 +31,6 @@ export const Primary = () => {
         <RecentPrompts
           on_recent_prompt_click={(id) => {
             console.log(id)
-          }}
-          chatbots={[
-            {
-              display_name: 'ChatGPT',
-              name: 'chatgpt',
-            },
-          ]}
-          selected_chatbot_name="chatgpt"
-          on_chatbot_change={(chatbot_name) => {
-            console.log(chatbot_name)
           }}
           recent_prompts={[
             {
@@ -50,9 +46,7 @@ export const Primary = () => {
               name: 'In-depth analysis',
             },
           ]}
-          translations={{
-            heading: 'Recent prompts',
-          }}
+          heading="Recent prompts"
         />
       </Popup>
     </div>

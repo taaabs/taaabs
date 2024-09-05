@@ -449,7 +449,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 renderCollapseIcon={({ isCollapsed }) =>
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
-                disableCollapse={true}
+                collapsed={true}
                 // Note: "confirmChange" can't be used for validation because it stops firing
                 // deeper in the tree if there is a problem higher up
                 // confirmChange={}

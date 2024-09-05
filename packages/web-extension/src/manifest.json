@@ -27,7 +27,6 @@
   "author": "Taaabs, Inc.",
   "permissions": [
     "storage",
-    "scripting",
     "background",
     "contextMenus",
     "activeTab",
