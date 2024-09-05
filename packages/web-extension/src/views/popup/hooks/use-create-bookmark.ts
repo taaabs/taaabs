@@ -67,30 +67,56 @@ export const use_create_bookmark = () => {
       send_message({ action: 'create-bookmark', bookmark })
     }
 
-    const doc_data = async (
-      doc: any,
-    ): Promise<{
+    const document_data = async (): Promise<{
       html: string
+      description?: string
       favicon?: string
       og_image?: string
     }> => {
+      let is_youtube = false
+      const url = new URL(window.location.href)
+
+      // Check if the URL is a YouTube video URL
+      if (url.hostname === 'www.youtube.com') {
+        is_youtube = true
+      }
+
       const get_og_image_url = () => {
-        const meta_tags = doc.getElementsByTagName('meta')
+        if (is_youtube) {
+          const video_id = url.searchParams.get('v')
+          if (video_id) {
+            return `https://i.ytimg.com/vi/${video_id}/maxresdefault.jpg`
+          }
+        }
+
+        const meta_tags = document.getElementsByTagName('meta')
         for (let i = 0; i < meta_tags.length; i++) {
           if (meta_tags[i].getAttribute('property') == 'og:image') {
             return meta_tags[i].getAttribute('content')
           }
         }
+
+        return undefined
       }
 
       const get_favicon_url = () => {
-        const link_tags = doc.getElementsByTagName('link')
-        const favicon_rels = ['icon', 'shortcut icon', 'apple-touch-icon']
-        for (let i = 0; i < link_tags.length; i++) {
-          if (favicon_rels.includes(link_tags[i].getAttribute('rel'))) {
-            return link_tags[i].getAttribute('href')
-          }
+        // Check for 32x32 favicon
+        const favicon_32x32 = document.querySelector(
+          'link[rel="icon"][sizes="32x32"]',
+        )
+        if (favicon_32x32) {
+          return favicon_32x32.getAttribute('href')
         }
+
+        // Check for shortcut icon with type image/x-icon
+        const favicon = document.querySelector(
+          `document.querySelector('link[href$=".ico"]')`,
+        )
+        if (favicon) {
+          return favicon.getAttribute('href')
+        }
+
+        // If no specific favicon found, use the default favicon.ico
         return new URL(window.location.href).origin + '/favicon.ico'
       }
 
@@ -99,17 +125,17 @@ export const use_create_bookmark = () => {
         width?: any,
         height?: any,
       ) => {
-        const img = doc.createElement('img')
+        const img = document.createElement('img')
         img.src = url
         img.setAttribute('crossorigin', 'anonymous')
         await new Promise((resolve, reject) => {
           img.onload = resolve
           img.onerror = () => reject(new Error('Image not found'))
         })
-        const canvas = doc.createElement('canvas')
+        const canvas = document.createElement('canvas')
         canvas.width = width || img.width
         canvas.height = height || img.height
-        const ctx = canvas.getContext('2d')
+        const ctx = canvas.getContext('2d')!
         if (width && height) {
           ctx.drawImage(img, 0, 0, width, height)
         } else {
@@ -131,96 +157,37 @@ export const use_create_bookmark = () => {
         favicon = await get_base64_of_image_url(get_favicon_url(), 32, 32)
       } catch {}
 
-      const html = doc.getElementsByTagName('html')[0].outerHTML
+      const get_description = () => {
+        let description: string | undefined | null = undefined
+        if (is_youtube) {
+          description = document.querySelector(
+            'span.yt-core-attributed-string--link-inherit-color:nth-of-type(1)',
+          )?.textContent
+        } else {
+          description = document.querySelector(
+            "meta[name='description']",
+          )?.textContent
+        }
 
-      return { og_image, favicon, html }
+        return description || undefined
+      }
+      const description = get_description()
+
+      const html = document.getElementsByTagName('html')[0].outerHTML
+
+      return { og_image, favicon, description, html }
     }
 
-    const check_iframe_support = async () => {
-      const title = document.title
-      const og_title_element = document.querySelector(
-        'meta[property="og:title"]',
-      )
-      if (!og_title_element) return false
-      const og_title_content = og_title_element.getAttribute('content')
-      if (title.toLowerCase().includes(og_title_content!.toLowerCase()))
-        return false
-
-      try {
-        const response = await fetch(window.location.href)
-        const headers = response.headers
-
-        const x_frame_options = headers.get('X-Frame-Options')
-        if (x_frame_options) {
-          if (x_frame_options === 'DENY') {
-            return false
-          }
-        }
-
-        const csp = headers.get('Content-Security-Policy')
-        if (csp && csp.includes('frame-ancestors')) {
-          const frame_ancestors = csp.match(/frame-ancestors\s+([^;]+)/)
-          if (frame_ancestors) {
-            const sources = frame_ancestors[1].split(' ')
-            if (!sources.includes('*') && !sources.includes('self')) {
-              return false
-            }
-          }
-        }
-
-        return true
-      } catch (error) {
-        console.error('Error checking iframe support:', error)
-        return false
-      }
+    const { html, favicon, og_image, description } = await document_data()
+    const tab_data: TabData = {
+      url: document.location.href,
+      title: document.title,
+      html,
+      description,
+      favicon,
+      og_image,
     }
-
-    check_iframe_support().then(async (supports_iframe) => {
-      if (supports_iframe) {
-        const iframe = document.createElement('iframe')
-        iframe.src = location.href
-        iframe.style.visibility = 'hidden'
-        document.body.appendChild(iframe)
-        iframe.addEventListener('load', async () => {
-          const doc = iframe.contentWindow!.document
-          const { html, favicon, og_image } = await doc_data(doc)
-          const url = document.location.href
-          const title = doc.title
-          const description =
-            doc.querySelector("meta[name='description']") != null
-              ? (doc.querySelector("meta[name='description']") as any).content
-              : ''
-          const tab_data: TabData = {
-            url,
-            html,
-            title,
-            description,
-            favicon,
-            og_image,
-          }
-          process_tab_data_and_send(tab_data)
-          document.body.removeChild(iframe)
-        })
-      } else {
-        const url = document.location.href
-        const title = document.title
-        const description =
-          document.querySelector("meta[name='description']") != null
-            ? (document.querySelector("meta[name='description']") as any)
-                .content
-            : ''
-        const { html, favicon, og_image } = await doc_data(document)
-        const tab_data: TabData = {
-          url,
-          html,
-          title,
-          description,
-          favicon,
-          og_image,
-        }
-        process_tab_data_and_send(tab_data)
-      }
-    })
+    process_tab_data_and_send(tab_data)
   }
 
   useEffect(() => {

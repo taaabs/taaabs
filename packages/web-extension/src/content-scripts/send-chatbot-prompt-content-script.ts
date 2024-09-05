@@ -23,6 +23,8 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
         selector = "textarea[placeholder='Ask anything!']"
       } else if (current_url == chatbot_urls.claude) {
         selector = 'div[contenteditable=true] > p'
+      } else if (current_url == chatbot_urls.you) {
+        selector = 'textarea[name="query"]'
       }
 
       if (selector) {
@@ -116,7 +118,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 1000)
+        }, 1500)
       })
     } else if (current_url == chatbot_urls.mistral) {
       await new Promise((resolve) => {

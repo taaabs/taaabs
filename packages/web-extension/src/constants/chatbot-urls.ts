@@ -12,4 +12,5 @@ export const chatbot_urls = {
   poe: 'https://poe.com/',
   grok: 'https://x.com/i/grok',
   meta: 'https://www.meta.ai/',
+  you: 'https://you.com/',
 }

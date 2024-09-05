@@ -1,4 +1,3 @@
-import React from 'react'
 import DOMPurify from 'dompurify'
 import type TurndownService from 'turndown'
 import TurndownServiceJoplin from '@joplin/turndown'

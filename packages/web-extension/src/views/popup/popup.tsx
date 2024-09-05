@@ -147,6 +147,7 @@ export const Popup: React.FC = () => {
               { name: 'deepseek', display_name: 'DeepSeek' },
               { name: 'phind', display_name: 'Phind' },
               { name: 'poe', display_name: 'Poe' },
+              { name: 'you', display_name: 'You' },
               ...(custom_chatbot_url
                 ? [{ name: 'custom', display_name: 'Custom' }]
                 : []),
@@ -171,7 +172,7 @@ export const Popup: React.FC = () => {
           heading="Quick prompts"
           recent_prompts={[
             { id: 'summarize', name: 'Summarize' },
-            { id: 'follow-up-question', name: 'Follow-up question' },
+            { id: 'ask-question', name: 'Ask question' },
             { id: 'study-guide', name: 'Study guide' },
             { id: 'quiz-me', name: 'Quiz me!' },
             { id: 'eli5', name: "Explain like I'm five" },

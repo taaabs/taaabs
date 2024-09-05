@@ -60,7 +60,8 @@
         "https://aistudio.google.com/app/prompts/new_chat",
         "https://chat.deepseek.com/",
         "https://www.phind.com/agent",
-        "https://poe.com/"
+        "https://poe.com/",
+        "https://you.com/"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }
