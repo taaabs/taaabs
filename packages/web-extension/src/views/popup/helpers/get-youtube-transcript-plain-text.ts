@@ -26,13 +26,14 @@ class YouTubeTranscriptExtractor {
     try {
       const video_page_text = await this._fetch_video_page()
       const video_title = this._extract_video_title(video_page_text)
+      const publication_date = this._extract_publication_date(video_page_text)
       const captions_data = this._extract_captions_data(video_page_text)
       const caption_url = this._find_caption_url(captions_data)
       const caption_text = await this._fetch_caption_track(caption_url)
       const transcript =
         this._extract_plain_text_from_transcript_xml(caption_text)
 
-      return `${video_title}\n\n${transcript}`
+      return `Video Title:${video_title}\nPublication Date: ${publication_date}\n\nTranscript: ${transcript}`
     } catch (error) {
       console.error('Error fetching transcript:', error)
       return ''
@@ -50,15 +51,25 @@ class YouTubeTranscriptExtractor {
   private _extract_video_title(text: string): string {
     const title_match = text.match(/<title>(.*?)<\/title>/)
     if (!title_match || title_match.length < 2) {
-      throw new Error('Video title not found in the video page.')
+      throw new Error('Video title not found.')
     }
     return title_match[1].replace(/&#39;/g, "'")
+  }
+
+  private _extract_publication_date(text: string): string {
+    const date_match = text.match(
+      /<meta itemprop="datePublished" content="([^"]+)">/,
+    )
+    if (!date_match || date_match.length < 2) {
+      throw new Error('Publication date not found.')
+    }
+    return date_match[1]
   }
 
   private _extract_captions_data(text: string): CaptionsData {
     const captions_match = text.match(/\"captions\"\:([\s\S]+?)\,"videoDetails/)
     if (!captions_match || captions_match.length < 2) {
-      throw new Error('Captions data not found in the video page.')
+      throw new Error('Captions data not found.')
     }
     const captions_json_string = captions_match[1].replace('\n', '')
     return JSON.parse(captions_json_string)?.playerCaptionsTracklistRenderer
@@ -68,7 +79,6 @@ class YouTubeTranscriptExtractor {
     if (!captions_data) {
       throw new Error('Failed to parse captions data.')
     }
-    console.log(captions_data)
     let caption_track = captions_data.captionTracks?.find(
       (caption_track: CaptionTrack) => caption_track.vssId.startsWith('.en'),
     )
