@@ -380,6 +380,56 @@ export namespace HtmlParser {
           } as ReaderData.Article),
           plain_text: strip_markdown_links(concatenated_tweets),
         }
+      } else if (params.url.startsWith('https://app.slack.com/client/')) {
+        const temp_el = document.createElement('div')
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
+
+        // Select the threads flexpane
+        const threads_flexpane = temp_el.querySelector<HTMLElement>(
+          'div[data-qa="threads_flexpane"]',
+        )
+        if (threads_flexpane) {
+          // Select all messages within the threads flexpane
+          const message_elements =
+            threads_flexpane.querySelectorAll<HTMLElement>(
+              'div[data-qa="message_content"]',
+            )
+          let concatenated_messages = ''
+
+          message_elements.forEach((message_element) => {
+            console.log(message_element)
+            const author = message_element.querySelector(
+              'button[data-qa="message_sender_name"]',
+            )
+            const date = message_element.querySelector(
+              'span[data-qa="timestamp_label"]',
+            )
+            if (author && date) {
+              concatenated_messages +=
+                (concatenated_messages != '' ? '\n' : '') +
+                author.textContent +
+                ' ' +
+                `(${date.textContent})` +
+                '\n'
+            }
+            const message = message_element.querySelector(
+              'div[data-qa="message-text"]',
+            )
+            if (message) {
+              concatenated_messages += message.textContent + '\n'
+            }
+          })
+
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title: title_element_text,
+              site_name: 'Slack',
+              content: concatenated_messages,
+            } as ReaderData.Article),
+            plain_text: concatenated_messages,
+          }
+        }
       } else {
         const parser = new DOMParser()
         const doc = parser.parseFromString(

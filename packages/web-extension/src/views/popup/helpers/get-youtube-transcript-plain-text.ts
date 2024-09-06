@@ -120,9 +120,11 @@ class YouTubeTranscriptExtractor {
         if (current_line.trim()) {
           extracted_text += current_line.trim()
         }
-        extracted_text += ` [${current_hour}:${current_minute
+        extracted_text += `<TIMESTAMP>[${current_hour}:${current_minute
           .toString()
-          .padStart(2, '0')}:${current_second.toString().padStart(2, '0')}] `
+          .padStart(2, '0')}:${current_second
+          .toString()
+          .padStart(2, '0')}]<TIMESTAMP>`
         current_line = ''
         last_hour = current_hour
         last_minute = current_minute
@@ -137,7 +139,10 @@ class YouTubeTranscriptExtractor {
       extracted_text += current_line.trim()
     }
 
-    return extracted_text.trim().replace(/\n/g, ' ')
+    return extracted_text
+      .trim()
+      .replace(/\n/g, ' ')
+      .replace(/<TIMESTAMP>/g, '\n')
   }
 }
 
