@@ -19,7 +19,7 @@ import { chatbot_urls } from '@/constants/chatbot-urls'
 import { get_chatbot_prompt } from './helpers/get-chatbot-prompt'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
-import { get_youtube_transcript_plain_text } from './helpers/get-youtube-transcript-plain-text'
+import { YouTubeTranscriptExtractor } from './helpers/youtube-transcript-extractor'
 
 import '../../../../web-ui/src/styles/theme.scss'
 
@@ -78,20 +78,40 @@ export const Popup: React.FC = () => {
     const url = document.location.href
     const html = document.getElementsByTagName('html')[0].outerHTML
     let plain_text = ''
+
     if (url.startsWith('https://www.youtube.com/watch?')) {
       try {
-        plain_text = await get_youtube_transcript_plain_text(url)
+        const youtube_transcript_extractor = new YouTubeTranscriptExtractor(url)
+        plain_text =
+          await youtube_transcript_extractor.get_transcript_plain_text()
       } catch (e) {
         console.error(e)
-        alert("Could't find transcript.")
+        alert("Couldn't find transcript.")
+      }
+    } else if (url.match(/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/)) {
+      try {
+        // Post is rendered in inframe, we need to grab the original html
+        const embed_url = `${url}?embed=1&mode=tme`
+        const response = await fetch(embed_url)
+        const html_content = await response.text()
+        const parsed_html = HtmlParser.parse({
+          html: html_content,
+          url: embed_url,
+        })
+        if (parsed_html) {
+          plain_text = parsed_html.plain_text
+        }
+      } catch (e) {
+        console.error(e)
+        alert("Couldn't fetch or parse the page.")
       }
     } else {
-      const parsed_document = HtmlParser.parse({
+      const parsed_html = HtmlParser.parse({
         html,
         url,
       })
-      if (parsed_document) {
-        plain_text = parsed_document.plain_text
+      if (parsed_html) {
+        plain_text = parsed_html.plain_text
       }
     }
 

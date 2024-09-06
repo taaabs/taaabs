@@ -142,7 +142,10 @@ export namespace HtmlParser {
     }
 
     try {
-      if (params.url.startsWith('https://chatgpt.com/')) {
+      if (
+        // ChatGPT
+        params.url.startsWith('https://chatgpt.com/')
+      ) {
         const user_selector = '[data-message-author-role="user"]'
         const assistant_selector = '[data-message-author-role="assistant"]'
         const { messages, plain_text } = parse_chat_messages({
@@ -161,7 +164,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://gemini.google.com/app/')) {
+      }
+      // Gemini
+      else if (params.url.startsWith('https://gemini.google.com/app/')) {
         const user_selector = '.query-content'
         const assistant_selector = '.response-content'
         const { messages, plain_text } = parse_chat_messages({
@@ -180,7 +185,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (
+      }
+      // AI Studio
+      else if (
         params.url.startsWith('https://aistudio.google.com/app/prompts/')
       ) {
         const user_selector =
@@ -203,7 +210,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://huggingface.co/chat/')) {
+      }
+      // HuggingFace
+      else if (params.url.startsWith('https://huggingface.co/chat/')) {
         const user_selector =
           '.dark\\:text-gray-400.text-gray-500.py-3\\.5.px-5.bg-inherit.break-words.text-wrap.whitespace-break-spaces.appearance-none.w-full.disabled'
         const assistant_selector =
@@ -224,7 +233,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://claude.ai/chat/')) {
+      }
+      // Claude
+      else if (params.url.startsWith('https://claude.ai/chat/')) {
         const user_selector = 'div.font-user-message'
         const assistant_selector = 'div.font-claude-message'
         const { messages, plain_text } = parse_chat_messages({
@@ -243,7 +254,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://coral.cohere.com/c/')) {
+      }
+      // Cohere
+      else if (params.url.startsWith('https://coral.cohere.com/c/')) {
         const user_selector =
           '.hover\\:bg-mushroom-50.ease-in-out.transition-colors.md\\:flex-row.text-left.p-2.rounded-md.gap-2.flex-col.w-full.h-fit.flex.group:has(img[alt="Avatar user image"])'
         const assistant_selector =
@@ -264,7 +277,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://chat.mistral.ai/chat/')) {
+      }
+      // Mistral
+      else if (params.url.startsWith('https://chat.mistral.ai/chat/')) {
         const user_selector =
           '.gap-2.justify-between.items-stretch.flex-col.min-w-0.w-full.flex'
         const assistant_selector =
@@ -285,7 +300,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (
+      }
+      // Open WebUI
+      else if (
         params.html.includes(
           '<link rel="search" type="application/opensearchdescription+xml" title="Open WebUI" href="/opensearch.xml">',
         )
@@ -308,7 +325,9 @@ export namespace HtmlParser {
             plain_text,
           }
         }
-      } else if (params.url.startsWith('https://www.reddit.com/')) {
+      }
+      // Reddit posts
+      else if (params.url.startsWith('https://www.reddit.com/')) {
         const temp_el = document.createElement('div')
         temp_el.innerHTML = DOMPurify.sanitize(params.html)
         const post_element = temp_el.querySelector<HTMLElement>(
@@ -380,7 +399,41 @@ export namespace HtmlParser {
           } as ReaderData.Article),
           plain_text: strip_markdown_links(concatenated_tweets),
         }
-      } else if (params.url.startsWith('https://app.slack.com/client/')) {
+      }
+      // Telegram post (t.me/USER/POST_ID)
+      else if (/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/.test(params.url)) {
+        const temp_el = document.createElement('div')
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
+
+        // Select the message content
+        const post_element = temp_el.querySelector<HTMLElement>(
+          'div.tgme_widget_message_text',
+        )
+        console.log(temp_el)
+        console.log(post_element)
+        if (post_element) {
+          console.log(post_element)
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(
+            DOMPurify.sanitize(post_element.innerHTML),
+            'text/html',
+          )
+          const post = new Readability(doc, { keepClasses: true }).parse()!
+          const content = turndown_service.turndown(post.content)
+          const plain_text = strip_markdown_links(content)
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title: title_element_text,
+              site_name: 'Telegram',
+              content,
+            } as ReaderData.Article),
+            plain_text,
+          }
+        }
+      }
+      // Slack threads
+      else if (params.url.startsWith('https://app.slack.com/client/')) {
         const temp_el = document.createElement('div')
         temp_el.innerHTML = DOMPurify.sanitize(params.html)
 
@@ -430,7 +483,9 @@ export namespace HtmlParser {
             plain_text: concatenated_messages,
           }
         }
-      } else {
+      }
+      // Generic articles
+      else {
         const parser = new DOMParser()
         const doc = parser.parseFromString(
           DOMPurify.sanitize(params.html),

@@ -6,10 +6,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  color: var(--white);
-  @include dark {
-    color: white;
-  }
+  color: white;
   background: var(--accent-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
@@ -20,6 +17,8 @@
   font-size: var(--font-size-16px);
   border: none;
   @include hover {
+    // Color set to fix issues with extension's popup on some websites.
+    color: white;
     background-color: var(--blue800);
     @include dark {
       background-color: var(--blue700);

@@ -7,7 +7,7 @@ type CaptionsData = {
   captionTracks: CaptionTrack[]
 }
 
-class YouTubeTranscriptExtractor {
+export class YouTubeTranscriptExtractor {
   private _video_url: string
 
   constructor(video_url: string) {
@@ -144,11 +144,4 @@ class YouTubeTranscriptExtractor {
       .replace(/\n/g, ' ')
       .replace(/<TIMESTAMP>/g, '\n')
   }
-}
-
-export const get_youtube_transcript_plain_text = async (
-  video_url: string,
-): Promise<string> => {
-  const extractor = new YouTubeTranscriptExtractor(video_url)
-  return extractor.get_transcript_plain_text()
 }
