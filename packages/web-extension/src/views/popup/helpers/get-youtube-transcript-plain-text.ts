@@ -92,20 +92,40 @@ class YouTubeTranscriptExtractor {
   }
 
   private _extract_plain_text_from_transcript_xml(xml_string: string): string {
-    const regex = /<text[^>]*>([^<]*)<\/text>/g
+    const regex = /<text start="([^"]+)"[^>]*>([^<]*)<\/text>/g
     let match
     let extracted_text = ''
+    let last_minute = -1
+    let last_hour = -1
 
     while ((match = regex.exec(xml_string)) !== null) {
-      extracted_text +=
-        match[1]
-          .trim()
-          .replace(/&amp;#39;/g, "'")
-          .replace(/&amp;quot;/g, '"')
-          .replace(/&amp;amp;/g, '"') + '\n'
+      const start_time = parseFloat(match[1])
+      const text = match[2]
+        .trim()
+        .replace(/&amp;#39;/g, "'")
+        .replace(/&amp;quot;/g, '"')
+        .replace(/&amp;amp;/g, '"')
+
+      const current_hour = Math.floor(start_time / 3600)
+      const current_minute = Math.floor((start_time % 3600) / 60)
+      const current_second = Math.floor(start_time % 60)
+
+      // Insert timestamp only if it's a new minute
+      if (
+        current_hour > last_hour ||
+        (current_hour === last_hour && current_minute > last_minute)
+      ) {
+        extracted_text += `\n[${current_hour}:${current_minute
+          .toString()
+          .padStart(2, '0')}:${current_second.toString().padStart(2, '0')}]\n`
+        last_hour = current_hour
+        last_minute = current_minute
+      }
+
+      extracted_text += `${text} `
     }
 
-    return extracted_text.replace(/\n/g, ' ')
+    return extracted_text.trim()
   }
 }
 
