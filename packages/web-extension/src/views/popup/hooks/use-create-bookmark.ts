@@ -47,7 +47,7 @@ export const use_create_bookmark = () => {
       const bookmark: UpsertBookmark_Params = {
         is_public: false,
         is_archived: false,
-        title: tab_data.title,
+        title: tab_data.title, // We'll clean the title here
         note: tab_data.description,
         tags: [],
         links: [
@@ -69,13 +69,14 @@ export const use_create_bookmark = () => {
 
     const document_data = async (): Promise<{
       html: string
+      title: string
       description?: string
       favicon?: string
       og_image?: string
     }> => {
-      let is_youtube = false
       const url = new URL(window.location.href)
 
+      let is_youtube = false
       // Check if the URL is a YouTube video URL
       if (url.hostname === 'www.youtube.com') {
         is_youtube = true
@@ -121,12 +122,12 @@ export const use_create_bookmark = () => {
       }
 
       const get_base64_of_image_url = async (
-        url: any,
+        image_url: any,
         width?: any,
         height?: any,
       ) => {
         const img = document.createElement('img')
-        img.src = url
+        img.src = image_url
         img.setAttribute('crossorigin', 'anonymous')
         await new Promise((resolve, reject) => {
           img.onload = resolve
@@ -160,9 +161,12 @@ export const use_create_bookmark = () => {
       const get_description = () => {
         let description: string | undefined | null = undefined
         if (is_youtube) {
-          description = document.querySelector(
+          const description_text = document.querySelector(
             'span.yt-core-attributed-string--link-inherit-color:nth-of-type(1)',
           )?.textContent
+          description = description_text?.endsWith('.')
+            ? description_text
+            : `${description_text}...`
         } else {
           description = document.querySelector(
             "meta[name='description']",
@@ -173,15 +177,26 @@ export const use_create_bookmark = () => {
       }
       const description = get_description()
 
+      const get_title = () => {
+        let title = document.title
+        if (is_youtube) {
+          title = title.replace(/^\(\d+\)\s*/, '').replace(/ - YouTube$/, '')
+        }
+        return title
+      }
+      const title = get_title()
+
       const html = document.getElementsByTagName('html')[0].outerHTML
 
-      return { og_image, favicon, description, html }
+      return { og_image, favicon, description, title, html }
     }
 
-    const { html, favicon, og_image, description } = await document_data()
+    const { html, favicon, og_image, description, title } =
+      await document_data()
+
     const tab_data: TabData = {
       url: document.location.href,
-      title: document.title,
+      title,
       html,
       description,
       favicon,

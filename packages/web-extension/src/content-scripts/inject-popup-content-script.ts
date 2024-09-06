@@ -42,6 +42,250 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
   }
 })
 
+const message_handler = async (event: MessageEvent) => {
+  if (event.source !== window) return
+  if (event.data.action == 'check-url-saved') {
+    chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
+      window.postMessage(
+        { action: 'url-saved-status', is_saved: response.is_saved },
+        '*',
+      )
+    })
+  } else if (event.data.action == 'open-options-page') {
+    chrome.runtime.sendMessage({ action: 'open-options-page' })
+  } else if (event.data.action == 'send-chatbot-prompt') {
+    chrome.runtime.sendMessage({
+      action: 'send-chatbot-prompt',
+      chatbot_url: event.data.chatbot_url,
+      prompt: event.data.prompt,
+      window_width: window.outerWidth,
+      window_height: window.outerHeight,
+    })
+  } else if (event.data.action == 'get-last-used-chatbot-name') {
+    chrome.runtime.sendMessage(
+      { action: 'get-last-used-chatbot-name' },
+      (response) => {
+        window.postMessage(
+          {
+            action: 'last-used-chatbot-name',
+            last_used_chatbot_name: response.last_used_chatbot_name,
+          },
+          '*',
+        )
+      },
+    )
+  } else if (event.data.action == 'set-last-used-chatbot-name') {
+    chrome.runtime.sendMessage({
+      action: 'set-last-used-chatbot-name',
+      last_used_chatbot_name: event.data.last_used_chatbot_name,
+    })
+  } else if (event.data.action == 'get-custom-chatbot-url') {
+    chrome.runtime.sendMessage(
+      {
+        action: 'get-custom-chatbot-url',
+      },
+      (response) => {
+        window.postMessage(
+          {
+            action: 'custom-chatbot-url',
+            custom_chatbot_url: response.custom_chatbot_url,
+          },
+          '*',
+        )
+      },
+    )
+  } else if (event.data && event.data.action == 'create-bookmark') {
+    // Injected code creates UpsertBookmark_Params, this content script DTO,
+    // and service worker sends data over to BE because sending here attaches referer header.
+    const auth_data = await get_auth_data()
+
+    const params = event.data.bookmark as UpsertBookmark_Params
+
+    const tags: CreateBookmark_Dto.Body['tags'] = []
+    for (const tag of params.tags) {
+      if (!tag.name.trim().length) continue
+      const hash = await SHA256(
+        tag.name,
+        new Uint8Array(auth_data.encryption_key),
+      )
+      if (tags.find((t) => t.hash == hash)) continue
+      if (tag.is_public) {
+        tags.push({
+          is_public: true,
+          hash,
+          name: tag.name.trim(),
+        })
+      } else {
+        tags.push({
+          is_public: false,
+          hash,
+          name_aes: await AES.encrypt(
+            tag.name.trim(),
+            new Uint8Array(auth_data.encryption_key),
+          ),
+        })
+      }
+    }
+
+    const links: CreateBookmark_Dto.Body['links'] = []
+    for (const link of params.links) {
+      if (!link.url.trim().length) continue
+      const hash = await SHA256(
+        link.url.trim(),
+        new Uint8Array(auth_data.encryption_key),
+      )
+      if (links.find((l) => l.hash == hash)) continue
+      const domain = get_domain_from_url(link.url)
+      if (link.is_public) {
+        links.push({
+          is_public: true,
+          url: link.url.trim(),
+          hash: await SHA256(
+            link.url.trim(),
+            new Uint8Array(auth_data.encryption_key),
+          ),
+          site_path: link.is_public ? link.site_path : undefined,
+          is_pinned: link.is_pinned,
+          pin_title: link.pin_title,
+          open_snapshot: link.open_snapshot,
+          reader_data: link.reader_data,
+          favicon_aes: link.favicon
+            ? await AES.encrypt(
+                link.favicon,
+                new Uint8Array(auth_data.encryption_key),
+              )
+            : undefined,
+        })
+      } else {
+        links.push({
+          is_public: false,
+          url_aes: await AES.encrypt(
+            link.url.trim(),
+            new Uint8Array(auth_data.encryption_key),
+          ),
+          site_aes: await AES.encrypt(
+            link.site_path ? `${domain}/${link.site_path}` : domain,
+            new Uint8Array(auth_data.encryption_key),
+          ),
+          hash: await SHA256(
+            link.url.trim(),
+            new Uint8Array(auth_data.encryption_key),
+          ),
+          is_pinned: link.is_pinned,
+          pin_title_aes: link.pin_title
+            ? await AES.encrypt(
+                link.pin_title,
+                new Uint8Array(auth_data.encryption_key),
+              )
+            : undefined,
+          open_snapshot: link.open_snapshot,
+          favicon_aes: link.favicon
+            ? await AES.encrypt(
+                link.favicon,
+                new Uint8Array(auth_data.encryption_key),
+              )
+            : undefined,
+          reader_data_aes: link.reader_data
+            ? await AES.encrypt(
+                btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
+                new Uint8Array(auth_data.encryption_key),
+              )
+            : undefined,
+        })
+      }
+    }
+
+    let cover = params.cover
+
+    const title = params.title?.substring(
+      0,
+      system_values.bookmark.title.max_length,
+    )
+    const note = params.note?.substring(
+      0,
+      system_values.bookmark.note.max_length,
+    )
+
+    const body: CreateBookmark_Dto.Body = {
+      created_at: params.created_at?.toISOString(),
+      title: params.is_public ? title : undefined,
+      title_aes:
+        !params.is_public && title
+          ? await AES.encrypt(title, new Uint8Array(auth_data.encryption_key))
+          : undefined,
+      note: params.is_public ? note : undefined,
+      note_aes:
+        !params.is_public && note
+          ? await AES.encrypt(note, new Uint8Array(auth_data.encryption_key))
+          : undefined,
+      is_public: params.is_public || undefined,
+      is_archived: params.is_archived || undefined,
+      stars: params.stars || undefined,
+      is_unsorted:
+        params.is_unsorted === undefined
+          ? params.tags.length
+            ? false
+            : undefined
+          : params.is_unsorted,
+      tags,
+      links,
+      cover: params.is_public ? cover : undefined,
+      cover_aes:
+        !params.is_public && cover
+          ? await AES.encrypt(cover, new Uint8Array(auth_data.encryption_key))
+          : undefined,
+      blurhash_aes:
+        !params.is_public && params.blurhash
+          ? await AES.encrypt(
+              params.blurhash,
+              new Uint8Array(auth_data.encryption_key),
+            )
+          : undefined,
+    }
+
+    chrome.runtime.sendMessage(
+      {
+        action: 'create-bookmark',
+        data: body,
+      },
+      (response) => {
+        window.postMessage(
+          {
+            action: 'created-bookmark',
+            bookmark: response.bookmark,
+          },
+          '*',
+        )
+        window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
+      },
+    )
+  } else if (event.data && event.data.action == 'delete-bookmark') {
+    chrome.runtime.sendMessage(
+      {
+        action: 'delete-bookmark',
+        data: { url: window.location.href },
+      },
+      () => {
+        window.postMessage(
+          {
+            action: 'bookmark-deleted-successfully',
+          },
+          '*',
+        )
+        window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
+      },
+    )
+  }
+}
+
+const click_outside_handler = (event: MouseEvent) => {
+  const popup = document.getElementById('root-taaabs-popup')
+  if (popup && !popup.contains(event.target as Node)) {
+    popup.style.opacity = '0'
+    popup.style.pointerEvents = 'none'
+  }
+}
+
 const inject_popup = () => {
   const container = document.createElement('div')
   container.id = 'root-taaabs-popup'
@@ -61,260 +305,16 @@ const inject_popup = () => {
   document.body.appendChild(script)
 
   // Add event listener to close popup when clicking outside
-  document.addEventListener('click', (event) => {
-    const popup = document.getElementById('root-taaabs-popup')
-    if (popup && !popup.contains(event.target as Node)) {
-      popup.style.opacity = '0'
-      popup.style.pointerEvents = 'none'
-    }
-  })
+  document.addEventListener('click', click_outside_handler)
 
   // Listen for messages from popup
-  window.addEventListener('message', async (event) => {
-    if (event.source !== window) return
-    if (event.data.action == 'check-url-saved') {
-      chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
-        window.postMessage(
-          { action: 'url-saved-status', is_saved: response.is_saved },
-          '*',
-        )
-      })
-    } else if (event.data.action == 'open-options-page') {
-      chrome.runtime.sendMessage({ action: 'open-options-page' })
-    } else if (event.data.action == 'send-chatbot-prompt') {
-      chrome.runtime.sendMessage({
-        action: 'send-chatbot-prompt',
-        chatbot_url: event.data.chatbot_url,
-        prompt: event.data.prompt,
-        window_width: window.outerWidth,
-        window_height: window.outerHeight,
-      })
-    } else if (event.data.action == 'get-last-used-chatbot-name') {
-      chrome.runtime.sendMessage(
-        { action: 'get-last-used-chatbot-name' },
-        (response) => {
-          window.postMessage(
-            {
-              action: 'last-used-chatbot-name',
-              last_used_chatbot_name: response.last_used_chatbot_name,
-            },
-            '*',
-          )
-        },
-      )
-    } else if (event.data.action == 'set-last-used-chatbot-name') {
-      chrome.runtime.sendMessage({
-        action: 'set-last-used-chatbot-name',
-        last_used_chatbot_name: event.data.last_used_chatbot_name,
-      })
-    } else if (event.data.action == 'get-custom-chatbot-url') {
-      chrome.runtime.sendMessage(
-        {
-          action: 'get-custom-chatbot-url',
-        },
-        (response) => {
-          window.postMessage(
-            {
-              action: 'custom-chatbot-url',
-              custom_chatbot_url: response.custom_chatbot_url,
-            },
-            '*',
-          )
-        },
-      )
-    } else if (event.data && event.data.action == 'create-bookmark') {
-      // Injected code creates UpsertBookmark_Params, this content script DTO,
-      // and service worker sends data over to BE because sending here attaches referer header.
-      const auth_data = await get_auth_data()
-
-      const params = event.data.bookmark as UpsertBookmark_Params
-
-      const tags: CreateBookmark_Dto.Body['tags'] = []
-      for (const tag of params.tags) {
-        if (!tag.name.trim().length) continue
-        const hash = await SHA256(
-          tag.name,
-          new Uint8Array(auth_data.encryption_key),
-        )
-        if (tags.find((t) => t.hash == hash)) continue
-        if (tag.is_public) {
-          tags.push({
-            is_public: true,
-            hash,
-            name: tag.name.trim(),
-          })
-        } else {
-          tags.push({
-            is_public: false,
-            hash,
-            name_aes: await AES.encrypt(
-              tag.name.trim(),
-              new Uint8Array(auth_data.encryption_key),
-            ),
-          })
-        }
-      }
-
-      const links: CreateBookmark_Dto.Body['links'] = []
-      for (const link of params.links) {
-        if (!link.url.trim().length) continue
-        const hash = await SHA256(
-          link.url.trim(),
-          new Uint8Array(auth_data.encryption_key),
-        )
-        if (links.find((l) => l.hash == hash)) continue
-        const domain = get_domain_from_url(link.url)
-        if (link.is_public) {
-          links.push({
-            is_public: true,
-            url: link.url.trim(),
-            hash: await SHA256(
-              link.url.trim(),
-              new Uint8Array(auth_data.encryption_key),
-            ),
-            site_path: link.is_public ? link.site_path : undefined,
-            is_pinned: link.is_pinned,
-            pin_title: link.pin_title,
-            open_snapshot: link.open_snapshot,
-            reader_data: link.reader_data,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(
-                  link.favicon,
-                  new Uint8Array(auth_data.encryption_key),
-                )
-              : undefined,
-          })
-        } else {
-          links.push({
-            is_public: false,
-            url_aes: await AES.encrypt(
-              link.url.trim(),
-              new Uint8Array(auth_data.encryption_key),
-            ),
-            site_aes: await AES.encrypt(
-              link.site_path ? `${domain}/${link.site_path}` : domain,
-              new Uint8Array(auth_data.encryption_key),
-            ),
-            hash: await SHA256(
-              link.url.trim(),
-              new Uint8Array(auth_data.encryption_key),
-            ),
-            is_pinned: link.is_pinned,
-            pin_title_aes: link.pin_title
-              ? await AES.encrypt(
-                  link.pin_title,
-                  new Uint8Array(auth_data.encryption_key),
-                )
-              : undefined,
-            open_snapshot: link.open_snapshot,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(
-                  link.favicon,
-                  new Uint8Array(auth_data.encryption_key),
-                )
-              : undefined,
-            reader_data_aes: link.reader_data
-              ? await AES.encrypt(
-                  btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
-                  new Uint8Array(auth_data.encryption_key),
-                )
-              : undefined,
-          })
-        }
-      }
-
-      let cover = params.cover
-
-      const title = params.title?.substring(
-        0,
-        system_values.bookmark.title.max_length,
-      )
-      const note = params.note?.substring(
-        0,
-        system_values.bookmark.note.max_length,
-      )
-
-      const body: CreateBookmark_Dto.Body = {
-        created_at: params.created_at?.toISOString(),
-        title: params.is_public ? title : undefined,
-        title_aes:
-          !params.is_public && title
-            ? await AES.encrypt(title, new Uint8Array(auth_data.encryption_key))
-            : undefined,
-        note: params.is_public ? note : undefined,
-        note_aes:
-          !params.is_public && note
-            ? await AES.encrypt(note, new Uint8Array(auth_data.encryption_key))
-            : undefined,
-        is_public: params.is_public || undefined,
-        is_archived: params.is_archived || undefined,
-        stars: params.stars || undefined,
-        is_unsorted:
-          params.is_unsorted === undefined
-            ? params.tags.length
-              ? false
-              : undefined
-            : params.is_unsorted,
-        tags,
-        links,
-        cover: params.is_public ? cover : undefined,
-        cover_aes:
-          !params.is_public && cover
-            ? await AES.encrypt(cover, new Uint8Array(auth_data.encryption_key))
-            : undefined,
-        blurhash_aes:
-          !params.is_public && params.blurhash
-            ? await AES.encrypt(
-                params.blurhash,
-                new Uint8Array(auth_data.encryption_key),
-              )
-            : undefined,
-      }
-
-      chrome.runtime.sendMessage(
-        {
-          action: 'create-bookmark',
-          data: body,
-        },
-        (response) => {
-          window.postMessage(
-            {
-              action: 'created-bookmark',
-              bookmark: response.bookmark,
-            },
-            '*',
-          )
-          window.postMessage(
-            { action: 'url-saved-status', is_saved: true },
-            '*',
-          )
-        },
-      )
-    } else if (event.data && event.data.action == 'delete-bookmark') {
-      chrome.runtime.sendMessage(
-        {
-          action: 'delete-bookmark',
-          data: { url: window.location.href },
-        },
-        () => {
-          window.postMessage(
-            {
-              action: 'bookmark-deleted-successfully',
-            },
-            '*',
-          )
-          window.postMessage(
-            { action: 'url-saved-status', is_saved: false },
-            '*',
-          )
-        },
-      )
-    }
-  })
+  window.addEventListener('message', message_handler)
 }
 
 const close_popup = () => {
   document.getElementById('root-taaabs-popup')?.remove()
   const script_src = chrome.runtime.getURL('popup.js')
   document.querySelector(`script[src="${script_src}"]`)?.remove()
+  document.removeEventListener('click', click_outside_handler)
+  window.removeEventListener('message', message_handler)
 }

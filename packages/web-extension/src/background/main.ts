@@ -120,11 +120,7 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
     try {
       is_handling_tab_change = true
       await handle_tab_change(tabId, changeInfo.url)
-      try {
-        await chrome.tabs.sendMessage(tabId, { action: 'close-popup' })
-      } catch {
-        // No popup to close
-      }
+      await chrome.tabs.sendMessage(tabId, { action: 'close-popup' })
       setTimeout(() => {
         is_handling_tab_change = false
       }, 500)
