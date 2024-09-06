@@ -137,7 +137,7 @@ class YouTubeTranscriptExtractor {
       extracted_text += current_line.trim()
     }
 
-    return extracted_text.replace(/\n/g, ' ').trim()
+    return extracted_text.trim().replace(/\n/g, ' ')
   }
 }
 
