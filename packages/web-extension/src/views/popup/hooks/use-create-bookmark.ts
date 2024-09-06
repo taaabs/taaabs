@@ -29,11 +29,27 @@ export const use_create_bookmark = () => {
       is_youtube = true
     }
 
-    const get_og_image_url = () => {
+    const get_og_image_url = async () => {
       if (is_youtube) {
         const video_id = url.searchParams.get('v')
         if (video_id) {
-          return `https://i.ytimg.com/vi/${video_id}/maxresdefault.jpg`
+          const image_urls = [
+            `https://i.ytimg.com/vi/${video_id}/maxresdefault.jpg`,
+            `https://i.ytimg.com/vi/${video_id}/hqdefault.jpg`,
+            `https://i.ytimg.com/vi/${video_id}/mqdefault.jpg`,
+            `https://i.ytimg.com/vi/${video_id}/default.jpg`,
+          ]
+
+          for (const image_url of image_urls) {
+            try {
+              const response = await fetch(image_url, { method: 'HEAD' })
+              if (response.ok) {
+                return image_url
+              }
+            } catch (error) {
+              // Ignore errors and try the next URL
+            }
+          }
         }
       }
 
@@ -92,7 +108,7 @@ export const use_create_bookmark = () => {
       return canvas.toDataURL('image/webp')
     }
 
-    const og_image_url = get_og_image_url()
+    const og_image_url = await get_og_image_url()
     let og_image = undefined
     if (og_image_url) {
       try {

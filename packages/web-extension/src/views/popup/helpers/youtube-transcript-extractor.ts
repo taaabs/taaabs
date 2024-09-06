@@ -95,11 +95,9 @@ export class YouTubeTranscriptExtractor {
     const regex = /<text start="([^"]+)"[^>]*>([^<]*)<\/text>/g
     let match
     let extracted_text = ''
-    let last_minute = -1
-    let last_hour = -1
-    let last_time = 0
+    let last_time = -1
     let current_line = ''
-
+  
     while ((match = regex.exec(xml_string)) !== null) {
       const start_time = parseFloat(match[1])
       const text = match[2]
@@ -107,38 +105,38 @@ export class YouTubeTranscriptExtractor {
         .replace(/&amp;#39;/g, "'")
         .replace(/&amp;quot;/g, '"')
         .replace(/&amp;amp;/g, '"')
-
+  
       const current_hour = Math.floor(start_time / 3600)
       const current_minute = Math.floor((start_time % 3600) / 60)
       const current_second = Math.floor(start_time % 60)
-
-      // Insert timestamp only if it's a new minute
-      if (
-        current_hour > last_hour ||
-        (current_hour == last_hour && current_minute > last_minute)
-      ) {
+  
+      // Insert timestamp only if it's a new 30-second interval
+      if (start_time - last_time >= 25) {
         if (current_line.trim()) {
           extracted_text += current_line.trim()
         }
-        extracted_text += `<TIMESTAMP>[${current_hour}:${current_minute
-          .toString()
-          .padStart(2, '0')}:${current_second
-          .toString()
-          .padStart(2, '0')}]<TIMESTAMP>`
+        const hours = current_hour ? current_hour + ':' : ''
+        const minutes = hours
+          ? current_minute
+            ? current_minute.toString().padStart(2, '0')
+            : '00'
+          : current_minute
+          ? current_minute.toString()
+          : '0'
+        const seconds = current_second.toString().padStart(2, '0')
+        extracted_text += `<TIMESTAMP>[${hours}${minutes}:${seconds}]<TIMESTAMP>`
         current_line = ''
-        last_hour = current_hour
-        last_minute = current_minute
+        last_time = start_time
       }
-
+  
       current_line += `${text} `
-      last_time = start_time
     }
-
+  
     // Add any remaining text
     if (current_line.trim()) {
       extracted_text += current_line.trim()
     }
-
+  
     return extracted_text
       .trim()
       .replace(/\n/g, ' ')
