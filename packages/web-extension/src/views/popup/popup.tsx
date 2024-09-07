@@ -221,11 +221,11 @@ export const Popup: React.FC = () => {
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           recent_prompts={[
             { id: 'summarize', name: 'Summarize' },
-            { id: 'ask-question', name: 'Ask question' },
+            { id: 'layman', name: 'Simplify' },
+            { id: 'eli5', name: 'ELI5' },
+            { id: 'ask-question', name: 'Answer me' },
+            { id: 'quiz-me', name: 'Quiz me' },
             { id: 'study-guide', name: 'Study guide' },
-            { id: 'quiz-me', name: 'Quiz me!' },
-            { id: 'eli5', name: "Explain like I'm 5" },
-            { id: 'layman', name: "Layman's terms" },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
         />
