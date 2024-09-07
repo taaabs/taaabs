@@ -1,6 +1,6 @@
 import { get_auth_data } from '@/helpers/get-auth-data'
 import { SHA256 } from '@repositories/utils/sha256'
-import { create_ky_instance } from './api/ky-instance'
+import { get_ky_instance } from './api/get-ky-instance'
 import { CheckUrlSaved_Dto } from '@shared/types/modules/bookmarks/check-url-saved.dto'
 
 export async function get_url_is_saved(url: string): Promise<boolean> {
@@ -11,7 +11,7 @@ export async function get_url_is_saved(url: string): Promise<boolean> {
       return false
     }
 
-    const ky_instance = create_ky_instance()
+    const ky_instance = get_ky_instance()
     const url_hash = await SHA256(url, new Uint8Array(auth_data.encryption_key))
     const body: CheckUrlSaved_Dto.Body = {
       url_hash,

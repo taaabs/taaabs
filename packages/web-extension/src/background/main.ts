@@ -114,16 +114,14 @@ const handle_tab_change = async (tab_id: number, url: string) => {
 }
 
 let is_handling_tab_change = false
+let tab_change_queue = Promise.resolve()
 
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (is_handling_tab_change) return
   if (changeInfo.url) {
     try {
-      is_handling_tab_change = true
-      await handle_tab_change(tabId, changeInfo.url)
       await chrome.tabs.sendMessage(tabId, { action: 'close-popup' })
-      setTimeout(() => {
-        is_handling_tab_change = false
-      }, 500)
+      handle_tab_change(tabId, changeInfo.url)
     } catch (error) {
       console.error('Error handling tab update:', error)
     }
@@ -132,14 +130,15 @@ chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
 
 // This listener is needed to handle refresh of the current tab
 chrome.webNavigation.onCommitted.addListener(async (details) => {
-  if (is_handling_tab_change) return
   if (details.frameId == 0) {
     // Ensure it's the main frame
-    try {
-      await handle_tab_change(details.tabId, details.url)
-    } catch (error) {
-      console.error('Error handling web navigation commit:', error)
-    }
+    tab_change_queue = tab_change_queue.then(async () => {
+      is_handling_tab_change = true
+      handle_tab_change(details.tabId, details.url)
+      setTimeout(() => {
+        is_handling_tab_change = false
+      }, 500)
+    })
   }
 })
 

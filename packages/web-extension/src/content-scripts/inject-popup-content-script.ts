@@ -312,6 +312,7 @@ const inject_popup = () => {
 }
 
 const close_popup = () => {
+  console.log('close popup')
   document.getElementById('root-taaabs-popup')?.remove()
   const script_src = chrome.runtime.getURL('popup.js')
   document.querySelector(`script[src="${script_src}"]`)?.remove()
