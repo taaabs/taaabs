@@ -16,8 +16,6 @@ export const get_chatbot_prompt = (params: {
 5. Recommended further reading or resources.
 
 Ensure the study guide is well-structured and easy to follow.\n\n---\n\n${params.plain_text}`
-  } else if (params.prompt_id == 'reply-draft') {
-    prompt = `Please draft a response to the following forum post. Please provide three options with different tones: neutral, friendly and professional. Make sure each option is clear and concise.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'ask-question') {
     prompt = `Your first response should be solely: "Hi! What's your question?" After the user provides a question, please provide two answers: a quick one and a detailed one. Use the attached page for context.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'quiz-me') {
@@ -28,15 +26,6 @@ Ensure the study guide is well-structured and easy to follow.\n\n---\n\n${params
 Provide all answers at the very end, grouped by quiz type.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'layman') {
     prompt = `Please explain the following text in layman's terms so that anyone can understand it.\n\n---\n\n${params.plain_text}`
-  } else if (params.prompt_id == 'buying-advice') {
-    prompt = `I'm considering purchasing the product described in the following text. To make an informed decision, could you please guide me through the key factors I should consider? Specifically, I'd like to know about:
-1. The most important features and specifications to look for in this type of product.
-2. Any potential drawbacks or limitations I should be aware of.
-3. The product's durability and expected lifespan.
-4. The brand's reputation and customer service.
-5. Value for money compared to similar products on the market.
-6. Any additional costs or accessories I might need to consider.
-Also, are there any specific online reviews or product comparisons you'd recommend I read before making my purchase? Thank you for your expert advice!\n\n---\n\n${params.plain_text}`
   }
   return prompt
 }

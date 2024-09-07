@@ -226,8 +226,6 @@ export const Popup: React.FC = () => {
             { id: 'quiz-me', name: 'Quiz me!' },
             { id: 'eli5', name: "Explain like I'm 5" },
             { id: 'layman', name: "Layman's terms" },
-            { id: 'reply-draft', name: 'Draft a reply' },
-            { id: 'buying-advice', name: 'Buying advice' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
         />
