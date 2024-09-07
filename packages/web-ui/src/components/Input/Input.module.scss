@@ -1,6 +1,30 @@
 // @type
 @use '../../styles/foundation' as *;
 
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.top {
+  display: flex;
+  position: relative;
+  &__button {
+    position: absolute;
+    right: 2px;
+    bottom: 2px;
+    height: var(--button-dimension-34px);
+    width: var(--button-dimension-34px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    > svg {
+      fill: var(--accent-color);
+      width: var(--icon-dimension-20px);
+      height: var(--icon-dimension-20px);
+    }
+  }
+}
 .field {
   width: 100%;
   background-color: var(--white);

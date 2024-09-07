@@ -12,9 +12,9 @@ chrome.action.onClicked.addListener((tab) => {
     if (!data.auth_data) {
       chrome.tabs.create({ url: 'https://taaabs.com/library' })
     } else {
-      if (!tab.url?.startsWith('https://taaabs.com')) {
-        chrome.tabs.sendMessage(tab.id!, { action: 'inject-popup' })
-      }
+      chrome.tabs
+        .sendMessage(tab.id!, { action: 'inject-popup' })
+        .catch(() => {})
     }
   })
 })
@@ -23,7 +23,7 @@ message_listeners()
 
 chrome.contextMenus.create({
   id: 'open_my_library',
-  title: 'Open my library',
+  title: 'Go to library',
   contexts: ['page'],
 })
 
@@ -113,32 +113,29 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   }
 }
 
-let is_handling_tab_change = false
-let tab_change_queue = Promise.resolve()
+const updated_tab_ids = new Set()
 
-chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
-  if (is_handling_tab_change) return
+chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
+  console.log(changeInfo)
   if (changeInfo.url) {
-    try {
-      await chrome.tabs.sendMessage(tabId, { action: 'close-popup' })
-      handle_tab_change(tabId, changeInfo.url)
-    } catch (error) {
-      console.error('Error handling tab update:', error)
-    }
+    // It throws error when Popup is not injected, we want to ignore that
+    chrome.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
+    updated_tab_ids.add(tabId)
+    setTimeout(() => {
+      // Other option could be await handle tab change and not use this timeout
+      // but on taaabs.com handle_tab_change runs instantly thus is not preventing
+      // chrome.webNavigation.onCommitted listener.
+      updated_tab_ids.delete(tabId)
+    }, 500)
+    handle_tab_change(tabId, changeInfo.url)
   }
 })
 
 // This listener is needed to handle refresh of the current tab
-chrome.webNavigation.onCommitted.addListener(async (details) => {
-  if (details.frameId == 0) {
-    // Ensure it's the main frame
-    tab_change_queue = tab_change_queue.then(async () => {
-      is_handling_tab_change = true
-      handle_tab_change(details.tabId, details.url)
-      setTimeout(() => {
-        is_handling_tab_change = false
-      }, 500)
-    })
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.frameId == 0 && !updated_tab_ids.has(details.tabId)) {
+    // Ensure it's the main frame and the tab update event hasn't been triggered
+    handle_tab_change(details.tabId, details.url)
   }
 })
 
