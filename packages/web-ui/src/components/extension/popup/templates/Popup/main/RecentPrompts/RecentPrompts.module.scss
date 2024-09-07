@@ -3,16 +3,8 @@
 
 .container {
   display: flex;
-  flex-direction: column;
-  gap: var(--padding-10px);
-  padding: var(--padding-16px);
-}
-.header {
-  color: var(--text-color-dimmed);
-}
-.prompts {
-  display: flex;
   flex-wrap: wrap;
+  padding: var(--padding-16px);
   row-gap: var(--padding-8px);
   column-gap: var(--padding-12px);
   > button {

@@ -17,7 +17,7 @@ export const get_chatbot_prompt = (params: {
 
 Ensure the study guide is well-structured and easy to follow.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'reply-draft') {
-    prompt = `Please draft a response to the following forum post.\n\n---\n\n${params.plain_text}`
+    prompt = `Please draft a response to the following forum post. Please provide three options with different tones: neutral, friendly and professional. Make sure each option is clear and concise.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'ask-question') {
     prompt = `Your first response should be solely: "Hi! What's your question?" After the user provides a question, please provide two answers: a quick one and a detailed one. Use the attached page for context.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'quiz-me') {

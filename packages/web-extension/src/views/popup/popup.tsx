@@ -219,7 +219,6 @@ export const Popup: React.FC = () => {
         />
         <Ui_extension_popup_templates_Popup_main_Separator />
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
-          heading="Quick prompts"
           recent_prompts={[
             { id: 'summarize', name: 'Summarize' },
             { id: 'ask-question', name: 'Ask question' },

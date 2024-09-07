@@ -13,7 +13,7 @@ export const Footer: React.FC<Footer.Props> = (props) => {
   return (
     <div className={styles.container}>
       <a href={props.feedback_url} target={'_blank'}>
-        {props.transaltions.send_feedback}
+        {props.transaltions.send_feedback} ↗
       </a>
     </div>
   )

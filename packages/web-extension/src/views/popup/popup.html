@@ -17,6 +17,9 @@
         margin-right: 24px;
         z-index: 99999;
       }
+      * {
+        box-sizing: border-box;
+      }
     </style>
     <link rel="stylesheet" href="popup.css" />
   </head>
@@ -37,7 +40,10 @@
             '*',
           )
           window.postMessage(
-            { action: 'last-used-chatbot-name', last_used_chatbot_name: 'chatgpt' },
+            {
+              action: 'last-used-chatbot-name',
+              last_used_chatbot_name: 'chatgpt',
+            },
             '*',
           )
         })
@@ -49,7 +55,10 @@
             '*',
           )
           window.postMessage(
-            { action: 'last-used-chatbot-name', last_used_chatbot_name: 'chatgpt' },
+            {
+              action: 'last-used-chatbot-name',
+              last_used_chatbot_name: 'chatgpt',
+            },
             '*',
           )
         })
