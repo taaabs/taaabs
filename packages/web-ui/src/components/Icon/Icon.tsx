@@ -37,6 +37,7 @@ import Resize from '../../assets/icons/resize.svg'
 import Search from '../../assets/icons/search.svg'
 import SelectedBold from '../../assets/icons/selected-bold.svg'
 import Selected from '../../assets/icons/selected.svg'
+import Send from '../../assets/icons/send.svg'
 import Settings from '../../assets/icons/settings.svg'
 import Sidebar from '../../assets/icons/sidebar.svg'
 import StarFilled from '../../assets/icons/star-filled.svg'
@@ -97,6 +98,7 @@ export namespace Icon {
     | 'SEARCH'
     | 'SELECTED_BOLD'
     | 'SELECTED'
+    | 'SEND'
     | 'SETTINGS'
     | 'SIDEBAR'
     | 'STAR_FILLED'
@@ -259,6 +261,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'SELECTED':
       icon = <Selected />
+      break
+    case 'SEND':
+      icon = <Send />
       break
     case 'SETTINGS':
       icon = <Settings />

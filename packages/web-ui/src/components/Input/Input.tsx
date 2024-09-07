@@ -31,52 +31,64 @@ export const Input: React.FC<Input.Props> = ({
   ...props
 }) => {
   return (
-    <div>
-      {props.min_lines ? (
-        <TextareaAutosize
-          className={cn([
-            styles.field,
-            styles.textarea,
-            { [styles['field--error']]: message_type == 'error' },
-            { [styles['field--disabled']]: props.is_disabled },
-            { [styles['field--note']]: props.is_note },
-          ])}
-          onChange={(e) => props.on_change(e.target.value)}
-          value={props.value}
-          autoFocus={props.autofocus}
-          placeholder={props.placeholder}
-          minRows={props.min_lines}
-          maxRows={props.max_lines}
-          onKeyDown={(e) => {
-            if (e.key == 'Enter') {
-              if (props.disable_enter_new_lines) e.preventDefault()
-              props.on_enter_pressed?.()
-            }
-          }}
-        />
-      ) : (
-        <input
-          className={cn([
-            styles.field,
-            styles.input,
-            { [styles['field--error']]: message_type == 'error' },
-            { [styles['field--disabled']]: props.is_disabled },
-            { [styles['field--note']]: props.is_note },
-          ])}
-          onChange={(e) => props.on_change(e.target.value)}
-          value={props.value}
-          autoFocus={props.autofocus}
-          placeholder={props.placeholder}
-          onFocus={props.on_focus}
-          onBlur={props.on_blur}
-          onKeyDown={(e) => {
-            if (e.key == 'Enter') {
-              props.on_enter_pressed?.()
-            }
-          }}
-          {...props.additional_properties}
-        />
-      )}
+    <div className={styles.container}>
+      <div className={styles.top}>
+        {props.min_lines ? (
+          <TextareaAutosize
+            className={cn([
+              styles.field,
+              styles.textarea,
+              { [styles['field--error']]: message_type == 'error' },
+              { [styles['field--disabled']]: props.is_disabled },
+              { [styles['field--note']]: props.is_note },
+            ])}
+            onChange={(e) => props.on_change(e.target.value)}
+            value={props.value}
+            autoFocus={props.autofocus}
+            placeholder={props.placeholder}
+            minRows={props.min_lines}
+            maxRows={props.max_lines}
+            onKeyDown={(e) => {
+              if (e.key == 'Enter') {
+                if (props.disable_enter_new_lines) e.preventDefault()
+                props.on_enter_pressed?.()
+              }
+            }}
+          />
+        ) : (
+          <input
+            className={cn([
+              styles.field,
+              styles.input,
+              { [styles['field--error']]: message_type == 'error' },
+              { [styles['field--disabled']]: props.is_disabled },
+              { [styles['field--note']]: props.is_note },
+            ])}
+            onChange={(e) => props.on_change(e.target.value)}
+            value={props.value}
+            autoFocus={props.autofocus}
+            placeholder={props.placeholder}
+            onFocus={props.on_focus}
+            onBlur={props.on_blur}
+            onKeyDown={(e) => {
+              if (e.key == 'Enter') {
+                props.on_enter_pressed?.()
+              }
+            }}
+            {...props.additional_properties}
+          />
+        )}
+        {props.suffix_action && (
+          <div
+            className={styles.top__button}
+            role="button"
+            onClick={props.suffix_action.on_click}
+          >
+            <Icon variant={props.suffix_action.icon_variant} />
+          </div>
+        )}
+      </div>
+
       {props.message && (
         <div
           className={cn([

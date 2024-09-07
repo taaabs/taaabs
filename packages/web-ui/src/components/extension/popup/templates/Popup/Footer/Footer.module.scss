@@ -4,29 +4,16 @@
 .container {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  height: var(--button-dimension-44px);
-  border-top: var(--border-secondary);
+  justify-content: center;
+  height: 40px;
+  border-top: var(--border-primary);
   padding: 0 var(--padding-24px);
-  select {
-    font-family: unset;
-    background: none;
-    border: none;
-    padding: 0;
-    margin: 0;
-    color: var(--text-color-dimmed);
-    font-size: var(--font-size-15px);
-    cursor: pointer;
-    &:focus-visible {
-      outline: none;
+  background-color: var(--header-background);
+  > a {
+    font-size: var(--font-size-14px);
+    color: var(--accent-color);
+    @include hover {
+      @include text-decoration-underlinie-thin;
     }
-  }
-}
-.logo {
-  display: flex;
-  margin-bottom: 4px;
-  > svg {
-    fill: var(--neutral200);
-    height: var(--icon-dimension-16px);
   }
 }
