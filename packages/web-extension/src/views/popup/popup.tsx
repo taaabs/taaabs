@@ -180,7 +180,7 @@ export const Popup: React.FC = () => {
       >
         <Ui_extension_popup_templates_Popup_main_Actions>
           <UiButton
-            href={'https://taaabs.com/library'}
+            href={'https://taaabs.com/library#fresh'}
             rel="noreferrer noopener"
             is_outlined={true}
           >

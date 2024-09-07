@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Taaabs Web Clipper and Truly Free AI Assistant",
+  "name": "Taaabs Web Clipper (now with Direct AI Assistant)",
   "short_name": "taaabs",
-  "description": "Easy to use, privacy-first way to organize, share and discover web bookmarks.",
+  "description": "Your easy to use, privacy-first Web browsing companion.",
   "version": "0.1.5",
   "homepage_url": "https://taaabs.com/library",
   "action": {

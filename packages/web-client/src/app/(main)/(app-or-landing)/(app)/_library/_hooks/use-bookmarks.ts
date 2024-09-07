@@ -234,49 +234,66 @@ export const use_bookmarks = () => {
   }
 
   useUpdateEffect(() => {
-    const bookmarks = sessionStorage.getItem(
-      browser_storage.session_storage.library.bookmarks({
-        username: username as string,
-        search_params: search_params.toString(),
-        hash: window.location.hash,
-      }),
-    )
+    try {
+      // We pass #fresh when user navigates to the library from the extension.
+      // Avoids stale results if library was previously opened on a given tab.
+      if (window.location.hash.startsWith('#fresh')) {
+        throw new Error('Should load fresh results.')
+      }
 
-    if (bookmarks) {
-      if (window.location.hash.startsWith('#q=')) {
-        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
-      } else {
-        dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
-      }
-      dispatch(
-        bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
-      )
-      dispatch(bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)))
-      dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
-      const has_more_bookmarks = sessionStorage.getItem(
-        browser_storage.session_storage.library.has_more_bookmarks({
-          username: username as string,
-          search_params: search_params.toString(),
-        }),
-      )
-      if (has_more_bookmarks) {
-        dispatch(
-          bookmarks_actions.set_has_more_bookmarks(
-            has_more_bookmarks == 'true',
-          ),
-        )
-      }
-      const density = sessionStorage.getItem(
-        browser_storage.session_storage.library.density({
+      const bookmarks = sessionStorage.getItem(
+        browser_storage.session_storage.library.bookmarks({
           username: username as string,
           search_params: search_params.toString(),
           hash: window.location.hash,
         }),
       )
-      if (density) {
-        dispatch(bookmarks_actions.set_density(density as any))
+
+      if (bookmarks) {
+        if (window.location.hash.startsWith('#q=')) {
+          dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
+        } else {
+          dispatch(
+            bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false),
+          )
+        }
+        dispatch(
+          bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(
+            Date.now(),
+          ),
+        )
+        dispatch(
+          bookmarks_actions.set_incoming_bookmarks(JSON.parse(bookmarks)),
+        )
+        dispatch(bookmarks_actions.set_bookmarks(JSON.parse(bookmarks)))
+        const has_more_bookmarks = sessionStorage.getItem(
+          browser_storage.session_storage.library.has_more_bookmarks({
+            username: username as string,
+            search_params: search_params.toString(),
+          }),
+        )
+        if (has_more_bookmarks) {
+          dispatch(
+            bookmarks_actions.set_has_more_bookmarks(
+              has_more_bookmarks == 'true',
+            ),
+          )
+        }
+        const density = sessionStorage.getItem(
+          browser_storage.session_storage.library.density({
+            username: username as string,
+            search_params: search_params.toString(),
+            hash: window.location.hash,
+          }),
+        )
+        if (density) {
+          dispatch(bookmarks_actions.set_density(density as any))
+        }
+      } else {
+        throw new Error('Session data was not found.')
       }
-    } else {
+    } catch (error) {
+      console.debug('[use_bookmarks]', error)
       if (window.location.hash.startsWith('#q=')) return
       get_bookmarks({})
     }
