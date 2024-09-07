@@ -2,7 +2,7 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  padding: var(--padding-16px) var(--padding-16px) var(--padding-6px) var(--padding-16px);
+  padding: var(--padding-16px) var(--padding-16px) var(--padding-8px) var(--padding-16px);
   display: flex;
   flex-direction: column;
   gap: var(--padding-10px);
@@ -14,7 +14,7 @@
 .field {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-6px);
+  gap: var(--padding-4px);
   > div {
     display: flex;
     width: 100%;
