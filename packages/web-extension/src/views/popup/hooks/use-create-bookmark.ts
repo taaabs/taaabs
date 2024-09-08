@@ -127,7 +127,11 @@ export const use_create_bookmark = () => {
         const description_text = document.querySelector(
           'span.yt-core-attributed-string--link-inherit-color:nth-of-type(1)',
         )?.textContent
-        description = description_text?.endsWith('.')
+        const sentence_endings = ['.', '?', '!', '...']
+        const ends_with_sentence_ending = sentence_endings.some((ending) =>
+          description_text?.endsWith(ending),
+        )
+        description = ends_with_sentence_ending
           ? description_text
           : `${description_text}...`
       } else {

@@ -222,10 +222,10 @@ export const Popup: React.FC = () => {
           recent_prompts={[
             { id: 'summarize', name: 'Summarize' },
             { id: 'layman', name: 'Simplify' },
-            { id: 'eli5', name: 'ELI5' },
-            { id: 'ask-question', name: 'Answer me' },
-            { id: 'quiz-me', name: 'Quiz me' },
             { id: 'study-guide', name: 'Study guide' },
+            { id: 'ask-question', name: 'Follow-up' },
+            { id: 'quiz-me', name: 'Quiz me' },
+            { id: 'eli5', name: 'ELI5' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
         />
