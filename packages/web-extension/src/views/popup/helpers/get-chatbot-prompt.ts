@@ -13,7 +13,7 @@ export const get_chatbot_prompt = (params: {
 2. Important facts and figures.
 3. Summary of main ideas and arguments.
 4. Practice questions and answers.
-5. Recommended further reading or resources.
+5. Inspirations for further learning.
 
 Ensure the study guide is well-structured and easy to follow.\n\n---\n\n${params.plain_text}`
   } else if (params.prompt_id == 'ask-question') {
