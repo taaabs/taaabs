@@ -37,7 +37,7 @@ export const Popup: React.FC = () => {
   const [
     is_include_page_content_selected,
     set_is_include_page_content_selected,
-  ] = useState(true)
+  ] = useState<boolean>()
 
   let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
