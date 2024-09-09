@@ -409,10 +409,7 @@ export namespace HtmlParser {
         const post_element = temp_el.querySelector<HTMLElement>(
           'div.tgme_widget_message_text',
         )
-        console.log(temp_el)
-        console.log(post_element)
         if (post_element) {
-          console.log(post_element)
           const parser = new DOMParser()
           const doc = parser.parseFromString(
             DOMPurify.sanitize(post_element.innerHTML),
@@ -449,24 +446,31 @@ export namespace HtmlParser {
             )
           let concatenated_messages = ''
 
-          message_elements.forEach((message_element) => {
-            console.log(message_element)
+          message_elements.forEach((message_element, i) => {
             const author = message_element.querySelector(
               'button[data-qa="message_sender_name"]',
             )
             const date = message_element.querySelector(
               'span[data-qa="timestamp_label"]',
             )
-            if (author && date) {
-              concatenated_messages +=
-                (concatenated_messages != '' ? '\n' : '') +
-                `@${author.textContent} (${date.textContent})\n`
-            }
             const message = message_element.querySelector(
               'div[data-qa="message-text"]',
             )
-            if (message) {
-              concatenated_messages += message.textContent + '\n'
+            if (author && date && message) {
+              const parser = new DOMParser()
+              const doc = parser.parseFromString(
+                DOMPurify.sanitize(message.innerHTML),
+                'text/html',
+              )
+              const readableMessage = new Readability(doc, {
+                keepClasses: true,
+              }).parse()
+              if (readableMessage) {
+                concatenated_messages +=
+                  `**@${author.textContent}** (${date.textContent})\n\n` +
+                  turndown_service.turndown(readableMessage.content) +
+                  (i == 0 ? '\n\n---\n\n' : '\n\n\n')
+              }
             }
           })
 
@@ -475,9 +479,9 @@ export namespace HtmlParser {
               type: ReaderData.ContentType.ARTICLE,
               title: title_element_text,
               site_name: 'Slack',
-              content: concatenated_messages,
+              content: concatenated_messages.trim(),
             } as ReaderData.Article),
-            plain_text: concatenated_messages,
+            plain_text: concatenated_messages.trim(),
           }
         }
       }
@@ -494,7 +498,7 @@ export namespace HtmlParser {
 
         let concatenated_comments = ''
 
-        comment_elements.forEach((comment_element) => {
+        comment_elements.forEach((comment_element, i) => {
           const author =
             comment_element.querySelector<HTMLElement>('.author')?.innerText
           const date =
@@ -512,12 +516,69 @@ export namespace HtmlParser {
               DOMPurify.sanitize(content),
               'text/html',
             )
-            const comment = new Readability(doc, { keepClasses: true }).parse()!
-            concatenated_comments +=
-              (concatenated_comments != '' ? '\n' : '') +
-              `@${author} (${date})\n\n` +
-              turndown_service.turndown(comment.content) +
-              '\n\n\n'
+            const comment = new Readability(doc, { keepClasses: true }).parse()
+            if (comment) {
+              concatenated_comments +=
+                `**@${author}** (${date})\n\n` +
+                turndown_service.turndown(comment.content) +
+                (i == 0 ? '\n\n---\n\n' : '\n\n\n')
+            }
+          }
+        })
+
+        return {
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.ARTICLE,
+            title: title_element_text,
+            site_name: 'GitHub',
+            content: concatenated_comments,
+          } as ReaderData.Article),
+          plain_text: strip_markdown_links(concatenated_comments),
+        }
+      }
+      // Discussions like https://github.com/vercel/next.js/discussions/46722
+      // We purposely don't include sub-discusisons (answers to answers)
+      // as these are mostly off-topic.
+      else if (
+        /^https:\/\/github\.com\/[^\/]+\/[^\/]+\/discussions\/[^\/]+$/.test(
+          params.url,
+        )
+      ) {
+        const temp_el = document.createElement('div')
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
+
+        // Select all comments in the discussion
+        const comment_elements = temp_el.querySelectorAll<HTMLElement>(
+          '.js-comment-container',
+        )
+
+        let concatenated_comments = ''
+
+        comment_elements.forEach((comment_element, i) => {
+          const author = comment_element
+            .querySelector<HTMLElement>('.text-bold.Truncate-text')
+            ?.innerText.trim()
+          const date = comment_element
+            .querySelector<HTMLElement>('.js-timestamp')
+            ?.innerText.trim()
+          const content =
+            comment_element.querySelector<HTMLElement>(
+              '.timeline-comment',
+            )?.innerHTML
+
+          if (author && date && content) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(
+              DOMPurify.sanitize(content),
+              'text/html',
+            )
+            const comment = new Readability(doc, { keepClasses: true }).parse()
+            if (comment) {
+              concatenated_comments +=
+                `**@${author}** (${date})\n\n` +
+                turndown_service.turndown(comment.content) +
+                (i == 0 ? '\n\n---\n\n' : '\n\n\n')
+            }
           }
         })
 
@@ -547,23 +608,25 @@ export namespace HtmlParser {
             link.setAttribute('href', url.origin + href)
           }
         })
-        const article = new Readability(doc, { keepClasses: true }).parse()!
-        const content = turndown_service.turndown(article.content)
-        const title = article.title || title_element_text
-        const plain_text = `${
-          title ? `# ${title}\n\n` : ''
-        }${strip_markdown_links(content)}`
-        return {
-          reader_data: JSON.stringify({
-            type: ReaderData.ContentType.ARTICLE,
-            title,
-            site_name: article.siteName,
-            published_at: article.publishedTime,
-            author: article.byline,
-            length: article.length,
-            content,
-          } as ReaderData.Article),
-          plain_text,
+        const article = new Readability(doc, { keepClasses: true }).parse()
+        if (article) {
+          const content = turndown_service.turndown(article.content)
+          const title = article.title || title_element_text
+          const plain_text = `${
+            title ? `# ${title}\n\n` : ''
+          }${strip_markdown_links(content)}`
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title,
+              site_name: article.siteName,
+              published_at: article.publishedTime,
+              author: article.byline,
+              length: article.length,
+              content,
+            } as ReaderData.Article),
+            plain_text,
+          }
         }
       }
     } catch (error) {
