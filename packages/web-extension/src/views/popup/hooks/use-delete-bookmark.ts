@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
 import { send_message } from '../helpers/send-message'
 import { DeleteBookmarkMessage } from '@/types/messages'
+import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 
 export const use_delete_bookmark = () => {
   const [is_deleting, set_is_deleting] = useState<boolean>()
 
   const delete_bookmark = async () => {
     set_is_deleting(true)
+    const url = url_cleaner(window.location.href)
     send_message({
       action: 'delete-bookmark',
-      data: { url: window.location.href },
+      url,
     } as DeleteBookmarkMessage)
   }
 

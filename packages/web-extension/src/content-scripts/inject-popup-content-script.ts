@@ -44,16 +44,17 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
 
 const message_handler = async (event: MessageEvent) => {
   if (event.source !== window) return
-  if (event.data.action == 'check-url-saved') {
+  const action = event.data.action
+  if (action == 'check-url-saved') {
     chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
       window.postMessage(
         { action: 'url-saved-status', is_saved: response.is_saved },
         '*',
       )
     })
-  } else if (event.data.action == 'open-options-page') {
+  } else if (action == 'open-options-page') {
     chrome.runtime.sendMessage({ action: 'open-options-page' })
-  } else if (event.data.action == 'send-chatbot-prompt') {
+  } else if (action == 'send-chatbot-prompt') {
     chrome.runtime.sendMessage({
       action: 'send-chatbot-prompt',
       chatbot_url: event.data.chatbot_url,
@@ -61,7 +62,7 @@ const message_handler = async (event: MessageEvent) => {
       window_width: window.outerWidth,
       window_height: window.outerHeight,
     })
-  } else if (event.data.action == 'get-last-used-chatbot-name') {
+  } else if (action == 'get-last-used-chatbot-name') {
     chrome.runtime.sendMessage(
       { action: 'get-last-used-chatbot-name' },
       (response) => {
@@ -74,12 +75,12 @@ const message_handler = async (event: MessageEvent) => {
         )
       },
     )
-  } else if (event.data.action == 'set-last-used-chatbot-name') {
+  } else if (action == 'set-last-used-chatbot-name') {
     chrome.runtime.sendMessage({
       action: 'set-last-used-chatbot-name',
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
-  } else if (event.data.action == 'get-custom-chatbot-url') {
+  } else if (action == 'get-custom-chatbot-url') {
     chrome.runtime.sendMessage(
       {
         action: 'get-custom-chatbot-url',
@@ -94,7 +95,7 @@ const message_handler = async (event: MessageEvent) => {
         )
       },
     )
-  } else if (event.data && event.data.action == 'create-bookmark') {
+  } else if (action == 'create-bookmark') {
     // Injected code creates UpsertBookmark_Params, this content script DTO,
     // and service worker sends data over to BE because sending here attaches referer header.
     const auth_data = await get_auth_data()
@@ -259,11 +260,11 @@ const message_handler = async (event: MessageEvent) => {
         window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
       },
     )
-  } else if (event.data && event.data.action == 'delete-bookmark') {
+  } else if (action == 'delete-bookmark') {
     chrome.runtime.sendMessage(
       {
         action: 'delete-bookmark',
-        data: { url: window.location.href },
+        url: event.data.url,
       },
       () => {
         window.postMessage(
@@ -275,6 +276,20 @@ const message_handler = async (event: MessageEvent) => {
         window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
       },
     )
+  } else if (action == 'get-prompts-history') {
+    chrome.storage.local.get('prompts_history', ({ prompts_history }) => {
+      if (prompts_history) {
+        window.postMessage(
+          {
+            action: 'prompts-history',
+            prompts_history,
+          },
+          '*',
+        )
+      }
+    })
+  } else if (action == 'set-prompts-history') {
+    chrome.storage.local.set({ prompts_history: event.data.prompts_history })
   }
 }
 

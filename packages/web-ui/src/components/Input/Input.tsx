@@ -21,6 +21,7 @@ export namespace Input {
     on_focus?: () => void
     on_blur?: () => void
     on_enter_pressed?: () => void
+    on_key_down?: (event: React.KeyboardEvent<any>) => void
     additional_properties?: any
     suffix_action?: { icon_variant: Icon.Variant; on_click?: () => void }
   }
@@ -48,7 +49,10 @@ export const Input: React.FC<Input.Props> = ({
             placeholder={props.placeholder}
             minRows={props.min_lines}
             maxRows={props.max_lines}
+            onFocus={props.on_focus}
+            onBlur={props.on_blur}
             onKeyDown={(e) => {
+              props.on_key_down?.(e)
               if (e.key == 'Enter') {
                 if (props.disable_enter_new_lines) e.preventDefault()
                 props.on_enter_pressed?.()
@@ -71,6 +75,7 @@ export const Input: React.FC<Input.Props> = ({
             onFocus={props.on_focus}
             onBlur={props.on_blur}
             onKeyDown={(e) => {
+              props.on_key_down?.(e)
               if (e.key == 'Enter') {
                 props.on_enter_pressed?.()
               }

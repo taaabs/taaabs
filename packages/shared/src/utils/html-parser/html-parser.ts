@@ -460,10 +460,7 @@ export namespace HtmlParser {
             if (author && date) {
               concatenated_messages +=
                 (concatenated_messages != '' ? '\n' : '') +
-                author.textContent +
-                ' ' +
-                `(${date.textContent})` +
-                '\n'
+                `@${author.textContent} (${date.textContent})\n`
             }
             const message = message_element.querySelector(
               'div[data-qa="message-text"]',
@@ -482,6 +479,56 @@ export namespace HtmlParser {
             } as ReaderData.Article),
             plain_text: concatenated_messages,
           }
+        }
+      }
+      // Issues like https://github.com/facebook/react/issues/29640
+      else if (
+        /^https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/\d+$/.test(params.url)
+      ) {
+        const temp_el = document.createElement('div')
+        temp_el.innerHTML = DOMPurify.sanitize(params.html)
+
+        // Select all comments in the issue
+        const comment_elements =
+          temp_el.querySelectorAll<HTMLElement>('.timeline-comment')
+
+        let concatenated_comments = ''
+
+        comment_elements.forEach((comment_element) => {
+          const author =
+            comment_element.querySelector<HTMLElement>('.author')?.innerText
+          const date =
+            comment_element.querySelector<HTMLElement>(
+              '.js-timestamp',
+            )?.innerText
+          const content =
+            comment_element.querySelector<HTMLElement>(
+              '.comment-body',
+            )?.innerHTML
+
+          if (author && date && content) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(
+              DOMPurify.sanitize(content),
+              'text/html',
+            )
+            const comment = new Readability(doc, { keepClasses: true }).parse()!
+            concatenated_comments +=
+              (concatenated_comments != '' ? '\n' : '') +
+              `@${author} (${date})\n\n` +
+              turndown_service.turndown(comment.content) +
+              '\n\n\n'
+          }
+        })
+
+        return {
+          reader_data: JSON.stringify({
+            type: ReaderData.ContentType.ARTICLE,
+            title: title_element_text,
+            site_name: 'GitHub',
+            content: concatenated_comments,
+          } as ReaderData.Article),
+          plain_text: strip_markdown_links(concatenated_comments),
         }
       }
       // Generic articles
