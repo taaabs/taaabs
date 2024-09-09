@@ -61,7 +61,8 @@
         "https://chat.deepseek.com/",
         "https://www.phind.com/agent",
         "https://poe.com/",
-        "https://you.com/"
+        "https://you.com/",
+        "https://librechat-librechat.hf.space/c/new"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }

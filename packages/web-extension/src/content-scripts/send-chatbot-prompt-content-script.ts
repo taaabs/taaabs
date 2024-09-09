@@ -10,21 +10,20 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       // Some chatbots have their inputs not focused by default
       let selector = ''
       if (current_url == chatbot_urls.huggingchat) {
+        // Not focused on mobile
         selector =
           '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom'
-      } else if (current_url == chatbot_urls.cohere) {
-        selector =
-          '.leading-\\[150\\%\\].font-body.text-p.focus\\:outline-none.ease-in-out.transition.bg-marble-100.rounded.md\\:mb-1.mb-3.md\\:pt-4.md\\:pb-6.md\\:px-4.pt-2.pb-3.px-2.self-center.overflow-hidden.resize-none.flex-1.w-full'
       } else if (current_url == chatbot_urls.deepseek) {
         selector = '#chat-input'
       } else if (current_url == chatbot_urls.duckduckgo) {
         selector = 'textarea'
-      } else if (current_url == chatbot_urls.mistral) {
-        selector = "textarea[placeholder='Ask anything!']"
       } else if (current_url == chatbot_urls.claude) {
         selector = 'div[contenteditable=true] > p'
       } else if (current_url == chatbot_urls.you) {
+        // Not focused on mobile
         selector = 'textarea[name="query"]'
+      } else if (current_url == chatbot_urls.librechat) {
+        selector = 'textarea[placeholder*="Message "]'
       }
 
       if (selector) {
@@ -113,18 +112,12 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       }
     }
 
-    // Fix for AI Studio and Mistral which has some work to do before being able to take a prompt
+    // AI Studio needs a little time before is ready to take a prompt
     if (current_url == chatbot_urls.aistudio) {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
         }, 1500)
-      })
-    } else if (current_url == chatbot_urls.mistral) {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 500)
       })
     }
 
