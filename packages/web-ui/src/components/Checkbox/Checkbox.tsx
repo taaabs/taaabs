@@ -12,7 +12,7 @@ export namespace Checkbox {
 
 export const Checkbox: React.FC<Checkbox.Props> = (props) => {
   return (
-    <button className={styles.container} onClick={props.on_click}>
+    <div role="button" className={styles.container} onClick={props.on_click}>
       <div
         className={cn([
           styles.checkbox,
@@ -24,6 +24,6 @@ export const Checkbox: React.FC<Checkbox.Props> = (props) => {
         <UiIcon variant="SELECTED" />
       </div>
       <span>{props.label}</span>
-    </button>
+    </div>
   )
 }

@@ -5,6 +5,8 @@ import { Popup } from './Popup'
 import { Actions } from './main/Actions'
 import { Separator } from './main/Separator'
 import { RecentPrompts } from './main/RecentPrompts'
+import { AssistantSelector } from './main/AssistantSelector'
+import { PromptField } from './main/PromptField'
 
 export default {
   component: Popup,
@@ -17,9 +19,10 @@ export const Primary = () => {
         header_slot={<Header settings_on_click={() => {}} />}
         footer_slot={
           <Footer
-            chatbots={[]}
-            on_chatbot_change={() => {}}
-            selected_chatbot_name=""
+            feedback_url=""
+            transaltions={{
+              send_feedback: 'Send feedback',
+            }}
           />
         }
       >
@@ -27,6 +30,17 @@ export const Primary = () => {
           <Button on_click={() => {}}>Test 1</Button>
           <Button on_click={() => {}}>Test 2</Button>
         </Actions>
+        <AssistantSelector
+          label="Assistant:"
+          chatbots={[
+            { display_name: 'Assistant 1', name: 'assistant1' },
+            { display_name: 'Assistant 2', name: 'assistant2' },
+          ]}
+          selected_chatbot_name="assistant1"
+          on_chatbot_change={(chatbot_name) => {
+            console.log(chatbot_name)
+          }}
+        />
         <Separator />
         <RecentPrompts
           on_recent_prompt_click={(id) => {
@@ -46,7 +60,22 @@ export const Primary = () => {
               name: 'In-depth analysis',
             },
           ]}
-          heading="Recent prompts"
+        />
+        <Separator />
+        <PromptField
+          value=""
+          on_submit={() => {}}
+          on_change={(value) => {}}
+          on_focus={() => {}}
+          is_include_content_selected={true}
+          on_include_content_click={() => {}}
+          prompts_history={['a', 'b']}
+          translations={{
+            heading: 'Custom prompt',
+            placeholder: 'Ask anything',
+            include_page_content: 'Include page content',
+            active_input_placeholder_suffix: '(⇅ for history)',
+          }}
         />
       </Popup>
     </div>

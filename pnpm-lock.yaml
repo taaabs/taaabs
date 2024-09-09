@@ -501,6 +501,9 @@ importers:
       '@taaabs/web-ui':
         specifier: workspace:*
         version: link:../web-ui
+      beautiful-react-hooks:
+        specifier: ^5.0.2
+        version: 5.0.2(react-dom@18.3.1(react@18.3.1))(react-router-dom@6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(rxjs@7.8.1)
       ky:
         specifier: ^1.5.0
         version: 1.5.0

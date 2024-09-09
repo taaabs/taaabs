@@ -21,6 +21,7 @@ import { get_chatbot_prompt } from './helpers/get-chatbot-prompt'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { YouTubeTranscriptExtractor } from './helpers/youtube-transcript-extractor'
+import { use_prompts_history } from './hooks/use-prompts-history'
 
 import '../../../../web-ui/src/styles/theme.scss'
 
@@ -28,6 +29,7 @@ export const Popup: React.FC = () => {
   const { is_saved } = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
   const delete_bookmark_hook = use_delete_bookmark()
+  const prompts_history_hook = use_prompts_history()
   const { selected_chatbot_name, set_selected_chatbot_name } =
     use_selected_chatbot()
   const { custom_chatbot_url } = use_custom_chatbot_url()
@@ -35,10 +37,9 @@ export const Popup: React.FC = () => {
   const [
     is_include_page_content_selected,
     set_is_include_page_content_selected,
-  ] = useState<boolean>()
+  ] = useState(true)
 
-  let chatbot_url = 'https://chatgpt.com/'
-
+  let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
     if (selected_chatbot_name != 'custom') {
       chatbot_url = (chatbot_urls as any)[selected_chatbot_name]
@@ -66,7 +67,7 @@ export const Popup: React.FC = () => {
     <UiButton
       href={
         'https://taaabs.com/library#url=' +
-        encodeURIComponent(url_cleaner(location.href))
+        encodeURIComponent(url_cleaner(window.location.href))
       }
       rel="noreferrer noopener"
       is_disabled={delete_bookmark_hook.is_deleting}
@@ -191,6 +192,7 @@ export const Popup: React.FC = () => {
             {is_saved ? saved_items : !is_taaabs_com && unsaved_items}
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
+
         <Ui_extension_popup_templates_Popup_main_AssistantSelector
           label="Assistant:"
           selected_chatbot_name={selected_chatbot_name}
@@ -217,27 +219,44 @@ export const Popup: React.FC = () => {
             set_selected_chatbot_name(chatbot_name)
           }}
         />
+
         <Ui_extension_popup_templates_Popup_main_Separator />
+
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           recent_prompts={[
             { id: 'summarize', name: 'Summarize' },
             { id: 'layman', name: 'Simplify' },
             { id: 'study-guide', name: 'Study guide' },
-            { id: 'ask-question', name: 'Follow-up' },
+            { id: 'ask-question', name: 'Answer questions' },
             { id: 'quiz-me', name: 'Quiz me' },
             { id: 'eli5', name: 'ELI5' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
         />
+
         <Ui_extension_popup_templates_Popup_main_Separator />
 
         <Ui_extension_popup_templates_Popup_main_PromptField
-          heading="New chat"
           value={prompt_field_value}
+          on_focus={() => {
+            prompts_history_hook.restore_prompts_history()
+          }}
           on_change={(prompt) => {
             set_prompt_field_value(prompt)
           }}
           on_submit={async () => {
+            if (!prompt_field_value) return
+
+            if (is_include_page_content_selected) {
+              // Update prompts history
+              const new_prompts_history = prompts_history_hook.prompts_history
+                .filter((item) => item != prompt_field_value)
+                .slice(-50, prompts_history_hook.prompts_history.length)
+
+              new_prompts_history.push(prompt_field_value)
+              prompts_history_hook.set_prompts_history(new_prompts_history)
+            }
+
             try {
               let plain_text = ''
               if (is_include_page_content_selected) {
@@ -255,11 +274,12 @@ export const Popup: React.FC = () => {
                 chatbot_url,
                 prompt,
               })
+
+              set_prompt_field_value('')
             } catch (e) {
               alert(e)
             }
           }}
-          placeholder={'Enter a prompt here'}
           is_include_content_selected={
             is_include_page_content_selected || false
           }
@@ -268,8 +288,12 @@ export const Popup: React.FC = () => {
               !is_include_page_content_selected,
             )
           }}
+          prompts_history={prompts_history_hook.prompts_history.reverse()}
           translations={{
-            include_page_content: 'Include page content',
+            heading: 'New chat',
+            placeholder: 'Ask anything!',
+            include_page_content: 'Attach this page',
+            active_input_placeholder_suffix: '(⇅ for history)',
           }}
         />
       </Ui_extension_popup_templates_Popup>

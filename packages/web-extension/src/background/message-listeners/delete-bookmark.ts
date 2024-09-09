@@ -11,7 +11,7 @@ export const delete_bookmark = () => {
         const ky_instance = get_ky_instance()
         const auth_data = await get_auth_data()
         const url_hash = await SHA256(
-          request.data.url,
+          request.url,
           new Uint8Array(auth_data.encryption_key),
         )
 
