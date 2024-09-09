@@ -19,6 +19,9 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
         selector = 'textarea'
       } else if (current_url == chatbot_urls.claude) {
         selector = 'div[contenteditable=true] > p'
+      } else if (current_url == chatbot_urls.mistral) {
+        // Not focused on mobile
+        selector = "textarea[placeholder='Ask anything!']"
       } else if (current_url == chatbot_urls.you) {
         // Not focused on mobile
         selector = 'textarea[name="query"]'
@@ -118,6 +121,13 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
         setTimeout(() => {
           resolve(true)
         }, 1500)
+      })
+    } else if (current_url == chatbot_urls.mistral) {
+      // Fix for mobile view
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
       })
     }
 
