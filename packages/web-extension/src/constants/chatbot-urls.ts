@@ -13,4 +13,5 @@ export const chatbot_urls = {
   grok: 'https://x.com/i/grok',
   meta: 'https://www.meta.ai/',
   you: 'https://you.com/',
+  librechat: 'https://librechat-librechat.hf.space/c/new',
 }

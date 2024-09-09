@@ -156,8 +156,8 @@ export const Popup: React.FC = () => {
         chatbot_url,
         prompt,
       })
-    } catch (e) {
-      alert(e)
+    } catch (e: any) {
+      alert(e.message)
     }
   }
 
@@ -208,6 +208,7 @@ export const Popup: React.FC = () => {
             { name: 'mistral', display_name: 'Mistral' },
             { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
+            { name: 'librechat', display_name: 'LibreChat' },
             { name: 'phind', display_name: 'Phind' },
             { name: 'poe', display_name: 'Poe' },
             { name: 'you', display_name: 'You' },

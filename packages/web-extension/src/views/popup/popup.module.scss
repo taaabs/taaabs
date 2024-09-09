@@ -31,6 +31,7 @@
   textarea {
     font-family: var(--font-family-inter);
     font-size: var(--font-size-15px);
+    color: var(--text-color-normal);
     &:focus-visible {
       outline: none;
     }
