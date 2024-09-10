@@ -5,14 +5,6 @@ export type DeleteBookmarkMessage = {
   url: string
 }
 export type GetAuthDataMessage = { action: 'get-auth-data' }
-export type GetCustomChatbotUrlMessage = { action: 'get-custom-chatbot-url' }
-export type GetLastUsedChatbotNameMessage = {
-  action: 'get-last-used-chatbot-name'
-}
-export type SetLastUsedChatbotNameMessage = {
-  action: 'set-last-used-chatbot-name'
-  last_used_chatbot_name: string
-}
 export type OpenOptionsPageMessage = { action: 'open-options-page' }
 export type SendChatbotPromptMessage = {
   action: 'send-chatbot-prompt'
@@ -31,9 +23,6 @@ export type Message =
   | CreateBookmarkMessage
   | DeleteBookmarkMessage
   | GetAuthDataMessage
-  | GetCustomChatbotUrlMessage
-  | GetLastUsedChatbotNameMessage
-  | SetLastUsedChatbotNameMessage
   | OpenOptionsPageMessage
   | SendChatbotPromptMessage
   | ThemeChangedMessage

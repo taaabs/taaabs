@@ -65,38 +65,32 @@ const message_handler = async (event: MessageEvent) => {
       window_height: window.outerHeight,
     })
   } else if (action == 'get-last-used-chatbot-name') {
-    chrome.runtime.sendMessage(
-      { action: 'get-last-used-chatbot-name' },
-      (response) => {
+    chrome.storage.sync.get(
+      'last_used_chatbot_name',
+      ({ last_used_chatbot_name }) => {
         window.postMessage(
           {
             action: 'last-used-chatbot-name',
-            last_used_chatbot_name: response.last_used_chatbot_name,
+            last_used_chatbot_name: last_used_chatbot_name || 'chatgpt',
           },
           '*',
         )
       },
     )
   } else if (action == 'set-last-used-chatbot-name') {
-    chrome.runtime.sendMessage({
-      action: 'set-last-used-chatbot-name',
+    chrome.storage.sync.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
   } else if (action == 'get-custom-chatbot-url') {
-    chrome.runtime.sendMessage(
-      {
-        action: 'get-custom-chatbot-url',
-      },
-      (response) => {
-        window.postMessage(
-          {
-            action: 'custom-chatbot-url',
-            custom_chatbot_url: response.custom_chatbot_url,
-          },
-          '*',
-        )
-      },
-    )
+    chrome.storage.local.get('custom_chatbot_url', ({ custom_chatbot_url }) => {
+      window.postMessage(
+        {
+          action: 'custom-chatbot-url',
+          custom_chatbot_url,
+        },
+        '*',
+      )
+    })
   } else if (action == 'create-bookmark') {
     // Injected code creates UpsertBookmark_Params, this content script DTO,
     // and service worker sends data over to BE because sending here attaches referer header.

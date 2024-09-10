@@ -75,9 +75,17 @@ export const Search: React.FC<Search.Props> = memo(
         input.current?.blur()
       } else if (
         event.code == 'Slash' &&
-        !props.is_focused &&
         !props.is_slash_shortcut_disabled
       ) {
+        // Check if the active element is an input or textarea
+        const activeElement = document.activeElement
+        if (
+          activeElement instanceof HTMLInputElement ||
+          activeElement instanceof HTMLTextAreaElement
+        ) {
+          return // Don't handle slash if already in an input field
+        }
+
         event.preventDefault()
         input.current?.focus()
       } else if (event.code == 'Tab') {
