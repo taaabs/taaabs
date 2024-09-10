@@ -23,27 +23,26 @@ export namespace PromptField {
 }
 
 export const PromptField: React.FC<PromptField.Props> = (props) => {
-  const [is_focused, set_is_focused] = useState<boolean>()
+  const [is_focused, set_is_focused] = useState<boolean>(false)
   const [prompts_history_index, set_prompts_history_index] =
     useState<number>(-1)
-  const [last_typed_text, set_last_typed_text] = useState<string>('')
 
-  const handle_key_down = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!props.is_include_content_selected) return
 
     if (is_focused) {
-      if (event.key == 'ArrowUp') {
-        event.preventDefault()
+      if (e.key == 'ArrowUp') {
+        e.preventDefault()
         if (prompts_history_index < props.prompts_history.length - 1) {
           set_prompts_history_index(prompts_history_index + 1)
           props.on_change(props.prompts_history[prompts_history_index + 1])
         }
-      } else if (event.key == 'ArrowDown') {
-        event.preventDefault()
+      } else if (e.key == 'ArrowDown') {
+        e.preventDefault()
         if (prompts_history_index > -1) {
           set_prompts_history_index(prompts_history_index - 1)
           if (prompts_history_index - 1 === -1) {
-            props.on_change(last_typed_text)
+            props.on_change('')
           } else {
             props.on_change(props.prompts_history[prompts_history_index - 1])
           }
@@ -54,7 +53,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   const handle_change = (value: string) => {
     props.on_change?.(value)
-    set_last_typed_text(value)
   }
 
   return (

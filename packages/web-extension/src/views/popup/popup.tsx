@@ -306,7 +306,7 @@ export const Popup: React.FC = () => {
               !is_include_page_content_selected,
             )
           }}
-          prompts_history={prompts_history_hook.prompts_history.reverse()}
+          prompts_history={[...prompts_history_hook.prompts_history].reverse()}
           translations={{
             heading: 'New chat',
             placeholder: 'Ask anything!',

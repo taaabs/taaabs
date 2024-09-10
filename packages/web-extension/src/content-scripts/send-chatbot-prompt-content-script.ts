@@ -52,7 +52,9 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             ).click()
           }, 500)
         } else if (form) {
-          form.requestSubmit()
+          setTimeout(() => {
+            form.requestSubmit()
+          }, 0)
         } else {
           const enter_event = new KeyboardEvent('keydown', {
             key: 'Enter',
@@ -80,13 +82,9 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
 
         const form = active_element.closest('form')
         if (form) {
-          if (current_url == chatbot_urls.duckduckgo) {
-            setTimeout(() => {
-              form.requestSubmit()
-            }, 0)
-          } else {
+          setTimeout(() => {
             form.requestSubmit()
-          }
+          }, 0)
         } else if (current_url == chatbot_urls.cohere) {
           ;(
             document.querySelector(
