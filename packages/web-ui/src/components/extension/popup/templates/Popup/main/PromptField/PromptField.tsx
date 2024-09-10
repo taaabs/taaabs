@@ -2,6 +2,7 @@ import { Input } from '@web-ui/components/Input'
 import styles from './PromptField.module.scss'
 import { Checkbox } from '@web-ui/components/Checkbox'
 import { useState } from 'react'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace PromptField {
   export type Props = {
@@ -54,6 +55,13 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   const handle_change = (value: string) => {
     props.on_change?.(value)
   }
+
+  // After submission we clear value thus index must be reset.
+  useUpdateEffect(() => {
+    if (props.value == '') {
+      set_prompts_history_index(-1)
+    }
+  }, [props.value])
 
   return (
     <div className={styles.container}>

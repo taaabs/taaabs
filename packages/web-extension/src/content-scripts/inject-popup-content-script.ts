@@ -6,7 +6,6 @@ import { system_values } from '@shared/constants/system-values'
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { HtmlParser } from '@shared/utils/html-parser'
-import { html_to_markdown } from '@shared/utils/html-to-markdown/html-to-markdown'
 import pako from 'pako'
 
 // Avoid flash of unstyled content
@@ -335,7 +334,7 @@ const inject_popup = () => {
 }
 
 const close_popup = () => {
-  console.log('close popup')
+  console.debug('Removing popup from DOM.')
   document.getElementById('root-taaabs-popup')?.remove()
   const script_src = chrome.runtime.getURL('popup.js')
   document.querySelector(`script[src="${script_src}"]`)?.remove()

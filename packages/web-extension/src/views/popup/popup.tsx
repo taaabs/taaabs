@@ -117,7 +117,9 @@ export const Popup: React.FC = () => {
     }
     window.addEventListener('message', listener)
 
-    return () => window.removeEventListener('message', listener)
+    return () => {
+      window.removeEventListener('message', listener)
+    }
   }, [])
 
   useEffect(() => {
