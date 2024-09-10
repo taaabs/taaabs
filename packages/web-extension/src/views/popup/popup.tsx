@@ -25,20 +25,18 @@ import { use_prompts_history } from './hooks/use-prompts-history'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 import '../../../../web-ui/src/styles/theme.scss'
+import { use_attach_this_page_checkbox } from './hooks/use-attach-this-page-checkbox'
 
 export const Popup: React.FC = () => {
-  const { is_saved } = use_saved_check()
+  const saved_check_hook = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
   const delete_bookmark_hook = use_delete_bookmark()
   const prompts_history_hook = use_prompts_history()
   const { selected_chatbot_name, set_selected_chatbot_name } =
     use_selected_chatbot()
   const { custom_chatbot_url } = use_custom_chatbot_url()
+  const attach_this_page_checkbox_hook = use_attach_this_page_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
-  const [
-    is_include_page_content_selected,
-    set_is_include_page_content_selected,
-  ] = useState<boolean>()
   const getting_plain_text_started_at_timestamp = useRef<number>()
   const [plain_text, set_plain_text] = useState<string>()
 
@@ -125,9 +123,13 @@ export const Popup: React.FC = () => {
   useEffect(() => {
     create_bookmark_hook.set_is_creating(false)
     delete_bookmark_hook.set_is_deleting(false)
-  }, [is_saved])
+  }, [saved_check_hook.is_saved])
 
-  if (is_saved === undefined || selected_chatbot_name === undefined) {
+  if (
+    saved_check_hook.is_saved === undefined ||
+    selected_chatbot_name === undefined ||
+    attach_this_page_checkbox_hook.is_checked === undefined
+  ) {
     return <></>
   }
 
@@ -211,7 +213,7 @@ export const Popup: React.FC = () => {
             >
               Go to library
             </UiButton>
-            {is_saved ? saved_items : unsaved_items}
+            {saved_check_hook.is_saved ? saved_items : unsaved_items}
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
@@ -271,7 +273,7 @@ export const Popup: React.FC = () => {
           on_submit={async () => {
             if (!prompt_field_value) return
 
-            if (is_include_page_content_selected) {
+            if (attach_this_page_checkbox_hook.is_checked && plain_text) {
               // Update prompts history
               const new_prompts_history = prompts_history_hook.prompts_history
                 .filter((item) => item != prompt_field_value)
@@ -284,7 +286,7 @@ export const Popup: React.FC = () => {
             try {
               const prompt =
                 prompt_field_value +
-                (is_include_page_content_selected
+                (attach_this_page_checkbox_hook.is_checked && plain_text
                   ? `\n\n---\n\n${plain_text}`
                   : '')
 
@@ -301,11 +303,11 @@ export const Popup: React.FC = () => {
           }}
           is_include_content_checkbox_disabled={!plain_text}
           is_include_content_selected={
-            is_include_page_content_selected || false
+            attach_this_page_checkbox_hook.is_checked || false
           }
           on_include_content_click={() => {
-            set_is_include_page_content_selected(
-              !is_include_page_content_selected,
+            attach_this_page_checkbox_hook.set_is_checked(
+              !attach_this_page_checkbox_hook.is_checked,
             )
           }}
           prompts_history={[...prompts_history_hook.prompts_history].reverse()}
