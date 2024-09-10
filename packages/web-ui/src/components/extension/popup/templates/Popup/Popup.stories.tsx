@@ -46,6 +46,7 @@ export const Primary = () => {
           on_recent_prompt_click={(id) => {
             console.log(id)
           }}
+          is_disabled={false}
           recent_prompts={[
             {
               id: '1',
@@ -70,6 +71,7 @@ export const Primary = () => {
           is_include_content_selected={true}
           on_include_content_click={() => {}}
           prompts_history={['a', 'b']}
+          is_include_content_checkbox_disabled={false}
           translations={{
             heading: 'Custom prompt',
             placeholder: 'Ask anything',

@@ -7,12 +7,19 @@ export namespace Checkbox {
     label: string
     on_click: () => void
     is_checked?: boolean
+    is_disabled?: boolean
   }
 }
 
 export const Checkbox: React.FC<Checkbox.Props> = (props) => {
   return (
-    <div role="button" className={styles.container} onClick={props.on_click}>
+    <div
+      role="button"
+      className={cn(styles.container, {
+        [styles['container--disabled']]: props.is_disabled,
+      })}
+      onClick={props.on_click}
+    >
       <div
         className={cn([
           styles.checkbox,

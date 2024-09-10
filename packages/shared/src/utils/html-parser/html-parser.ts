@@ -15,7 +15,7 @@ export namespace HtmlParser {
     plain_text: string
   }
 
-  const create_turndown_service = (): TurndownService => {
+  export const create_turndown_service = (): TurndownService => {
     const turndown_service: TurndownService = new TurndownServiceJoplin({
       codeBlockStyle: 'fenced',
     })
@@ -131,7 +131,9 @@ export namespace HtmlParser {
     return { messages, plain_text }
   }
 
-  export const parse = (params: Params): ParsedResult | undefined => {
+  export const parse = async (
+    params: Params,
+  ): Promise<ParsedResult | undefined> => {
     const turndown_service = create_turndown_service()
 
     const titleRegex = /<title>(.*?)<\/title>/
@@ -429,6 +431,31 @@ export namespace HtmlParser {
           }
         }
       }
+      // Gmail mail
+      else if (
+        params.url.startsWith('https://mail.google.com/mail/u/0/#inbox/')
+      ) {
+        const message_element = document.querySelector<HTMLElement>('div.ii.gt')
+        if (message_element) {
+          const parser = new DOMParser()
+          const doc = parser.parseFromString(
+            DOMPurify.sanitize(message_element.innerHTML),
+            'text/html',
+          )
+          const post = new Readability(doc, { keepClasses: true }).parse()!
+          const content = turndown_service.turndown(post.content)
+          const plain_text = strip_markdown_links(content)
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title: title_element_text,
+              site_name: 'Gmail',
+              content: plain_text,
+            } as ReaderData.Article),
+            plain_text: `# ${title_element_text}\n\n${plain_text}`,
+          }
+        }
+      }
       // Slack threads
       else if (params.url.startsWith('https://app.slack.com/client/')) {
         const temp_el = document.createElement('div')
@@ -533,7 +560,9 @@ export namespace HtmlParser {
             site_name: 'GitHub',
             content: concatenated_comments,
           } as ReaderData.Article),
-          plain_text: strip_markdown_links(concatenated_comments),
+          plain_text: `# ${title_element_text}\n\n${strip_markdown_links(
+            concatenated_comments,
+          )}`,
         }
       }
       // Discussions like https://github.com/vercel/next.js/discussions/46722
@@ -589,7 +618,9 @@ export namespace HtmlParser {
             site_name: 'GitHub',
             content: concatenated_comments,
           } as ReaderData.Article),
-          plain_text: strip_markdown_links(concatenated_comments),
+          plain_text: `# ${title_element_text}\n\n${strip_markdown_links(
+            concatenated_comments,
+          )}`,
         }
       }
       // Generic articles

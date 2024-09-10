@@ -9,6 +9,7 @@ export namespace PromptField {
     on_submit: () => void
     on_change: (value: string) => void
     on_focus: () => void
+    is_include_content_checkbox_disabled: boolean
     is_include_content_selected: boolean
     on_include_content_click: () => void
     prompts_history: string[]
@@ -64,7 +65,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           value={props.value}
           on_change={handle_change}
           min_lines={2}
-          max_lines={6}
+          max_lines={8}
           disable_enter_new_lines={true}
           on_enter_pressed={props.on_submit}
           placeholder={
@@ -91,6 +92,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           label={props.translations.include_page_content}
           on_click={props.on_include_content_click}
           is_checked={props.is_include_content_selected}
+          is_disabled={props.is_include_content_checkbox_disabled}
         />
       </div>
     </div>

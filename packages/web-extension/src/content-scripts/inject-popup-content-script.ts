@@ -5,6 +5,8 @@ import { SHA256 } from '@repositories/utils/sha256'
 import { system_values } from '@shared/constants/system-values'
 import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookmark.dto'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
+import { HtmlParser } from '@shared/utils/html-parser'
+import { html_to_markdown } from '@shared/utils/html-to-markdown/html-to-markdown'
 import pako from 'pako'
 
 // Avoid flash of unstyled content
@@ -290,6 +292,18 @@ const message_handler = async (event: MessageEvent) => {
     })
   } else if (action == 'set-prompts-history') {
     chrome.storage.local.set({ prompts_history: event.data.prompts_history })
+  } else if (action == 'parse-html') {
+    const parsed_html = await HtmlParser.parse({
+      html: event.data.html,
+      url: document.location.href,
+    })
+    window.postMessage(
+      {
+        action: 'parsed-html',
+        parsed_html,
+      },
+      '*',
+    )
   }
 }
 

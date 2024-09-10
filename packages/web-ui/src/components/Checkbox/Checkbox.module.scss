@@ -6,8 +6,12 @@
   align-items: center;
   gap: 2px;
   border-radius: var(--border-radius-5px);
-  @include transition-150ms(background-color);
+  @include transition-150ms;
   cursor: pointer;
+  &--disabled {
+    pointer-events: none;
+    opacity: var(--dimmed-opacity);
+  }
   > svg {
     fill: var(--black);
     width: var(--icon-dimension-13px);

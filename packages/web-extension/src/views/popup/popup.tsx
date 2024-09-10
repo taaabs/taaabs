@@ -10,7 +10,7 @@ import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } fr
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { AssistantSelector as Ui_extension_popup_templates_Popup_main_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/AssistantSelector'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
 import { HtmlParser } from '@shared/utils/html-parser'
@@ -22,6 +22,7 @@ import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { YouTubeTranscriptExtractor } from './helpers/youtube-transcript-extractor'
 import { use_prompts_history } from './hooks/use-prompts-history'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 import '../../../../web-ui/src/styles/theme.scss'
 
@@ -38,6 +39,8 @@ export const Popup: React.FC = () => {
     is_include_page_content_selected,
     set_is_include_page_content_selected,
   ] = useState<boolean>()
+  const getting_plain_text_started_at_timestamp = useRef<number>()
+  const [plain_text, set_plain_text] = useState<string>()
 
   let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
@@ -48,8 +51,73 @@ export const Popup: React.FC = () => {
     }
   }
 
+  useUpdateEffect(() => {
+    console.debug(
+      `Plain text for Assistant parsed in ${
+        Date.now() - getting_plain_text_started_at_timestamp.current!
+      }ms.`,
+    )
+  }, [plain_text])
+
+  // Get plain text for Assistant on initialization
   useEffect(() => {
-    console.log('Taaabs popup has been initialized')
+    console.debug('Taaabs popup has been initialized.')
+
+    // 150ms is popup entry animation duration
+    setTimeout(() => {
+      console.debug('Getting plain text of the current page for Assistant...')
+      getting_plain_text_started_at_timestamp.current = Date.now()
+
+      const url = document.location.href
+      if (url.startsWith('https://www.youtube.com/watch?')) {
+        const get_plain_text_from_youtube = async () => {
+          try {
+            const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
+              url,
+            )
+            const transcript =
+              await youtube_transcript_extractor.get_transcript_plain_text()
+            set_plain_text(transcript)
+          } catch (e) {
+            console.error(e)
+          }
+        }
+        get_plain_text_from_youtube()
+      } else if (url.match(/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/)) {
+        const get_plain_text_from_telegram = async () => {
+          try {
+            // Post is rendered in iframe, we need to grab the original html
+            const embed_url = `${url}?embed=1&mode=tme`
+            const response = await fetch(embed_url)
+            const html_content = await response.text()
+            const parsed_html = await HtmlParser.parse({
+              html: html_content,
+              url: embed_url,
+            })
+            if (parsed_html) {
+              set_plain_text(parsed_html.plain_text)
+            }
+          } catch (e) {
+            console.error(e)
+          }
+        }
+        get_plain_text_from_telegram()
+      } else {
+        const html = document.getElementsByTagName('html')[0].outerHTML
+        send_message({ action: 'parse-html', html })
+      }
+    }, 150)
+
+    const listener = (event: MessageEvent) => {
+      if (event.source !== window) return
+      if (event.data && event.data.action == 'parsed-html') {
+        const parsed_html = event.data.parsed_html as HtmlParser.ParsedResult
+        set_plain_text(parsed_html.plain_text)
+      }
+    }
+    window.addEventListener('message', listener)
+
+    return () => window.removeEventListener('message', listener)
   }, [])
 
   useEffect(() => {
@@ -60,8 +128,6 @@ export const Popup: React.FC = () => {
   if (is_saved === undefined || selected_chatbot_name === undefined) {
     return <></>
   }
-
-  const is_taaabs_com = window.location.href.startsWith('https://taaabs.com')
 
   const saved_items = [
     <UiButton
@@ -92,59 +158,13 @@ export const Popup: React.FC = () => {
     </UiButton>,
   ]
 
-  const get_page_plain_text = async (): Promise<string> => {
-    const url = document.location.href
-    const html = document.getElementsByTagName('html')[0].outerHTML
-    let plain_text = ''
-
-    if (url.startsWith('https://www.youtube.com/watch?')) {
-      try {
-        const youtube_transcript_extractor = new YouTubeTranscriptExtractor(url)
-        plain_text =
-          await youtube_transcript_extractor.get_transcript_plain_text()
-      } catch (e) {
-        console.error(e)
-        alert("Couldn't find transcript.")
-      }
-    } else if (url.match(/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/)) {
-      try {
-        // Post is rendered in inframe, we need to grab the original html
-        const embed_url = `${url}?embed=1&mode=tme`
-        const response = await fetch(embed_url)
-        const html_content = await response.text()
-        const parsed_html = HtmlParser.parse({
-          html: html_content,
-          url: embed_url,
-        })
-        if (parsed_html) {
-          plain_text = parsed_html.plain_text
-        }
-      } catch (e) {
-        console.error(e)
-        alert("Couldn't fetch or parse the page.")
-      }
-    } else {
-      const parsed_html = HtmlParser.parse({
-        html,
-        url,
-      })
-      if (parsed_html) {
-        plain_text = parsed_html.plain_text
-      }
-    }
-
-    if (!plain_text) {
-      throw new Error(
-        "We're sorry, but we are unable to process the page content at this time.",
-      )
-    } else {
-      return plain_text
-    }
-  }
-
   const handle_quick_prompt_click = async (prompt_id: string) => {
     try {
-      const plain_text = await get_page_plain_text()
+      if (!plain_text) {
+        throw new Error(
+          "We're sorry, but we are unable to process the page content at this time. Please send feedback with a link to this page.",
+        )
+      }
 
       const prompt = get_chatbot_prompt({
         prompt_id,
@@ -180,7 +200,7 @@ export const Popup: React.FC = () => {
           />
         }
       >
-        {!is_taaabs_com && (
+        {!window.location.href.startsWith('https://taaabs.com') && (
           <Ui_extension_popup_templates_Popup_main_Actions>
             <UiButton
               href={'https://taaabs.com/library#fresh'}
@@ -189,7 +209,7 @@ export const Popup: React.FC = () => {
             >
               Go to library
             </UiButton>
-            {is_saved ? saved_items : !is_taaabs_com && unsaved_items}
+            {is_saved ? saved_items : unsaved_items}
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
@@ -233,6 +253,7 @@ export const Popup: React.FC = () => {
             { id: 'eli5', name: 'ELI5' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
+          is_disabled={!plain_text}
         />
 
         <Ui_extension_popup_templates_Popup_main_Separator />
@@ -259,16 +280,11 @@ export const Popup: React.FC = () => {
             }
 
             try {
-              let plain_text = ''
-              if (is_include_page_content_selected) {
-                plain_text = await get_page_plain_text()
-              }
-
-              if (plain_text) {
-                plain_text = `\n\n---\n\n${plain_text}`
-              }
-
-              const prompt = prompt_field_value + plain_text
+              const prompt =
+                prompt_field_value +
+                (is_include_page_content_selected
+                  ? `\n\n---\n\n${plain_text}`
+                  : '')
 
               send_message({
                 action: 'send-chatbot-prompt',
@@ -281,6 +297,7 @@ export const Popup: React.FC = () => {
               alert(e)
             }
           }}
+          is_include_content_checkbox_disabled={!plain_text}
           is_include_content_selected={
             is_include_page_content_selected || false
           }

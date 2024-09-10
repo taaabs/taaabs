@@ -165,10 +165,10 @@ export const use_create_bookmark = () => {
       html = document.getElementsByTagName('html')[0].outerHTML
     }
 
-    const reader_data = HtmlParser.parse({
+    const reader_data = (await HtmlParser.parse({
       url: url.href,
       html,
-    })?.reader_data
+    }))?.reader_data
 
     const favicon_base64 = favicon ? favicon.split(',')[1] : undefined
 
@@ -209,7 +209,6 @@ export const use_create_bookmark = () => {
         console.log('Received newly created bookmark:', event.data)
       }
     }
-
     window.addEventListener('message', listener)
     return () => window.removeEventListener('message', listener)
   }, [])
