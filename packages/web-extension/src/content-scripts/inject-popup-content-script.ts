@@ -285,6 +285,24 @@ const message_handler = async (event: MessageEvent) => {
     })
   } else if (action == 'set-prompts-history') {
     chrome.storage.local.set({ prompts_history: event.data.prompts_history })
+  } else if (action == 'get-attach-this-page-checkbox-state') {
+    chrome.storage.local.get(
+      'is_attach_this_page_checkbox_checked',
+      ({ is_attach_this_page_checkbox_checked }) => {
+        window.postMessage(
+          {
+            action: 'attach-this-page-checkbox-state',
+            is_checked: is_attach_this_page_checkbox_checked,
+          },
+          '*',
+        )
+      },
+    )
+  } else if (action == 'set-attach-this-page-checkbox-state') {
+    console.log(event.data.is_checked)
+    chrome.storage.local.set({
+      is_attach_this_page_checkbox_checked: event.data.is_checked,
+    })
   } else if (action == 'parse-html') {
     const parsed_html = await HtmlParser.parse({
       html: event.data.html,
