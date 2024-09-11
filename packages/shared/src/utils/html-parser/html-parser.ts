@@ -697,5 +697,5 @@ export namespace HtmlParser {
 
 // Replace "[TEXT](URL)" with "[TEXT]()"
 const strip_markdown_links = (text: string) => {
-  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/, (_, text) => `[${text}]()`)
+  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/g, (_, text) => `[${text}]()`)
 }
