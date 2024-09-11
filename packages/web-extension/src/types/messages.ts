@@ -10,6 +10,7 @@ export type SendChatbotPromptMessage = {
   action: 'send-chatbot-prompt'
   chatbot_url: string
   prompt: string
+  plain_text?: string
   window_width: number
   window_height: number
 }

@@ -60,6 +60,7 @@ const message_handler = async (event: MessageEvent) => {
       action: 'send-chatbot-prompt',
       chatbot_url: event.data.chatbot_url,
       prompt: event.data.prompt,
+      plain_text: event.data.plain_text,
       window_width: window.outerWidth,
       window_height: window.outerHeight,
     })

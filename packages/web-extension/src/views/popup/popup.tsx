@@ -17,10 +17,9 @@ import { HtmlParser } from '@shared/utils/html-parser'
 import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
 import { chatbot_urls } from '@/constants/chatbot-urls'
-import { get_chatbot_prompt } from './helpers/get-chatbot-prompt'
+import { get_chatbot_prompt_by_id } from './helpers/get-chatbot-prompt-by-id'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
-import { YouTubeTranscriptExtractor } from './helpers/youtube-transcript-extractor'
 import { use_prompts_history } from './hooks/use-prompts-history'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
@@ -37,8 +36,8 @@ export const Popup: React.FC = () => {
   const { custom_chatbot_url } = use_custom_chatbot_url()
   const attach_this_page_checkbox_hook = use_attach_this_page_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
-  const getting_plain_text_started_at_timestamp = useRef<number>()
-  const [plain_text, set_plain_text] = useState<string>()
+  const getting_parsed_html_started_at_timestamp = useRef<number>()
+  const [parsed_html, set_parsed_html] = useState<HtmlParser.ParsedResult>()
 
   let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
@@ -52,10 +51,10 @@ export const Popup: React.FC = () => {
   useUpdateEffect(() => {
     console.debug(
       `Plain text for Assistant parsed in ${
-        Date.now() - getting_plain_text_started_at_timestamp.current!
+        Date.now() - getting_parsed_html_started_at_timestamp.current!
       }ms.`,
     )
-  }, [plain_text])
+  }, [parsed_html])
 
   // Get plain text for Assistant on initialization
   useEffect(() => {
@@ -64,53 +63,17 @@ export const Popup: React.FC = () => {
     // 150ms is popup entry animation duration
     setTimeout(() => {
       console.debug('Getting plain text of the current page for Assistant...')
-      getting_plain_text_started_at_timestamp.current = Date.now()
+      getting_parsed_html_started_at_timestamp.current = Date.now()
 
-      const url = document.location.href
-      if (url.startsWith('https://www.youtube.com/watch?')) {
-        const get_plain_text_from_youtube = async () => {
-          try {
-            const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
-              url,
-            )
-            const transcript =
-              await youtube_transcript_extractor.get_transcript_plain_text()
-            set_plain_text(transcript)
-          } catch (e) {
-            console.error(e)
-          }
-        }
-        get_plain_text_from_youtube()
-      } else if (url.match(/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/)) {
-        const get_plain_text_from_telegram = async () => {
-          try {
-            // Post is rendered in iframe, we need to grab the original html
-            const embed_url = `${url}?embed=1&mode=tme`
-            const response = await fetch(embed_url)
-            const html_content = await response.text()
-            const parsed_html = await HtmlParser.parse({
-              html: html_content,
-              url: embed_url,
-            })
-            if (parsed_html) {
-              set_plain_text(parsed_html.plain_text)
-            }
-          } catch (e) {
-            console.error(e)
-          }
-        }
-        get_plain_text_from_telegram()
-      } else {
-        const html = document.getElementsByTagName('html')[0].outerHTML
-        send_message({ action: 'parse-html', html })
-      }
+      const html = document.getElementsByTagName('html')[0].outerHTML
+      send_message({ action: 'parse-html', html })
     }, 150)
 
     const listener = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'parsed-html') {
         const parsed_html = event.data.parsed_html as HtmlParser.ParsedResult
-        set_plain_text(parsed_html.plain_text)
+        set_parsed_html(parsed_html)
       }
     }
     window.addEventListener('message', listener)
@@ -163,26 +126,14 @@ export const Popup: React.FC = () => {
   ]
 
   const handle_quick_prompt_click = async (prompt_id: string) => {
-    try {
-      if (!plain_text) {
-        throw new Error(
-          "We're sorry, but we are unable to process the page content at this time. Please send feedback with a link to this page.",
-        )
-      }
+    if (!parsed_html) return
 
-      const prompt = get_chatbot_prompt({
-        prompt_id,
-        plain_text,
-      })
-
-      send_message({
-        action: 'send-chatbot-prompt',
-        chatbot_url,
-        prompt,
-      })
-    } catch (e: any) {
-      alert(e.message)
-    }
+    send_message({
+      action: 'send-chatbot-prompt',
+      chatbot_url,
+      prompt: get_chatbot_prompt_by_id(prompt_id),
+      plain_text: parsed_html.plain_text,
+    })
   }
 
   return (
@@ -257,7 +208,7 @@ export const Popup: React.FC = () => {
             { id: 'eli5', name: 'ELI5' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
-          is_disabled={!plain_text}
+          is_disabled={!parsed_html}
         />
 
         <Ui_extension_popup_templates_Popup_main_Separator />
@@ -273,7 +224,7 @@ export const Popup: React.FC = () => {
           on_submit={async () => {
             if (!prompt_field_value) return
 
-            if (attach_this_page_checkbox_hook.is_checked && plain_text) {
+            if (attach_this_page_checkbox_hook.is_checked && parsed_html) {
               // Update prompts history
               const new_prompts_history = prompts_history_hook.prompts_history
                 .filter((item) => item != prompt_field_value)
@@ -286,8 +237,8 @@ export const Popup: React.FC = () => {
             try {
               const prompt =
                 prompt_field_value +
-                (attach_this_page_checkbox_hook.is_checked && plain_text
-                  ? `\n\n---\n\n${plain_text}`
+                (attach_this_page_checkbox_hook.is_checked && parsed_html
+                  ? `\n\n---\n\n${parsed_html.plain_text}`
                   : '')
 
               send_message({
@@ -301,7 +252,7 @@ export const Popup: React.FC = () => {
               alert(e)
             }
           }}
-          is_include_content_checkbox_disabled={!plain_text}
+          is_include_content_checkbox_disabled={!parsed_html}
           is_include_content_selected={
             attach_this_page_checkbox_hook.is_checked || false
           }
