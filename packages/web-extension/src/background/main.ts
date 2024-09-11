@@ -9,12 +9,19 @@ chrome.action.setBadgeTextColor({ color: 'white' })
 
 chrome.action.onClicked.addListener((tab) => {
   chrome.storage.local.get('auth_data', (data) => {
-    if (!data.auth_data) {
-      chrome.tabs.create({ url: 'https://taaabs.com/library' })
+    if (tab.url == 'chrome://newtab/') {
+      chrome.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
     } else {
-      chrome.tabs
-        .sendMessage(tab.id!, { action: 'inject-popup' })
-        .catch(() => {})
+      if (!data.auth_data) {
+        chrome.tabs.create({ url: 'https://taaabs.com/library' })
+        setTimeout(() => {
+          chrome.tabs.reload(tab.id!)
+        }, 3000)
+      } else {
+        chrome.tabs
+          .sendMessage(tab.id!, { action: 'inject-popup' })
+          .catch(() => {})
+      }
     }
   })
 })

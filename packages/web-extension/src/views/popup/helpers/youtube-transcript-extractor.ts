@@ -105,6 +105,8 @@ export class YouTubeTranscriptExtractor {
         .replace(/&amp;#39;/g, "'")
         .replace(/&amp;quot;/g, '"')
         .replace(/&amp;amp;/g, '"')
+        .replace(/&amp;gt;/g, '>')
+        .replace(/&amp;lt;/g, '<')
   
       const current_hour = Math.floor(start_time / 3600)
       const current_minute = Math.floor((start_time % 3600) / 60)
