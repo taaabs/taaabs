@@ -47,7 +47,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
                 await new Promise((resolve) => {
                   setTimeout(() => {
                     resolve(true)
-                  }, 3000)
+                  }, 1000)
                 })
               }
             }
@@ -179,6 +179,14 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
           resolve(true)
         }, 500)
       })
+    } else if (current_url == chatbot_urls.deepseek) {
+      // Click "Clear context" button before sending a prompt
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 1000)
+      })
+      ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
     }
 
     // Roughly a little below 4k tokens
