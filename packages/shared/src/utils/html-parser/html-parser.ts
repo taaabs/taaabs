@@ -4,6 +4,7 @@ import TurndownServiceJoplin from '@joplin/turndown'
 import * as turndownPluginGfm from '@joplin/turndown-plugin-gfm'
 import { ReaderData } from './reader-data'
 import { Readability, isProbablyReaderable } from '@mozilla/readability'
+import { YouTubeTranscriptExtractor } from './helpers/youtube-transcript-extractor'
 
 export namespace HtmlParser {
   export type Params = {
@@ -404,31 +405,36 @@ export namespace HtmlParser {
       }
       // Telegram post (t.me/USER/POST_ID)
       else if (/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/.test(params.url)) {
-        const temp_el = document.createElement('div')
-        temp_el.innerHTML = DOMPurify.sanitize(params.html)
-
-        // Select the message content
-        const post_element = temp_el.querySelector<HTMLElement>(
-          'div.tgme_widget_message_text',
-        )
-        if (post_element) {
+        try {
+          // Post is rendered in iframe, we need to grab the original html
+          const embed_url = `${params.url}?embed=1&mode=tme`
+          const response = await fetch(embed_url)
+          const html_content = await response.text()
           const parser = new DOMParser()
           const doc = parser.parseFromString(
-            DOMPurify.sanitize(post_element.innerHTML),
+            DOMPurify.sanitize(html_content),
             'text/html',
           )
-          const post = new Readability(doc, { keepClasses: true }).parse()!
-          const content = turndown_service.turndown(post.content)
-          const plain_text = strip_markdown_links(content)
-          return {
-            reader_data: JSON.stringify({
-              type: ReaderData.ContentType.ARTICLE,
-              title: title_element_text,
-              site_name: 'Telegram',
-              content,
-            } as ReaderData.Article),
-            plain_text,
+          if (!isProbablyReaderable(doc)) return
+          const article = new Readability(doc, { keepClasses: true }).parse()
+          if (article) {
+            const content = turndown_service.turndown(article.content)
+            const plain_text = strip_markdown_links(content)
+            return {
+              reader_data: JSON.stringify({
+                type: ReaderData.ContentType.ARTICLE,
+                title: plain_text.substring(0, 100),
+                site_name: article.siteName,
+                published_at: article.publishedTime,
+                author: article.byline,
+                length: article.length,
+                content,
+              } as ReaderData.Article),
+              plain_text: strip_markdown_links(content),
+            }
           }
+        } catch (e) {
+          console.error(e)
         }
       }
       // Gmail mail
@@ -623,6 +629,28 @@ export namespace HtmlParser {
           )}`,
         }
       }
+      // TODO: YouTube should have it's own type
+      else if (params.url.startsWith('https://www.youtube.com/watch?')) {
+        try {
+          const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
+            params.url,
+          )
+          const transcript_plain_text =
+            await youtube_transcript_extractor.get_transcript_plain_text()
+
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title: title_element_text,
+              site_name: 'YouTube',
+              content: transcript_plain_text,
+            } as ReaderData.Article),
+            plain_text: transcript_plain_text,
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
       // Generic articles
       else {
         const parser = new DOMParser()
@@ -669,5 +697,5 @@ export namespace HtmlParser {
 
 // Replace "[TEXT](URL)" with "[TEXT]()"
 const strip_markdown_links = (text: string) => {
-  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, text) => `[${text}]()`)
+  return text.replace(/\[([^\]]*)\]\(([^)]*)\)/, (_, text) => `[${text}]()`)
 }

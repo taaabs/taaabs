@@ -29,6 +29,7 @@ export const send_chatbot_prompt = () => {
                   chrome.tabs.sendMessage(new_tab.id!, {
                     action: 'send-chatbot-prompt',
                     prompt: request.prompt,
+                    plain_text: request.plain_text,
                   })
                 }
               }
@@ -70,6 +71,7 @@ export const send_chatbot_prompt = () => {
                     chrome.tabs.sendMessage(new_window!.tabs![0].id!, {
                       action: 'send-chatbot-prompt',
                       prompt: request.prompt,
+                      plain_text: request.plain_text,
                     })
                   }
                 }
