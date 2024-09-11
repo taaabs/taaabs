@@ -168,7 +168,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       })
     }
 
-    const max_length = 12000
+    const max_length = 15000
 
     // Send prompt.
     // TODO: gemini needs better detecition when busy in send_prompt
