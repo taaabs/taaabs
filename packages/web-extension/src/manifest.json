@@ -3,7 +3,7 @@
   "name": "Taaabs Web Clipper (with free Direct AI Assistant)",
   "short_name": "taaabs",
   "description": "Your easy-to-use, privacy-first web browsing companion.",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "homepage_url": "https://taaabs.com/library",
   "action": {
     "default_icon": {
