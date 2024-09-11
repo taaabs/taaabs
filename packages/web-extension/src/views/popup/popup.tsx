@@ -234,23 +234,16 @@ export const Popup: React.FC = () => {
               prompts_history_hook.set_prompts_history(new_prompts_history)
             }
 
-            try {
-              const prompt =
-                prompt_field_value +
-                (attach_this_page_checkbox_hook.is_checked && parsed_html
-                  ? `\n\n---\n\n${parsed_html.plain_text}`
-                  : '')
+            send_message({
+              action: 'send-chatbot-prompt',
+              chatbot_url,
+              prompt: prompt_field_value,
+              plain_text:
+                attach_this_page_checkbox_hook.is_checked &&
+                parsed_html?.plain_text,
+            })
 
-              send_message({
-                action: 'send-chatbot-prompt',
-                chatbot_url,
-                prompt,
-              })
-
-              set_prompt_field_value('')
-            } catch (e) {
-              alert(e)
-            }
+            set_prompt_field_value('')
           }}
           is_include_content_checkbox_disabled={!parsed_html}
           is_include_content_selected={
