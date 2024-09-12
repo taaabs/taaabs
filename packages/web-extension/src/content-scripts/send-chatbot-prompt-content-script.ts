@@ -201,10 +201,10 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
           )
           if (!context_cleared_text) return
 
-          const top_chat_message = document.querySelector(
-            '#latest-context-divider + div',
+          const chat_message_sent_by_user = document.querySelector(
+            '#latest-context-divider + ._18fe68b',
           )
-          if (!top_chat_message) {
+          if (!chat_message_sent_by_user) {
             clearInterval(interval)
             resolve(true)
           } else {
