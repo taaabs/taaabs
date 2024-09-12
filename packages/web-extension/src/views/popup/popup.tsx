@@ -183,6 +183,7 @@ export const Popup: React.FC = () => {
             { name: 'mistral', display_name: 'Mistral' },
             { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
+            { name: 'openrouter', display_name: 'OpenRouter' },
             { name: 'librechat', display_name: 'LibreChat' },
             { name: 'phind', display_name: 'Phind' },
             { name: 'poe', display_name: 'Poe' },

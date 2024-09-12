@@ -201,7 +201,7 @@ export const use_create_bookmark = () => {
         blurhash,
       }
 
-      console.log(`Page parsed in ${Date.now() - before_bookmark_parsed}ms.`)
+      console.debug(`Page parsed in ${Date.now() - before_bookmark_parsed}ms.`)
       send_message({ action: 'create-bookmark', bookmark })
     } catch (e: any) {
       console.error(e.message)
@@ -214,7 +214,7 @@ export const use_create_bookmark = () => {
     const listener = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'created-bookmark') {
-        console.log('Received newly created bookmark:', event.data)
+        console.debug('Received newly created bookmark:', event.data)
       }
     }
     window.addEventListener('message', listener)

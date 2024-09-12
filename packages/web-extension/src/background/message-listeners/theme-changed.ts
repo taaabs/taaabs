@@ -11,12 +11,12 @@ export const theme_changed = () => {
             ?.theme != request.theme
         ) {
           chrome.storage.local.set({ theme: request.theme }, () => {
-            console.log('Theme saved.', request.theme)
+            console.debug('Theme saved.', request.theme)
           })
         } else {
           if (await chrome.storage.local.get('theme')) {
             chrome.storage.local.remove('theme', () => {
-              console.log('Theme removed.')
+              console.debug('Theme removed.')
             })
           }
         }

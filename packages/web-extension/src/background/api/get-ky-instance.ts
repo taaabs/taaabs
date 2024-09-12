@@ -67,7 +67,7 @@ export const get_ky_instance = () => {
                     auth_data: new_auth_data,
                   },
                   () => {
-                    console.log('New auth data has been saved:', new_auth_data)
+                    console.debug('New auth data has been saved:', new_auth_data)
                   },
                 )
 

@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Taaabs Web Clipper (with free Direct AI Assistant)",
+  "name": "Taaabs Web Clipper (with Direct AI Assistant)",
   "short_name": "taaabs",
   "description": "Your easy-to-use, privacy-first web browsing companion.",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "homepage_url": "https://taaabs.com/library",
   "action": {
     "default_icon": {
@@ -59,6 +59,7 @@
         "https://huggingface.co/chat/",
         "https://aistudio.google.com/app/prompts/new_chat",
         "https://chat.deepseek.com/",
+        "https://openrouter.ai/chat",
         "https://www.phind.com/agent",
         "https://poe.com/",
         "https://you.com/",

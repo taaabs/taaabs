@@ -31,11 +31,11 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
       ) {
         popup.style.opacity = '0'
         popup.style.pointerEvents = 'none'
-        console.log('Popup visibility has been hidden')
+        console.debug('Popup visibility has been hidden')
       } else {
         popup.style.opacity = '1'
         popup.style.pointerEvents = 'all'
-        console.log('Popup visibility has been restored')
+        console.debug('Popup visibility has been restored')
       }
     }
   } else if (request.action == 'close-popup') {
@@ -300,7 +300,7 @@ const message_handler = async (event: MessageEvent) => {
       },
     )
   } else if (action == 'set-attach-this-page-checkbox-state') {
-    console.log(event.data.is_checked)
+    console.debug(event.data.is_checked)
     chrome.storage.local.set({
       is_attach_this_page_checkbox_checked: event.data.is_checked,
     })

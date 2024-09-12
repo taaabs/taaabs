@@ -10,9 +10,8 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       resolve?: (val: boolean) => void
     }) => {
       try {
-        // Handle multi-part prompts. When implementing this for other chatbots,
-        // it's very important to investigate how the input field behave immediately
-        // after submission. With ChatGPT it's stuck for a few seconds with a prompt.
+        // This describes when we don't want to send new prompt just yet.
+        // Is intended for multi-part prompts.
         if (params.resolve) {
           try {
             if (current_url == chatbot_urls.chatgpt) {
@@ -41,7 +40,6 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
                   '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
                 )
               ) {
-                console.log('busy')
                 throw new Error()
               } else if (!params.is_first_part) {
                 await new Promise((resolve) => {
@@ -52,7 +50,6 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
               }
             }
           } catch {
-            console.debug('Response generation is ongoing.')
             throw new Error()
           }
         }
@@ -154,6 +151,13 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
               which: 13,
               bubbles: true,
             })
+            if (current_url == chatbot_urls.openrouter) {
+              await new Promise((resolve) => {
+                setTimeout(() => {
+                  resolve(true)
+                }, 1000)
+              })
+            }
             active_element.dispatchEvent(enter_event)
             params.resolve?.(true)
           }
@@ -179,14 +183,37 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
           resolve(true)
         }, 500)
       })
-    } else if (current_url == chatbot_urls.deepseek) {
-      // Click "Clear context" button before sending a prompt
+    } else if (current_url == chatbot_urls.openrouter) {
+      // Fix for mobile view
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 1000)
+        }, 1500)
       })
-      ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
+    } else if (current_url == chatbot_urls.deepseek) {
+      // We first check if "Context cleared" element is there, meaning previous
+      // conversation is loaded, then we repeatedly click "Clear context" button
+      // until previous conversation is gone.
+      await new Promise((resolve) => {
+        const interval = setInterval(() => {
+          const context_cleared_text = document.querySelector(
+            '#latest-context-divider',
+          )
+          if (!context_cleared_text) return
+
+          const top_chat_message = document.querySelector(
+            '#latest-context-divider + div',
+          )
+          if (!top_chat_message) {
+            clearInterval(interval)
+            resolve(true)
+          } else {
+            ;(
+              document.querySelector('.ba62c862._64447e7') as HTMLElement
+            ).click()
+          }
+        }, 500)
+      })
     }
 
     // Roughly a little below 4k tokens
@@ -209,11 +236,11 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
         for (let i = 0; i <= prompt_parts.length; i++) {
           const part = prompt_parts[i]
           let prompt = ''
-          if (i == 0) {
+          if (i < prompt_parts.length - 1) {
             prompt = `Text (part ${i + 1} of ${
               prompt_parts.length
             }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with a single "OK gesture" emoji.`
-          } else if (i < prompt_parts.length) {
+          } else if (i == prompt_parts.length - 1) {
             prompt = `Text (part ${i + 1} of ${
               prompt_parts.length
             }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with a single "OK gesture" emoji.`

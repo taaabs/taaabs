@@ -19,7 +19,7 @@ export const use_delete_bookmark = () => {
     window.addEventListener('message', (event) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'bookmark-deleted-successfully') {
-        console.log('Bookmark deleted successfully.')
+        console.debug('Bookmark deleted successfully.')
       }
     })
   }, [])

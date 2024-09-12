@@ -68,7 +68,7 @@ const handle_tab_change = async (tab_id: number, url: string) => {
           if (auth_data) {
             const parsed_auth_data = JSON.parse(auth_data)
             chrome.storage.local.set({ auth_data: parsed_auth_data }, () => {
-              console.log(
+              console.debug(
                 '[handle_tab_change] Auth data saved.',
                 parsed_auth_data,
               )
@@ -76,12 +76,12 @@ const handle_tab_change = async (tab_id: number, url: string) => {
           } else {
             if (await chrome.storage.local.get('auth_data')) {
               chrome.storage.local.remove('auth_data', () => {
-                console.log(
+                console.debug(
                   '[handle_tab_change] Old auth data has been deleted.',
                 )
               })
             }
-            console.log('[handle_tab_change] Auth data not found.')
+            console.debug('[handle_tab_change] Auth data not found.')
           }
         },
       )
@@ -95,14 +95,14 @@ const handle_tab_change = async (tab_id: number, url: string) => {
                 ?.theme != response.theme
             ) {
               chrome.storage.local.set({ theme: response.theme }, () => {
-                console.log('[handle_tab_change] Theme saved.', response.theme)
+                console.debug('[handle_tab_change] Theme saved.', response.theme)
               })
             }
           } else if (
             ((await chrome.storage.local.get('theme')) as LocalDataStore)?.theme
           ) {
             chrome.storage.local.remove('theme', () => {
-              console.log('[handle_tab_change] Theme removed.')
+              console.debug('[handle_tab_change] Theme removed.')
             })
           }
         },
@@ -123,7 +123,6 @@ const handle_tab_change = async (tab_id: number, url: string) => {
 const updated_tab_ids = new Set()
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  console.log(changeInfo)
   if (changeInfo.url) {
     // It throws error when Popup is not injected, we want to ignore that
     chrome.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
