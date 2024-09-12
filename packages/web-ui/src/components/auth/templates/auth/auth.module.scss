@@ -46,7 +46,7 @@
     row-gap: 0;
     column-gap: var(--padding-40px);
     background: radial-gradient(
-      circle at 75% 50%,
+      circle at 80% 80%,
       var(--blue50) 0%,
       var(--white) 50%
     );
@@ -92,9 +92,6 @@
   }
   &__form {
     grid-area: form;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
   }
   &__switch-form {
     grid-area: switch-form;

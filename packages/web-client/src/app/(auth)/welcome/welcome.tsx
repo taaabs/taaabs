@@ -68,7 +68,16 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
       }}
       recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
     >
-      <UiButton on_click={guest_sign_up}>Continue as guest</UiButton>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-end',
+          justifyContent: 'flex-end',
+          height: '100%'
+        }}
+      >
+        <UiButton on_click={guest_sign_up}>Continue as guest</UiButton>
+      </div>
     </Ui_auth_templates_Auth>
   )
 }
