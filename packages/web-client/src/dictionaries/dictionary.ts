@@ -45,6 +45,9 @@ export type Dictionary = {
     invalid_email: string
     recaptcha_privacy_notice: React.ReactNode
     something_went_wrong: string
+    welcome: {
+      heading: { text: string; subtext: string }
+    }
     log_in: {
       heading: { text: string; subtext: string }
       switch_form: {

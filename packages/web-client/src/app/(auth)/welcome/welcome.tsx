@@ -1,5 +1,6 @@
 'use client'
 
+import { Auth as Ui_auth_templates_Auth } from '@web-ui/components/auth/templates/auth'
 import { browser_storage } from '@/constants/browser-storage'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { GuestAuthDataLocalStorage } from '@/providers/AuthProvider'
@@ -10,12 +11,10 @@ import { Crypto } from '@repositories/utils/crypto'
 import { Button as UiButton } from '@web-ui/components/Button'
 import Cookies from 'js-cookie'
 import ky from 'ky'
-import { useRouter } from 'next/navigation'
 import { useGoogleReCaptcha } from 'react-google-recaptcha-v3'
 import { toast } from 'react-toastify'
 
 export const Welcome = (props: { dictionary: Dictionary }) => {
-  const router = useRouter()
   const { executeRecaptcha } = useGoogleReCaptcha()
 
   const guest_sign_up = async () => {
@@ -61,32 +60,15 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
   }
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px',
-        width: '100%',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center',
+    <Ui_auth_templates_Auth
+      logo_href="/"
+      heading={{
+        text: props.dictionary.auth.welcome.heading.text,
+        subtext: props.dictionary.auth.welcome.heading.subtext,
       }}
+      recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
     >
       <UiButton on_click={guest_sign_up}>Continue as guest</UiButton>
-      <UiButton
-        on_click={() => {
-          router.push('/login')
-        }}
-      >
-        Log in
-      </UiButton>
-      <UiButton
-        on_click={() => {
-          router.push('/signup')
-        }}
-      >
-        Sign up
-      </UiButton>
-    </div>
+    </Ui_auth_templates_Auth>
   )
 }

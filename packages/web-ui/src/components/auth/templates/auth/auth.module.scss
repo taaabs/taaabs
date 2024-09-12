@@ -92,6 +92,9 @@
   }
   &__form {
     grid-area: form;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
   }
   &__switch-form {
     grid-area: switch-form;

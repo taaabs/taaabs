@@ -53,38 +53,24 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            'Nielimitowane publiczne zakładki',
-            '1000 zaszyfrowanych zakładek',
-            'Wieczne kopie tekstowe wszystkich stron',
+            '1000 zakładek',
+            'Nielimitowane tagi',
+            'Kopie tekstowe',
             'Wyszukiwanie pełnotekstowe',
           ],
           button_label: 'Rozpocznij za darmo',
         },
         {
-          name: 'Surfer',
-          description: 'Podnieś limity użytkowania i funkcje na wyższy poziom',
-          bullets_heading: 'Wszystko co w darmowym, plus:',
-          bullets: [
-            '10 000 zaszyfrowanych zakładek',
-            'Oznaczanie fragmentów',
-            'Wiele linków na zakładce',
-            'Filtruj oznaczone gwiazdkami oraz nieprzeczytane',
-            'Sortuj ostatnio odwiedzone, edytowane',
-          ],
-          button_label: 'Przejdź na Surfer',
-        },
-        {
           name: 'Pro',
           description: 'Wykorzystaj pełnię możliwości jakie daje Taaabs',
-          bullets_heading: 'Wszystko co w Surfer, plus:',
-          featured_text: 'Polecane',
+          bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
             'Nielimitowane zakładki',
-            'Zbiorcze edycje',
-            'Kontrola dostępu profilu publicznego',
+            'Oznaczanie fragmentów',
+            'Sortuj ostatnio odwiedzone',
             'Przejmij krótszy nick',
           ],
-          button_label: 'Przejdź na Pro',
+          button_label: 'Subskrybuj',
         },
       ],
     },
@@ -99,6 +85,12 @@ export const dictionary: Dictionary = {
         <a>Polityka Prywatności</a> i <a>Regulamin</a> Google.
       </span>
     ),
+    welcome: {
+      heading: {
+        text: 'Witaj!',
+        subtext: 'To Twój pierwszy raz tutaj?',
+      },
+    },
     log_in: {
       heading: {
         text: 'Zaloguj się',

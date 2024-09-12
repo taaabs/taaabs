@@ -12,14 +12,8 @@ enum BillingCycle {
 }
 
 const price = {
-  monthly: {
-    lite: 5,
-    pro: 10,
-  },
-  yearly: {
-    lite: 4,
-    pro: 8,
-  },
+  monthly: 5,
+  yearly: 4,
 }
 
 const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
@@ -27,23 +21,13 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
     BillingCycle.YEARLY,
   )
 
-  let lite_price: number
-  switch (billing_cycle) {
-    case BillingCycle.YEARLY:
-      lite_price = price.yearly.lite
-      break
-    case BillingCycle.MONTHLY:
-      lite_price = price.monthly.lite
-      break
-  }
-
   let pro_price: number
   switch (billing_cycle) {
     case BillingCycle.YEARLY:
-      pro_price = price.yearly.pro
+      pro_price = price.yearly
       break
     case BillingCycle.MONTHLY:
-      pro_price = price.monthly.pro
+      pro_price = price.monthly
       break
   }
 
@@ -86,11 +70,12 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
           {
             name: props.dictionary.landing.pricing.tiers[1].name,
             description: props.dictionary.landing.pricing.tiers[1].description,
+            featured_text: 'Membership',
             previous_price:
               billing_cycle == BillingCycle.YEARLY
-                ? `$${price.monthly.lite}`
+                ? `$${price.monthly}`
                 : undefined,
-            price: `$${lite_price}`,
+            price: `$${pro_price}`,
             price_info: {
               first_line: props.dictionary.landing.pricing.per_month,
               second_line:
@@ -104,32 +89,6 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
             slot_button: (
               <UiButton on_click={() => {}} size="medium">
                 {props.dictionary.landing.pricing.tiers[1].button_label}
-              </UiButton>
-            ),
-          },
-          {
-            name: props.dictionary.landing.pricing.tiers[2].name,
-            description: props.dictionary.landing.pricing.tiers[2].description,
-            previous_price:
-              billing_cycle == BillingCycle.YEARLY
-                ? `$${price.monthly.pro}`
-                : undefined,
-            price: `$${pro_price}`,
-            price_info: {
-              first_line: props.dictionary.landing.pricing.per_month,
-              second_line:
-                billing_cycle == BillingCycle.YEARLY
-                  ? props.dictionary.landing.pricing.billed_yearly
-                  : props.dictionary.landing.pricing.billed_monthly,
-            },
-            bullets_heading:
-              props.dictionary.landing.pricing.tiers[2].bullets_heading,
-            bullets: props.dictionary.landing.pricing.tiers[2].bullets,
-            featured_text:
-              props.dictionary.landing.pricing.tiers[2].featured_text,
-            slot_button: (
-              <UiButton on_click={() => {}} size="medium">
-                {props.dictionary.landing.pricing.tiers[2].button_label}
               </UiButton>
             ),
           },

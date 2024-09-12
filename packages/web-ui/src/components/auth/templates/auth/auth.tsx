@@ -10,7 +10,7 @@ export namespace Auth {
       subtext: string
     }
     recaptcha_privacy_notice?: React.ReactNode
-    switch_form: {
+    switch_form?: {
       text: string
       link_label: string
       link_href: string
@@ -35,14 +35,16 @@ export const Auth: React.FC<Auth.Props> = (props) => {
             <div>{props.heading.subtext}</div>
           </div>
           <div className={styles.box__form}>{props.children}</div>
-          <div className={styles['box__switch-form']}>
-            <div>
-              <span>{props.switch_form.text} </span>
-              <Link href={props.switch_form.link_href}>
-                {props.switch_form.link_label}
-              </Link>
+          {props.switch_form && (
+            <div className={styles['box__switch-form']}>
+              <div>
+                <span>{props.switch_form.text} </span>
+                <Link href={props.switch_form.link_href}>
+                  {props.switch_form.link_label}
+                </Link>
+              </div>
             </div>
-          </div>
+          )}
         </div>
         {props.recaptcha_privacy_notice && (
           <div className={styles.footer}>{props.recaptcha_privacy_notice}</div>

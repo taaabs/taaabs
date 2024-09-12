@@ -84,8 +84,9 @@
 }
 .tiers {
   display: flex;
+  justify-content: center;
   gap: 16px;
-  @include to992 {
+  @include to768 {
     flex-direction: column;
   }
   @include at1200 {
@@ -102,6 +103,9 @@
   padding: 0 16px;
   background-color: var(--white);
   position: relative;
+  @include at768 {
+    max-width: 400px;
+  }
   @include at1200 {
     padding: 0 40px;
   }

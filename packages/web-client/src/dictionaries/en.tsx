@@ -25,7 +25,7 @@ const dictionary: Dictionary = {
             <strong>End-to-end encryption</strong> of private bookmarks
           </>,
           <>
-            <strong>Free to try</strong> for as long as you'd like
+            <strong>Generous free tier</strong> with pro features
           </>,
         ],
         incentive: '30 seconds or less',
@@ -47,38 +47,24 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            'Unlimited public bookmarks',
-            '1000 Zero-knowledge™ bookmarks',
-            "Permanent Reader™ of everything you've saved",
+            '1000 bookmarks',
+            'Unlimited tags',
+            'Permanent reader',
             'Full-text search',
           ],
           button_label: 'Start for free',
         },
         {
-          name: 'Surfer',
-          description: 'Level up your usage limits and features',
-          bullets_heading: 'Everything in Free, plus:',
-          bullets: [
-            '10 000 Zero-knowledge™ bookmarks',
-            'Highlights',
-            'Multi-link bookmarks',
-            'Filters: starred, unsorted',
-            'Sorts: updated at, last visited',
-          ],
-          button_label: 'Subscribe to Surfer',
-        },
-        {
           name: 'Pro',
           description: 'Get the most out of Taaabs',
-          bullets_heading: 'Everything in Surfer, plus:',
-          featured_text: 'Recommended',
+          bullets_heading: 'Everything in Free, plus:',
           bullets: [
-            'Unlimited Zero-knowledge™ bookmarks',
-            'Bulk edits',
-            'Public profile access control',
-            'Claim shorter username',
+            'Unlimited bookmarks',
+            'Highlights',
+            'Last visited sort',
+            'Shorter username',
           ],
-          button_label: 'Subscribe to Pro',
+          button_label: 'Subscribe now',
         },
       ],
     },
@@ -93,6 +79,13 @@ const dictionary: Dictionary = {
         and <a>Terms of Service</a> apply.
       </span>
     ),
+    welcome: {
+      heading: {
+        text: 'Welcome!',
+        subtext:
+          "It seems it's your first visit here. Let's get started by creating a guest account so you can see all the features in action.",
+      },
+    },
     log_in: {
       heading: {
         text: 'Log in',
