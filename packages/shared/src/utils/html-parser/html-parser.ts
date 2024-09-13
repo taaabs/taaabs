@@ -631,24 +631,15 @@ export namespace HtmlParser {
       }
       // TODO: YouTube should have it's own type
       else if (params.url.startsWith('https://www.youtube.com/watch?')) {
-        try {
-          const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
-            params.url,
-          )
-          const transcript_plain_text =
-            await youtube_transcript_extractor.get_transcript_plain_text()
+        const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
+          params.url,
+        )
+        const { plain_text, reader_data } =
+          await youtube_transcript_extractor.get_transcript()
 
-          return {
-            reader_data: JSON.stringify({
-              type: ReaderData.ContentType.ARTICLE,
-              title: title_element_text,
-              site_name: 'YouTube',
-              content: transcript_plain_text,
-            } as ReaderData.Article),
-            plain_text: transcript_plain_text,
-          }
-        } catch (e) {
-          console.error(e)
+        return {
+          reader_data: JSON.stringify(reader_data),
+          plain_text,
         }
       }
       // Generic articles

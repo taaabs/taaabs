@@ -1,3 +1,5 @@
+import { ReaderData } from '../reader-data'
+
 type CaptionTrack = {
   vssId: string
   baseUrl: string
@@ -22,20 +24,56 @@ export class YouTubeTranscriptExtractor {
     this._video_url = `https://www.youtube.com/watch?v=${video_id}`
   }
 
-  public async get_transcript_plain_text(): Promise<string> {
+  public async get_transcript(): Promise<{
+    plain_text: string
+    reader_data: ReaderData.Transcript
+  }> {
     try {
       const video_page_text = await this._fetch_video_page()
       const video_title = this._extract_video_title(video_page_text)
       const captions_data = this._extract_captions_data(video_page_text)
       const caption_url = this._find_caption_url(captions_data)
       const caption_text = await this._fetch_caption_track(caption_url)
-      const transcript =
-        this._extract_plain_text_from_transcript_xml(caption_text)
+      const transcript = this._extract_transcript_object_from_xml(caption_text)
 
-      return `# ${video_title}\n\n${transcript}`
+      // Calculate total duration
+      const total_duration = transcript.reduce(
+        (sum, item) => sum + item.duration,
+        0,
+      )
+
+      const reader_data: ReaderData.Transcript = {
+        type: ReaderData.ContentType.TRANSCRIPT,
+        duration: this._format_duration(total_duration),
+        transcript: transcript,
+      }
+
+      const plain_text = this._generate_plain_text_with_timestamps(
+        video_title,
+        transcript,
+      )
+
+      return {
+        plain_text,
+        reader_data,
+      }
     } catch (error) {
       console.error('Error fetching transcript:', error)
-      return ''
+      throw error
+    }
+  }
+
+  private _format_timestamp(seconds: number): string {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remaining_seconds = Math.floor(seconds % 60)
+
+    if (hours > 0) {
+      return `${hours}:${minutes
+        .toString()
+        .padStart(2, '0')}:${remaining_seconds.toString().padStart(2, '0')}`
+    } else {
+      return `${minutes}:${remaining_seconds.toString().padStart(2, '0')}`
     }
   }
 
@@ -91,55 +129,64 @@ export class YouTubeTranscriptExtractor {
     return await response.text()
   }
 
-  private _extract_plain_text_from_transcript_xml(xml_string: string): string {
-    const regex = /<text start="([^"]+)"[^>]*>([^<]*)<\/text>/g
+  private _extract_transcript_object_from_xml(
+    xml_string: string,
+  ): ReaderData.Transcript['transcript'] {
+    const regex = /<text start="([^"]+)" dur="([^"]+)"[^>]*>([^<]*)<\/text>/g
     let match
-    let extracted_text = ''
-    let last_time = -1
-    let current_line = ''
-  
+    let transcript: ReaderData.Transcript['transcript'] = []
+
     while ((match = regex.exec(xml_string)) !== null) {
-      const start_time = parseFloat(match[1])
-      const text = match[2]
+      const start = parseFloat(match[1])
+      const duration = parseFloat(match[2])
+      const text = match[3]
         .trim()
         .replace(/&amp;#39;/g, "'")
         .replace(/&amp;quot;/g, '"')
-        .replace(/&amp;amp;/g, '"')
-  
-      const current_hour = Math.floor(start_time / 3600)
-      const current_minute = Math.floor((start_time % 3600) / 60)
-      const current_second = Math.floor(start_time % 60)
-  
-      // Insert timestamp only if it's a new 30-second interval
-      if (start_time - last_time >= 25) {
-        if (current_line.trim()) {
-          extracted_text += current_line.trim()
+        .replace(/&amp;amp;/g, '&')
+        .replace(/&gt;/g, '>')
+        .replace(/&lt;/g, '<')
+
+      transcript.push({
+        start,
+        duration,
+        text,
+      })
+    }
+
+    return transcript
+  }
+
+  private _generate_plain_text_with_timestamps(
+    title: string,
+    transcript: ReaderData.Transcript['transcript'],
+  ): string {
+    let plain_text = `# ${title}\n\n`
+    let last_timestamp = -30 // Initialize to -30 to ensure the first timestamp is shown
+
+    for (const item of transcript) {
+      if (item.start - last_timestamp >= 25) {
+        // 25 seconds threshold for readability
+        if (plain_text !== `# ${title}\n\n`) {
+          plain_text += '\n'
         }
-        const hours = current_hour ? current_hour + ':' : ''
-        const minutes = hours
-          ? current_minute
-            ? current_minute.toString().padStart(2, '0')
-            : '00'
-          : current_minute
-          ? current_minute.toString()
-          : '0'
-        const seconds = current_second.toString().padStart(2, '0')
-        extracted_text += `<TIMESTAMP>[${hours}${minutes}:${seconds}]<TIMESTAMP>`
-        current_line = ''
-        last_time = start_time
+        plain_text += `<TIMESTAMP>[${this._format_timestamp(
+          item.start,
+        )}]<TIMESTAMP>\n`
+        last_timestamp = item.start
       }
-  
-      current_line += `${text} `
+      plain_text += `${item.text} `
     }
-  
-    // Add any remaining text
-    if (current_line.trim()) {
-      extracted_text += current_line.trim()
-    }
-  
-    return extracted_text
-      .trim()
-      .replace(/\n/g, ' ')
-      .replace(/<TIMESTAMP>/g, '\n')
+
+    return plain_text.trim().replace(/<TIMESTAMP>/g, '\n')
+  }
+
+  private _format_duration(seconds: number): string {
+    const hours = Math.floor(seconds / 3600)
+    const minutes = Math.floor((seconds % 3600) / 60)
+    const remaining_seconds = Math.floor(seconds % 60)
+    return `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}:${remaining_seconds.toString().padStart(2, '0')}`
   }
 }

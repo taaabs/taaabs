@@ -2,6 +2,7 @@ export namespace ReaderData {
   export enum ContentType {
     ARTICLE = 'article',
     CHAT = 'chat',
+    TRANSCRIPT = 'transcript',
   }
   type Base = {
     type: ContentType
@@ -31,6 +32,15 @@ export namespace ReaderData {
           content: string
         }
     >
+  }
+  export interface Transcript extends Base {
+    type: ContentType.TRANSCRIPT
+    duration: string
+    transcript: Array<{
+      start: number
+      duration: number
+      text: string
+    }>
   }
   export type Data = Article | Chat
 }
