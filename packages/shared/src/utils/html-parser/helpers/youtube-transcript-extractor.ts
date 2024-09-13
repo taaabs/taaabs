@@ -164,12 +164,9 @@ export class YouTubeTranscriptExtractor {
     for (const item of transcript) {
       if (item.start - last_timestamp >= 25) {
         // 25 seconds threshold for readability
-        if (plain_text !== `# ${title}\n\n`) {
-          plain_text += '\n'
-        }
         plain_text += `<TIMESTAMP>[${this._format_timestamp(
           item.start,
-        )}]<TIMESTAMP>\n`
+        )}]<TIMESTAMP>`
         last_timestamp = item.start
       }
       plain_text += `${item.text} `
