@@ -29,27 +29,24 @@ export class YouTubeTranscriptExtractor {
     reader_data: ReaderData.Transcript
   }> {
     try {
-      const video_page_text = await this._fetch_video_page()
-      const video_title = this._extract_video_title(video_page_text)
-      const captions_data = this._extract_captions_data(video_page_text)
+      const video_page_html_text = await this._fetch_video_page_html_text()
+      const title = this._extract_title(video_page_html_text)
+      const duration = this._extract_duration_from_html(video_page_html_text)
+      const captions_data = this._extract_captions_data(video_page_html_text)
       const caption_url = this._find_caption_url(captions_data)
-      const caption_text = await this._fetch_caption_track(caption_url)
-      const transcript = this._extract_transcript_object_from_xml(caption_text)
-
-      // Calculate total duration
-      const total_duration = transcript.reduce(
-        (sum, item) => sum + item.duration,
-        0,
-      )
+      const caption_track = await this._fetch_caption_track(caption_url)
+      const transcript =
+        this._extract_transcript_from_caption_track(caption_track)
 
       const reader_data: ReaderData.Transcript = {
         type: ReaderData.ContentType.TRANSCRIPT,
-        duration: this._format_duration(total_duration),
-        transcript: transcript,
+        title,
+        duration,
+        transcript,
       }
 
       const plain_text = this._generate_plain_text_with_timestamps(
-        video_title,
+        title,
         transcript,
       )
 
@@ -77,7 +74,7 @@ export class YouTubeTranscriptExtractor {
     }
   }
 
-  private async _fetch_video_page(): Promise<string> {
+  private async _fetch_video_page_html_text(): Promise<string> {
     const response = await fetch(this._video_url)
     if (!response.ok) {
       throw new Error(`Failed to fetch video page: ${response.statusText}`)
@@ -85,7 +82,7 @@ export class YouTubeTranscriptExtractor {
     return await response.text()
   }
 
-  private _extract_video_title(text: string): string {
+  private _extract_title(text: string): string {
     const title_match = text.match(/<meta itemprop="name" content="([^"]+)">/)
     if (!title_match || title_match.length < 2) {
       throw new Error('Video title not found.')
@@ -129,7 +126,7 @@ export class YouTubeTranscriptExtractor {
     return await response.text()
   }
 
-  private _extract_transcript_object_from_xml(
+  private _extract_transcript_from_caption_track(
     xml_string: string,
   ): ReaderData.Transcript['transcript'] {
     const regex = /<text start="([^"]+)" dur="([^"]+)"[^>]*>([^<]*)<\/text>/g
@@ -181,12 +178,29 @@ export class YouTubeTranscriptExtractor {
     return plain_text.trim().replace(/<TIMESTAMP>/g, '\n')
   }
 
-  private _format_duration(seconds: number): string {
-    const hours = Math.floor(seconds / 3600)
-    const minutes = Math.floor((seconds % 3600) / 60)
-    const remaining_seconds = Math.floor(seconds % 60)
-    return `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${remaining_seconds.toString().padStart(2, '0')}`
+  private _extract_duration_from_html(html_content: string): number {
+    const duration_match = html_content.match(
+      /<meta itemprop="duration" content="([^"]+)">/,
+    )
+    if (duration_match && duration_match[1]) {
+      const duration_str = duration_match[1]
+      return this._parse_iso8601_duration(duration_str)
+    }
+    return 0
+  }
+
+  private _parse_iso8601_duration(duration: string): number {
+    const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
+    let hours = 0
+    let minutes = 0
+    let seconds = 0
+
+    if (match) {
+      if (match[1]) hours = parseInt(match[1].slice(0, -1))
+      if (match[2]) minutes = parseInt(match[2].slice(0, -1))
+      if (match[3]) seconds = parseInt(match[3].slice(0, -1))
+    }
+
+    return hours * 3600 + minutes * 60 + seconds
   }
 }

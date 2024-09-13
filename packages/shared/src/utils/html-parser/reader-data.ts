@@ -35,7 +35,8 @@ export namespace ReaderData {
   }
   export interface Transcript extends Base {
     type: ContentType.TRANSCRIPT
-    duration: string
+    title: string
+    duration: number
     transcript: Array<{
       start: number
       duration: number

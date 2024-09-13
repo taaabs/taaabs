@@ -634,7 +634,7 @@ export namespace HtmlParser {
         const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
           params.url,
         )
-        const { plain_text, reader_data } =
+        const { reader_data, plain_text } =
           await youtube_transcript_extractor.get_transcript()
 
         return {
