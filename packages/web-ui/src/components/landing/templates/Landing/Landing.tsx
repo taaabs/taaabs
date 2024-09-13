@@ -23,7 +23,7 @@ export const Landing: React.FC<Landing.Props> = (props) => {
           <div className={styles.header__inner__burger}>[BURGER]</div>
         </div>
       </header>
-      {props.children}
+      <main>{props.children}</main>
     </div>
   )
 }

@@ -6,8 +6,6 @@
 }
 .header {
   width: 100%;
-  position: sticky;
-  top: 0;
   z-index: 3;
   background: var(--header-transparent-background);
   backdrop-filter: var(--backdrop-filter);

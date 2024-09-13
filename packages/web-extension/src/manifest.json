@@ -63,7 +63,8 @@
         "https://www.phind.com/agent",
         "https://poe.com/",
         "https://you.com/",
-        "https://librechat-librechat.hf.space/c/new"
+        "https://librechat-librechat.hf.space/c/new",
+        "https://chat.notdiamond.ai/"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }

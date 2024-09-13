@@ -15,4 +15,5 @@ export const chatbot_urls = {
   meta: 'https://www.meta.ai/',
   you: 'https://you.com/',
   librechat: 'https://librechat-librechat.hf.space/c/new',
+  notdiamond: 'https://chat.notdiamond.ai/'
 }

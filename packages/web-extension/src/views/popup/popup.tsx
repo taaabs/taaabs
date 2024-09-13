@@ -184,6 +184,7 @@ export const Popup: React.FC = () => {
             { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
             { name: 'openrouter', display_name: 'OpenRouter' },
+            { name: 'notdiamond', display_name: 'Not Diamond' },
             { name: 'librechat', display_name: 'LibreChat' },
             { name: 'phind', display_name: 'Phind' },
             { name: 'poe', display_name: 'Poe' },
