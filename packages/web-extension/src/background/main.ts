@@ -146,6 +146,5 @@ chrome.webNavigation.onCommitted.addListener((details) => {
 })
 
 chrome.runtime.onInstalled.addListener(() => {
-  chrome.storage.local.set({ use_custom_new_tab: true })
   chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

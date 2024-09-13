@@ -12,8 +12,8 @@ enum BillingCycle {
 }
 
 const price = {
-  monthly: 5,
-  yearly: 4,
+  monthly: 4,
+  yearly: 3.33,
 }
 
 const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
@@ -51,7 +51,7 @@ const Pricing: React.FC<{ dictionary: Dictionary }> = (props) => {
             }
           },
           is_monthly_selected: billing_cycle == BillingCycle.MONTHLY,
-          yearly_savings: '-20%',
+          yearly_savings: '2 months free!',
         }}
         pricing_tiers={[
           {

@@ -57,7 +57,7 @@ const dictionary: Dictionary = {
         {
           name: 'Pro',
           description: 'Get the most out of Taaabs',
-          bullets_heading: 'Everything in Free, plus:',
+          bullets_heading: 'Level-up with:',
           bullets: [
             'Unlimited bookmarks',
             'Highlights',

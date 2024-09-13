@@ -5,9 +5,11 @@ export namespace Crypto {
     const charset =
       'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+~`|}{[]:;?><,./-='
     let password = ''
+    const values = new Uint32Array(length)
+    window.crypto.getRandomValues(values)
 
     for (let i = 0; i < length; i++) {
-      const random_index = Math.floor(Math.random() * charset.length)
+      const random_index = values[i] % charset.length
       password += charset[random_index]
     }
 

@@ -88,7 +88,8 @@ export const dictionary: Dictionary = {
     welcome: {
       heading: {
         text: 'Witaj!',
-        subtext: 'To Twój pierwszy raz tutaj?',
+        subtext:
+          'Wygląda na to, że to Twoja pierwsza wizyta. Zaczniemy od utworzenia konta gościa jednym kliknięciem, abyś mógł zobaczyć wszystkie funkcje w akcji.',
       },
     },
     log_in: {
