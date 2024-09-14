@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
   if (request.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
-    AssistantSpecificTasks.on_load(current_url)
+    await AssistantSpecificTasks.on_load(current_url)
 
     // Roughly a little below 4k tokens
     const max_length = 15000
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             prompt = request.prompt
           }
 
-          AssistantSpecificTasks.before_prompt_part({
+          await AssistantSpecificTasks.before_prompt_part({
             url: current_url,
             iteration: i,
           })
