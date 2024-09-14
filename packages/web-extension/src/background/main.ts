@@ -16,7 +16,7 @@ chrome.action.onClicked.addListener((tab) => {
         chrome.tabs.create({ url: 'https://taaabs.com/library' })
         setTimeout(() => {
           chrome.tabs.reload(tab.id!)
-        }, 3000)
+        }, 2000)
       } else {
         chrome.tabs
           .sendMessage(tab.id!, { action: 'inject-popup' })
