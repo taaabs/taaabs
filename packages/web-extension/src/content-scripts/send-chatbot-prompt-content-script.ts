@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
   if (request.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
-    await AssistantSpecificTasks.on_load(current_url)
+    await AssistantFixes.on_load(current_url)
 
     // Roughly a little below 4k tokens
     const max_length = 15000
@@ -38,13 +38,13 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             prompt = request.prompt
           }
 
-          await AssistantSpecificTasks.before_prompt_part({
+          await AssistantFixes.before_prompt_part({
             url: current_url,
             iteration: i,
           })
 
           await new Promise((resolve) =>
-            AssistantHandler.send_prompt({
+            send_prompt({
               url: current_url,
               prompt,
               is_first_part: i == 0,
@@ -58,183 +58,181 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       const prompt = request.plain_text
         ? `${request.prompt}\n\n---\n\n${request.plain_text}`
         : request.prompt
-      AssistantHandler.send_prompt({
+      send_prompt({
         url: current_url,
         prompt,
         is_first_part: true,
       })
     }
 
-    AssistantSpecificTasks.scroll_to_response()
+    AssistantFixes.scroll_to_response()
   }
 })
 
-namespace AssistantHandler {
-  export const send_prompt = async (params: {
-    url: string
-    prompt: string
-    is_first_part: boolean
-    resolve?: (val: boolean) => void
-  }) => {
-    try {
-      // This describes when we don't want to send new prompt just yet.
-      // Is intended for multi-part prompts.
-      if (params.resolve) {
-        try {
-          if (params.url == chatbot_urls.chatgpt) {
-            if (
-              document.querySelector('button[data-testid="stop-button"]') ||
-              (document.querySelector(
-                'button[data-testid="send-button"][disabled]',
-              ) &&
-                document.querySelector('div#prompt-textarea')?.textContent)
-            ) {
-              throw new Error()
-            } else if (!params.is_first_part) {
-              await new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve(true)
-                }, 1000)
-              })
-            }
-          } else if (params.url == chatbot_urls.gemini) {
-            if (document.querySelector('svg[alt="skip response icon"]')) {
-              throw new Error()
-            } else if (!params.is_first_part) {
-              await new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve(true)
-                }, 1000)
-              })
-            }
-          } else if (params.url == chatbot_urls.huggingchat) {
-            if (
-              document.querySelector(
-                '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
-              )
-            ) {
-              throw new Error()
-            } else if (!params.is_first_part) {
-              await new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve(true)
-                }, 1000)
-              })
-            }
+const send_prompt = async (params: {
+  url: string
+  prompt: string
+  is_first_part: boolean
+  resolve?: (val: boolean) => void
+}) => {
+  try {
+    // This describes when we don't want to send new prompt just yet.
+    // Is intended for multi-part prompts.
+    if (params.resolve) {
+      try {
+        if (params.url == chatbot_urls.chatgpt) {
+          if (
+            document.querySelector('button[data-testid="stop-button"]') ||
+            (document.querySelector(
+              'button[data-testid="send-button"][disabled]',
+            ) &&
+              document.querySelector('div#prompt-textarea')?.textContent)
+          ) {
+            throw new Error()
+          } else if (!params.is_first_part) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 1000)
+            })
           }
-        } catch {
-          throw new Error()
-        }
-      }
-
-      let active_element = document.activeElement as HTMLElement
-
-      // Some chatbots have their inputs not focused by default.
-      // Some applies to only smartphone widths: huggingchat, mistral, you
-      let selector = ''
-      if (params.url == chatbot_urls.huggingchat) {
-        selector =
-          '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom'
-      } else if (params.url == chatbot_urls.deepseek) {
-        selector = '#chat-input'
-      } else if (params.url == chatbot_urls.claude) {
-        selector = 'div[contenteditable=true] > p'
-      } else if (params.url == chatbot_urls.mistral) {
-        selector = 'textarea[placeholder="Ask anything!"]'
-      } else if (params.url == chatbot_urls.you) {
-        selector = 'textarea[name="query"]'
-      } else if (params.url == chatbot_urls.librechat) {
-        selector = 'textarea[placeholder*="Message "]'
-      }
-
-      if (selector) {
-        active_element = document.querySelector(selector) as HTMLElement
-      }
-
-      if (active_element && active_element.isContentEditable) {
-        // Handle contenteditable element
-        active_element.innerText = params.prompt
-
-        // Dispatch input and change events
-        active_element.dispatchEvent(new Event('input', { bubbles: true }))
-        active_element.dispatchEvent(new Event('change', { bubbles: true }))
-
-        const form = active_element.closest('form')
-
-        if (params.url == chatbot_urls.claude) {
-          setTimeout(() => {
-            ;(
-              document.querySelector(
-                'button[aria-label="Send Message"]',
-              ) as HTMLElement
-            ).click()
-            params.resolve?.(true)
-          }, 500)
-        } else if (form) {
-          setTimeout(() => {
-            form.requestSubmit()
-            params.resolve?.(true)
-          }, 0)
-        } else {
-          const enter_event = new KeyboardEvent('keydown', {
-            key: 'Enter',
-            code: 'Enter',
-            keyCode: 13,
-            which: 13,
-            bubbles: true,
-          })
-          active_element.dispatchEvent(enter_event)
-          params.resolve?.(true)
-        }
-      } else if (active_element && active_element.tagName == 'TEXTAREA') {
-        // Handle input or textarea element
-        ;(active_element as HTMLTextAreaElement).value = params.prompt
-
-        // Dispatch input and change events
-        active_element.dispatchEvent(new Event('input', { bubbles: true }))
-        active_element.dispatchEvent(new Event('change', { bubbles: true }))
-
-        const form = active_element.closest('form')
-        if (form) {
-          setTimeout(() => {
-            form.requestSubmit()
-            params.resolve?.(true)
-          }, 0)
-        } else if (params.url == chatbot_urls.cohere) {
-          ;(
+        } else if (params.url == chatbot_urls.gemini) {
+          if (document.querySelector('svg[alt="skip response icon"]')) {
+            throw new Error()
+          } else if (!params.is_first_part) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 1000)
+            })
+          }
+        } else if (params.url == chatbot_urls.huggingchat) {
+          if (
             document.querySelector(
-              '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
-            ) as HTMLElement
-          )?.click()
-          params.resolve?.(true)
-        } else if (params.url == chatbot_urls.aistudio) {
-          setTimeout(() => {
-            ;(
-              document.querySelector('button[aria-label=Run]') as HTMLElement
-            )?.click()
-            params.resolve?.(true)
-          }, 0)
-        } else {
-          const enter_event = new KeyboardEvent('keydown', {
-            key: 'Enter',
-            code: 'Enter',
-            keyCode: 13,
-            which: 13,
-            bubbles: true,
-          })
-          active_element.dispatchEvent(enter_event)
-          params.resolve?.(true)
+              '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
+            )
+          ) {
+            throw new Error()
+          } else if (!params.is_first_part) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 1000)
+            })
+          }
         }
-      } else {
+      } catch {
         throw new Error()
       }
-    } catch {
-      setTimeout(() => send_prompt(params), 100)
     }
+
+    let active_element = document.activeElement as HTMLElement
+
+    // Some chatbots have their inputs not focused by default.
+    // Some applies to only smartphone widths: huggingchat, mistral, you
+    let selector = ''
+    if (params.url == chatbot_urls.huggingchat) {
+      selector =
+        '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom'
+    } else if (params.url == chatbot_urls.deepseek) {
+      selector = '#chat-input'
+    } else if (params.url == chatbot_urls.claude) {
+      selector = 'div[contenteditable=true] > p'
+    } else if (params.url == chatbot_urls.mistral) {
+      selector = 'textarea[placeholder="Ask anything!"]'
+    } else if (params.url == chatbot_urls.you) {
+      selector = 'textarea[name="query"]'
+    } else if (params.url == chatbot_urls.librechat) {
+      selector = 'textarea[placeholder*="Message "]'
+    }
+
+    if (selector) {
+      active_element = document.querySelector(selector) as HTMLElement
+    }
+
+    if (active_element && active_element.isContentEditable) {
+      // Handle contenteditable element
+      active_element.innerText = params.prompt
+
+      // Dispatch input and change events
+      active_element.dispatchEvent(new Event('input', { bubbles: true }))
+      active_element.dispatchEvent(new Event('change', { bubbles: true }))
+
+      const form = active_element.closest('form')
+
+      if (params.url == chatbot_urls.claude) {
+        setTimeout(() => {
+          ;(
+            document.querySelector(
+              'button[aria-label="Send Message"]',
+            ) as HTMLElement
+          ).click()
+          params.resolve?.(true)
+        }, 500)
+      } else if (form) {
+        setTimeout(() => {
+          form.requestSubmit()
+          params.resolve?.(true)
+        }, 0)
+      } else {
+        const enter_event = new KeyboardEvent('keydown', {
+          key: 'Enter',
+          code: 'Enter',
+          keyCode: 13,
+          which: 13,
+          bubbles: true,
+        })
+        active_element.dispatchEvent(enter_event)
+        params.resolve?.(true)
+      }
+    } else if (active_element && active_element.tagName == 'TEXTAREA') {
+      // Handle input or textarea element
+      ;(active_element as HTMLTextAreaElement).value = params.prompt
+
+      // Dispatch input and change events
+      active_element.dispatchEvent(new Event('input', { bubbles: true }))
+      active_element.dispatchEvent(new Event('change', { bubbles: true }))
+
+      const form = active_element.closest('form')
+      if (form) {
+        setTimeout(() => {
+          form.requestSubmit()
+          params.resolve?.(true)
+        }, 0)
+      } else if (params.url == chatbot_urls.cohere) {
+        ;(
+          document.querySelector(
+            '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
+          ) as HTMLElement
+        )?.click()
+        params.resolve?.(true)
+      } else if (params.url == chatbot_urls.aistudio) {
+        setTimeout(() => {
+          ;(
+            document.querySelector('button[aria-label=Run]') as HTMLElement
+          )?.click()
+          params.resolve?.(true)
+        }, 0)
+      } else {
+        const enter_event = new KeyboardEvent('keydown', {
+          key: 'Enter',
+          code: 'Enter',
+          keyCode: 13,
+          which: 13,
+          bubbles: true,
+        })
+        active_element.dispatchEvent(enter_event)
+        params.resolve?.(true)
+      }
+    } else {
+      throw new Error()
+    }
+  } catch {
+    setTimeout(() => send_prompt(params), 100)
   }
 }
 
-namespace AssistantSpecificTasks {
+namespace AssistantFixes {
   export const on_load = async (url: string) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
