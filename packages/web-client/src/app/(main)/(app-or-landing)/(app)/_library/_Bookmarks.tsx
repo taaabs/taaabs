@@ -53,7 +53,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
     tag_hierarchies_hook,
     filter_view_options_hook,
     date_view_options_hook,
-    pinned_hook,
 
     username,
     library_updated_at_timestamp,

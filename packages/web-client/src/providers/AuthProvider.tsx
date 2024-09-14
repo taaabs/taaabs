@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
           },
         ],
         afterResponse: [
-          async (request, _, response) => {
+          async (_, __, response) => {
             if (response.status == 401) {
               // Token has expired, refresh it
               const auth_data_local_storage = JSON.parse(
@@ -151,12 +151,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                         }),
                       )
                     }
-
-                    request.headers.set(
-                      'Authorization',
-                      `Bearer ${result.access_token}`,
-                    )
-                    ky_instance.current(request)
                   } catch {
                     // If refreshing the token fails, log the user out
                     logout()

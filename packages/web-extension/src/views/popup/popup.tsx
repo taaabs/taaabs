@@ -178,12 +178,10 @@ export const Popup: React.FC = () => {
             { name: 'claude', display_name: 'Claude' },
             { name: 'grok', display_name: 'Grok' },
             { name: 'meta', display_name: 'Meta AI' },
-            { name: 'duckduckgo', display_name: 'DuckDuckGo' },
             { name: 'huggingchat', display_name: 'HuggingChat' },
             { name: 'mistral', display_name: 'Mistral' },
             { name: 'cohere', display_name: 'Cohere' },
             { name: 'deepseek', display_name: 'DeepSeek' },
-            { name: 'openrouter', display_name: 'OpenRouter' },
             { name: 'notdiamond', display_name: 'Not Diamond' },
             { name: 'librechat', display_name: 'LibreChat' },
             { name: 'phind', display_name: 'Phind' },
@@ -257,6 +255,7 @@ export const Popup: React.FC = () => {
             )
           }}
           prompts_history={[...prompts_history_hook.prompts_history].reverse()}
+          is_history_enabled={!!parsed_html}
           translations={{
             heading: 'New chat',
             placeholder: 'Ask anything!',

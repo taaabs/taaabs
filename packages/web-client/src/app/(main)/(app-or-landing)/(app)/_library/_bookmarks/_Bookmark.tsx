@@ -47,7 +47,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = (props) => {
     if (
       is_visible &&
       !is_links_data_prefetched.current &&
-      props.links.find((link) => link.is_parsed)
+      props.links.find(
+        (link) =>
+          link.is_parsed &&
+          // Don't prefetch transcripts
+          !link.url.startsWith('https://www.youtube.com/watch'),
+      )
     ) {
       const data_source = new Bookmarks_DataSourceImpl(auth_context.ky_instance)
       const repository = new Bookmarks_RepositoryImpl(data_source)

@@ -13,6 +13,7 @@ export namespace PromptField {
     is_include_content_checkbox_disabled: boolean
     is_include_content_selected: boolean
     on_include_content_click: () => void
+    is_history_enabled: boolean
     prompts_history: string[]
     translations: {
       heading: string
@@ -29,7 +30,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     useState<number>(-1)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_include_content_selected) return
+    if (!props.is_include_content_selected || !props.is_history_enabled) return
 
     if (is_focused) {
       if (e.key == 'ArrowUp') {
@@ -76,7 +77,9 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           on_enter_pressed={props.on_submit}
           placeholder={
             props.translations.placeholder +
-            (is_focused && props.is_include_content_selected
+            (is_focused &&
+            props.is_history_enabled &&
+            props.is_include_content_selected
               ? ` ${props.translations.active_input_placeholder_suffix}`
               : '')
           }

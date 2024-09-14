@@ -26,7 +26,7 @@ export const get_ky_instance = () => {
           },
         ],
         afterResponse: [
-          async (request, __, response) => {
+          async (_, __, response) => {
             if (response.status == 401) {
               const auth_data = await get_auth_data()
 
@@ -67,16 +67,12 @@ export const get_ky_instance = () => {
                     auth_data: new_auth_data,
                   },
                   () => {
-                    console.debug('New auth data has been saved:', new_auth_data)
+                    console.debug(
+                      'New auth data has been saved:',
+                      new_auth_data,
+                    )
                   },
                 )
-
-                request.headers.set(
-                  'Authorization',
-                  `Bearer ${new_auth_data.access_token}`,
-                )
-
-                ky_instance!(request)
               }
             }
           },
