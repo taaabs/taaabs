@@ -297,8 +297,8 @@ export const use_bookmarks = () => {
       } else {
         throw new Error('Session data was not found.')
       }
-    } catch (error) {
-      console.debug('[use_bookmarks]', error)
+    } catch (error: any) {
+      console.debug('[use_bookmarks]', error.message)
       if (window.location.hash.startsWith('#q=')) return
       get_bookmarks({})
     }
