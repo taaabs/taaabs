@@ -37,16 +37,21 @@ export namespace CreateBookmark_Dto {
   })
 
   export const body_schema = z.object({
-    title: z.string().max(system_values.bookmark.title.max_length).optional(),
+    title: z
+      .string()
+      .max(system_values.bookmark.title.max_length)
+      .optional()
+      .nullable(),
     title_aes: z
       .string()
       .max(system_values.bookmark.title.max_length * 2)
-      .optional(),
-    note: z.string().max(system_values.bookmark.note.max_length).optional(),
+      .optional()
+      .nullable(),
+    note: z.string().max(system_values.bookmark.note.max_length).optional().nullable(),
     note_aes: z
       .string()
       .max(system_values.bookmark.note.max_length * 2)
-      .optional(),
+      .optional().nullable(),
     created_at: z
       .string()
       .datetime()
@@ -56,8 +61,8 @@ export namespace CreateBookmark_Dto {
       .optional(),
     is_public: z.boolean().optional(),
     is_archived: z.boolean().optional(),
-    stars: z.number().int().min(0).max(5).optional(),
-    is_unsorted: z.boolean().optional(),
+    stars: z.number().int().min(0).max(5).optional().nullable(),
+    is_unsorted: z.boolean().optional().nullable(),
     tags: z
       .array(
         z.discriminatedUnion('is_public', [
@@ -66,7 +71,7 @@ export namespace CreateBookmark_Dto {
         ]),
       )
       .max(system_values.bookmark.tags.limit)
-      .optional(),
+      .optional().nullable(),
     links: z
       .array(
         z.discriminatedUnion('is_public', [
@@ -75,10 +80,10 @@ export namespace CreateBookmark_Dto {
         ]),
       )
       .max(system_values.bookmark.links.limit)
-      .optional(),
-    cover: z.string().optional(),
-    cover_aes: z.string().optional(),
-    blurhash_aes: z.string().optional(),
+      .optional().nullable(),
+    cover: z.string().optional().nullable(),
+    cover_aes: z.string().optional().nullable(),
+    blurhash_aes: z.string().optional().nullable(),
   })
 
   export type Body = z.infer<typeof body_schema>

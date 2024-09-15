@@ -43,12 +43,14 @@ export const upsert_bookmark = (params: {
           ...params.bookmark,
           ...(links_data
             ? {
-                links: params.bookmark.links.map((link) => ({
-                  ...link,
-                  reader_data: links_data?.find(
-                    (link_data) => link_data.url == link.url,
-                  )?.reader_data,
-                })),
+                links: params.bookmark.links
+                  ? params.bookmark.links.map((link) => ({
+                      ...link,
+                      reader_data: links_data?.find(
+                        (link_data) => link_data.url == link.url,
+                      )?.reader_data,
+                    }))
+                  : undefined,
               }
             : {}),
         },

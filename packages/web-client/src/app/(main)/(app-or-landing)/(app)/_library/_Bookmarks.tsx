@@ -73,29 +73,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
-                is_public: bookmark.is_public,
-                created_at: new Date(bookmark.created_at),
-                title: bookmark.title,
-                note: bookmark.note,
-                is_archived: is_archived_filter,
-                is_unsorted: bookmark.is_unsorted,
                 stars: bookmark.stars == no_stars ? 0 : no_stars,
-                links: bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                  is_public: link.is_public,
-                  is_pinned: link.is_pinned,
-                  pin_title: link.pin_title,
-                  open_snapshot: link.open_snapshot,
-                  favicon: link.favicon,
-                })),
-                tags: bookmark.tags.map((tag) => ({
-                  name: tag.name,
-                  is_public: tag.is_public,
-                })),
-                cover_hash: bookmark.cover_hash,
-                has_cover_aes: bookmark.has_cover_aes,
-                blurhash: bookmark.blurhash,
               }
               await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -143,31 +121,9 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
-                is_public: bookmark.is_public,
-                created_at: new Date(bookmark.created_at),
-                title: bookmark.title,
-                note: bookmark.note,
-                is_archived: is_archived_filter,
                 is_unsorted: !(bookmark.is_unsorted === undefined
                   ? true
                   : bookmark.is_unsorted),
-                stars: bookmark.stars,
-                links: bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                  is_public: link.is_public,
-                  is_pinned: link.is_pinned,
-                  pin_title: link.pin_title,
-                  open_snapshot: link.open_snapshot,
-                  favicon: link.favicon,
-                })),
-                tags: bookmark.tags.map((tag) => ({
-                  name: tag.name,
-                  is_public: tag.is_public,
-                })),
-                cover_hash: bookmark.cover_hash,
-                has_cover_aes: bookmark.has_cover_aes,
-                blurhash: bookmark.blurhash,
               }
               await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -224,7 +180,10 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               if (bookmark.is_public != modified_bookmark.is_public) {
                 should_refetch_links_reader_data = true
               }
-              if (!should_refetch_links_reader_data) {
+              if (
+                !should_refetch_links_reader_data &&
+                modified_bookmark.links
+              ) {
                 modified_bookmark.links.forEach((link) => {
                   const old_link = bookmark.links.find((l) => l.url == link.url)
                   if (old_link && old_link.is_public != link.is_public) {
@@ -350,28 +309,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               dispatch(bookmarks_actions.set_is_upserting(true))
               const modified_bookmark: UpsertBookmark_Params = {
                 bookmark_id: bookmark.id,
-                is_public: bookmark.is_public,
-                created_at: new Date(bookmark.created_at),
-                title: bookmark.title,
                 is_archived: !is_archived_filter,
-                is_unsorted: bookmark.is_unsorted,
-                stars: bookmark.stars,
-                links: bookmark.links.map((link) => ({
-                  url: link.url,
-                  site_path: link.site_path,
-                  is_public: link.is_public,
-                  is_pinned: link.is_pinned,
-                  pin_title: link.pin_title,
-                  open_snapshot: link.open_snapshot,
-                  favicon: link.favicon,
-                })),
-                tags: bookmark.tags.map((tag) => ({
-                  name: tag.name,
-                  is_public: tag.is_public,
-                })),
-                cover_hash: bookmark.cover_hash,
-                has_cover_aes: bookmark.has_cover_aes,
-                blurhash: bookmark.blurhash,
               }
               await dispatch(
                 bookmarks_actions.upsert_bookmark({
@@ -479,29 +417,10 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       }
       const modified_bookmark: UpsertBookmark_Params = {
         bookmark_id: bookmark.id,
-        is_public: bookmark.is_public,
-        created_at: new Date(bookmark.created_at),
-        title: bookmark.title,
-        note: bookmark.note,
-        is_archived: is_archived_filter,
-        is_unsorted: bookmark.is_unsorted,
-        stars: bookmark.stars,
-        links: bookmark.links.map((link) => ({
-          url: link.url,
-          site_path: link.site_path,
-          is_public: link.is_public,
-          is_pinned: link.is_pinned,
-          pin_title: link.pin_title,
-          open_snapshot: link.open_snapshot,
-          favicon: link.favicon,
-        })),
         tags: updated_tags.map((tag) => ({
           name: tag.name,
           is_public: tag.is_public,
         })),
-        cover_hash: bookmark.cover_hash,
-        has_cover_aes: bookmark.has_cover_aes,
-        blurhash: bookmark.blurhash,
       }
       const updated_bookmark = await dispatch(
         bookmarks_actions.upsert_bookmark({
@@ -659,22 +578,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       dispatch(bookmarks_actions.set_is_upserting(true))
       const modified_bookmark: UpsertBookmark_Params = {
         bookmark_id: bookmark.id,
-        is_public: bookmark.is_public,
-        created_at: new Date(bookmark.created_at),
-        title: bookmark.title,
-        note: bookmark.note,
-        is_archived: is_archived_filter,
-        is_unsorted: bookmark.is_unsorted,
-        stars: bookmark.stars,
-        links: bookmark.links.map((link) => ({
-          url: link.url,
-          site_path: link.site_path,
-          is_public: link.is_public,
-          is_pinned: link.is_pinned,
-          pin_title: link.pin_title,
-          open_snapshot: link.open_snapshot,
-          favicon: link.favicon,
-        })),
         tags: [
           ...bookmark.tags.map((tag) => ({
             name: tag.name,
@@ -685,9 +588,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             is_public: bookmark.is_public,
           },
         ],
-        cover_hash: bookmark.cover_hash,
-        has_cover_aes: bookmark.has_cover_aes,
-        blurhash: bookmark.blurhash,
       }
       const updated_bookmark = await dispatch(
         bookmarks_actions.upsert_bookmark({
@@ -749,31 +649,12 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       dispatch(bookmarks_actions.set_is_upserting(true))
       const modified_bookmark: UpsertBookmark_Params = {
         bookmark_id: bookmark.id,
-        is_public: bookmark.is_public,
-        created_at: new Date(bookmark.created_at),
-        title: bookmark.title,
-        note: bookmark.note,
-        is_archived: is_archived_filter,
-        is_unsorted: bookmark.is_unsorted,
-        stars: bookmark.stars,
-        links: bookmark.links.map((link) => ({
-          url: link.url,
-          site_path: link.site_path,
-          is_public: link.is_public,
-          is_pinned: link.is_pinned,
-          pin_title: link.pin_title,
-          open_snapshot: link.open_snapshot,
-          favicon: link.favicon,
-        })),
         tags: bookmark.tags
           .filter((tag) => tag.id !== tag_id)
           .map((tag) => ({
             name: tag.name,
             is_public: tag.is_public,
           })),
-        cover_hash: bookmark.cover_hash,
-        has_cover_aes: bookmark.has_cover_aes,
-        blurhash: bookmark.blurhash,
       }
       const updated_bookmark = await dispatch(
         bookmarks_actions.upsert_bookmark({
@@ -1010,29 +891,10 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                 dispatch(bookmarks_actions.set_is_upserting(true))
                 const modified_bookmark: UpsertBookmark_Params = {
                   bookmark_id: bookmark.id,
-                  is_public: bookmark.is_public,
-                  created_at: new Date(bookmark.created_at),
-                  title: bookmark.title,
-                  note: bookmark.note,
-                  is_archived: is_archived_filter,
-                  is_unsorted: bookmark.is_unsorted,
-                  stars: bookmark.stars,
-                  links: bookmark.links.map((link) => ({
-                    url: link.url,
-                    site_path: link.site_path,
-                    is_public: link.is_public,
-                    is_pinned: link.is_pinned,
-                    pin_title: link.pin_title,
-                    open_snapshot: link.open_snapshot,
-                    favicon: link.favicon,
-                  })),
                   tags: tags.map((tag) => ({
                     name: tag.name,
                     is_public: tag.is_public || false,
                   })),
-                  cover_hash: bookmark.cover_hash,
-                  has_cover_aes: bookmark.has_cover_aes,
-                  blurhash: bookmark.blurhash,
                 }
                 const updated_bookmark = await dispatch(
                   bookmarks_actions.upsert_bookmark({
@@ -1152,13 +1014,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
-                    is_public: bookmark.is_public,
-                    created_at: new Date(bookmark.created_at),
-                    title: bookmark.title,
-                    note: bookmark.note,
-                    is_archived: is_archived_filter,
-                    is_unsorted: bookmark.is_unsorted,
-                    stars: bookmark.stars,
                     links: bookmark.links.map((l) => ({
                       url: l.url,
                       site_path: l.site_path,
@@ -1168,13 +1023,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                       open_snapshot: l.open_snapshot,
                       favicon: link.favicon,
                     })),
-                    tags: bookmark.tags.map((tag) => ({
-                      name: tag.name,
-                      is_public: tag.is_public,
-                    })),
-                    cover_hash: bookmark.cover_hash,
-                    has_cover_aes: bookmark.has_cover_aes,
-                    blurhash: bookmark.blurhash,
                   }
                   await dispatch(
                     bookmarks_actions.upsert_bookmark({
@@ -1206,13 +1054,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                   dispatch(bookmarks_actions.set_is_upserting(true))
                   const modified_bookmark: UpsertBookmark_Params = {
                     bookmark_id: bookmark.id,
-                    is_public: bookmark.is_public,
-                    created_at: new Date(bookmark.created_at),
-                    title: bookmark.title,
-                    note: bookmark.note,
-                    is_archived: is_archived_filter,
-                    is_unsorted: bookmark.is_unsorted,
-                    stars: bookmark.stars,
                     links: bookmark.links.map((l) => ({
                       url: l.url,
                       site_path: l.site_path,
@@ -1223,13 +1064,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                         link.url == l.url ? open_snapshot : l.open_snapshot,
                       favicon: link.favicon,
                     })),
-                    tags: bookmark.tags.map((tag) => ({
-                      name: tag.name,
-                      is_public: tag.is_public,
-                    })),
-                    cover_hash: bookmark.cover_hash,
-                    has_cover_aes: bookmark.has_cover_aes,
-                    blurhash: bookmark.blurhash,
                   }
                   await dispatch(
                     bookmarks_actions.upsert_bookmark({
