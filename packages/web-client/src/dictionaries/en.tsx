@@ -60,7 +60,7 @@ const dictionary: Dictionary = {
           bullets_heading: 'Level-up with:',
           bullets: [
             'Unlimited bookmarks',
-            'Highlights',
+            'Highlights (coming soon)',
             'Priority support',
             'Claim shorter username',
           ],

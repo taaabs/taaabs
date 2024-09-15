@@ -275,7 +275,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           : undefined,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
-      stars: params.stars || undefined,
+      stars: params.stars,
       is_unsorted:
         params.is_unsorted === undefined
           ? params.tags && params.tags.length
