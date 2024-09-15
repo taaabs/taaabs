@@ -63,7 +63,9 @@
         "https://poe.com/",
         "https://you.com/",
         "https://librechat-librechat.hf.space/c/new",
-        "https://chat.notdiamond.ai/"
+        "https://chat.notdiamond.ai/",
+        "https://www.perplexity.ai/",
+        "https://www.bing.com/chat"
       ],
       "js": ["send-chatbot-prompt-content-script.js"]
     }

@@ -99,96 +99,100 @@ const message_handler = async (event: MessageEvent) => {
     const params = event.data.bookmark as UpsertBookmark_Params
 
     const tags: CreateBookmark_Dto.Body['tags'] = []
-    for (const tag of params.tags) {
-      if (!tag.name.trim().length) continue
-      const hash = await SHA256(
-        tag.name,
-        new Uint8Array(auth_data.encryption_key),
-      )
-      if (tags.find((t) => t.hash == hash)) continue
-      if (tag.is_public) {
-        tags.push({
-          is_public: true,
-          hash,
-          name: tag.name.trim(),
-        })
-      } else {
-        tags.push({
-          is_public: false,
-          hash,
-          name_aes: await AES.encrypt(
-            tag.name.trim(),
-            new Uint8Array(auth_data.encryption_key),
-          ),
-        })
+    if (params.tags) {
+      for (const tag of params.tags) {
+        if (!tag.name.trim().length) continue
+        const hash = await SHA256(
+          tag.name,
+          new Uint8Array(auth_data.encryption_key),
+        )
+        if (tags.find((t) => t.hash == hash)) continue
+        if (tag.is_public) {
+          tags.push({
+            is_public: true,
+            hash,
+            name: tag.name.trim(),
+          })
+        } else {
+          tags.push({
+            is_public: false,
+            hash,
+            name_aes: await AES.encrypt(
+              tag.name.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
+          })
+        }
       }
     }
 
     const links: CreateBookmark_Dto.Body['links'] = []
-    for (const link of params.links) {
-      if (!link.url.trim().length) continue
-      const hash = await SHA256(
-        link.url.trim(),
-        new Uint8Array(auth_data.encryption_key),
-      )
-      if (links.find((l) => l.hash == hash)) continue
-      const domain = get_domain_from_url(link.url)
-      if (link.is_public) {
-        links.push({
-          is_public: true,
-          url: link.url.trim(),
-          hash: await SHA256(
-            link.url.trim(),
-            new Uint8Array(auth_data.encryption_key),
-          ),
-          site_path: link.is_public ? link.site_path : undefined,
-          is_pinned: link.is_pinned,
-          pin_title: link.pin_title,
-          open_snapshot: link.open_snapshot,
-          reader_data: link.reader_data,
-          favicon_aes: link.favicon
-            ? await AES.encrypt(
-                link.favicon,
-                new Uint8Array(auth_data.encryption_key),
-              )
-            : undefined,
-        })
-      } else {
-        links.push({
-          is_public: false,
-          url_aes: await AES.encrypt(
-            link.url.trim(),
-            new Uint8Array(auth_data.encryption_key),
-          ),
-          site_aes: await AES.encrypt(
-            link.site_path ? `${domain}/${link.site_path}` : domain,
-            new Uint8Array(auth_data.encryption_key),
-          ),
-          hash: await SHA256(
-            link.url.trim(),
-            new Uint8Array(auth_data.encryption_key),
-          ),
-          is_pinned: link.is_pinned,
-          pin_title_aes: link.pin_title
-            ? await AES.encrypt(
-                link.pin_title,
-                new Uint8Array(auth_data.encryption_key),
-              )
-            : undefined,
-          open_snapshot: link.open_snapshot,
-          favicon_aes: link.favicon
-            ? await AES.encrypt(
-                link.favicon,
-                new Uint8Array(auth_data.encryption_key),
-              )
-            : undefined,
-          reader_data_aes: link.reader_data
-            ? await AES.encrypt(
-                btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
-                new Uint8Array(auth_data.encryption_key),
-              )
-            : undefined,
-        })
+    if (params.links) {
+      for (const link of params.links) {
+        if (!link.url.trim().length) continue
+        const hash = await SHA256(
+          link.url.trim(),
+          new Uint8Array(auth_data.encryption_key),
+        )
+        if (links.find((l) => l.hash == hash)) continue
+        const domain = get_domain_from_url(link.url)
+        if (link.is_public) {
+          links.push({
+            is_public: true,
+            url: link.url.trim(),
+            hash: await SHA256(
+              link.url.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
+            site_path: link.is_public ? link.site_path : undefined,
+            is_pinned: link.is_pinned,
+            pin_title: link.pin_title,
+            open_snapshot: link.open_snapshot,
+            reader_data: link.reader_data,
+            favicon_aes: link.favicon
+              ? await AES.encrypt(
+                  link.favicon,
+                  new Uint8Array(auth_data.encryption_key),
+                )
+              : undefined,
+          })
+        } else {
+          links.push({
+            is_public: false,
+            url_aes: await AES.encrypt(
+              link.url.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
+            site_aes: await AES.encrypt(
+              link.site_path ? `${domain}/${link.site_path}` : domain,
+              new Uint8Array(auth_data.encryption_key),
+            ),
+            hash: await SHA256(
+              link.url.trim(),
+              new Uint8Array(auth_data.encryption_key),
+            ),
+            is_pinned: link.is_pinned,
+            pin_title_aes: link.pin_title
+              ? await AES.encrypt(
+                  link.pin_title,
+                  new Uint8Array(auth_data.encryption_key),
+                )
+              : undefined,
+            open_snapshot: link.open_snapshot,
+            favicon_aes: link.favicon
+              ? await AES.encrypt(
+                  link.favicon,
+                  new Uint8Array(auth_data.encryption_key),
+                )
+              : undefined,
+            reader_data_aes: link.reader_data
+              ? await AES.encrypt(
+                  btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
+                  new Uint8Array(auth_data.encryption_key),
+                )
+              : undefined,
+          })
+        }
       }
     }
 
@@ -220,7 +224,7 @@ const message_handler = async (event: MessageEvent) => {
       stars: params.stars || undefined,
       is_unsorted:
         params.is_unsorted === undefined
-          ? params.tags.length
+          ? params.tags && params.tags.length
             ? false
             : undefined
           : params.is_unsorted,

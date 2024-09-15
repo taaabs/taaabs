@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
   if (request.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
-    await AssistantFixes.on_load(current_url)
+    await AssistantsFixes.on_load(current_url)
 
     // Roughly a little below 4k tokens
     const max_length = 15000
@@ -38,7 +38,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             prompt = request.prompt
           }
 
-          await AssistantFixes.before_prompt_part({
+          await AssistantsFixes.before_prompt_part({
             url: current_url,
             iteration: i,
           })
@@ -65,7 +65,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       })
     }
 
-    AssistantFixes.scroll_to_response()
+    AssistantsFixes.scroll_to_response()
   }
 })
 
@@ -126,39 +126,17 @@ const send_prompt = async (params: {
       }
     }
 
-    let active_element = document.activeElement as HTMLElement
+    const input_element = AssistantsFixes.get_input_element(params.url)
 
-    // Some chatbots have their inputs not focused by default.
-    // Some applies to only smartphone widths: huggingchat, mistral, you
-    let selector = ''
-    if (params.url == chatbot_urls.huggingchat) {
-      selector =
-        '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom'
-    } else if (params.url == chatbot_urls.deepseek) {
-      selector = '#chat-input'
-    } else if (params.url == chatbot_urls.claude) {
-      selector = 'div[contenteditable=true] > p'
-    } else if (params.url == chatbot_urls.mistral) {
-      selector = 'textarea[placeholder="Ask anything!"]'
-    } else if (params.url == chatbot_urls.you) {
-      selector = 'textarea[name="query"]'
-    } else if (params.url == chatbot_urls.librechat) {
-      selector = 'textarea[placeholder*="Message "]'
-    }
-
-    if (selector) {
-      active_element = document.querySelector(selector) as HTMLElement
-    }
-
-    if (active_element && active_element.isContentEditable) {
+    if (input_element && input_element.isContentEditable) {
       // Handle contenteditable element
-      active_element.innerText = params.prompt
+      input_element.innerText = params.prompt
 
       // Dispatch input and change events
-      active_element.dispatchEvent(new Event('input', { bubbles: true }))
-      active_element.dispatchEvent(new Event('change', { bubbles: true }))
+      input_element.dispatchEvent(new Event('input', { bubbles: true }))
+      input_element.dispatchEvent(new Event('change', { bubbles: true }))
 
-      const form = active_element.closest('form')
+      const form = input_element.closest('form')
 
       if (params.url == chatbot_urls.claude) {
         setTimeout(() => {
@@ -182,19 +160,19 @@ const send_prompt = async (params: {
           which: 13,
           bubbles: true,
         })
-        active_element.dispatchEvent(enter_event)
+        input_element.dispatchEvent(enter_event)
         params.resolve?.(true)
       }
-    } else if (active_element && active_element.tagName == 'TEXTAREA') {
+    } else if (input_element && input_element.tagName == 'TEXTAREA') {
       // Handle input or textarea element
-      ;(active_element as HTMLTextAreaElement).value = params.prompt
+      ;(input_element as HTMLTextAreaElement).value = params.prompt
 
       // Dispatch input and change events
-      active_element.dispatchEvent(new Event('input', { bubbles: true }))
-      active_element.dispatchEvent(new Event('change', { bubbles: true }))
+      input_element.dispatchEvent(new Event('input', { bubbles: true }))
+      input_element.dispatchEvent(new Event('change', { bubbles: true }))
 
-      const form = active_element.closest('form')
-      if (form) {
+      const form = input_element.closest('form')
+      if (form && params.url != chatbot_urls.copilot) {
         setTimeout(() => {
           form.requestSubmit()
           params.resolve?.(true)
@@ -221,7 +199,7 @@ const send_prompt = async (params: {
           which: 13,
           bubbles: true,
         })
-        active_element.dispatchEvent(enter_event)
+        input_element.dispatchEvent(enter_event)
         params.resolve?.(true)
       }
     } else {
@@ -232,7 +210,7 @@ const send_prompt = async (params: {
   }
 }
 
-namespace AssistantFixes {
+namespace AssistantsFixes {
   export const on_load = async (url: string) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
@@ -248,6 +226,12 @@ namespace AssistantFixes {
         setTimeout(() => {
           resolve(true)
         }, 1000)
+      })
+    } else if (url == chatbot_urls.perplexity) {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
       })
     } else if (url == chatbot_urls.deepseek) {
       // We first check if "Context cleared" element is there, meaning previous
@@ -273,6 +257,34 @@ namespace AssistantFixes {
           }
         }, 500)
       })
+    }
+  }
+
+  export const get_input_element = (chatbot_url: string) => {
+    if (chatbot_url == chatbot_urls.copilot) {
+      return (document as any)
+        .querySelector('cib-serp')
+        .shadowRoot.querySelector('cib-action-bar')
+        .shadowRoot.querySelector('cib-text-input').shadowRoot.activeElement
+    } else {
+      let active_element = document.activeElement as HTMLElement
+
+      const chatbot_selectors = {
+        [chatbot_urls.huggingchat]:
+          '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
+        [chatbot_urls.deepseek]: '#chat-input',
+        [chatbot_urls.claude]: 'div[contenteditable=true] > p',
+        [chatbot_urls.mistral]: 'textarea[placeholder="Ask anything!"]',
+        [chatbot_urls.you]: 'textarea[name="query"]',
+        [chatbot_urls.librechat]: 'textarea[placeholder*="Message "]',
+      }
+
+      const selector = chatbot_selectors[chatbot_url]
+      if (selector) {
+        active_element = document.querySelector(selector) as HTMLElement
+      }
+
+      return active_element
     }
   }
 
@@ -305,6 +317,10 @@ namespace AssistantFixes {
       scroll_container_selector =
         '[class^="ChatMessagesScrollWrapper_scrollableContainerWrapper"]'
       response_container_selector = '[class^="Message_leftSideMessageBubble"]'
+    } else if (document.location.href.startsWith(chatbot_urls.perplexity)) {
+      scroll_container_selector = 'html'
+      response_container_selector =
+        'div.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50:nth-of-type(2) > .dark\\:bg-backgroundDark.bg-background.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.justify-between.items-center.flex'
     }
 
     const try_scrolling = () => {
