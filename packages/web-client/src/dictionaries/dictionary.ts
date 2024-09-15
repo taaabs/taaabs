@@ -47,6 +47,10 @@ export type Dictionary = {
     something_went_wrong: string
     welcome: {
       heading: { text: string; subtext: string }
+      switch_form: {
+        text: string
+        link_label: string
+      }
     }
     log_in: {
       heading: { text: string; subtext: string }

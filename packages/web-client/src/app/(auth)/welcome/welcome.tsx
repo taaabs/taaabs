@@ -1,6 +1,7 @@
 'use client'
 
 import { Auth as Ui_auth_templates_Auth } from '@web-ui/components/auth/templates/auth'
+import { WelcomeForm as Ui_auth_templates_WelcomeForm } from '@web-ui/components/auth/templates/welcome-form'
 import { browser_storage } from '@/constants/browser-storage'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { GuestAuthDataLocalStorage } from '@/providers/AuthProvider'
@@ -67,17 +68,17 @@ export const Welcome = (props: { dictionary: Dictionary }) => {
         subtext: props.dictionary.auth.welcome.heading.subtext,
       }}
       recaptcha_privacy_notice={props.dictionary.auth.recaptcha_privacy_notice}
+      switch_form={{
+        text: props.dictionary.auth.welcome.switch_form.text,
+        link_href: '/login',
+        link_label: props.dictionary.auth.welcome.switch_form.link_label,
+      }}
     >
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'flex-end',
-          justifyContent: 'flex-end',
-          height: '100%'
-        }}
-      >
-        <UiButton on_click={guest_sign_up}>Continue as guest</UiButton>
-      </div>
+      <Ui_auth_templates_WelcomeForm
+        slot_submit_button={
+          <UiButton on_click={guest_sign_up}>Continue as guest</UiButton>
+        }
+      />
     </Ui_auth_templates_Auth>
   )
 }

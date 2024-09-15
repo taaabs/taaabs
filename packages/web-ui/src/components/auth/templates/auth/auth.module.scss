@@ -102,6 +102,7 @@
     }
     @include at992 {
       align-items: flex-end;
+      margin-top: var(--padding-40px);
     }
     > div > a {
       color: var(--accent-color);

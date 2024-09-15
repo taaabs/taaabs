@@ -1,24 +1,27 @@
 import { chatbot_urls } from '@/constants/chatbot-urls'
 
+// Roughly a little below 4k tokens
+const PROMPT_MAX_LENGTH = 15000
+
 chrome.runtime.onMessage.addListener(async (request, _, __) => {
   if (request.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
-    await AssistantsFixes.on_load(current_url)
-
-    // Roughly a little below 4k tokens
-    const max_length = 15000
+    await AssistantBugMitigation.on_load(current_url)
 
     // Send prompt
     if (
-      request.plain_text.length > max_length &&
+      request.plain_text.length > PROMPT_MAX_LENGTH &&
       (current_url == chatbot_urls.chatgpt ||
         current_url == chatbot_urls.gemini ||
-        current_url == chatbot_urls.huggingchat)
+        current_url == chatbot_urls.huggingchat ||
+        current_url == chatbot_urls.perplexity)
     ) {
       let prompt_parts = []
-      for (let i = 0; i < request.plain_text.length; i += max_length) {
-        prompt_parts.push(request.plain_text.substring(i, i + max_length))
+      for (let i = 0; i < request.plain_text.length; i += PROMPT_MAX_LENGTH) {
+        prompt_parts.push(
+          request.plain_text.substring(i, i + PROMPT_MAX_LENGTH),
+        )
       }
 
       // Send each part sequentially in a non blocking way
@@ -38,7 +41,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
             prompt = request.prompt
           }
 
-          await AssistantsFixes.before_prompt_part({
+          await AssistantBugMitigation.before_prompt_part_submitted({
             url: current_url,
             iteration: i,
           })
@@ -65,7 +68,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       })
     }
 
-    AssistantsFixes.scroll_to_response()
+    AssistantBugMitigation.scroll_to_response()
   }
 })
 
@@ -120,13 +123,30 @@ const send_prompt = async (params: {
               }, 1000)
             })
           }
+        } else if (params.url == chatbot_urls.perplexity) {
+          const message = document.querySelector(
+            '.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.border-b.pb-lg',
+          )
+          const related_section = document.querySelector(
+            '.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.fade-in.animate-in.ease-out.duration-1000.pt-lg.border-t.mt-lg',
+          )
+          const answering_state = message && !related_section
+          if (answering_state) {
+            throw new Error()
+          } else if (!params.is_first_part) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 1000)
+            })
+          }
         }
       } catch {
         throw new Error()
       }
     }
 
-    const input_element = AssistantsFixes.get_input_element(params.url)
+    const input_element = AssistantBugMitigation.get_input_element(params.url)
 
     if (input_element && input_element.isContentEditable) {
       // Handle contenteditable element
@@ -210,7 +230,7 @@ const send_prompt = async (params: {
   }
 }
 
-namespace AssistantsFixes {
+namespace AssistantBugMitigation {
   export const on_load = async (url: string) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
@@ -288,16 +308,24 @@ namespace AssistantsFixes {
     }
   }
 
-  export const before_prompt_part = async (params: {
+  export const before_prompt_part_submitted = async (params: {
     url: string
     iteration: number
   }) => {
-    if (params.url == chatbot_urls.gemini && params.iteration > 0) {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 1000)
-      })
+    if (params.iteration > 0) {
+      if (params.url == chatbot_urls.gemini) {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 1000)
+        })
+      } else if (params.url == chatbot_urls.perplexity) {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 2000)
+        })
+      }
     }
   }
 

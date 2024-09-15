@@ -87,9 +87,13 @@ export const dictionary: Dictionary = {
     ),
     welcome: {
       heading: {
-        text: 'Witaj!',
+        text: 'Cześć!',
         subtext:
-          'Wygląda na to, że to Twoja pierwsza wizyta. Zaczniemy od utworzenia konta gościa jednym kliknięciem, abyś mógł zobaczyć wszystkie funkcje w akcji.',
+          'Zacznijmy od utworzenia profilu gościa, abyś mógł zobaczyć wszystkie funkcje w akcji.',
+      },
+      switch_form: {
+        text: 'Masz już konto?',
+        link_label: 'Zaloguj się',
       },
     },
     log_in: {

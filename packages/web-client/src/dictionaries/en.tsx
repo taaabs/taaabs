@@ -83,7 +83,11 @@ const dictionary: Dictionary = {
       heading: {
         text: 'Welcome!',
         subtext:
-          "It seems it's your first visit. Let's get started by creating a one-click guest account so you can see all the features in action.",
+          "Let's begin by creating a guest profile and explore all the features in action.",
+      },
+      switch_form: {
+        text: 'Already a member?',
+        link_label: 'Login',
       },
     },
     log_in: {
