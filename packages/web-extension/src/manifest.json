@@ -43,6 +43,11 @@
     },
     {
       "matches": ["<all_urls>"],
+      "js": ["inject-floating-button-content-script.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["<all_urls>"],
       "js": ["inject-popup-content-script.js"]
     },
     {

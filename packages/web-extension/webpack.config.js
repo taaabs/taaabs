@@ -48,6 +48,8 @@ module.exports = (_, argv) => {
         './src/content-scripts/get-auth-data-content-script.ts',
       'get-theme-content-script':
         './src/content-scripts/get-theme-content-script.ts',
+      'inject-floating-button-content-script':
+        './src/content-scripts/inject-floating-button-content-script.ts',
       'inject-popup-content-script':
         './src/content-scripts/inject-popup-content-script.ts',
       'send-chatbot-prompt-content-script':

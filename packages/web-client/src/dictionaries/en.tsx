@@ -49,8 +49,8 @@ const dictionary: Dictionary = {
           bullets: [
             '1000 bookmarks',
             'Unlimited tags',
-            'Permanent reader',
             'Full-text search',
+            'Permanent reader',
           ],
           button_label: 'Start for free',
         },
@@ -60,9 +60,9 @@ const dictionary: Dictionary = {
           bullets_heading: 'Level-up with:',
           bullets: [
             'Unlimited bookmarks',
-            'Highlights (coming soon)',
-            'Priority support',
-            'Claim shorter username',
+            'Highlights',
+            'Related links',
+            'Shorter username',
           ],
           button_label: 'Subscribe now',
         },

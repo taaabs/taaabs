@@ -27,6 +27,9 @@ export const delete_bookmark = () => {
           currentWindow: true,
         })
         update_icon(current_tab.id!, false)
+
+        // Notify content scripts about the bookmark deletion
+        chrome.tabs.sendMessage(current_tab.id!, { action: 'bookmark-deleted' })
       })()
       return true
     }

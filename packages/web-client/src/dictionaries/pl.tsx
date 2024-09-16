@@ -55,7 +55,7 @@ export const dictionary: Dictionary = {
           bullets: [
             '1000 zakładek',
             'Nielimitowane tagi',
-            'Kopie tekstowe',
+            'Kopie w trybie czytania',
             'Wyszukiwanie pełnotekstowe',
           ],
           button_label: 'Rozpocznij za darmo',
@@ -67,7 +67,7 @@ export const dictionary: Dictionary = {
           bullets: [
             'Nielimitowane zakładki',
             'Oznaczanie fragmentów',
-            'Sortuj ostatnio odwiedzone',
+            'Dodatkowe linki',
             'Przejmij krótszy nick',
           ],
           button_label: 'Subskrybuj',

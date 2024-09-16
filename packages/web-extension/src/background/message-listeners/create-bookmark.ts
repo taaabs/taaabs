@@ -25,6 +25,9 @@ export const create_bookmark = () => {
           currentWindow: true,
         })
         update_icon(current_tab.id!, true)
+
+        // Notify content scripts about the bookmark creation
+        chrome.tabs.sendMessage(current_tab.id!, { action: 'bookmark-created' })
       })()
       return true
     }

@@ -116,6 +116,7 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   } else {
     const cleaned_url = url_cleaner(url)
     const is_saved = await get_url_is_saved(cleaned_url)
+    chrome.tabs.sendMessage(tab_id, { action: 'url-saved-status', is_saved });
     update_icon(tab_id, is_saved)
   }
 }

@@ -40,6 +40,10 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
     }
   } else if (request.action == 'close-popup') {
     close_popup()
+  } else if (request.action == 'bookmark-created') {
+    window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
+  } else if (request.action == 'bookmark-deleted') {
+    window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
   }
 })
 
@@ -304,7 +308,6 @@ const message_handler = async (event: MessageEvent) => {
       },
     )
   } else if (action == 'set-attach-this-page-checkbox-state') {
-    console.debug(event.data.is_checked)
     chrome.storage.local.set({
       is_attach_this_page_checkbox_checked: event.data.is_checked,
     })
