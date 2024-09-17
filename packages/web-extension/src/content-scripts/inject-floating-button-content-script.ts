@@ -14,7 +14,6 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
     fetch(chrome.runtime.getURL('floating-button.html'))
       .then((response) => response.text())
       .then((html) => {
-        // Timeout ensures styles are loaded
         // Element will be there on SPA app navigation
         document.querySelector<HTMLElement>('#taaabs.floating-button')?.remove()
         document.body.insertAdjacentHTML('beforeend', html)
