@@ -3,7 +3,7 @@
   "name": "Taaabs Web Clipper, clip any page to ChatGPT!",
   "short_name": "taaabs",
   "description": "Supercharge your web research with Taaabs.",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "homepage_url": "https://taaabs.com/library",
   "action": {
     "default_icon": {
