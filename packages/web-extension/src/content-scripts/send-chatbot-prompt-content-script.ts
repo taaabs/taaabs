@@ -33,13 +33,11 @@ chrome.runtime.onMessage.addListener(async (message, _, __) => {
           if (i < prompt_parts.length - 1) {
             prompt = `Text (part ${i + 1} of ${
               prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with "Processing part ${
-              i + 1
-            } of ${prompt_parts.length}...".`
+            }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with OK gesture emoji.`
           } else if (i == prompt_parts.length - 1) {
             prompt = `Text (part ${i + 1} of ${
               prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with "Waiting for instructions...".`
+            }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with OK gesture emoji.`
           } else {
             prompt = message.prompt
           }

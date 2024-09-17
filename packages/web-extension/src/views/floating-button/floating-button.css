@@ -19,7 +19,6 @@
   z-index: 9999999;
   transition: all var(--transition-duration-150ms)
     var(--transition-timing-function);
-  opacity: 0.5;
   > svg {
     position: absolute;
     top: 0;
@@ -29,7 +28,6 @@
 
 #taaabs.floating-button:hover {
   transform: translateX(-3px);
-  opacity: 1;
 }
 
 #taaabs .saved-indicator {

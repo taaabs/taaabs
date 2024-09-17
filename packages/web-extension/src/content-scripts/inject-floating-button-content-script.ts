@@ -18,11 +18,20 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
         document.querySelector<HTMLElement>('#taaabs.floating-button')?.remove()
         document.body.insertAdjacentHTML('beforeend', html)
         update_button_status(message.is_saved)
-        document
-          .querySelector<HTMLElement>('#taaabs.floating-button')!
-          .addEventListener('click', () => {
-            chrome.runtime.sendMessage({ action: 'open-popup' })
-          })
+        const button = document.querySelector<HTMLElement>(
+          '#taaabs.floating-button',
+        )
+        button!.addEventListener('click', () => {
+          chrome.runtime.sendMessage({ action: 'open-popup' })
+        })
+        document.addEventListener('fullscreenchange', () => {
+          if (!button) return
+          if (document.fullscreenElement) {
+            button.style.display = 'none'
+          } else {
+            button.style.display = 'block'
+          }
+        })
       })
   } else if (message.action == 'bookmark-created') {
     update_button_status(true)
@@ -36,7 +45,5 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
     document.querySelector<HTMLElement>(
       '#taaabs.floating-button',
     )!.style.transform = ''
-  } else if (message.action == 'close-popup') {
-    document.querySelector<HTMLElement>('#taaabs.floating-button')?.remove()
   }
 })

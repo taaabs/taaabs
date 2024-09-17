@@ -112,6 +112,11 @@ const handle_tab_change = async (tab_id: number, url: string) => {
         },
       )
     }, 1000)
+    await ensure_tab_is_ready(tab_id)
+    chrome.tabs.sendMessage(tab_id, {
+      action: 'url-saved-status',
+      is_saved: false,
+    })
   } else if (
     url.startsWith('chrome://') ||
     url.startsWith('chrome-extension://')
