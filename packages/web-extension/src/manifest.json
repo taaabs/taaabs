@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Taaabs Web Clipper, clip any page to ChatGPT!",
   "short_name": "taaabs",
-  "description": "Supercharge your web research with Taaabs",
+  "description": "Supercharge your web research with Taaabs.",
   "version": "0.1.8",
   "homepage_url": "https://taaabs.com/library",
   "action": {
@@ -20,7 +20,12 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["popup.js", "popup.css"],
+      "resources": [
+        "popup.js",
+        "popup.css",
+        "floating-button.html",
+        "floating-button.css"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
@@ -43,8 +48,7 @@
     },
     {
       "matches": ["<all_urls>"],
-      "js": ["inject-floating-button-content-script.js"],
-      "run_at": "document_start"
+      "js": ["inject-floating-button-content-script.js"]
     },
     {
       "matches": ["<all_urls>"],

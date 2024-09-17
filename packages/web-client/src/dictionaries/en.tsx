@@ -61,7 +61,7 @@ const dictionary: Dictionary = {
           bullets: [
             'Unlimited bookmarks',
             'Highlights',
-            'Related links',
+            'Secondary links',
             'Shorter username',
           ],
           button_label: 'Subscribe now',

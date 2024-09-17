@@ -1,50 +1,43 @@
-const button = document.createElement('div')
-button.id = 'taaabs-floating-button'
-button.innerHTML = '🔖'
-button.style.cssText = `
-    position: fixed;
-    top: 100px;
-    right: 0;
-    width: 50px;
-    height: 50px;
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    color: white;
-    font-size: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    z-index: 9999999;
-  `
-
-button.addEventListener('click', () => {
-  chrome.runtime.sendMessage({ action: 'open-popup' })
-})
-
 const update_button_status = (isSaved: boolean) => {
-  button.style.opacity = '1'
-  button.style.backgroundColor = isSaved ? '#0DCA3B' : '#808080'
+  document.querySelector<HTMLElement>(
+    '#taaabs .saved-indicator',
+  )!.style.opacity = isSaved ? '1' : '0'
 }
+
+const link = document.createElement('link')
+link.rel = 'stylesheet'
+link.href = chrome.runtime.getURL('floating-button.css')
+document.head.appendChild(link)
 
 chrome.runtime.onMessage.addListener((message, _, __) => {
   if (message.action == 'url-saved-status') {
-    // Wait for the DOM
-    const append_child = () => {
-      document.body.appendChild(button)
-      update_button_status(message.is_saved)
-    }
-    try {
-      append_child()
-    } catch {
-      setTimeout(() => {
-        append_child()
-      }, 10)
-    }
+    fetch(chrome.runtime.getURL('floating-button.html'))
+      .then((response) => response.text())
+      .then((html) => {
+        // Timeout ensures styles are loaded
+        // Element will be there on SPA app navigation
+        document.querySelector<HTMLElement>('#taaabs.floating-button')?.remove()
+        document.body.insertAdjacentHTML('beforeend', html)
+        update_button_status(message.is_saved)
+        document
+          .querySelector<HTMLElement>('#taaabs.floating-button')!
+          .addEventListener('click', () => {
+            chrome.runtime.sendMessage({ action: 'open-popup' })
+          })
+      })
   } else if (message.action == 'bookmark-created') {
     update_button_status(true)
   } else if (message.action == 'bookmark-deleted') {
     update_button_status(false)
+  } else if (message.action == 'popup-opened') {
+    document.querySelector<HTMLElement>(
+      '#taaabs.floating-button',
+    )!.style.transform = 'translateX(100%)'
+  } else if (message.action == 'popup-closed') {
+    document.querySelector<HTMLElement>(
+      '#taaabs.floating-button',
+    )!.style.transform = ''
+  } else if (message.action == 'close-popup') {
+    document.querySelector<HTMLElement>('#taaabs.floating-button')?.remove()
   }
 })

@@ -18,11 +18,12 @@ if (!document.querySelector(`link[href="${link_href}"]`)) {
   document.head.appendChild(link)
 }
 
-chrome.runtime.onMessage.addListener((request, _, __) => {
-  if (request.action == 'inject-popup') {
+chrome.runtime.onMessage.addListener((message, _, __) => {
+  if (message.action == 'inject-popup') {
     const popup = document.getElementById('root-taaabs-popup')
     if (!popup) {
       inject_popup()
+      chrome.runtime.sendMessage({ action: 'popup-opened' })
     } else {
       // Toggle visibility
       if (
@@ -32,17 +33,19 @@ chrome.runtime.onMessage.addListener((request, _, __) => {
         popup.style.opacity = '0'
         popup.style.pointerEvents = 'none'
         console.debug('Popup visibility has been hidden')
+        chrome.runtime.sendMessage({ action: 'popup-closed' })
       } else {
         popup.style.opacity = '1'
         popup.style.pointerEvents = 'all'
         console.debug('Popup visibility has been restored')
+        chrome.runtime.sendMessage({ action: 'popup-opened' })
       }
     }
-  } else if (request.action == 'close-popup') {
+  } else if (message.action == 'close-popup') {
     close_popup()
-  } else if (request.action == 'bookmark-created') {
+  } else if (message.action == 'bookmark-created') {
     window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
-  } else if (request.action == 'bookmark-deleted') {
+  } else if (message.action == 'bookmark-deleted') {
     window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
   }
 })
@@ -331,6 +334,7 @@ const click_outside_handler = (event: MouseEvent) => {
   if (popup && !popup.contains(event.target as Node)) {
     popup.style.opacity = '0'
     popup.style.pointerEvents = 'none'
+    chrome.runtime.sendMessage({ action: 'popup-closed' })
   }
 }
 

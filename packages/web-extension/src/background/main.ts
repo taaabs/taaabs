@@ -3,6 +3,7 @@ import { get_url_is_saved } from './get-url-is-saved'
 import { update_icon } from './helpers/update-icon'
 import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
+import { ensure_tab_is_ready } from './helpers/ensure-tab-is-ready'
 
 chrome.action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 chrome.action.setBadgeTextColor({ color: 'white' })
@@ -95,7 +96,10 @@ const handle_tab_change = async (tab_id: number, url: string) => {
                 ?.theme != response.theme
             ) {
               chrome.storage.local.set({ theme: response.theme }, () => {
-                console.debug('[handle_tab_change] Theme saved.', response.theme)
+                console.debug(
+                  '[handle_tab_change] Theme saved.',
+                  response.theme,
+                )
               })
             }
           } else if (
@@ -116,8 +120,9 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   } else {
     const cleaned_url = url_cleaner(url)
     const is_saved = await get_url_is_saved(cleaned_url)
-    chrome.tabs.sendMessage(tab_id, { action: 'url-saved-status', is_saved });
     update_icon(tab_id, is_saved)
+    await ensure_tab_is_ready(tab_id)
+    chrome.tabs.sendMessage(tab_id, { action: 'url-saved-status', is_saved })
   }
 }
 
@@ -147,5 +152,6 @@ chrome.webNavigation.onCommitted.addListener((details) => {
 })
 
 chrome.runtime.onInstalled.addListener(() => {
+  chrome.storage.local.set({ use_custom_new_tab: true })
   chrome.tabs.create({ url: 'https://taaabs.com/library' })
 })

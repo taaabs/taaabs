@@ -67,7 +67,7 @@ export const dictionary: Dictionary = {
           bullets: [
             'Nielimitowane zakładki',
             'Oznaczanie fragmentów',
-            'Dodatkowe linki',
+            'Powiązane odnośniki',
             'Przejmij krótszy nick',
           ],
           button_label: 'Subskrybuj',

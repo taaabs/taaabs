@@ -27,6 +27,14 @@ module.exports = (_, argv) => {
         { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
         { from: 'src/views/options/options.js', to: 'options.js' },
+        {
+          from: 'src/views/floating-button/floating-button.html',
+          to: 'floating-button.html',
+        },
+        {
+          from: 'src/views/floating-button/floating-button.css',
+          to: 'floating-button.css',
+        },
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
       ],
     }),
