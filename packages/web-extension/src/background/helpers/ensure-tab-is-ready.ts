@@ -8,8 +8,6 @@ export const ensure_tab_is_ready = (tab_id: number): Promise<void> => {
           return
         }
 
-        console.log(tab)
-
         if (tab.status == 'complete') {
           resolve()
         } else {

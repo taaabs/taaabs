@@ -3,24 +3,25 @@ import { chatbot_urls } from '@/constants/chatbot-urls'
 // Roughly a little below 4k tokens
 const PROMPT_MAX_LENGTH = 15000
 
-chrome.runtime.onMessage.addListener(async (request, _, __) => {
-  if (request.action == 'send-chatbot-prompt') {
+chrome.runtime.onMessage.addListener(async (message, _, __) => {
+  if (message.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
     await AssistantBugMitigation.on_load(current_url)
 
     // Send prompt
     if (
-      request.plain_text.length > PROMPT_MAX_LENGTH &&
+      message.plain_text &&
+      message.plain_text.length > PROMPT_MAX_LENGTH &&
       (current_url == chatbot_urls.chatgpt ||
         current_url == chatbot_urls.gemini ||
         current_url == chatbot_urls.huggingchat ||
         current_url == chatbot_urls.perplexity)
     ) {
       let prompt_parts = []
-      for (let i = 0; i < request.plain_text.length; i += PROMPT_MAX_LENGTH) {
+      for (let i = 0; i < message.plain_text.length; i += PROMPT_MAX_LENGTH) {
         prompt_parts.push(
-          request.plain_text.substring(i, i + PROMPT_MAX_LENGTH),
+          message.plain_text.substring(i, i + PROMPT_MAX_LENGTH),
         )
       }
 
@@ -40,7 +41,7 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
               prompt_parts.length
             }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with "Waiting for instructions...".`
           } else {
-            prompt = request.prompt
+            prompt = message.prompt
           }
 
           await AssistantBugMitigation.before_prompt_part_submitted({
@@ -60,9 +61,10 @@ chrome.runtime.onMessage.addListener(async (request, _, __) => {
       }
       send_prompt_sequentially()
     } else {
-      const prompt = request.plain_text
-        ? `${request.prompt}\n\n---\n\n${request.plain_text}`
-        : request.prompt
+      const prompt = message.plain_text
+        ? `${message.prompt}\n\n---\n\n${message.plain_text}`
+        : message.prompt
+
       send_prompt({
         url: current_url,
         prompt,
