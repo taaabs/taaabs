@@ -183,10 +183,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       )
     }
 
-    const is_public =
-      props.bookmark?.is_public != is_bookmark_public
-        ? is_bookmark_public
-        : undefined
     const title =
       props.bookmark?.title && !form_data.title
         ? ''
@@ -207,7 +203,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
-      is_public,
+      is_public: is_bookmark_public,
       title,
       note,
       links: await Promise.all(
