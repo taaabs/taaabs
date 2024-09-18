@@ -22,6 +22,7 @@ import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
 import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as Ui_app_library_TagsInput } from '@web-ui/components/app/library/TagsInput'
 import { Checkbox as Ui_Checkbox } from '@web-ui/components/Checkbox'
+import equal from 'fast-deep-equal'
 
 const cover_max_width = 1200
 
@@ -182,17 +183,33 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       )
     }
 
+    const is_public =
+      props.bookmark?.is_public != is_bookmark_public
+        ? is_bookmark_public
+        : undefined
+    const title =
+      props.bookmark?.title && !form_data.title
+        ? ''
+        : props.bookmark?.title != form_data.title?.trim()
+        ? form_data.title?.trim()
+        : undefined
+    const note =
+      props.bookmark?.note && !form_data.note
+        ? ''
+        : props.bookmark?.note != form_data.note?.trim()
+        ? form_data.note?.trim()
+        : undefined
+
+    const new_tags = tags.map((tag) => ({
+      name: tag.name,
+      is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
+    }))
+
     const bookmark: UpsertBookmark_Params = {
       bookmark_id: props.bookmark?.id,
-      is_public: is_bookmark_public || false,
-      title: form_data.title?.trim() || undefined,
-      note: form_data.note?.trim() || undefined,
-      created_at: props.bookmark?.created_at
-        ? new Date(props.bookmark.created_at)
-        : undefined,
-      stars: props.bookmark?.stars,
-      is_archived: props.is_archived || false,
-      is_unsorted: props.bookmark?.is_unsorted,
+      is_public,
+      title,
+      note,
       links: await Promise.all(
         links.map(async (link) => {
           const current_link = props.bookmark?.links.find(
@@ -206,12 +223,15 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             props.bookmark_autofill.links.length &&
             props.bookmark_autofill.links[0].url == link.url
               ? clipboard_data
-                ? HtmlParser.parse({
-                    url: link.url,
-                    html: clipboard_data.html,
-                  })?.reader_data
+                ? (
+                    await HtmlParser.parse({
+                      url: link.url,
+                      html: clipboard_data.html,
+                    })
+                  )?.reader_data
                 : undefined
               : undefined
+
           return {
             url: link.url,
             is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional
@@ -224,14 +244,15 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           }
         }),
       ),
-      tags: tags.map((tag) => ({
-        name: tag.name,
-        is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
-      })),
-      cover: og_image?.split(',')[1],
-      cover_hash: props.bookmark?.cover_hash,
-      has_cover_aes: props.bookmark?.has_cover_aes,
-      blurhash: og_image_blurhash || props.bookmark?.blurhash,
+      tags: equal(
+        new_tags,
+        props.bookmark?.tags.map((tag) => ({
+          name: tag.name,
+          is_public: tag.is_public,
+        })),
+      )
+        ? undefined
+        : new_tags,
     }
     props.on_submit(bookmark)
   }

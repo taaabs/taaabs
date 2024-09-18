@@ -252,14 +252,15 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       }
     }
 
-    const title = params.title?.substring(
-      0,
-      system_values.bookmark.title.max_length,
-    )
-    const note = params.note?.substring(
-      0,
-      system_values.bookmark.note.max_length,
-    )
+    const title =
+      params.title == ''
+        ? null
+        : params.title?.substring(0, system_values.bookmark.title.max_length)
+
+    const note =
+      params.note == ''
+        ? null
+        : params.note?.substring(0, system_values.bookmark.note.max_length)
 
     const body: CreateBookmark_Dto.Body = {
       created_at: params.created_at?.toISOString(),
@@ -267,12 +268,12 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       title_aes:
         !params.is_public && title
           ? await AES.encrypt(title, encryption_key)
-          : undefined,
+          : title,
       note: params.is_public ? note : undefined,
       note_aes:
         !params.is_public && note
           ? await AES.encrypt(note, encryption_key)
-          : undefined,
+          : note,
       is_public: params.is_public || undefined,
       is_archived: params.is_archived || undefined,
       stars: params.stars,
