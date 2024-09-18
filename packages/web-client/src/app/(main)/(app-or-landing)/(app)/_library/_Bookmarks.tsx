@@ -555,11 +555,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         )
       }
       window.onbeforeunload = null
-      // Timeout is there so updated by cache_data values of search_data_awaits_caching,
-      // archived_search_data_awaits_caching can be seen by "beforeunload" event handler.
-      setTimeout(() => {
-        location.href = url
-      }, 0)
+      location.href = url
     }
 
     const handle_mouse_up = async () => {
