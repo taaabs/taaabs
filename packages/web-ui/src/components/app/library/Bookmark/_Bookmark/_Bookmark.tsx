@@ -585,6 +585,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             props.locale == 'en' ? 'MMMM DD, YYYY' : 'D MMMM YYYY',
           )
 
+    const title = props.title
+      ? props.highlights
+        ? highlight_text(props.title, props.highlights)
+        : props.title
+      : '(Untitled)'
+
+    const primary_url = get_primary_url(props.links, props.created_at)
+
     return (
       <div
         className={cn(
@@ -651,7 +659,18 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           >
             {props.has_cover && (
               <div className={styles.bookmark__card__cover}>
-                <div className={styles.bookmark__card__cover__image}>
+                <div
+                  className={styles.bookmark__card__cover__image}
+                  onClick={
+                    primary_url
+                      ? () => {
+                          set_recently_visited_link_idx(0)
+                          props.on_link_click(primary_url)
+                        }
+                      : undefined
+                  }
+                  style={{ cursor: primary_url ? 'pointer' : undefined }}
+                >
                   {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
                   {props.cover ? (
                     <>
@@ -738,11 +757,35 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 </div>
               )}
               {props.title ? (
-                <div className={styles.bookmark__card__title__text}>
-                  {props.highlights
-                    ? highlight_text(props.title, props.highlights)
-                    : props.title}
-                </div>
+                primary_url ? (
+                  <a
+                    href={primary_url}
+                    className={styles.bookmark__card__title__text}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      e.preventDefault()
+                      set_recently_visited_link_idx(0)
+                      props.on_link_click(primary_url)
+                    }}
+                    onAuxClick={props.on_link_middle_click}
+                  >
+                    {title}
+                  </a>
+                ) : (
+                  <div className={styles.bookmark__card__title__text}>
+                    {title}
+                  </div>
+                )
+              ) : primary_url ? (
+                <a
+                  href={primary_url}
+                  className={cn(
+                    styles.bookmark__card__title__text,
+                    styles['bookmark__card__title__text--untitled'],
+                  )}
+                >
+                  {title}
+                </a>
               ) : (
                 <div
                   className={cn(
@@ -750,7 +793,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     styles['bookmark__card__title__text--untitled'],
                   )}
                 >
-                  (Untitled)
+                  {title}
                 </div>
               )}
             </div>
@@ -1151,4 +1194,17 @@ const is_video_url = (url: string): boolean => {
   return (
     youtube_regex.test(url) || pornhub_regex.test(url) || twitch_regex.test(url)
   )
+}
+
+const get_primary_url = (
+  links: _Bookmark.Props['links'],
+  created_at: Date,
+): string | undefined => {
+  if (links.length > 0) {
+    const first_link = links[0]
+    return first_link.open_snapshot
+      ? url_to_wayback({ date: created_at, url: first_link.url })
+      : first_link.url
+  }
+  return undefined
 }

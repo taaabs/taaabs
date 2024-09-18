@@ -195,6 +195,11 @@
           font-style: italic;
           font-weight: var(--font-weight-inter-medium);
         }
+        &:is(a) {
+          @include hover {
+            @include text-decoration-underlinie-thin;
+          }
+        }
       }
       &__menu {
         @include to992 {
