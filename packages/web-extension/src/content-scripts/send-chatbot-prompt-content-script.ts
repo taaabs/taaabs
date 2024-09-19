@@ -1,146 +1,65 @@
 import { chatbot_urls } from '@/constants/chatbot-urls'
 
-// Roughly a little below 4k tokens
-const PROMPT_MAX_LENGTH = 15000
+// 15k characters is roughly a little below 4k tokens
+const PART_MAX_LENGTH = {
+  [chatbot_urls.chatgpt]: 15000,
+  [chatbot_urls.gemini]: 30000,
+  [chatbot_urls.perplexity]: 38000,
+}
 
-chrome.runtime.onMessage.addListener(async (message, _, __) => {
-  if (message.action == 'send-chatbot-prompt') {
-    const current_url = window.location.href
-
-    await AssistantBugMitigation.on_load(current_url)
-
-    // Send prompt
-    if (
-      message.plain_text &&
-      message.plain_text.length > PROMPT_MAX_LENGTH &&
-      (current_url == chatbot_urls.chatgpt ||
-        current_url == chatbot_urls.gemini ||
-        current_url == chatbot_urls.huggingchat ||
-        current_url == chatbot_urls.perplexity)
-    ) {
-      let prompt_parts = []
-      for (let i = 0; i < message.plain_text.length; i += PROMPT_MAX_LENGTH) {
-        prompt_parts.push(
-          message.plain_text.substring(i, i + PROMPT_MAX_LENGTH),
-        )
-      }
-
-      // Send each part sequentially in a non blocking way
-      const send_prompt_sequentially = async () => {
-        for (let i = 0; i <= prompt_parts.length; i++) {
-          const part = prompt_parts[i]
-          let prompt = ''
-          if (i < prompt_parts.length - 1) {
-            prompt = `Text (part ${i + 1} of ${
-              prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with OK gesture emoji.`
-          } else if (i == prompt_parts.length - 1) {
-            prompt = `Text (part ${i + 1} of ${
-              prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with OK gesture emoji.`
-          } else {
-            prompt = message.prompt
-          }
-
-          await AssistantBugMitigation.before_prompt_part_submitted({
-            url: current_url,
-            iteration: i,
-          })
-
-          await new Promise((resolve) =>
-            send_prompt({
-              url: current_url,
-              prompt,
-              is_first_part: i == 0,
-              resolve,
-            }),
-          )
-        }
-      }
-      send_prompt_sequentially()
-    } else {
-      const prompt = message.plain_text
-        ? `${message.prompt}\n\n---\n\n${message.plain_text}`
-        : message.prompt
-
-      send_prompt({
-        url: current_url,
-        prompt,
-        is_first_part: true,
-      })
-    }
-
-    AssistantBugMitigation.scroll_to_response()
-  }
-})
+// Total length limits for each chatbot
+const TOTAL_LENGTH_LIMIT = {
+  [chatbot_urls.chatgpt]: 50000,
+  [chatbot_urls.gemini]: 1000000,
+  [chatbot_urls.perplexity]: 100000,
+}
 
 const send_prompt = async (params: {
   url: string
   prompt: string
-  is_first_part: boolean
+  iteration?: number
   resolve?: (val: boolean) => void
 }) => {
   try {
-    // This describes when we don't want to send new prompt just yet.
-    // Is intended for multi-part prompts.
+    // For multi-part prompts, check if chatbot has finished generating responses
     if (params.resolve) {
       try {
         if (params.url == chatbot_urls.chatgpt) {
-          if (
-            document.querySelector('button[data-testid="stop-button"]') ||
-            (document.querySelector(
-              'button[data-testid="send-button"][disabled]',
-            ) &&
-              document.querySelector('div#prompt-textarea')?.textContent)
-          ) {
+          const answers = document.querySelectorAll(
+            'button[data-testid="voice-play-turn-action-button"]',
+          )
+          if (params.iteration && params.iteration != answers.length) {
             throw new Error()
-          } else if (!params.is_first_part) {
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(true)
-              }, 1000)
-            })
           }
         } else if (params.url == chatbot_urls.gemini) {
-          if (document.querySelector('svg[alt="skip response icon"]')) {
+          const answers = document.querySelectorAll('message-actions')
+          if (params.iteration && params.iteration != answers.length) {
             throw new Error()
-          } else if (!params.is_first_part) {
+          } else if (params.iteration) {
+            // Slowish animations must finish, otherwise it hangs
             await new Promise((resolve) => {
               setTimeout(() => {
                 resolve(true)
-              }, 1000)
-            })
-          }
-        } else if (params.url == chatbot_urls.huggingchat) {
-          if (
-            document.querySelector(
-              '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
-            )
-          ) {
-            throw new Error()
-          } else if (!params.is_first_part) {
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(true)
-              }, 1000)
+              }, 200)
             })
           }
         } else if (params.url == chatbot_urls.perplexity) {
-          const message = document.querySelector(
-            '.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.border-b.pb-lg',
-          )
-          const related_section = document.querySelector(
-            '.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.fade-in.animate-in.ease-out.duration-1000.pt-lg.border-t.mt-lg',
-          )
-          const answering_state = message && !related_section
-          if (answering_state) {
+          const answers = document.querySelectorAll('svg[data-icon="repeat"]')
+          if (params.iteration && params.iteration != answers.length) {
             throw new Error()
-          } else if (!params.is_first_part) {
+          } else if (params.iteration) {
             await new Promise((resolve) => {
               setTimeout(() => {
                 resolve(true)
-              }, 1000)
+              }, 0)
             })
+          }
+        } else if (params.url == chatbot_urls.mistral) {
+          const answers = document.querySelectorAll(
+            'button[aria-label="Rewrite"]',
+          )
+          if (params.iteration && params.iteration != answers.length) {
+            throw new Error()
           }
         }
       } catch {
@@ -232,6 +151,101 @@ const send_prompt = async (params: {
   }
 }
 
+chrome.runtime.onMessage.addListener(async (message, _, __) => {
+  if (message.action == 'send-chatbot-prompt') {
+    const current_url = window.location.href
+
+    await AssistantBugMitigation.on_load(current_url)
+
+    // Send prompt
+    if (
+      message.plain_text &&
+      message.plain_text.length > PART_MAX_LENGTH[current_url] &&
+      (current_url == chatbot_urls.chatgpt ||
+        current_url == chatbot_urls.gemini ||
+        current_url == chatbot_urls.perplexity)
+    ) {
+      let prompt_parts = []
+      let total_length = 0
+      let start_index = 0
+
+      while (start_index < message.plain_text.length) {
+        let part_length = Math.min(
+          PART_MAX_LENGTH[current_url],
+          message.plain_text.length - start_index,
+        )
+
+        // Adjust part length to ensure total length does not exceed limit
+        if (total_length + part_length > TOTAL_LENGTH_LIMIT[current_url]) {
+          part_length = TOTAL_LENGTH_LIMIT[current_url] - total_length
+        }
+
+        if (part_length <= 0) break
+
+        const part = message.plain_text.substring(
+          start_index,
+          start_index + part_length,
+        )
+        prompt_parts.push(part)
+        total_length += part_length
+        start_index += part_length
+      }
+
+      // Send each part sequentially in a non blocking way
+      const send_prompt_sequentially = async () => {
+        for (let i = 0; i <= prompt_parts.length; i++) {
+          const part = prompt_parts[i]
+          let prompt = ''
+          if (i < prompt_parts.length - 1) {
+            prompt = `Text (part ${i + 1} of ${
+              prompt_parts.length
+            }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with a single "OK gesture" emoji.`
+          } else if (i == prompt_parts.length - 1) {
+            prompt = `Text (part ${i + 1} of ${
+              prompt_parts.length
+            }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with a single "OK gesture" emoji.`
+          } else {
+            prompt = message.prompt
+          }
+
+          await new Promise((resolve) =>
+            send_prompt({
+              url: current_url,
+              prompt,
+              iteration: i,
+              resolve,
+            }),
+          )
+        }
+      }
+      send_prompt_sequentially()
+    } else if (current_url == chatbot_urls.mistral) {
+      const prompt = message.plain_text
+        ? `${message.prompt}\n\n---\n\n${message.plain_text.substring(
+            0,
+            100000,
+          )}\n\n---\n\n`
+        : message.prompt
+
+      send_prompt({
+        url: current_url,
+        prompt,
+      })
+    } else {
+      const prompt = message.plain_text
+        ? `${message.prompt}\n\n---\n\n${message.plain_text}\n\n---\n\n`
+        : message.prompt
+
+      send_prompt({
+        url: current_url,
+        prompt,
+      })
+    }
+
+    AssistantBugMitigation.scroll_to_response()
+  }
+})
+
 namespace AssistantBugMitigation {
   export const on_load = async (url: string) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
@@ -247,7 +261,7 @@ namespace AssistantBugMitigation {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 1000)
+        }, 1500)
       })
     } else if (url == chatbot_urls.perplexity) {
       await new Promise((resolve) => {
@@ -307,27 +321,6 @@ namespace AssistantBugMitigation {
       }
 
       return active_element
-    }
-  }
-
-  export const before_prompt_part_submitted = async (params: {
-    url: string
-    iteration: number
-  }) => {
-    if (params.iteration > 0) {
-      if (params.url == chatbot_urls.gemini) {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 1000)
-        })
-      } else if (params.url == chatbot_urls.perplexity) {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 2000)
-        })
-      }
     }
   }
 
