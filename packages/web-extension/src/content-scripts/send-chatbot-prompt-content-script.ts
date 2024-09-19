@@ -224,7 +224,7 @@ chrome.runtime.onMessage.addListener(async (message, _, __) => {
         ? `${message.prompt}\n\n---\n\n${message.plain_text.substring(
             0,
             100000,
-          )}\n\n---\n\n`
+          )}\n\n---`
         : message.prompt
 
       send_prompt({
@@ -233,7 +233,7 @@ chrome.runtime.onMessage.addListener(async (message, _, __) => {
       })
     } else {
       const prompt = message.plain_text
-        ? `${message.prompt}\n\n---\n\n${message.plain_text}\n\n---\n\n`
+        ? `${message.prompt}\n\n---\n\n${message.plain_text}\n\n---`
         : message.prompt
 
       send_prompt({
