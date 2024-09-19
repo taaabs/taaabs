@@ -40,7 +40,7 @@ const send_prompt = async (params: {
             await new Promise((resolve) => {
               setTimeout(() => {
                 resolve(true)
-              }, 200)
+              }, 500)
             })
           }
         } else if (params.url == chatbot_urls.perplexity) {

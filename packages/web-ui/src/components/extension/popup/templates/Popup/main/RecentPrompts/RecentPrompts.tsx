@@ -15,8 +15,8 @@ export namespace RecentPrompts {
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   return (
     <div
-      className={cn(styles.container, {
-        [styles['container--disabled']]: props.is_disabled,
+      className={cn(styles.prompts, {
+        [styles['prompts--disabled']]: props.is_disabled,
       })}
     >
       {props.recent_prompts.map((prompt) => (

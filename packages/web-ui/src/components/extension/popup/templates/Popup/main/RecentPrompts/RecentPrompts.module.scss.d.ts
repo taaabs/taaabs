@@ -1,6 +1,6 @@
 declare const styles: {
-  readonly "container": string;
-  readonly "container--disabled": string;
+  readonly "prompts": string;
+  readonly "prompts--disabled": string;
 };
 export = styles;
 

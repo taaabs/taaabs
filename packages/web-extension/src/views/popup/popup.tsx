@@ -8,7 +8,6 @@ import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
-import { AssistantSelector as Ui_extension_popup_templates_Popup_main_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/AssistantSelector'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
 import { useEffect, useRef, useState } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
@@ -170,53 +169,6 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
-        <Ui_extension_popup_templates_Popup_main_AssistantSelector
-          label="Assistant:"
-          selected_chatbot_name={selected_chatbot_name}
-          chatbots={[
-            { name: 'chatgpt', display_name: 'ChatGPT' },
-            { name: 'gemini', display_name: 'Gemini' },
-            { name: 'copilot', display_name: 'Copilot' },
-            { name: 'perplexity', display_name: 'Perplexity' },
-            { name: 'claude', display_name: 'Claude' },
-            { name: 'grok', display_name: 'Grok' },
-            { name: 'meta', display_name: 'Meta AI' },
-            { name: 'huggingchat', display_name: 'HuggingChat' },
-            { name: 'aistudio', display_name: 'AI Studio' },
-            { name: 'mistral', display_name: 'Mistral' },
-            { name: 'cohere', display_name: 'Cohere' },
-            { name: 'deepseek', display_name: 'DeepSeek' },
-            { name: 'notdiamond', display_name: 'Not Diamond' },
-            { name: 'librechat', display_name: 'LibreChat' },
-            { name: 'phind', display_name: 'Phind' },
-            { name: 'poe', display_name: 'Poe' },
-            { name: 'you', display_name: 'You' },
-            ...(custom_chatbot_url
-              ? [{ name: 'custom', display_name: 'Custom' }]
-              : []),
-          ]}
-          on_chatbot_change={(chatbot_name) => {
-            set_selected_chatbot_name(chatbot_name)
-          }}
-        />
-
-        <Ui_extension_popup_templates_Popup_main_Separator />
-
-        <Ui_extension_popup_templates_Popup_main_RecentPrompts
-          recent_prompts={[
-            { id: 'summarize', name: 'Summarize' },
-            { id: 'layman', name: 'Simplify' },
-            { id: 'study-guide', name: 'Study guide' },
-            { id: 'ask-question', name: 'Answer questions' },
-            { id: 'quiz-me', name: 'Quiz me' },
-            { id: 'eli5', name: 'ELI5' },
-          ]}
-          on_recent_prompt_click={handle_quick_prompt_click}
-          is_disabled={!parsed_html && !text_selection_hook.selected_text}
-        />
-
-        <Ui_extension_popup_templates_Popup_main_Separator />
-
         <Ui_extension_popup_templates_Popup_main_PromptField
           value={prompt_field_value}
           on_focus={() => {
@@ -225,7 +177,7 @@ export const Popup: React.FC = () => {
           on_change={(value) => {
             set_prompt_field_value(value)
           }}
-          on_submit={async () => {
+          on_submit={() => {
             if (!prompt_field_value) return
 
             if (attach_this_page_checkbox_hook.is_checked && parsed_html) {
@@ -262,6 +214,32 @@ export const Popup: React.FC = () => {
           is_history_enabled={
             !!parsed_html || !!text_selection_hook.selected_text
           }
+          selected_chatbot_name={selected_chatbot_name}
+          chatbots={[
+            { name: 'chatgpt', display_name: 'ChatGPT' },
+            { name: 'gemini', display_name: 'Gemini' },
+            { name: 'copilot', display_name: 'Copilot' },
+            { name: 'perplexity', display_name: 'Perplexity' },
+            { name: 'claude', display_name: 'Claude' },
+            { name: 'grok', display_name: 'Grok' },
+            { name: 'meta', display_name: 'Meta AI' },
+            { name: 'huggingchat', display_name: 'HuggingChat' },
+            { name: 'aistudio', display_name: 'AI Studio' },
+            { name: 'mistral', display_name: 'Mistral' },
+            { name: 'cohere', display_name: 'Cohere' },
+            { name: 'deepseek', display_name: 'DeepSeek' },
+            { name: 'notdiamond', display_name: 'Not Diamond' },
+            { name: 'librechat', display_name: 'LibreChat' },
+            { name: 'phind', display_name: 'Phind' },
+            { name: 'poe', display_name: 'Poe' },
+            { name: 'you', display_name: 'You' },
+            ...(custom_chatbot_url
+              ? [{ name: 'custom', display_name: 'Custom' }]
+              : []),
+          ]}
+          on_chatbot_change={(chatbot_name) => {
+            set_selected_chatbot_name(chatbot_name)
+          }}
           translations={{
             heading: 'New chat',
             placeholder: 'Ask anything!',
@@ -270,6 +248,21 @@ export const Popup: React.FC = () => {
               : 'Attach this page',
             active_input_placeholder_suffix: '(⇅ for history)',
           }}
+        />
+
+        <Ui_extension_popup_templates_Popup_main_Separator />
+
+        <Ui_extension_popup_templates_Popup_main_RecentPrompts
+          recent_prompts={[
+            { id: 'summarize', name: 'Summarize' },
+            { id: 'layman', name: 'Simplify' },
+            { id: 'study-guide', name: 'Study guide' },
+            { id: 'ask-question', name: 'Answer questions' },
+            { id: 'quiz-me', name: 'Quiz me' },
+            { id: 'eli5', name: 'ELI5' },
+          ]}
+          on_recent_prompt_click={handle_quick_prompt_click}
+          is_disabled={!parsed_html && !text_selection_hook.selected_text}
         />
       </Ui_extension_popup_templates_Popup>
     </div>

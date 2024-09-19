@@ -8,8 +8,25 @@
   flex-direction: column;
   gap: var(--padding-10px);
 }
-.header {
-  color: var(--text-color-dimmed);
+.chatbots {
+  display: flex;
+  span {
+    color: var(--text-color-dimmed);
+  }
+  select {
+    flex: 1;
+    font-family: unset;
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    font-size: var(--font-size-15px);
+    color: var(--text-color-normal);
+    cursor: pointer;
+    &:focus-visible {
+      outline: none;
+    }
+  }
 }
 
 .field {

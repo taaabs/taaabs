@@ -5,13 +5,15 @@ export const use_text_selection = () => {
   const [selected_text, set_selected_text] = useState<string>()
   const [is_popup_open, set_is_popup_open] = useState<boolean>()
 
-  useUpdateEffect(() => {
+  useEffect(() => {
     if (!is_popup_open) {
       set_selected_text('')
-    } 
+    }
   }, [is_popup_open])
 
   useEffect(() => {
+    if (is_popup_open) return
+
     const handle_selection_change = () => {
       const selection = window.getSelection()?.toString()
       if (selection) {
@@ -23,7 +25,7 @@ export const use_text_selection = () => {
     return () => {
       document.removeEventListener('selectionchange', handle_selection_change)
     }
-  }, [])
+  }, [is_popup_open])
 
   useEffect(() => {
     const handle_message = (event: MessageEvent) => {
