@@ -41,9 +41,11 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
     document.querySelector<HTMLElement>(
       '#taaabs.floating-button',
     )!.style.transform = 'translateX(100%)'
+    window.postMessage({ action: 'popup-opened' }, '*')
   } else if (message.action == 'popup-closed') {
     document.querySelector<HTMLElement>(
       '#taaabs.floating-button',
     )!.style.transform = ''
+    window.postMessage({ action: 'popup-closed' }, '*')
   }
 })

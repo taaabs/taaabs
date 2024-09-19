@@ -25,6 +25,7 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_attach_this_page_checkbox } from './hooks/use-attach-this-page-checkbox'
+import { use_text_selection } from './hooks/use-text-selection'
 
 export const Popup: React.FC = () => {
   const saved_check_hook = use_saved_check()
@@ -38,6 +39,7 @@ export const Popup: React.FC = () => {
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const getting_parsed_html_started_at_timestamp = useRef<number>()
   const [parsed_html, set_parsed_html] = useState<HtmlParser.ParsedResult>()
+  const text_selection_hook = use_text_selection()
 
   let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
@@ -132,7 +134,7 @@ export const Popup: React.FC = () => {
       action: 'send-chatbot-prompt',
       chatbot_url,
       prompt: get_chatbot_prompt_by_id(prompt_id),
-      plain_text: parsed_html.plain_text,
+      plain_text: text_selection_hook.selected_text || parsed_html.plain_text,
     })
   }
 
@@ -210,7 +212,7 @@ export const Popup: React.FC = () => {
             { id: 'eli5', name: 'ELI5' },
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
-          is_disabled={!parsed_html}
+          is_disabled={!parsed_html && !text_selection_hook.selected_text}
         />
 
         <Ui_extension_popup_templates_Popup_main_Separator />
@@ -220,8 +222,8 @@ export const Popup: React.FC = () => {
           on_focus={() => {
             prompts_history_hook.restore_prompts_history()
           }}
-          on_change={(prompt) => {
-            set_prompt_field_value(prompt)
+          on_change={(value) => {
+            set_prompt_field_value(value)
           }}
           on_submit={async () => {
             if (!prompt_field_value) return
@@ -242,12 +244,12 @@ export const Popup: React.FC = () => {
               prompt: prompt_field_value,
               plain_text:
                 attach_this_page_checkbox_hook.is_checked &&
-                parsed_html?.plain_text,
+                (text_selection_hook.selected_text || parsed_html?.plain_text),
             })
-
-            set_prompt_field_value('')
           }}
-          is_include_content_checkbox_disabled={!parsed_html}
+          is_include_content_checkbox_disabled={
+            !parsed_html && !text_selection_hook.selected_text
+          }
           is_include_content_selected={
             attach_this_page_checkbox_hook.is_checked || false
           }
@@ -257,11 +259,15 @@ export const Popup: React.FC = () => {
             )
           }}
           prompts_history={[...prompts_history_hook.prompts_history].reverse()}
-          is_history_enabled={!!parsed_html}
+          is_history_enabled={
+            !!parsed_html || !!text_selection_hook.selected_text
+          }
           translations={{
             heading: 'New chat',
             placeholder: 'Ask anything!',
-            include_page_content: 'Attach this page',
+            include_page_content: text_selection_hook.selected_text
+              ? 'Attach selected text'
+              : 'Attach this page',
             active_input_placeholder_suffix: '(⇅ for history)',
           }}
         />
