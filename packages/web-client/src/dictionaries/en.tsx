@@ -13,11 +13,11 @@ const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'Supercharge',
-          second_line: 'your web research',
+          first_line: 'Unlock the joy',
+          second_line: 'of your web research',
         },
         subheading:
-          'Privately save and organize with tags any page. Assist learning with top AI chatbots.',
+          'Privately save and organize any link with tags. Assist learning with top AI chatbots.',
         claim_username: 'Claim username',
         username: 'username',
         ticks: [
@@ -25,7 +25,10 @@ const dictionary: Dictionary = {
             <strong>End-to-end encryption</strong> of private bookmarks
           </>,
           <>
-            <strong>Generous free tier</strong> with pro features
+            <strong>Source-available</strong> client apps
+          </>,
+          <>
+            <strong>Free tier</strong> with pro features
           </>,
         ],
         incentive: '30 seconds or less',
@@ -60,9 +63,10 @@ const dictionary: Dictionary = {
           bullets_heading: 'Level-up with:',
           bullets: [
             'Unlimited bookmarks',
-            'Highlights',
+            // 'Highlights',
             'Secondary links',
-            'Shorter username',
+            'Premium support',
+            'Claim shorter username',
           ],
           button_label: 'Subscribe now',
         },

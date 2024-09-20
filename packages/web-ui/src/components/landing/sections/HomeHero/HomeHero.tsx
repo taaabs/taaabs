@@ -39,21 +39,39 @@ export const HomeHero: React.FC<HomeHero.Props> = (props) => {
                 <div
                   className={styles['top__heading__first-line__hugging-face']}
                   onClick={(e) => {
-                    confetti({
-                      particleCount: 60,
-                      startVelocity: 20,
-                      spread: 200,
-                      gravity: 0.3,
-                      ticks: 30,
-                      decay: 0.91,
-                      scalar: 1.4,
-                      shapes: ['square'],
-                      colors: ['#FFD21E', '#1d4ed8'],
-                      origin: {
-                        x: e.clientX / window.innerWidth,
-                        y: e.clientY / window.innerHeight,
-                      },
-                    })
+                    if (window.innerWidth < 992) {
+                      confetti({
+                        particleCount: 60,
+                        startVelocity: 15,
+                        spread: 200,
+                        gravity: 0.3,
+                        ticks: 30,
+                        decay: 0.91,
+                        scalar: 1.2,
+                        shapes: ['square'],
+                        colors: ['#FFD21E', '#1d4ed8'],
+                        origin: {
+                          x: e.clientX / window.innerWidth,
+                          y: e.clientY / window.innerHeight,
+                        },
+                      })
+                    } else {
+                      confetti({
+                        particleCount: 60,
+                        startVelocity: 25,
+                        spread: 200,
+                        gravity: 0.3,
+                        ticks: 30,
+                        decay: 0.91,
+                        scalar: 2,
+                        shapes: ['square'],
+                        colors: ['#FFD21E', '#1d4ed8'],
+                        origin: {
+                          x: e.clientX / window.innerWidth,
+                          y: e.clientY / window.innerHeight,
+                        },
+                      })
+                    }
                   }}
                 >
                   <UiIcon variant="HUGGING_FACE" />

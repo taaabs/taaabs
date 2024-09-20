@@ -13,11 +13,11 @@ export const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'Najżyczliwsze',
-          second_line: 'zakładki społecznościowe',
+          first_line: 'Przywróć radość',
+          second_line: 'z surfowania Internetu',
         },
         subheading:
-          'Łatwa i bezpieczna strona do uporządkowania, udostępniania i odkrywania zakładek',
+          'Prywatnie zapisuj i organizuj odnośniki tagami. Wspieraj się najlepszymi chatbotami AI.',
         claim_username: 'Przejmij nick',
         username: 'nick',
         ticks: [
@@ -25,7 +25,10 @@ export const dictionary: Dictionary = {
             <strong>Szyfrowanie end-to-end</strong> prywatnych zakładek
           </>,
           <>
-            <strong>Używaj za darmo</strong> tak długo, jak chcesz
+            <strong>Publiczny kod źródłowy</strong> klientów
+          </>,
+          <>
+            <strong>Darmowy plan</strong> z "Pro" funkcjami
           </>,
         ],
         incentive: '30 sekund lub mniej',

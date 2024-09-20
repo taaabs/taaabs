@@ -73,7 +73,7 @@
     flex-direction: column;
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-extra-bold);
-    font-size: clamp(32px, 9vw, 44px);
+    font-size: clamp(32px, 7.8vw, 44px);
     @include to992 {
       align-items: flex-start;
     }
@@ -82,7 +82,7 @@
       font-size: clamp(65px, 5.6vw, 90px);
     }
     &__first-line {
-      --emoji-width: clamp(40px, 11vw, 52px);
+      --emoji-width: clamp(45px, 11vw, 60px);
       @include at992 {
         --emoji-width: clamp(80px, 6.9vw, 110px);
       }
@@ -102,7 +102,7 @@
   }
   &__subheading {
     font-weight: var(--font-weight-inter-medium);
-    font-size: clamp(17px, 4.5vw, 22px);
+    font-size: clamp(17px, 4.2vw, 20px);
     @include to992 {
       max-width: 90%;
     }
@@ -209,6 +209,9 @@
     align-items: flex-start;
     gap: 12px;
     @include at768 {
+      font-size: var(--font-size-17px);
+    }
+    @include at1200 {
       font-size: var(--font-size-18px);
     }
     @include at1380 {
