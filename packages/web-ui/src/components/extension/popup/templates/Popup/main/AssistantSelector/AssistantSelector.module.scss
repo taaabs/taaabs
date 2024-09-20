@@ -2,38 +2,23 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-10px)
-    var(--padding-16px);
   display: flex;
-  flex-direction: column;
-  gap: var(--padding-8px);
-}
-.heading {
-  position: relative;
+  padding: var(--padding-12px) var(--padding-16px);
   span {
     color: var(--text-color-dimmed);
   }
   select {
-    position: absolute;
-    right: 0;
+    flex: 1;
     font-family: unset;
     background: none;
     border: none;
     margin: 0;
-    border-right: 2px solid transparent;
     font-size: var(--font-size-15px);
     color: var(--text-color-normal);
     border-radius: var(--border-radius-8px);
-    top: 50%;
-    transform: translateY(-50%);
     cursor: pointer;
     &:focus-visible {
       outline: none;
     }
   }
-}
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--padding-10px);
 }

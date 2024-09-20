@@ -7,6 +7,7 @@ import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/com
 import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web-ui/components/extension/popup/templates/Popup/main/Actions'
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
+import { AssistantSelector as Ui_extension_popup_templates_Popup_main_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/AssistantSelector'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
 import { useEffect, useRef, useState } from 'react'
@@ -169,53 +170,7 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
-        <Ui_extension_popup_templates_Popup_main_PromptField
-          value={prompt_field_value}
-          on_focus={() => {
-            prompts_history_hook.restore_prompts_history()
-          }}
-          on_change={(value) => {
-            set_prompt_field_value(value)
-          }}
-          on_submit={() => {
-            if (!prompt_field_value) return
-
-            if (attach_this_page_checkbox_hook.is_checked && parsed_html) {
-              // Update prompts history
-              const new_prompts_history = prompts_history_hook.prompts_history
-                .filter((item) => item != prompt_field_value)
-                .slice(-50, prompts_history_hook.prompts_history.length)
-
-              new_prompts_history.push(prompt_field_value)
-              prompts_history_hook.set_prompts_history(new_prompts_history)
-            }
-
-            send_message({
-              action: 'send-chatbot-prompt',
-              chatbot_url,
-              prompt: prompt_field_value,
-              plain_text:
-                attach_this_page_checkbox_hook.is_checked &&
-                (text_selection_hook.selected_text || parsed_html?.plain_text),
-            })
-          }}
-          selected_text={text_selection_hook.selected_text}
-          on_clear_selected_text_click={() => {}}
-          is_include_content_checkbox_disabled={
-            !parsed_html && !text_selection_hook.selected_text
-          }
-          is_include_content_selected={
-            attach_this_page_checkbox_hook.is_checked || false
-          }
-          on_include_content_click={() => {
-            attach_this_page_checkbox_hook.set_is_checked(
-              !attach_this_page_checkbox_hook.is_checked,
-            )
-          }}
-          prompts_history={[...prompts_history_hook.prompts_history].reverse()}
-          is_history_enabled={
-            !!parsed_html || !!text_selection_hook.selected_text
-          }
+        <Ui_extension_popup_templates_Popup_main_AssistantSelector
           selected_chatbot_name={selected_chatbot_name}
           chatbots={[
             { name: 'chatgpt', display_name: 'ChatGPT' },
@@ -243,12 +198,7 @@ export const Popup: React.FC = () => {
             set_selected_chatbot_name(chatbot_name)
           }}
           translations={{
-            heading: 'New chat',
-            placeholder: 'Ask anything!',
-            include_page_content: text_selection_hook.selected_text
-              ? 'Attach selected text'
-              : 'Attach this page',
-            active_input_placeholder_suffix: '(⇅ for history)',
+            heading: 'Assistant:',
           }}
         />
 
@@ -265,6 +215,73 @@ export const Popup: React.FC = () => {
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
           is_disabled={!parsed_html && !text_selection_hook.selected_text}
+          translations={{
+            heading: 'Quick actions',
+          }}
+        />
+
+        <Ui_extension_popup_templates_Popup_main_Separator />
+
+        <Ui_extension_popup_templates_Popup_main_PromptField
+          value={prompt_field_value}
+          on_focus={() => {
+            prompts_history_hook.restore_prompts_history()
+          }}
+          on_change={(value) => {
+            set_prompt_field_value(value)
+          }}
+          on_submit={() => {
+            if (
+              !prompt_field_value &&
+              !(
+                attach_this_page_checkbox_hook.is_checked &&
+                text_selection_hook.selected_text
+              )
+            )
+              return
+
+            if (attach_this_page_checkbox_hook.is_checked && parsed_html) {
+              // Update prompts history
+              const new_prompts_history = prompts_history_hook.prompts_history
+                .filter((item) => item != prompt_field_value)
+                .slice(-50, prompts_history_hook.prompts_history.length)
+
+              new_prompts_history.push(prompt_field_value)
+              prompts_history_hook.set_prompts_history(new_prompts_history)
+            }
+
+            send_message({
+              action: 'send-chatbot-prompt',
+              chatbot_url,
+              prompt: prompt_field_value,
+              plain_text:
+                attach_this_page_checkbox_hook.is_checked &&
+                (text_selection_hook.selected_text || parsed_html?.plain_text),
+            })
+          }}
+          is_include_content_checkbox_disabled={
+            !parsed_html && !text_selection_hook.selected_text
+          }
+          is_include_content_selected={
+            attach_this_page_checkbox_hook.is_checked || false
+          }
+          on_include_content_click={() => {
+            attach_this_page_checkbox_hook.set_is_checked(
+              !attach_this_page_checkbox_hook.is_checked,
+            )
+          }}
+          prompts_history={[...prompts_history_hook.prompts_history].reverse()}
+          is_history_enabled={
+            !!parsed_html || !!text_selection_hook.selected_text
+          }
+          translations={{
+            heading: 'New chat',
+            placeholder: 'Ask anything!',
+            include_page_content: text_selection_hook.selected_text
+              ? 'Include selected text'
+              : 'Include this page',
+            active_input_placeholder_suffix: '(⇅ for history)',
+          }}
         />
       </Ui_extension_popup_templates_Popup>
     </div>

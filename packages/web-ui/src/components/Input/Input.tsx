@@ -18,7 +18,7 @@ export namespace Input {
     max_lines?: number
     disable_enter_new_lines?: boolean
     is_note?: boolean
-    on_focus?: () => void
+    on_focus?: (e: any) => void
     on_blur?: () => void
     on_enter_pressed?: () => void
     on_key_down?: (event: React.KeyboardEvent<any>) => void

@@ -13,11 +13,11 @@ const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'The huggiest',
-          second_line: 'social bookmarking',
+          first_line: 'Supercharge',
+          second_line: 'your web research',
         },
         subheading:
-          'Easy to use, privacy-first way to organize, share and discover web bookmarks',
+          'Privately save any page, organize with tags and get assistance from top AI chatbots',
         claim_username: 'Claim username',
         username: 'username',
         ticks: [
