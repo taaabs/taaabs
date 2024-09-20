@@ -3,6 +3,7 @@
 
 .container {
   display: flex;
+  background-color: var(--background);
   padding: var(--padding-12px) var(--padding-16px);
   span {
     color: var(--text-color-dimmed);

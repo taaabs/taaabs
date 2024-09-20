@@ -4,8 +4,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: var(--background);
+  background-color: var(--header-background);
   border-radius: var(--border-radius-30px);
   box-shadow: var(--box-shadow-long-strong);
-  overflow: hidden;
 }

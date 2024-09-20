@@ -3,6 +3,7 @@ declare const styles: {
   readonly "header": string;
   readonly "prompts": string;
   readonly "prompts--disabled": string;
+  readonly "prompts--not-available": string;
 };
 export = styles;
 

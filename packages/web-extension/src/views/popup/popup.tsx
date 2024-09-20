@@ -38,7 +38,8 @@ export const Popup: React.FC = () => {
   const attach_this_page_checkbox_hook = use_attach_this_page_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const getting_parsed_html_started_at_timestamp = useRef<number>()
-  const [parsed_html, set_parsed_html] = useState<HtmlParser.ParsedResult>()
+  const [parsed_html, set_parsed_html] =
+    useState<HtmlParser.ParsedResult | null>()
   const text_selection_hook = use_text_selection()
 
   let chatbot_url = chatbot_urls.chatgpt
@@ -74,8 +75,7 @@ export const Popup: React.FC = () => {
     const listener = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'parsed-html') {
-        const parsed_html = event.data.parsed_html as HtmlParser.ParsedResult
-        set_parsed_html(parsed_html)
+        set_parsed_html(event.data.parsed_html || null)
       }
     }
     window.addEventListener('message', listener)
@@ -215,8 +215,15 @@ export const Popup: React.FC = () => {
           ]}
           on_recent_prompt_click={handle_quick_prompt_click}
           is_disabled={!parsed_html && !text_selection_hook.selected_text}
+          is_not_available={
+            parsed_html === null && !text_selection_hook.selected_text
+          }
           translations={{
-            heading: 'Quick actions',
+            heading: `Quick actions${
+              parsed_html === null && !text_selection_hook.selected_text
+                ? ' (Text not found)'
+                : ''
+            }`,
           }}
         />
 

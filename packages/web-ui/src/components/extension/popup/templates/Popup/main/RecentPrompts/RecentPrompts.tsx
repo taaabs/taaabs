@@ -9,6 +9,7 @@ export namespace RecentPrompts {
     }[]
     on_recent_prompt_click: (prompt_id: string) => void
     is_disabled: boolean
+    is_not_available: boolean
     translations: {
       heading: string
     }
@@ -22,6 +23,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
       <div
         className={cn(styles.prompts, {
           [styles['prompts--disabled']]: props.is_disabled,
+          [styles['prompts--not-available']]: props.is_not_available,
         })}
       >
         {props.recent_prompts.map((prompt) => (

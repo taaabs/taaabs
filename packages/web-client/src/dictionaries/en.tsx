@@ -17,7 +17,7 @@ const dictionary: Dictionary = {
           second_line: 'of your web research',
         },
         subheading:
-          'Privately save and organize any link with tags. Assist learning with top AI chatbots.',
+          'Privately save any link to your personal library. Assist browsing with top AI chatbots.',
         claim_username: 'Claim username',
         username: 'username',
         ticks: [

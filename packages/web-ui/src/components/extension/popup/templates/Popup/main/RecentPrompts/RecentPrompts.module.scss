@@ -7,6 +7,7 @@
   gap: var(--padding-8px);
   padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
     var(--padding-16px);
+  background-color: var(--background);
 }
 .header {
   color: var(--text-color-dimmed);
@@ -17,9 +18,13 @@
   row-gap: var(--padding-8px);
   column-gap: var(--padding-12px);
   @include transition-150ms;
+  position: relative;
   &--disabled {
     pointer-events: none;
     opacity: var(--dimmed-opacity);
+  }
+  &--not-available {
+    opacity: 0.2;
   }
   > button {
     font-family: unset;

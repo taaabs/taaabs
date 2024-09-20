@@ -2,6 +2,7 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
+  background-color: var(--background);
   padding: var(--padding-12px) var(--padding-16px) var(--padding-10px)
     var(--padding-16px);
   display: flex;
