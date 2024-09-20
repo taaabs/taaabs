@@ -10,6 +10,8 @@ export namespace PromptField {
     on_submit: () => void
     on_change: (value: string) => void
     on_focus: () => void
+    selected_text?: string
+    on_clear_selected_text_click: () => void
     is_include_content_checkbox_disabled: boolean
     is_include_content_selected: boolean
     on_include_content_click: () => void
@@ -120,6 +122,12 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           is_checked={props.is_include_content_selected}
           is_disabled={props.is_include_content_checkbox_disabled}
         />
+
+        {props.selected_text && (
+          <div className={styles['selected-text']}>
+            {props.selected_text.substring(0, 100)}...
+          </div>
+        )}
       </div>
     </div>
   )

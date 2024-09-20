@@ -18,12 +18,24 @@ if (!document.querySelector(`link[href="${link_href}"]`)) {
   document.head.appendChild(link)
 }
 
+// Clicking on floating button clears text selection so we hold it for a short while
+let selected_text = ''
+const text_selection_handler = () => {
+  const selection = window.getSelection()?.toString() || ''
+  setTimeout(() => {
+    selected_text = selection
+  }, 500)
+}
+document.addEventListener('selectionchange', text_selection_handler)
+
 chrome.runtime.onMessage.addListener((message, _, __) => {
   if (message.action == 'inject-popup') {
     const popup = document.getElementById('root-taaabs-popup')
     if (!popup) {
       inject_popup()
       chrome.runtime.sendMessage({ action: 'popup-opened' })
+      // We no longer need to store text selection for popup intialization
+      document.removeEventListener('selectionchange', text_selection_handler)
     } else {
       // Toggle visibility
       if (
@@ -60,6 +72,14 @@ const message_handler = async (event: MessageEvent) => {
         '*',
       )
     })
+    // Initial selected text
+    window.postMessage(
+      {
+        action: 'selected-text',
+        selected_text,
+      },
+      '*',
+    )
   } else if (action == 'open-options-page') {
     chrome.runtime.sendMessage({ action: 'open-options-page' })
   } else if (action == 'send-chatbot-prompt') {

@@ -6,7 +6,7 @@
     var(--padding-16px);
   display: flex;
   flex-direction: column;
-  gap: var(--padding-10px);
+  gap: var(--padding-8px);
 }
 .chatbots {
   display: flex;
@@ -28,7 +28,6 @@
     }
   }
 }
-
 .field {
   display: flex;
   flex-direction: column;
@@ -37,4 +36,10 @@
     display: flex;
     width: 100%;
   }
+}
+.selected-text {
+  font-size: var(--font-size-13px);
+  color: var(--text-color-dimmed);
+  font-style: italic;
+  margin: -3px 0;
 }

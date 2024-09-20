@@ -1,4 +1,3 @@
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 
 export const use_text_selection = () => {
@@ -34,6 +33,9 @@ export const use_text_selection = () => {
         set_is_popup_open(true)
       } else if (event.data && event.data.action == 'popup-closed') {
         set_is_popup_open(false)
+      } else if (event.data && event.data.action == 'selected-text') {
+        // Selected text is send this way only after popup initialization
+        set_selected_text(event.data.selected_text)
       }
     }
 

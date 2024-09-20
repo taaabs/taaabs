@@ -199,6 +199,8 @@ export const Popup: React.FC = () => {
                 (text_selection_hook.selected_text || parsed_html?.plain_text),
             })
           }}
+          selected_text={text_selection_hook.selected_text}
+          on_clear_selected_text_click={() => {}}
           is_include_content_checkbox_disabled={
             !parsed_html && !text_selection_hook.selected_text
           }
