@@ -128,14 +128,15 @@ export const Popup: React.FC = () => {
   ]
 
   const handle_quick_prompt_click = async (prompt_id: string) => {
-    if (!parsed_html) return
-
-    send_message({
-      action: 'send-chatbot-prompt',
-      chatbot_url,
-      prompt: get_chatbot_prompt_by_id(prompt_id),
-      plain_text: text_selection_hook.selected_text || parsed_html.plain_text,
-    })
+    if (text_selection_hook.selected_text || parsed_html) {
+      send_message({
+        action: 'send-chatbot-prompt',
+        chatbot_url,
+        prompt: get_chatbot_prompt_by_id(prompt_id),
+        plain_text:
+          text_selection_hook.selected_text || parsed_html!.plain_text,
+      })
+    }
   }
 
   return (
