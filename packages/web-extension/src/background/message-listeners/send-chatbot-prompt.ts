@@ -79,7 +79,11 @@ export const send_chatbot_prompt = () => {
 
                 // Track window size and position changes
                 chrome.windows.onBoundsChanged.addListener((window) => {
-                  if (window.id == new_window!.id) {
+                  if (
+                    window.id == new_window!.id &&
+                    // Popup is not opened from another popup
+                    popup_width != window_width
+                  ) {
                     let position: 'left' | 'middle' | 'right' = 'middle'
                     if (window.left! < 100) {
                       position = 'left'
