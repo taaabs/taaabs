@@ -222,7 +222,7 @@ export const Popup: React.FC = () => {
           translations={{
             heading: `Quick actions${
               parsed_html === null && !text_selection_hook.selected_text
-                ? ' (text not found)'
+                ? ' (select text...)'
                 : ''
             }`,
           }}

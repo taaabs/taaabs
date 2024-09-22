@@ -2,7 +2,7 @@
   "name": "@taaabs/web-extension",
   "scripts": {
     "dev": "webpack serve --mode development",
-    "build": "webpack --mode production",
+    "build": "webpack --mode production && node create-firefox-build.js",
     "start": "webpack serve --mode development --open"
   },
   "dependencies": {
@@ -12,7 +12,8 @@
     "beautiful-react-hooks": "^5.0.2",
     "ky": "^1.5.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.15",
@@ -21,6 +22,7 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "^18.3.0",
     "@types/uuid": "^10.0.0",
+    "@types/webextension-polyfill": "^0.12.1",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "css-loader": "^6.5.1",

@@ -23,10 +23,8 @@ module.exports = (_, argv) => {
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
         { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
-        { from: 'src/views/newtab/detect-theme.js', to: 'detect-theme.js' },
         { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
-        { from: 'src/views/options/options.js', to: 'options.js' },
         {
           from: 'src/views/floating-button/floating-button.html',
           to: 'floating-button.html',
@@ -50,6 +48,8 @@ module.exports = (_, argv) => {
   return {
     entry: {
       background: './src/background/main.ts',
+      'detect-theme': './src/views/newtab/detect-theme.ts',
+      options: './src/views/options/options.ts',
       newtab: './src/views/newtab/newtab.tsx',
       popup: './src/views/popup/popup.tsx',
       'get-auth-data-content-script':
@@ -113,11 +113,11 @@ module.exports = (_, argv) => {
     optimization: {
       minimize: false,
     },
-    cache: {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename], // This makes all dependencies of this file - build dependencies
-      },
-    },
+    // cache: {
+    //   type: 'filesystem',
+    //   buildDependencies: {
+    //     config: [__filename], // This makes all dependencies of this file - build dependencies
+    //   },
+    // },
   }
 }

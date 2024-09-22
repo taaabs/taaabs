@@ -14,5 +14,9 @@
     @include hover {
       @include text-decoration-underlinie-thin;
     }
+    &:visited {
+      // Fix for instagram.com
+      color: var(--accent-color);
+    }
   }
 }

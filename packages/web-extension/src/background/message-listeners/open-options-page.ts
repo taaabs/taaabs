@@ -1,9 +1,10 @@
 import { is_message } from '@/utils/is-message'
+import browser from 'webextension-polyfill'
 
 export const open_options_page = () => {
-  chrome.runtime.onMessage.addListener((request, _, __) => {
+  browser.runtime.onMessage.addListener((request, _, __): any => {
     if (is_message(request) && request.action == 'open-options-page') {
-      chrome.runtime.openOptionsPage()
+      browser.runtime.openOptionsPage()
     }
     return false
   })

@@ -11,7 +11,7 @@
     "strictPropertyInitialization": false,
     "experimentalDecorators": true,
     "outDir": "./dist",
-    "types": ["jest", "chrome", "node"],
+    "types": ["jest", "chrome", "webextension-polyfill", "node"],
     "baseUrl": ".",
     "jsx": "react-jsx",
     "jsxImportSource": "react",

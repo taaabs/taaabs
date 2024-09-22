@@ -1,3 +1,5 @@
+import browser from 'webextension-polyfill'
+
 function detect_system_theme() {
   const darkThemeMq = window.matchMedia('(prefers-color-scheme: dark)')
   if (darkThemeMq.matches) {
@@ -8,7 +10,7 @@ function detect_system_theme() {
 }
 
 // Check storage for theme preference and apply it
-chrome.storage?.local.get('theme', (data) => {
+browser.storage.local.get('theme').then((data: any) => {
   if (data.theme) {
     document.documentElement.setAttribute('data-theme', data.theme)
   } else {

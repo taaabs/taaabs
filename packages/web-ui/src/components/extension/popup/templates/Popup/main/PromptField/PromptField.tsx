@@ -76,6 +76,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           min_lines={2}
           max_lines={8}
           disable_enter_new_lines={true}
+          autofocus={true}
           on_enter_pressed={props.on_submit}
           placeholder={
             props.translations.placeholder +

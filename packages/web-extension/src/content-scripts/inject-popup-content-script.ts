@@ -7,9 +7,11 @@ import { CreateBookmark_Dto } from '@shared/types/modules/bookmarks/create-bookm
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { HtmlParser } from '@shared/utils/html-parser'
 import pako from 'pako'
+import browser from 'webextension-polyfill'
+import { is_message } from '@/utils/is-message'
 
 // Avoid flash of unstyled content
-const link_href = chrome.runtime.getURL('popup.css')
+const link_href = browser.runtime.getURL('popup.css')
 if (!document.querySelector(`link[href="${link_href}"]`)) {
   const link = document.createElement('link')
   link.rel = 'stylesheet'
@@ -28,12 +30,12 @@ const text_selection_handler = () => {
 }
 document.addEventListener('selectionchange', text_selection_handler)
 
-chrome.runtime.onMessage.addListener((message, _, __) => {
-  if (message.action == 'inject-popup') {
+browser.runtime.onMessage.addListener((message: any, _, __): any => {
+  if (is_message(message) && message.action == 'inject-popup') {
     const popup = document.getElementById('root-taaabs-popup')
     if (!popup) {
       inject_popup()
-      chrome.runtime.sendMessage({ action: 'popup-opened' })
+      browser.runtime.sendMessage({ action: 'popup-opened' })
       // We no longer need to store text selection for popup intialization
       document.removeEventListener('selectionchange', text_selection_handler)
     } else {
@@ -45,19 +47,19 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
         popup.style.opacity = '0'
         popup.style.pointerEvents = 'none'
         console.debug('Popup visibility has been hidden')
-        chrome.runtime.sendMessage({ action: 'popup-closed' })
+        browser.runtime.sendMessage({ action: 'popup-closed' })
       } else {
         popup.style.opacity = '1'
         popup.style.pointerEvents = 'all'
         console.debug('Popup visibility has been restored')
-        chrome.runtime.sendMessage({ action: 'popup-opened' })
+        browser.runtime.sendMessage({ action: 'popup-opened' })
       }
     }
-  } else if (message.action == 'close-popup') {
+  } else if (is_message(message) && message.action == 'close-popup') {
     close_popup()
-  } else if (message.action == 'bookmark-created') {
+  } else if (is_message(message) && message.action == 'bookmark-created') {
     window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
-  } else if (message.action == 'bookmark-deleted') {
+  } else if (is_message(message) && message.action == 'bookmark-deleted') {
     window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
   }
 })
@@ -66,12 +68,14 @@ const message_handler = async (event: MessageEvent) => {
   if (event.source !== window) return
   const action = event.data.action
   if (action == 'check-url-saved') {
-    chrome.runtime.sendMessage({ action: 'check-url-saved' }, (response) => {
-      window.postMessage(
-        { action: 'url-saved-status', is_saved: response.is_saved },
-        '*',
-      )
-    })
+    browser.runtime
+      .sendMessage({ action: 'check-url-saved' })
+      .then((response: any) => {
+        window.postMessage(
+          { action: 'url-saved-status', is_saved: response.is_saved },
+          '*',
+        )
+      })
     // Initial selected text
     window.postMessage(
       {
@@ -81,9 +85,9 @@ const message_handler = async (event: MessageEvent) => {
       '*',
     )
   } else if (action == 'open-options-page') {
-    chrome.runtime.sendMessage({ action: 'open-options-page' })
+    browser.runtime.sendMessage({ action: 'open-options-page' })
   } else if (action == 'send-chatbot-prompt') {
-    chrome.runtime.sendMessage({
+    browser.runtime.sendMessage({
       action: 'send-chatbot-prompt',
       chatbot_url: event.data.chatbot_url,
       prompt: event.data.prompt,
@@ -92,9 +96,9 @@ const message_handler = async (event: MessageEvent) => {
       window_height: window.outerHeight,
     })
   } else if (action == 'get-last-used-chatbot-name') {
-    chrome.storage.sync.get(
-      'last_used_chatbot_name',
-      ({ last_used_chatbot_name }) => {
+    browser.storage.sync
+      .get('last_used_chatbot_name')
+      .then(({ last_used_chatbot_name }) => {
         window.postMessage(
           {
             action: 'last-used-chatbot-name',
@@ -102,22 +106,23 @@ const message_handler = async (event: MessageEvent) => {
           },
           '*',
         )
-      },
-    )
+      })
   } else if (action == 'set-last-used-chatbot-name') {
-    chrome.storage.sync.set({
+    browser.storage.sync.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
   } else if (action == 'get-custom-chatbot-url') {
-    chrome.storage.local.get('custom_chatbot_url', ({ custom_chatbot_url }) => {
-      window.postMessage(
-        {
-          action: 'custom-chatbot-url',
-          custom_chatbot_url,
-        },
-        '*',
-      )
-    })
+    browser.storage.local
+      .get('custom_chatbot_url')
+      .then(({ custom_chatbot_url }) => {
+        window.postMessage(
+          {
+            action: 'custom-chatbot-url',
+            custom_chatbot_url,
+          },
+          '*',
+        )
+      })
   } else if (action == 'create-bookmark') {
     // Injected code creates UpsertBookmark_Params, this content script DTO,
     // and service worker sends data over to BE because sending here attaches referer header.
@@ -271,12 +276,12 @@ const message_handler = async (event: MessageEvent) => {
           : undefined,
     }
 
-    chrome.runtime.sendMessage(
-      {
+    browser.runtime
+      .sendMessage({
         action: 'create-bookmark',
         data: body,
-      },
-      (response) => {
+      })
+      .then((response: any) => {
         window.postMessage(
           {
             action: 'created-bookmark',
@@ -285,15 +290,14 @@ const message_handler = async (event: MessageEvent) => {
           '*',
         )
         window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
-      },
-    )
+      })
   } else if (action == 'delete-bookmark') {
-    chrome.runtime.sendMessage(
-      {
+    browser.runtime
+      .sendMessage({
         action: 'delete-bookmark',
         url: event.data.url,
-      },
-      () => {
+      })
+      .then(() => {
         window.postMessage(
           {
             action: 'bookmark-deleted-successfully',
@@ -301,10 +305,9 @@ const message_handler = async (event: MessageEvent) => {
           '*',
         )
         window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
-      },
-    )
+      })
   } else if (action == 'get-prompts-history') {
-    chrome.storage.local.get('prompts_history', ({ prompts_history }) => {
+    browser.storage.local.get('prompts_history').then(({ prompts_history }) => {
       if (prompts_history) {
         window.postMessage(
           {
@@ -316,11 +319,11 @@ const message_handler = async (event: MessageEvent) => {
       }
     })
   } else if (action == 'set-prompts-history') {
-    chrome.storage.local.set({ prompts_history: event.data.prompts_history })
+    browser.storage.local.set({ prompts_history: event.data.prompts_history })
   } else if (action == 'get-attach-this-page-checkbox-state') {
-    chrome.storage.local.get(
-      'is_attach_this_page_checkbox_checked',
-      ({ is_attach_this_page_checkbox_checked }) => {
+    browser.storage.local
+      .get('is_attach_this_page_checkbox_checked')
+      .then(({ is_attach_this_page_checkbox_checked }) => {
         window.postMessage(
           {
             action: 'attach-this-page-checkbox-state',
@@ -328,10 +331,9 @@ const message_handler = async (event: MessageEvent) => {
           },
           '*',
         )
-      },
-    )
+      })
   } else if (action == 'set-attach-this-page-checkbox-state') {
-    chrome.storage.local.set({
+    browser.storage.local.set({
       is_attach_this_page_checkbox_checked: event.data.is_checked,
     })
   } else if (action == 'parse-html') {
@@ -355,7 +357,7 @@ const click_outside_handler = (event: MouseEvent) => {
   if (popup && !popup.contains(event.target as Node)) {
     popup.style.opacity = '0'
     popup.style.pointerEvents = 'none'
-    chrome.runtime.sendMessage({ action: 'popup-closed' })
+    browser.runtime.sendMessage({ action: 'popup-closed' })
   }
 }
 
@@ -374,7 +376,7 @@ const inject_popup = () => {
   document.body.appendChild(container)
 
   const script = document.createElement('script')
-  script.src = chrome.runtime.getURL('popup.js')
+  script.src = browser.runtime.getURL('popup.js')
   document.body.appendChild(script)
 
   // Add event listener to close popup when clicking outside
@@ -387,7 +389,7 @@ const inject_popup = () => {
 const close_popup = () => {
   console.debug('Removing popup from DOM.')
   document.getElementById('root-taaabs-popup')?.remove()
-  const script_src = chrome.runtime.getURL('popup.js')
+  const script_src = browser.runtime.getURL('popup.js')
   document.querySelector(`script[src="${script_src}"]`)?.remove()
   document.removeEventListener('click', click_outside_handler)
   window.removeEventListener('message', message_handler)
