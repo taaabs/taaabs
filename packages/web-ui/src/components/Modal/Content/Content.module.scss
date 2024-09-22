@@ -8,6 +8,6 @@
   padding: var(--padding-16px);
   @include at768 {
     gap: var(--padding-24px);
-    padding: var(--padding-40px);
+    padding: var(--padding-24px) var(--padding-40px);
   }
 }

@@ -1,4 +1,6 @@
 import { chatbot_urls } from '@/constants/chatbot-urls'
+import browser from 'webextension-polyfill'
+import { is_message } from '@/utils/is-message'
 
 // 15k characters is roughly a little below 4k tokens
 const PART_MAX_LENGTH = {
@@ -151,8 +153,8 @@ const send_prompt = async (params: {
   }
 }
 
-chrome.runtime.onMessage.addListener(async (message, _, __) => {
-  if (message.action == 'send-chatbot-prompt') {
+browser.runtime.onMessage.addListener(async (message, _, __) => {
+  if (is_message(message) && message.action == 'send-chatbot-prompt') {
     const current_url = window.location.href
 
     await AssistantBugMitigation.on_load(current_url)
@@ -221,10 +223,12 @@ chrome.runtime.onMessage.addListener(async (message, _, __) => {
       send_prompt_sequentially()
     } else if (current_url == chatbot_urls.mistral) {
       const prompt = message.plain_text
-        ? `${message.prompt}\n\n---\n\n${message.plain_text.substring(
+        ? `<instruction>\n${
+            message.prompt
+          }\n</instruction>\n\n<text>\n${message.plain_text.substring(
             0,
             100000,
-          )}\n\n---`
+          )}\n</text>`
         : message.prompt
 
       send_prompt({
@@ -233,7 +237,7 @@ chrome.runtime.onMessage.addListener(async (message, _, __) => {
       })
     } else {
       const prompt = message.plain_text
-        ? `${message.prompt}\n\n---\n\n${message.plain_text}\n\n---`
+        ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
         : message.prompt
 
       send_prompt({

@@ -1,5 +1,6 @@
 import { get_auth_data } from '@/helpers/get-auth-data'
 import ky from 'ky'
+import browser from 'webextension-polyfill'
 
 let ky_instance: typeof ky | null = null
 
@@ -62,17 +63,17 @@ export const get_ky_instance = () => {
                   refresh_token: refreshed_auth_data.refresh_token,
                 }
 
-                chrome.storage.local.set(
-                  {
+                // Use browser.storage.local.set instead of chrome.storage.local.set
+                browser.storage.local
+                  .set({
                     auth_data: new_auth_data,
-                  },
-                  () => {
+                  })
+                  .then(() => {
                     console.debug(
                       'New auth data has been saved:',
                       new_auth_data,
                     )
-                  },
-                )
+                  })
               }
             }
           },

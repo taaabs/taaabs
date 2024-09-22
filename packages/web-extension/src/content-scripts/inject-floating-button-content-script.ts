@@ -1,3 +1,6 @@
+import browser from 'webextension-polyfill'
+import { is_message } from '@/utils/is-message'
+
 const update_button_status = (isSaved: boolean) => {
   document.querySelector<HTMLElement>(
     '#taaabs .saved-indicator',
@@ -6,12 +9,12 @@ const update_button_status = (isSaved: boolean) => {
 
 const link = document.createElement('link')
 link.rel = 'stylesheet'
-link.href = chrome.runtime.getURL('floating-button.css')
+link.href = browser.runtime.getURL('floating-button.css')
 document.head.appendChild(link)
 
-chrome.runtime.onMessage.addListener((message, _, __) => {
-  if (message.action == 'url-saved-status') {
-    fetch(chrome.runtime.getURL('floating-button.html'))
+browser.runtime.onMessage.addListener((message: any, _, __): any => {
+  if (is_message(message) && message.action == 'url-saved-status') {
+    fetch(browser.runtime.getURL('floating-button.html'))
       .then((response) => response.text())
       .then((html) => {
         // Element will be there on SPA app navigation
@@ -22,7 +25,7 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
           '#taaabs.floating-button',
         )
         button!.addEventListener('click', () => {
-          chrome.runtime.sendMessage({ action: 'open-popup' })
+          browser.runtime.sendMessage({ action: 'open-popup' })
         })
         document.addEventListener('fullscreenchange', () => {
           if (!button) return
@@ -33,16 +36,16 @@ chrome.runtime.onMessage.addListener((message, _, __) => {
           }
         })
       })
-  } else if (message.action == 'bookmark-created') {
+  } else if (is_message(message) && message.action == 'bookmark-created') {
     update_button_status(true)
-  } else if (message.action == 'bookmark-deleted') {
+  } else if (is_message(message) && message.action == 'bookmark-deleted') {
     update_button_status(false)
-  } else if (message.action == 'popup-opened') {
+  } else if (is_message(message) && message.action == 'popup-opened') {
     document.querySelector<HTMLElement>(
       '#taaabs.floating-button',
     )!.style.transform = 'translateX(100%)'
     window.postMessage({ action: 'popup-opened' }, '*')
-  } else if (message.action == 'popup-closed') {
+  } else if (is_message(message) && message.action == 'popup-closed') {
     document.querySelector<HTMLElement>(
       '#taaabs.floating-button',
     )!.style.transform = ''

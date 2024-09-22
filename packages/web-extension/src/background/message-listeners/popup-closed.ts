@@ -1,9 +1,12 @@
+import { is_message } from '@/utils/is-message'
+import browser from 'webextension-polyfill'
+
 export const popup_closed = () => {
-  chrome.runtime.onMessage.addListener((message: any, _, __) => {
-    if (message.action == 'popup-closed') {
-      chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+  browser.runtime.onMessage.addListener((message: any, _, __): any => {
+    if (is_message(message) && message.action == 'popup-closed') {
+      browser.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
         if (tabs[0] && tabs[0].id) {
-          chrome.tabs.sendMessage(tabs[0].id, message)
+          browser.tabs.sendMessage(tabs[0].id, message)
         }
       })
     }

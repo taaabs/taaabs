@@ -6,6 +6,9 @@ export type DeleteBookmarkMessage = {
 }
 export type GetAuthDataMessage = { action: 'get-auth-data' }
 export type OpenOptionsPageMessage = { action: 'open-options-page' }
+export type OpenPopupMessage = { action: 'open-popup' }
+export type PopupClosedMessage = { action: 'popup-closed' }
+export type PopupOpenedMessage = { action: 'popup-opened' }
 export type SendChatbotPromptMessage = {
   action: 'send-chatbot-prompt'
   chatbot_url: string
@@ -18,6 +21,20 @@ export type ThemeChangedMessage = {
   action: 'theme-changed'
   theme: 'light' | 'dark'
 }
+export type GetAuthDataContentScriptMessage = { action: 'get-auth-data' }
+export type GetThemeContentScriptMessage = { action: 'get-theme' }
+export type UrlSavedStatusMessage = {
+  action: 'url-saved-status'
+  is_saved: boolean
+}
+export type BookmarkCreatedMessage = {
+  action: 'bookmark-created'
+}
+export type BookmarkDeletedMessage = {
+  action: 'bookmark-deleted'
+}
+export type InjectPopupContentScriptMessage = { action: 'inject-popup' }
+export type ClosePopupContentScriptMessage = { action: 'close-popup' }
 
 export type Message =
   | CheckUrlSavedMessage
@@ -25,8 +42,18 @@ export type Message =
   | DeleteBookmarkMessage
   | GetAuthDataMessage
   | OpenOptionsPageMessage
+  | OpenPopupMessage
+  | PopupClosedMessage
+  | PopupOpenedMessage
   | SendChatbotPromptMessage
   | ThemeChangedMessage
+  | GetAuthDataContentScriptMessage
+  | GetThemeContentScriptMessage
+  | UrlSavedStatusMessage
+  | BookmarkCreatedMessage
+  | BookmarkDeletedMessage
+  | InjectPopupContentScriptMessage
+  | ClosePopupContentScriptMessage
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type CreateBookmarkResponse = any // TODO: Replace 'any' with the actual type
