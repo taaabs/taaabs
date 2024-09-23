@@ -5,6 +5,7 @@
   display: flex;
   background-color: var(--background);
   padding: var(--padding-12px) var(--padding-16px);
+  gap: var(--padding-2px);
   span {
     color: var(--text-color-dimmed);
   }

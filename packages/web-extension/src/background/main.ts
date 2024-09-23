@@ -110,7 +110,8 @@ const handle_tab_change = async (tab_id: number, url: string) => {
     })
   } else if (
     url.startsWith('chrome://') ||
-    url.startsWith('chrome-extension://')
+    url.startsWith('chrome-extension://') ||
+    url.startsWith('moz-extension://')
   ) {
     update_icon(tab_id)
   } else {

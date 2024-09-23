@@ -1,9 +1,10 @@
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 
 export const use_selected_chatbot = () => {
   const [selected_chatbot_name, set_selected_chatbot_name] = useState<string>()
 
-  useEffect(() => {
+  useUpdateEffect(() => {
     window.postMessage(
       {
         action: 'set-last-used-chatbot-name',

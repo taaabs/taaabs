@@ -20,6 +20,7 @@ firefox_manifest.manifest_version = 2
 if (firefox_manifest.background && firefox_manifest.background.service_worker) {
   firefox_manifest.background = {
     scripts: [firefox_manifest.background.service_worker],
+    persistent: true,
   }
 }
 

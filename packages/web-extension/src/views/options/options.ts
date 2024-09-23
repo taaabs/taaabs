@@ -1,8 +1,14 @@
 import browser from 'webextension-polyfill'
 
+// Detect Firefox
+if (browser !== undefined) {
+  // Remove the "Use custom new tab page" option
+  document.getElementById('use-custom-new-tab-option')!.style.display = 'none'
+}
+
 // Event listeners for checkboxes and input field
 document
-  .getElementById('use_custom_new_tab')!
+  .getElementById('use-custom-new-tab')!
   .addEventListener('change', (event: Event) => {
     browser.storage.local.set({
       use_custom_new_tab: (event.target as HTMLInputElement).checked,
@@ -10,7 +16,7 @@ document
   })
 
 document
-  .getElementById('open_chatbot_in_new_tab')!
+  .getElementById('open-chatbot-in-new-tab')!
   .addEventListener('change', (event: Event) => {
     browser.storage.local.set({
       open_chatbot_in_new_tab: (event.target as HTMLInputElement).checked,
@@ -18,7 +24,7 @@ document
   })
 
 document
-  .getElementById('custom_chatbot_url')!
+  .getElementById('custom-chatbot-url')!
   .addEventListener('input', (event: Event) => {
     const custom_chatbot_url = (
       event.target as HTMLInputElement

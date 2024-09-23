@@ -96,7 +96,12 @@ const message_handler = async (event: MessageEvent) => {
       window_height: window.outerHeight,
     })
   } else if (action == 'get-last-used-chatbot-name') {
-    browser.storage.sync
+    // Use browser.storage.local for Firefox
+    const storage_area = browser.browserAction
+      ? browser.storage.local
+      : browser.storage.sync
+
+    storage_area
       .get('last_used_chatbot_name')
       .then(({ last_used_chatbot_name }) => {
         window.postMessage(
@@ -108,7 +113,12 @@ const message_handler = async (event: MessageEvent) => {
         )
       })
   } else if (action == 'set-last-used-chatbot-name') {
-    browser.storage.sync.set({
+    // Use browser.storage.local for Firefox
+    const storageArea = browser.browserAction
+      ? browser.storage.local
+      : browser.storage.sync
+
+    storageArea.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
   } else if (action == 'get-custom-chatbot-url') {
