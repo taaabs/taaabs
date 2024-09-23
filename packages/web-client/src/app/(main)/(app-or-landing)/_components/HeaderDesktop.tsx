@@ -90,7 +90,7 @@ export const HeaderDesktop: React.FC<{
                 filled_icon: 'HOME_FILLED',
                 href: '/',
                 is_active: pathname == '/',
-              },
+              } as Ui_app_templates_App_HeaderDesktop_Navigation.Item,
             ]
           : []),
         {
@@ -267,24 +267,16 @@ export const HeaderDesktop: React.FC<{
                       props.dictionary.app.header_desktop.user_dropdown
                         .my_public_profile
                     }
-                    on_click={() => {
-                      router.push(
-                        `/${
-                          auth_context.auth_data!.username
-                        }?back=${pathname}?${search_params.toString()}`,
-                      )
-                    }}
+                    href={`/${
+                      auth_context.auth_data!.username
+                    }?back=${pathname}?${search_params.toString()}#fresh`}
                   />
                 )}
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
                   label={
                     props.dictionary.app.header_desktop.user_dropdown.settings
                   }
-                  on_click={() => {
-                    router.push(
-                      `/settings?back=${pathname}?${search_params.toString()}`,
-                    )
-                  }}
+                  href={`/settings?back=${pathname}?${search_params.toString()}`}
                 />
                 {auth_context.auth_data!.username ? (
                   <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem

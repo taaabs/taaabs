@@ -23,7 +23,6 @@ const LayoutAuthorized: React.FC<{
   bookmarklet_script: string
 }> = (props) => {
   const pathname = usePathname()
-  const router = useRouter()
   const auth_context = useContext(AuthContext)
 
   return landing_pathnames.includes(pathname) ||
@@ -33,10 +32,8 @@ const LayoutAuthorized: React.FC<{
       slot_desktop_user={
         <Ui_landing_templates_Landing_DesktopActions
           library_button_label={props.dictionary.landing.my_library}
-          library_button_on_click={() => {
-            router.push('/library')
-          }}
-          github_url='https://github.com/taaabs/taaabs'
+          library_button_href="/library#fresh"
+          github_url="https://github.com/taaabs/taaabs"
         />
       }
       slot_desktop_navigation={

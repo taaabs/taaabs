@@ -73,10 +73,8 @@ export const use_create_bookmark = () => {
           return favicon_32x32.getAttribute('href')
         }
 
-        // Check for shortcut icon with type image/x-icon
-        const favicon = document.querySelector(
-          `document.querySelector('link[href$=".ico"]')`,
-        )
+        // Look for .ico
+        const favicon = document.querySelector('link[href$=".ico"]')
         if (favicon) {
           return favicon.getAttribute('href')
         }
@@ -154,22 +152,10 @@ export const use_create_bookmark = () => {
       }
       const title = get_title()
 
-      let html = ''
-
-      // TODO: Send over youtube transcript with timestamps
-      // Telegram
-      if (url.href.match(/^https:\/\/t\.me\/[^\/]+\/[^\/]+$/)) {
-        const embed_url = `${url}?embed=1&mode=tme`
-        const response = await fetch(embed_url)
-        html = await response.text()
-      } else {
-        html = document.getElementsByTagName('html')[0].outerHTML
-      }
-
       const reader_data = (
         await HtmlParser.parse({
           url: url.href,
-          html,
+          html: document.getElementsByTagName('html')[0].outerHTML,
         })
       )?.reader_data
 

@@ -27,10 +27,8 @@ const LayoutVisitor: React.FC<{
       slot_desktop_user={
         <Ui_landing_templates_Landing_DesktopActions
           library_button_label={props.dictionary.landing.my_library}
-          library_button_on_click={() => {
-            router.push('/welcome')
-          }}
-          github_url='https://github.com/taaabs/taaabs'
+          library_button_href="/welcome"
+          github_url="https://github.com/taaabs/taaabs"
         />
       }
       slot_desktop_navigation={
@@ -43,9 +41,7 @@ const LayoutVisitor: React.FC<{
   ) : (
     <PublicUserAvatarProvider>
       <Ui_app_templates_App
-        slot_header_desktop={
-          <HeaderDesktop dictionary={props.dictionary}/>
-        }
+        slot_header_desktop={<HeaderDesktop dictionary={props.dictionary} />}
         slot_header_mobile={<HeaderMobile />}
         slot_bottom_navigation_bar={
           <BottomNavigationBar dictionary={props.dictionary} />

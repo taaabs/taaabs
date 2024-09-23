@@ -274,8 +274,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
         !params.is_public && note
           ? await AES.encrypt(note, encryption_key)
           : note,
-      is_public: params.is_public || undefined,
-      is_archived: params.is_archived || undefined,
+      is_public: params.is_public,
+      is_archived: params.is_archived,
       stars: params.stars,
       is_unsorted:
         params.is_unsorted === undefined

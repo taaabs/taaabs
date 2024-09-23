@@ -183,6 +183,8 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
       )
     }
 
+    let bookmark: UpsertBookmark_Params
+
     const title =
       props.bookmark?.title && !form_data.title
         ? ''
@@ -196,60 +198,102 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         ? form_data.note?.trim()
         : undefined
 
-    const new_tags = tags.map((tag) => ({
-      name: tag.name,
-      is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
-    }))
-
-    const bookmark: UpsertBookmark_Params = {
-      bookmark_id: props.bookmark?.id,
-      is_public: is_bookmark_public,
-      title,
-      note,
-      links: await Promise.all(
-        links.map(async (link) => {
-          const current_link = props.bookmark?.links.find(
-            (l) => l.url == link.url,
-          )
-          const favicon = clipboard_data?.favicon
-            ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
-            : undefined
-          const reader_data =
-            props.bookmark_autofill?.links &&
-            props.bookmark_autofill.links.length &&
-            props.bookmark_autofill.links[0].url == link.url
-              ? clipboard_data
-                ? (
-                    await HtmlParser.parse({
-                      url: link.url,
-                      html: clipboard_data.html,
-                    })
-                  )?.reader_data
-                : undefined
+    if (!props.bookmark || is_bookmark_public != props.bookmark?.is_public) {
+      // New bookmark or visibility changed, send whole bookmark
+      bookmark = {
+        bookmark_id: props.bookmark?.id,
+        is_public: is_bookmark_public || false,
+        title,
+        note,
+        created_at: props.bookmark?.created_at
+          ? new Date(props.bookmark.created_at)
+          : undefined,
+        stars: props.bookmark?.stars,
+        is_archived: props.is_archived || false,
+        is_unsorted: props.bookmark?.is_unsorted,
+        links: await Promise.all(
+          links.map(async (link) => {
+            const current_link = props.bookmark?.links.find(
+              (l) => l.url == link.url,
+            )
+            const favicon = clipboard_data?.favicon
+              ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
               : undefined
+            const reader_data =
+              props.bookmark_autofill?.links &&
+              props.bookmark_autofill.links.length &&
+              props.bookmark_autofill.links[0].url == link.url
+                ? clipboard_data
+                  ? (
+                      await HtmlParser.parse({
+                        url: link.url,
+                        html: clipboard_data.html,
+                      })
+                    )?.reader_data
+                  : undefined
+                : undefined
 
-          return {
-            url: link.url,
-            is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional
-            site_path: link.site_path,
-            is_pinned: current_link?.is_pinned,
-            pin_title: current_link?.pin_title,
-            open_snapshot: link.open_snapshot,
-            favicon: favicon || current_link?.favicon,
-            reader_data,
-          }
-        }),
-      ),
-      tags: equal(
-        new_tags,
-        props.bookmark?.tags.map((tag) => ({
+            return {
+              url: link.url,
+              is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional
+              site_path: link.site_path,
+              is_pinned: current_link?.is_pinned,
+              pin_title: current_link?.pin_title,
+              open_snapshot: link.open_snapshot,
+              favicon: favicon || current_link?.favicon,
+              reader_data,
+            }
+          }),
+        ),
+        tags: tags.map((tag) => ({
           name: tag.name,
-          is_public: tag.is_public,
+          is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
         })),
-      )
-        ? undefined
-        : new_tags,
+        cover: og_image?.split(',')[1],
+        cover_hash: props.bookmark?.cover_hash,
+        has_cover_aes: props.bookmark?.has_cover_aes,
+        blurhash: og_image_blurhash || props.bookmark?.blurhash,
+      }
+    } else {
+      const new_tags = tags.map((tag) => ({
+        name: tag.name,
+        is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
+      }))
+
+      bookmark = {
+        bookmark_id: props.bookmark.id,
+        is_public: is_bookmark_public,
+        title,
+        note,
+        links: await Promise.all(
+          links.map(async (link) => {
+            const current_link = props.bookmark?.links.find(
+              (l) => l.url == link.url,
+            )
+
+            return {
+              url: link.url,
+              is_public: (is_bookmark_public ? link.is_public : false) || false, // TODO: make is public optional
+              site_path: link.site_path,
+              is_pinned: current_link?.is_pinned,
+              pin_title: current_link?.pin_title,
+              open_snapshot: link.open_snapshot,
+              favicon: current_link?.favicon,
+            }
+          }),
+        ),
+        tags: equal(
+          new_tags,
+          props.bookmark.tags.map((tag) => ({
+            name: tag.name,
+            is_public: tag.is_public,
+          })),
+        )
+          ? undefined
+          : new_tags,
+      }
     }
+
     props.on_submit(bookmark)
   }
 
