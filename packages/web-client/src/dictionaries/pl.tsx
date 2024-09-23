@@ -17,7 +17,7 @@ export const dictionary: Dictionary = {
           second_line: 'z surfowania Internetu',
         },
         subheading:
-          'Prywatnie zapisuj i organizuj odnośniki tagami. Wspieraj się najlepszymi chatbotami AI.',
+          'Prywatnie zapisuj strony WWW. Wspieraj przeglądanie najlepszymi asystentami AI.',
         claim_username: 'Przejmij nick',
         username: 'nick',
         ticks: [
