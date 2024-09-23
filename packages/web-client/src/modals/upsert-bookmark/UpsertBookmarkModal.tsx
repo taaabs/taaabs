@@ -185,26 +185,13 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
     let bookmark: UpsertBookmark_Params
 
-    const title =
-      props.bookmark?.title && !form_data.title
-        ? ''
-        : props.bookmark?.title != form_data.title?.trim()
-        ? form_data.title?.trim()
-        : undefined
-    const note =
-      props.bookmark?.note && !form_data.note
-        ? ''
-        : props.bookmark?.note != form_data.note?.trim()
-        ? form_data.note?.trim()
-        : undefined
-
     if (!props.bookmark || is_bookmark_public != props.bookmark?.is_public) {
       // New bookmark or visibility changed, send whole bookmark
       bookmark = {
         bookmark_id: props.bookmark?.id,
         is_public: is_bookmark_public || false,
-        title,
-        note,
+        title: form_data.title?.trim(),
+        note: form_data.note?.trim(),
         created_at: props.bookmark?.created_at
           ? new Date(props.bookmark.created_at)
           : undefined,
@@ -255,6 +242,19 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
         blurhash: og_image_blurhash || props.bookmark?.blurhash,
       }
     } else {
+      const title =
+        props.bookmark.title && !form_data.title
+          ? ''
+          : props.bookmark.title != form_data.title?.trim()
+          ? form_data.title?.trim()
+          : undefined
+      const note =
+        props.bookmark.note && !form_data.note
+          ? ''
+          : props.bookmark.note != form_data.note?.trim()
+          ? form_data.note?.trim()
+          : undefined
+
       const new_tags = tags.map((tag) => ({
         name: tag.name,
         is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
