@@ -1,0 +1,20 @@
+// @type
+@use '../../../../../../../../styles/foundation' as *;
+
+.container {
+  select {
+    font-family: unset;
+    text-align: right;
+    background: none;
+    border: none;
+    margin: 0;
+    padding: 0;
+    appearance: auto;
+    font-size: var(--font-size-14px);
+    color: var(--text-color-normal);
+    cursor: pointer;
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}

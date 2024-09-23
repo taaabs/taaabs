@@ -3,41 +3,13 @@
 
 .container {
   background-color: var(--background);
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-10px)
+  padding: var(--padding-16px) var(--padding-16px) var(--padding-10px)
     var(--padding-16px);
   display: flex;
   flex-direction: column;
-  gap: var(--padding-8px);
-}
-.heading {
-  position: relative;
-  span {
-    color: var(--text-color-dimmed);
-  }
-  select {
-    position: absolute;
-    right: 0;
-    font-family: unset;
-    background: none;
-    border: none;
-    margin: 0;
-    padding: 0;
-    line-height: 1;
-    appearance: auto; // some sites clear it
-    border-right: 2px solid transparent;
-    font-size: var(--font-size-15px);
-    color: var(--text-color-normal);
-    border-radius: var(--border-radius-8px);
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    &:focus-visible {
-      outline: none;
-    }
-  }
-}
-.field {
-  display: flex;
-  flex-direction: column;
   gap: var(--padding-10px);
+}
+.footer {
+  display: flex;
+  justify-content: space-between;
 }

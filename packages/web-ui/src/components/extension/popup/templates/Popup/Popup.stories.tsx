@@ -5,7 +5,7 @@ import { Popup } from './Popup'
 import { Actions } from './main/Actions'
 import { Separator } from './main/Separator'
 import { RecentPrompts } from './main/RecentPrompts'
-import { AssistantSelector } from './main/AssistantSelector'
+import { AssistantSelector } from './main/PromptField/AssistantSelector'
 import { PromptField } from './main/PromptField'
 
 export default {

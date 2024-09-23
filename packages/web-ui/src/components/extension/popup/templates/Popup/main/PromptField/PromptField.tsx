@@ -15,8 +15,8 @@ export namespace PromptField {
     on_include_content_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
+    assistant_selector_slot: React.ReactNode
     translations: {
-      heading: string
       placeholder: string
       include_page_content: string
       active_input_placeholder_suffix: string
@@ -66,10 +66,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.heading}>
-        <span>{props.translations.heading}</span>
-      </div>
-      <div className={styles.field}>
         <Input
           value={props.value}
           on_change={handle_change}
@@ -101,13 +97,15 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           on_key_down={handle_key_down}
         />
 
-        <Checkbox
-          label={props.translations.include_page_content}
-          on_click={props.on_include_content_click}
-          is_checked={props.is_include_content_selected}
-          is_disabled={props.is_include_content_checkbox_disabled}
-        />
-      </div>
+        <div className={styles.footer}>
+          <Checkbox
+            label={props.translations.include_page_content}
+            on_click={props.on_include_content_click}
+            is_checked={props.is_include_content_selected}
+            is_disabled={props.is_include_content_checkbox_disabled}
+          />
+          {props.assistant_selector_slot}
+        </div>
     </div>
   )
 }

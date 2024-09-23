@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { default_prompts } from '../data/default-prompts'
 
 export const use_prompts_history = () => {
   const [prompts_history, set_prompts_history] = useState<string[]>([])
@@ -19,7 +20,20 @@ export const use_prompts_history = () => {
   }
 
   useUpdateEffect(() => {
-    window.postMessage({ action: 'set-prompts-history', prompts_history }, '*')
+    const prompts_history_copy = new Set<string>(
+      prompts_history.slice(-15).reverse(),
+    )
+    default_prompts
+      .reverse()
+      .forEach((prompt) => prompts_history_copy.add(prompt))
+
+    window.postMessage(
+      {
+        action: 'set-prompts-history',
+        prompts_history: [...prompts_history_copy].reverse(),
+      },
+      '*',
+    )
   }, [prompts_history])
 
   return {

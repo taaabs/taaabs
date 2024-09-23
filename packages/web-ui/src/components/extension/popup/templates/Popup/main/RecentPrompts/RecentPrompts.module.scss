@@ -4,43 +4,53 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: var(--padding-8px);
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
-    var(--padding-16px);
   background-color: var(--background);
 }
 .header {
+  padding: var(--padding-12px) var(--padding-16px) var(--padding-8px)
+    var(--padding-16px);
   color: var(--text-color-dimmed);
 }
 .prompts {
-  display: flex;
-  flex-wrap: wrap;
-  row-gap: var(--padding-8px);
-  column-gap: var(--padding-12px);
-  @include transition-150ms;
-  position: relative;
-  &--disabled {
-    pointer-events: none;
-    opacity: var(--dimmed-opacity);
-  }
-  &--not-available {
-    opacity: 0.2;
-  }
-  > button {
-    font-family: unset;
-    font-size: var(--font-size-15px);
-    border: none;
-    background: none;
-    padding: 0;
-    color: var(--text-color-normal);
-    font-weight: var(--font-weight-inter-regular);
-    height: unset !important;
-    line-height: 1.4;
-    @include hover {
-      @include text-decoration-underlinie-thin;
+  overflow: auto;
+  max-height: 132px;
+  padding: 0 var(--padding-16px) var(--padding-12px) var(--padding-16px);
+  &__inner {
+    display: flex;
+    gap: var(--padding-8px);
+    flex-direction: column;
+    align-items: flex-start;
+    &--disabled {
+      pointer-events: none;
+      opacity: var(--dimmed-opacity);
     }
-    &:nth-child(odd) {
-      font-weight: var(--font-weight-inter-medium);
+    &--not-available {
+      opacity: 0.2;
+    }
+    &__button {
+      font-family: unset;
+      font-size: var(--font-size-14px);
+      text-align: left;
+      border: none;
+      background: none;
+      padding: 0;
+      color: var(--text-color-normal);
+      font-weight: var(--font-weight-inter-regular);
+      height: unset !important;
+      line-height: 1.4;
+      display: -webkit-box;
+      overflow: hidden;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
+      &:nth-child(odd) {
+        font-weight: var(--font-weight-inter-medium);
+      }
+      &--default {
+        color: var(--accent-color);
+      }
     }
   }
 }
