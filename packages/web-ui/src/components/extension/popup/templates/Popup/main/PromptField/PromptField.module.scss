@@ -12,4 +12,17 @@
 .footer {
   display: flex;
   justify-content: space-between;
+  &__info {
+    padding-left: var(--padding-4px);
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-13px);
+    font-style: italic;
+    white-space: nowrap;
+  }
+  &__checkbox {
+    position: relative;
+    &--not-available {
+      display: none;
+    }
+  }
 }

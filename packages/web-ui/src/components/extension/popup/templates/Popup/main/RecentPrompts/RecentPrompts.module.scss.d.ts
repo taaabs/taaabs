@@ -3,9 +3,8 @@ declare const styles: {
   readonly "prompts": string;
   readonly "prompts__inner": string;
   readonly "prompts__inner--disabled": string;
-  readonly "prompts__inner--not-available": string;
   readonly "prompts__inner__button": string;
-  readonly "prompts__inner__button--default": string;
+  readonly "prompts__inner__button--clamp": string;
 };
 export = styles;
 

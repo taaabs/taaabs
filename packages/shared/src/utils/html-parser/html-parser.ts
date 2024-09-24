@@ -77,8 +77,8 @@ export namespace HtmlParser {
         return is_block ? `$$ ${annotation} $$` : `$${annotation}$`
       },
     })
-    turndown_service.addRule('stripImages', {
-      filter: ['figure', 'picture', 'img'],
+    turndown_service.addRule('stripElements', {
+      filter: ['figure', 'picture', 'img', 'sup'],
       replacement: () => '',
     })
     return turndown_service

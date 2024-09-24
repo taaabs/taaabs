@@ -232,6 +232,9 @@ export const Popup: React.FC = () => {
           is_include_content_checkbox_disabled={
             !parsed_html && !text_selection_hook.selected_text
           }
+          is_include_content_checkbox_not_available={
+            parsed_html === null && !text_selection_hook.selected_text
+          }
           is_include_content_selected={
             attach_this_page_checkbox_hook.is_checked || false
           }
@@ -280,27 +283,28 @@ export const Popup: React.FC = () => {
               ? 'Ask selection'
               : 'Ask this page',
             active_input_placeholder_suffix: '(⇅ for history)',
+            info: 'TIP: Make text selection'
           }}
         />
 
-        {attach_this_page_checkbox_hook.is_checked && (
-          <>
-            <Ui_extension_popup_templates_Popup_main_Separator />
+        {attach_this_page_checkbox_hook.is_checked &&
+          !(parsed_html === null && !text_selection_hook.selected_text) && (
+            <>
+              <Ui_extension_popup_templates_Popup_main_Separator />
 
-            <Ui_extension_popup_templates_Popup_main_RecentPrompts
-              recent_prompts={[
-                ...prompts_history_hook.prompts_history,
-              ].reverse()}
-              filter_phrase={is_prompt_field_focused ? prompt_field_value : ''}
-              default_prompts={default_prompts}
-              on_recent_prompt_click={handle_quick_prompt_click}
-              is_disabled={!parsed_html && !text_selection_hook.selected_text}
-              is_not_available={
-                parsed_html === null && !text_selection_hook.selected_text
-              }
-            />
-          </>
-        )}
+              <Ui_extension_popup_templates_Popup_main_RecentPrompts
+                recent_prompts={[
+                  ...prompts_history_hook.prompts_history,
+                ].reverse()}
+                filter_phrase={
+                  is_prompt_field_focused ? prompt_field_value : ''
+                }
+                default_prompts={default_prompts}
+                on_recent_prompt_click={handle_quick_prompt_click}
+                is_disabled={!parsed_html && !text_selection_hook.selected_text}
+              />
+            </>
+          )}
       </Ui_extension_popup_templates_Popup>
     </div>
   )
