@@ -280,6 +280,7 @@ export const Popup: React.FC = () => {
               recent_prompts={[
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
+              filter_phrase={prompt_field_value}
               default_prompts={default_prompts}
               on_recent_prompt_click={handle_quick_prompt_click}
               is_disabled={!parsed_html && !text_selection_hook.selected_text}
