@@ -56,6 +56,9 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
         })
     : props.recent_prompts
 
+  const prompts_to_display =
+    filtered_prompts.length > 0 ? filtered_prompts : props.recent_prompts
+
   return (
     <div className={styles.container}>
       <div className={styles.prompts}>
@@ -64,7 +67,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             [styles['prompts__inner--disabled']]: props.is_disabled,
           })}
         >
-          {filtered_prompts.map((prompt, i) => {
+          {prompts_to_display.map((prompt, i) => {
             const prompt_to_use =
               typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
             const original_prompt =
@@ -90,7 +93,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                 onClick={() => props.on_recent_prompt_click(original_prompt)}
                 className={cn(styles.prompts__inner__button, {
                   [styles['prompts__inner__button--clamp']]:
-                    props.filter_phrase.length,
+                    !props.filter_phrase,
                 })}
                 dangerouslySetInnerHTML={{ __html: html }}
                 title={original_prompt}

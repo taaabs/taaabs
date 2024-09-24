@@ -11,7 +11,6 @@ export namespace PromptField {
     on_submit: () => void
     on_change: (value: string) => void
     on_focus: () => void
-    on_blur: () => void
     is_include_content_checkbox_disabled: boolean
     is_include_content_checkbox_not_available: boolean
     is_include_content_selected: boolean
@@ -93,7 +92,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }}
         on_blur={() => {
           set_is_focused(false)
-          props.on_blur()
         }}
         suffix_action={{
           icon_variant: 'SEND',

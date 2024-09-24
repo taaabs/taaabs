@@ -184,15 +184,36 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
+        {!(parsed_html === null && !text_selection_hook.selected_text) && (
+          <>
+            <Ui_extension_popup_templates_Popup_main_RecentPrompts
+              recent_prompts={[
+                ...prompts_history_hook.prompts_history,
+              ].reverse()}
+              filter_phrase={
+                is_prompt_field_focused &&
+                attach_this_page_checkbox_hook.is_checked &&
+                !prompts_history_hook.prompts_history.includes(
+                  prompt_field_value,
+                )
+                  ? prompt_field_value
+                  : ''
+              }
+              default_prompts={default_prompts}
+              on_recent_prompt_click={handle_quick_prompt_click}
+              is_disabled={!parsed_html && !text_selection_hook.selected_text}
+            />
+
+            <Ui_extension_popup_templates_Popup_main_Separator />
+          </>
+        )}
+
         <Ui_extension_popup_templates_Popup_main_PromptField
           key={popup_restored_count}
           value={prompt_field_value}
           on_focus={() => {
             set_is_propmt_field_focused(true)
             prompts_history_hook.restore_prompts_history()
-          }}
-          on_blur={() => {
-            set_is_propmt_field_focused(false)
           }}
           on_change={(value) => {
             set_prompt_field_value(value)
@@ -286,25 +307,6 @@ export const Popup: React.FC = () => {
             info: '💡 Select some text',
           }}
         />
-
-        {attach_this_page_checkbox_hook.is_checked &&
-          !(parsed_html === null && !text_selection_hook.selected_text) && (
-            <>
-              <Ui_extension_popup_templates_Popup_main_Separator />
-
-              <Ui_extension_popup_templates_Popup_main_RecentPrompts
-                recent_prompts={[
-                  ...prompts_history_hook.prompts_history,
-                ].reverse()}
-                filter_phrase={
-                  is_prompt_field_focused ? prompt_field_value : ''
-                }
-                default_prompts={default_prompts}
-                on_recent_prompt_click={handle_quick_prompt_click}
-                is_disabled={!parsed_html && !text_selection_hook.selected_text}
-              />
-            </>
-          )}
       </Ui_extension_popup_templates_Popup>
     </div>
   )
