@@ -55,6 +55,7 @@ type Item = {
 
 export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
   function TagHierarchies(props) {
+    const nestable = useRef(null)
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
@@ -66,6 +67,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const simplebar_tag_hierarchies = useRef<any>(null)
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
+    const unique_id_counter = useRef(0)
     const { contextMenu, onContextMenu } = useContextMenu(
       <Ui_Dropdown>
         <Ui_Dropdown_StandardItem
@@ -135,6 +137,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
         ),
       )
+      const stored_closed_ids = localStorage.getItem('tag-hierarchy-closed-ids')
+      const initial_closed_ids = stored_closed_ids
+        ? JSON.parse(stored_closed_ids)
+        : []
+      setTimeout(() => {
+        ;(nestable.current as any)?.collapse(initial_closed_ids)
+      }, 0)
     }, [props.tree])
 
     useEffect(() => {
@@ -151,6 +160,28 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         element!.removeEventListener('scroll', handle_scroll)
       }
     }, [])
+
+    const tag_to_item = (params: {
+      node: TagHierarchies.Node
+      hierarchy_ids: number[]
+      hierarchy_tag_ids: number[]
+    }): Item => {
+      const id = unique_id_counter.current++
+      const hierarchy_ids = [...params.hierarchy_ids, id]
+      const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
+      return {
+        // Nestable requires unique ids for items
+        id,
+        tag_id: params.node.id,
+        name: params.node.name,
+        yields: params.node.yields,
+        hierarchy_ids,
+        hierarchy_tag_ids,
+        children: params.node.children.map((node) =>
+          tag_to_item({ node, hierarchy_ids, hierarchy_tag_ids }),
+        ),
+      }
+    }
 
     const render_tag = ({
       item,
@@ -214,7 +245,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 const parent_id = (item as Item).hierarchy_ids.slice(-1)[0]
                 const loop_over_items = (item: Item): Item => {
                   if (item.id == parent_id) {
-                    const id = Math.round(Math.random() * 1e12)
+                    const id = unique_id_counter.current++
                     return {
                       ...item,
                       children: [
@@ -437,22 +468,29 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 </div>
               </button>
               <Nestable
+                ref={nestable}
                 items={items}
                 renderItem={render_tag as any}
                 onChange={(params) => {
                   clear_mouseover_ids()
                   update_items({ items: params.items as Item[] })
                   set_is_dragging(false)
+                  localStorage.removeItem('tag-hierarchy-closed-ids')
                 }}
                 maxDepth={5}
                 disableDrag={props.is_read_only}
                 renderCollapseIcon={({ isCollapsed }) =>
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
-                collapsed={true}
-                // Note: "confirmChange" can't be used for validation because it stops firing
-                // deeper in the tree if there is a problem higher up
-                // confirmChange={}
+                collapsed={false}
+                onCollapseChange={(params: any) => {
+                  if (params.closedIds) {
+                    localStorage.setItem(
+                      'tag-hierarchy-closed-ids',
+                      JSON.stringify(params.closedIds),
+                    )
+                  }
+                }}
               />
               {!props.is_read_only && (
                 <div
@@ -517,28 +555,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     o.is_updating == n.is_updating &&
     o.dragged_tag == n.dragged_tag,
 )
-
-const tag_to_item = (params: {
-  node: TagHierarchies.Node
-  hierarchy_ids: number[]
-  hierarchy_tag_ids: number[]
-}): Item => {
-  const id = Math.round(Math.random() * 1e12)
-  const hierarchy_ids = [...params.hierarchy_ids, id]
-  const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
-  return {
-    // Nestable requires unique ids for items
-    id,
-    tag_id: params.node.id,
-    name: params.node.name,
-    yields: params.node.yields,
-    hierarchy_ids,
-    hierarchy_tag_ids,
-    children: params.node.children.map((node) =>
-      tag_to_item({ node, hierarchy_ids, hierarchy_tag_ids }),
-    ),
-  }
-}
 
 const item_to_tag = (item: Item): TagHierarchies.Node => {
   return {
