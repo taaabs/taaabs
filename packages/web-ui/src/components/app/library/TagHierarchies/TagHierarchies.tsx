@@ -170,7 +170,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       hierarchy_ids: number[]
       hierarchy_tag_ids: number[]
     }): Item => {
-      const id = generateUniqueId(params.hierarchy_ids, params.node.id)
+      const id = generate_unique_id(params.hierarchy_ids, params.node.id)
       const hierarchy_ids = [...params.hierarchy_ids, id]
       const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
       return {
@@ -185,24 +185,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           tag_to_item({ node, hierarchy_ids, hierarchy_tag_ids }),
         ),
       }
-    }
-
-    const generateUniqueId = (
-      hierarchy_ids: number[],
-      nodeId: number,
-    ): number => {
-      const idString = hierarchy_ids.join(',') + ',' + nodeId
-      const hash = hashCode(idString)
-      return hash
-    }
-
-    const hashCode = (str: string): number => {
-      let hash = 0
-      for (let i = 0; i < str.length; i++) {
-        hash = (hash << 5) - hash + str.charCodeAt(i)
-        hash |= 0 // Convert to 32bit integer
-      }
-      return hash
     }
 
     const render_tag = ({
@@ -267,7 +249,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                 const parent_id = (item as Item).hierarchy_ids.slice(-1)[0]
                 const loop_over_items = (item: Item): Item => {
                   if (item.id == parent_id) {
-                    const id = generateUniqueId(
+                    const id = generate_unique_id(
                       item.hierarchy_ids,
                       props.dragged_tag!.id,
                     )
@@ -592,4 +574,22 @@ const item_to_tag = (item: Item): TagHierarchies.Node => {
     yields: item.yields,
     children: item.children.map((i) => item_to_tag(i)),
   }
+}
+
+const generate_unique_id = (
+  hierarchy_ids: number[],
+  nodeId: number,
+): number => {
+  const idString = hierarchy_ids.join(',') + ',' + nodeId
+  const hash = hash_code(idString)
+  return hash
+}
+
+const hash_code = (str: string): number => {
+  let hash = 0
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i)
+    hash |= 0 // Convert to 32bit integer
+  }
+  return hash
 }
