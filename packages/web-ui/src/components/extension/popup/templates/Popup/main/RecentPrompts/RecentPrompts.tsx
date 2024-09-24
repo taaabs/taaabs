@@ -17,7 +17,6 @@ export namespace RecentPrompts {
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <div className={styles.header}>{props.translations.heading}</div>
       <div className={styles.prompts}>
         <div
           className={cn(styles.prompts__inner, {

@@ -1,6 +1,5 @@
 declare const styles: {
   readonly "container": string;
-  readonly "header": string;
   readonly "prompts": string;
   readonly "prompts__inner": string;
   readonly "prompts__inner--disabled": string;

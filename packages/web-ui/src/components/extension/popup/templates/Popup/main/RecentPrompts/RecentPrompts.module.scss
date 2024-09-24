@@ -6,15 +6,10 @@
   flex-direction: column;
   background-color: var(--background);
 }
-.header {
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-8px)
-    var(--padding-16px);
-  color: var(--text-color-dimmed);
-}
 .prompts {
   overflow: auto;
-  max-height: 132px;
-  padding: 0 var(--padding-16px) var(--padding-12px) var(--padding-16px);
+  max-height: 180px;
+  padding: var(--padding-12px) var(--padding-16px) var(--padding-12px) var(--padding-16px);
   &__inner {
     display: flex;
     gap: var(--padding-8px);
@@ -30,10 +25,11 @@
     &__button {
       font-family: unset;
       font-size: var(--font-size-14px);
+      padding: 0;
+      padding-right: 2px;
       text-align: left;
       border: none;
       background: none;
-      padding: 0;
       color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-regular);
       height: unset !important;

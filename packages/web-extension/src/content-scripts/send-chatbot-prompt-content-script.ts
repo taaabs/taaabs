@@ -7,13 +7,15 @@ const PART_MAX_LENGTH = {
   [chatbot_urls.chatgpt]: 15000,
   [chatbot_urls.gemini]: 30000,
   [chatbot_urls.perplexity]: 38000,
+  [chatbot_urls.huggingchat]: 45000,
 }
 
 // Total length limits for each chatbot
 const TOTAL_LENGTH_LIMIT = {
-  [chatbot_urls.chatgpt]: 50000,
+  [chatbot_urls.chatgpt]: 100000,
   [chatbot_urls.gemini]: 1000000,
-  [chatbot_urls.perplexity]: 100000,
+  [chatbot_urls.perplexity]: 200000,
+  [chatbot_urls.huggingchat]: 200000,
 }
 
 const send_prompt = async (params: {
@@ -56,12 +58,18 @@ const send_prompt = async (params: {
               }, 0)
             })
           }
-        } else if (params.url == chatbot_urls.mistral) {
-          const answers = document.querySelectorAll(
-            'button[aria-label="Rewrite"]',
+        } else if (params.url == chatbot_urls.huggingchat) {
+          const stop_button = document.querySelector(
+            '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
           )
-          if (params.iteration && params.iteration != answers.length) {
+          if (params.iteration && stop_button) {
             throw new Error()
+          } else if (params.iteration) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 500)
+            })
           }
         }
       } catch {
@@ -165,7 +173,8 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
       message.plain_text.length > PART_MAX_LENGTH[current_url] &&
       (current_url == chatbot_urls.chatgpt ||
         current_url == chatbot_urls.gemini ||
-        current_url == chatbot_urls.perplexity)
+        current_url == chatbot_urls.perplexity ||
+        current_url == chatbot_urls.huggingchat)
     ) {
       let prompt_parts = []
       let total_length = 0
@@ -195,19 +204,19 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
       // Send each part sequentially in a non blocking way
       const send_prompt_sequentially = async () => {
-        for (let i = 0; i <= prompt_parts.length; i++) {
+        for (let i = 0; i < prompt_parts.length; i++) {
           const part = prompt_parts[i]
           let prompt = ''
           if (i < prompt_parts.length - 1) {
-            prompt = `Text (part ${i + 1} of ${
+            prompt = `Part ${i + 1} of ${
               prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of this part ends here. Please reply with a single "OK gesture" emoji.`
+            }\n\n<text>\n\n${part}\n\n</text>\n\nText of this part ends here. Please reply with a single "OK gesture" emoji.`
           } else if (i == prompt_parts.length - 1) {
-            prompt = `Text (part ${i + 1} of ${
+            prompt = `Part ${i + 1} of ${
               prompt_parts.length
-            }):\n\n---\n\n${part}\n\n---\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text. Please reply with a single "OK gesture" emoji.`
-          } else {
-            prompt = message.prompt
+            }:\n\n<text>\n\n${part}\n\n</text>\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text.\n\n<instructon>\n${
+              message.prompt
+            }\n</instruction>`
           }
 
           await new Promise((resolve) =>
