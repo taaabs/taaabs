@@ -107,10 +107,7 @@ export namespace HtmlParser {
         plain_text += `**User:** ${content}\n\n`
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
-        const doc = parser.parseFromString(
-          DOMPurify.sanitize(el.innerHTML),
-          'text/html',
-        )
+        const doc = parser.parseFromString(el.innerHTML, 'text/html')
         const article = new Readability(doc, { keepClasses: true }).parse()!
         const content = params.turndown_service.turndown(article.content)
         messages.push({
@@ -170,8 +167,8 @@ export namespace HtmlParser {
       }
       // Gemini
       else if (params.url.startsWith('https://gemini.google.com/app/')) {
-        const user_selector = '.query-content'
-        const assistant_selector = '.response-content'
+        const user_selector = '.user-query-container'
+        const assistant_selector = 'message-content.model-response-text'
         const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
@@ -345,7 +342,7 @@ export namespace HtmlParser {
         if (post_element) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(
-            DOMPurify.sanitize(post_element.innerHTML),
+            post_element.innerHTML,
             'text/html',
           )
           const post = new Readability(doc, { keepClasses: true }).parse()!
@@ -371,36 +368,27 @@ export namespace HtmlParser {
       ) {
         const temp_el = document.createElement('div')
         temp_el.innerHTML = DOMPurify.sanitize(params.html)
-
         // Select the main tweet and all tweets that are part of the thread
-        const tweet_elements = temp_el.querySelectorAll<HTMLElement>(
-          'article:has(.r-12kyg2d.css-175oi2r > .r-1wtj0ep.r-18u37iz.r-k4xj1c.css-175oi2r), article:has(.r-14gqq1x.r-16y2uox.r-m5arl1.r-f8sm7e.r-1bnu78o.css-175oi2r), article:has(.r-15zivkp.r-onrtq4.r-1wron08.r-18kxxzh.css-175oi2r)',
+        const tweet_element = temp_el.querySelector<HTMLElement>(
+          'article[tabindex="-1"]',
         )
-
-        let concatenated_tweets = ''
-
-        tweet_elements.forEach((tweet_element) => {
+        if (tweet_element) {
           const parser = new DOMParser()
           const doc = parser.parseFromString(
-            DOMPurify.sanitize(
-              tweet_element.querySelector('[data-testid="tweetText"]')!
-                .innerHTML,
-            ),
+            tweet_element.querySelector('[data-testid="tweetText"]')!.innerHTML,
             'text/html',
           )
           const tweet = new Readability(doc, { keepClasses: true }).parse()!
-          concatenated_tweets +=
-            turndown_service.turndown(tweet.content) + '\n\n'
-        })
-        // TODO, twitter to have special output type
-        return {
-          reader_data: JSON.stringify({
-            type: ReaderData.ContentType.ARTICLE,
-            title: title_element_text,
-            site_name: 'Twitter',
-            content: concatenated_tweets,
-          } as ReaderData.Article),
-          plain_text: strip_markdown_links(concatenated_tweets),
+          const content = turndown_service.turndown(tweet.content)
+          return {
+            reader_data: JSON.stringify({
+              type: ReaderData.ContentType.ARTICLE,
+              title: title_element_text,
+              site_name: 'X',
+              content,
+            } as ReaderData.Article),
+            plain_text: strip_markdown_links(content),
+          }
         }
       }
       // Telegram post (t.me/USER/POST_ID)
@@ -411,10 +399,7 @@ export namespace HtmlParser {
           const response = await fetch(embed_url)
           const html_content = await response.text()
           const parser = new DOMParser()
-          const doc = parser.parseFromString(
-            DOMPurify.sanitize(html_content),
-            'text/html',
-          )
+          const doc = parser.parseFromString(html_content, 'text/html')
           if (!isProbablyReaderable(doc)) return
           const article = new Readability(doc, { keepClasses: true }).parse()
           if (article) {
@@ -491,10 +476,7 @@ export namespace HtmlParser {
             )
             if (author && date && message) {
               const parser = new DOMParser()
-              const doc = parser.parseFromString(
-                DOMPurify.sanitize(message.innerHTML),
-                'text/html',
-              )
+              const doc = parser.parseFromString(message.innerHTML, 'text/html')
               const readableMessage = new Readability(doc, {
                 keepClasses: true,
               }).parse()
@@ -545,10 +527,7 @@ export namespace HtmlParser {
 
           if (author && date && content) {
             const parser = new DOMParser()
-            const doc = parser.parseFromString(
-              DOMPurify.sanitize(content),
-              'text/html',
-            )
+            const doc = parser.parseFromString(content, 'text/html')
             const comment = new Readability(doc, { keepClasses: true }).parse()
             if (comment) {
               concatenated_comments +=
@@ -603,10 +582,7 @@ export namespace HtmlParser {
 
           if (author && date && content) {
             const parser = new DOMParser()
-            const doc = parser.parseFromString(
-              DOMPurify.sanitize(content),
-              'text/html',
-            )
+            const doc = parser.parseFromString(content, 'text/html')
             const comment = new Readability(doc, { keepClasses: true }).parse()
             if (comment) {
               concatenated_comments +=

@@ -14,10 +14,8 @@
   justify-content: space-between;
   align-items: center;
   &__info {
-    padding-left: var(--padding-4px);
     color: var(--text-color-dimmed);
     font-size: var(--font-size-13px);
-    font-style: italic;
     white-space: nowrap;
   }
   &__checkbox {
