@@ -36,8 +36,7 @@
       @include hover {
         @include text-decoration-underlinie-thin;
       }
-      // Mark can be nested withn mark
-      mark {
+      > mark {
         color: var(--text-color-normal);
         background-color: var(--highlight);
       }

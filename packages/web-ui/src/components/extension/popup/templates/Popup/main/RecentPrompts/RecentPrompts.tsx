@@ -28,7 +28,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             .trim()
             .toLowerCase()
             .split(/\s+/)
-            .filter((word) => word.length > 1)
+            .filter((word) => word.length)
           return filter_words.every((word) =>
             prompt.toLowerCase().includes(word),
           )
@@ -40,13 +40,13 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             .trim()
             .toLowerCase()
             .split(/\s+/)
-            .filter((word) => word.length > 1)
+            .filter((word) => word.length)
 
           filter_words.forEach((word) => {
             const regex = new RegExp(`(${word})`, 'gi')
             highlighted_with_markup = highlighted_with_markup.replace(
               regex,
-              '<mark>$1</mark>',
+              '<>$1</>',
             )
           })
           return {
@@ -69,19 +69,30 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
               typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
             const original_prompt =
               typeof prompt == 'string' ? prompt : prompt.original_prompt
+
+            // Replace <> and </> with <mark> and </mark>
+            const html =
+              typeof prompt === 'string'
+                ? props.default_prompts.includes(original_prompt)
+                  ? `${star}${prompt}`
+                  : prompt
+                : props.default_prompts.includes(original_prompt)
+                ? `${star}${prompt_to_use
+                    .replace(/<>/g, '<mark>')
+                    .replace(/<\/>/g, '</mark>')}`
+                : prompt_to_use
+                    .replace(/<>/g, '<mark>')
+                    .replace(/<\/>/g, '</mark>')
+
             return (
               <button
                 key={i}
                 onClick={() => props.on_recent_prompt_click(original_prompt)}
                 className={cn(styles.prompts__inner__button, {
                   [styles['prompts__inner__button--clamp']]:
-                    props.filter_phrase.length <= 1,
+                    props.filter_phrase.length,
                 })}
-                dangerouslySetInnerHTML={{
-                  __html: props.default_prompts.includes(original_prompt)
-                    ? `${star}${prompt_to_use}`
-                    : prompt_to_use,
-                }}
+                dangerouslySetInnerHTML={{ __html: html }}
                 title={original_prompt}
               />
             )
