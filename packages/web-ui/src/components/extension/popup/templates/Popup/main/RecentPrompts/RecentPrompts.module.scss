@@ -46,7 +46,9 @@
         font-weight: var(--font-weight-inter-medium);
       }
       &--default {
-        color: var(--accent-color);
+        &::before {
+          content: '*';
+        }
       }
     }
   }
