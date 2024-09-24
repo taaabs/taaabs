@@ -41,6 +41,9 @@ export const Popup: React.FC = () => {
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
   const text_selection_hook = use_text_selection()
+  const [is_prompt_field_focused, set_is_propmt_field_focused] =
+    useState<boolean>()
+  const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
   let chatbot_url = chatbot_urls.chatgpt
   if (selected_chatbot_name) {
@@ -76,6 +79,9 @@ export const Popup: React.FC = () => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'parsed-html') {
         set_parsed_html(event.data.parsed_html || null)
+      } else if (event.data && event.data.action == 'popup-restored') {
+        set_prompt_field_value('')
+        set_popup_restored_count(Math.random())
       }
     }
     window.addEventListener('message', listener)
@@ -179,9 +185,14 @@ export const Popup: React.FC = () => {
         )}
 
         <Ui_extension_popup_templates_Popup_main_PromptField
+          key={popup_restored_count}
           value={prompt_field_value}
           on_focus={() => {
+            set_is_propmt_field_focused(true)
             prompts_history_hook.restore_prompts_history()
+          }}
+          on_blur={() => {
+            set_is_propmt_field_focused(false)
           }}
           on_change={(value) => {
             set_prompt_field_value(value)
@@ -280,16 +291,13 @@ export const Popup: React.FC = () => {
               recent_prompts={[
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
-              filter_phrase={prompt_field_value}
+              filter_phrase={is_prompt_field_focused ? prompt_field_value : ''}
               default_prompts={default_prompts}
               on_recent_prompt_click={handle_quick_prompt_click}
               is_disabled={!parsed_html && !text_selection_hook.selected_text}
               is_not_available={
                 parsed_html === null && !text_selection_hook.selected_text
               }
-              translations={{
-                heading: 'Recent',
-              }}
             />
           </>
         )}

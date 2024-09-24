@@ -10,6 +10,7 @@ export namespace PromptField {
     on_submit: () => void
     on_change: (value: string) => void
     on_focus: () => void
+    on_blur: () => void
     is_include_content_checkbox_disabled: boolean
     is_include_content_selected: boolean
     on_include_content_click: () => void
@@ -66,46 +67,47 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-        <Input
-          value={props.value}
-          on_change={handle_change}
-          min_lines={2}
-          max_lines={8}
-          disable_enter_new_lines={true}
-          autofocus={true}
-          on_enter_pressed={props.on_submit}
-          placeholder={
-            props.translations.placeholder +
-            (is_focused &&
-            props.is_history_enabled &&
-            props.is_include_content_selected
-              ? ` ${props.translations.active_input_placeholder_suffix}`
-              : '')
-          }
-          on_focus={(e) => {
-            set_is_focused(true)
-            props.on_focus()
-            e.target.select()
-          }}
-          on_blur={() => {
-            set_is_focused(false)
-          }}
-          suffix_action={{
-            icon_variant: 'SEND',
-            on_click: props.on_submit,
-          }}
-          on_key_down={handle_key_down}
-        />
+      <Input
+        value={props.value}
+        on_change={handle_change}
+        min_lines={2}
+        max_lines={8}
+        disable_enter_new_lines={true}
+        autofocus={true}
+        on_enter_pressed={props.on_submit}
+        placeholder={
+          props.translations.placeholder +
+          (is_focused &&
+          props.is_history_enabled &&
+          props.is_include_content_selected
+            ? ` ${props.translations.active_input_placeholder_suffix}`
+            : '')
+        }
+        on_focus={(e) => {
+          set_is_focused(true)
+          props.on_focus()
+          e.target.select()
+        }}
+        on_blur={() => {
+          set_is_focused(false)
+          props.on_blur()
+        }}
+        suffix_action={{
+          icon_variant: 'SEND',
+          on_click: props.on_submit,
+        }}
+        on_key_down={handle_key_down}
+      />
 
-        <div className={styles.footer}>
-          <Checkbox
-            label={props.translations.include_page_content}
-            on_click={props.on_include_content_click}
-            is_checked={props.is_include_content_selected}
-            is_disabled={props.is_include_content_checkbox_disabled}
-          />
-          {props.assistant_selector_slot}
-        </div>
+      <div className={styles.footer}>
+        <Checkbox
+          label={props.translations.include_page_content}
+          on_click={props.on_include_content_click}
+          is_checked={props.is_include_content_selected}
+          is_disabled={props.is_include_content_checkbox_disabled}
+        />
+        {props.assistant_selector_slot}
+      </div>
     </div>
   )
 }

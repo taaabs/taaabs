@@ -53,6 +53,7 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
         popup.style.pointerEvents = 'all'
         console.debug('Popup visibility has been restored')
         browser.runtime.sendMessage({ action: 'popup-opened' })
+        window.postMessage({ action: 'popup-restored' }, '*')
       }
     }
   } else if (is_message(message) && message.action == 'close-popup') {

@@ -8,40 +8,32 @@ export namespace RecentPrompts {
     on_recent_prompt_click: (prompt: string) => void
     is_disabled: boolean
     is_not_available: boolean
-    translations: {
-      heading: string
-    }
     filter_phrase: string
   }
 }
 
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
+  const filter_words = props.filter_phrase
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length > 1)
+
   const filtered_prompts = props.filter_phrase
     ? props.recent_prompts
-        .filter((prompt) => {
-          const regex = new RegExp(
-            props.filter_phrase
-              .split('')
-              .map((char) => `.*${char}`)
-              .join(''),
-            'i',
-          )
-          return regex.test(prompt)
-        })
+        .filter((prompt) =>
+          filter_words.every((word) => prompt.toLowerCase().includes(word)),
+        )
         .map((prompt) => {
-          const index = prompt
-            .toLowerCase()
-            .indexOf(props.filter_phrase.toLowerCase())
-          if (index > -1) {
-            const before = prompt.substring(0, index)
-            const match = prompt.substring(
-              index,
-              index + props.filter_phrase.length,
+          let highlightedPrompt = prompt
+          filter_words.forEach((word) => {
+            const regex = new RegExp(`(${word})`, 'gi')
+            highlightedPrompt = highlightedPrompt.replace(
+              regex,
+              '<mark>$1</mark>',
             )
-            const after = prompt.substring(index + props.filter_phrase.length)
-            return `${before}<mark>${match}</mark>${after}`
-          }
-          return prompt
+          })
+          return highlightedPrompt
         })
     : props.recent_prompts
 
