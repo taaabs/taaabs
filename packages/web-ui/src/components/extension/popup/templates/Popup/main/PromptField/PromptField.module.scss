@@ -12,6 +12,7 @@
 .footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   &__info {
     padding-left: var(--padding-4px);
     color: var(--text-color-dimmed);
