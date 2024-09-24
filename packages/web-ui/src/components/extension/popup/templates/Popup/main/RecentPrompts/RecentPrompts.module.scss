@@ -8,8 +8,9 @@
 }
 .prompts {
   overflow: auto;
-  max-height: 180px;
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-12px) var(--padding-16px);
+  max-height: 200px;
+  padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
+    var(--padding-16px);
   &__inner {
     display: flex;
     gap: var(--padding-8px);
