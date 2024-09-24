@@ -28,7 +28,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             .trim()
             .toLowerCase()
             .split(/\s+/)
-            .filter((word) => word.length)
+            .filter((word) => word.length > 1)
           return filter_words.every((word) =>
             prompt.toLowerCase().includes(word),
           )
@@ -40,7 +40,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             .trim()
             .toLowerCase()
             .split(/\s+/)
-            .filter((word) => word.length)
+            .filter((word) => word.length > 1)
 
           filter_words.forEach((word) => {
             const regex = new RegExp(`(${word})`, 'gi')
@@ -75,7 +75,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                 onClick={() => props.on_recent_prompt_click(original_prompt)}
                 className={cn(styles.prompts__inner__button, {
                   [styles['prompts__inner__button--clamp']]:
-                    !props.filter_phrase,
+                    props.filter_phrase.length <= 1,
                 })}
                 dangerouslySetInnerHTML={{
                   __html: props.default_prompts.includes(original_prompt)

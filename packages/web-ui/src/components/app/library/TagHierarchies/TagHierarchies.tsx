@@ -132,6 +132,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
 
     useEffect(() => {
       if (!props.tree) return
+
+      unique_id_counter.current = 0
+
       set_items(
         props.tree.map((node) =>
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
@@ -475,7 +478,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                   clear_mouseover_ids()
                   update_items({ items: params.items as Item[] })
                   set_is_dragging(false)
-                  localStorage.removeItem('tag-hierarchy-closed-ids')
                 }}
                 maxDepth={5}
                 disableDrag={props.is_read_only}

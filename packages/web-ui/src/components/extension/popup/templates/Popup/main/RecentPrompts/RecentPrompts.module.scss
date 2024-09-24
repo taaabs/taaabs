@@ -36,6 +36,11 @@
       @include hover {
         @include text-decoration-underlinie-thin;
       }
+      // Mark can be nested withn mark
+      mark {
+        color: var(--text-color-normal);
+        background-color: var(--highlight);
+      }
       > svg {
         display: inline;
         vertical-align: baseline;
@@ -49,7 +54,7 @@
       &--clamp {
         display: -webkit-box;
         overflow: hidden;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
       }
     }
