@@ -283,7 +283,7 @@ export const Popup: React.FC = () => {
               ? 'Ask selection'
               : 'Ask this page',
             active_input_placeholder_suffix: '(⇅ for history)',
-            info: 'TIP: Make text selection'
+            info: 'TIP: Select text',
           }}
         />
 
