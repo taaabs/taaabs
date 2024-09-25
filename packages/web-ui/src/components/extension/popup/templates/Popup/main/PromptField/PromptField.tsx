@@ -3,7 +3,6 @@ import styles from './PromptField.module.scss'
 import { Checkbox } from '@web-ui/components/Checkbox'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import cn from 'classnames'
 
 export namespace PromptField {
   export type Props = {
@@ -22,7 +21,6 @@ export namespace PromptField {
       placeholder: string
       include_page_content: string
       active_input_placeholder_suffix: string
-      info: string
     }
   }
 }
@@ -101,15 +99,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        {props.is_include_content_checkbox_not_available && (
-          <div className={styles.footer__info}>{props.translations.info}</div>
-        )}
-        <div
-          className={cn(styles.footer__checkbox, {
-            [styles['footer__checkbox--not-available']]:
-              props.is_include_content_checkbox_not_available,
-          })}
-        >
+        <div className={styles.footer__checkbox}>
           <Checkbox
             label={props.translations.include_page_content}
             on_click={props.on_include_content_click}
