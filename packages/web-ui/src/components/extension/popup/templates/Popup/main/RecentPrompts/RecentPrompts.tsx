@@ -1,5 +1,7 @@
+import React from 'react'
 import styles from './RecentPrompts.module.scss'
 import cn from 'classnames'
+import { Icon as UiIcon } from '@web-ui/components/Icon'
 
 export namespace RecentPrompts {
   export type Props = {
@@ -18,6 +20,28 @@ type FilteredPrompt =
       highlighted_prompt: string
     }
 
+const HighlightedText = ({
+  text,
+  highlight,
+}: {
+  text: string
+  highlight: string
+}) => {
+  if (!highlight.trim()) return text
+
+  const words = highlight
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length)
+  const regex = new RegExp(`(${words.join('|')})`, 'gi')
+  const parts = text.split(regex)
+
+  return parts.map((part, i) =>
+    words.includes(part.toLowerCase()) ? <mark key={i}>{part}</mark> : part,
+  )
+}
+
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   const filtered_prompts: FilteredPrompt[] = props.is_disabled
     ? props.recent_prompts
@@ -33,27 +57,10 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             prompt.toLowerCase().includes(word),
           )
         })
-        .map((prompt) => {
-          const original_prompt = prompt
-          let highlighted_with_markup = prompt
-          const filter_words = props.filter_phrase
-            .trim()
-            .toLowerCase()
-            .split(/\s+/)
-            .filter((word) => word.length)
-
-          filter_words.forEach((word) => {
-            const regex = new RegExp(`(${word})`, 'gi')
-            highlighted_with_markup = highlighted_with_markup.replace(
-              regex,
-              '<>$1</>',
-            )
-          })
-          return {
-            original_prompt,
-            highlighted_prompt: highlighted_with_markup,
-          }
-        })
+        .map((prompt) => ({
+          original_prompt: prompt,
+          highlighted_prompt: prompt,
+        }))
     : props.recent_prompts
 
   const prompts_to_display =
@@ -68,24 +75,12 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
           })}
         >
           {prompts_to_display.map((prompt, i) => {
-            const prompt_to_use =
-              typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
             const original_prompt =
               typeof prompt == 'string' ? prompt : prompt.original_prompt
-
-            // Replace <> and </> with <mark> and </mark>
-            const html =
-              typeof prompt === 'string'
-                ? props.default_prompts.includes(original_prompt)
-                  ? `${star}${prompt}`
-                  : prompt
-                : props.default_prompts.includes(original_prompt)
-                ? `${star}${prompt_to_use
-                    .replace(/<>/g, '<mark>')
-                    .replace(/<\/>/g, '</mark>')}`
-                : prompt_to_use
-                    .replace(/<>/g, '<mark>')
-                    .replace(/<\/>/g, '</mark>')
+            const prompt_to_display =
+              typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
+            const is_default_prompt =
+              props.default_prompts.includes(original_prompt)
 
             return (
               <button
@@ -95,9 +90,20 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                   [styles['prompts__inner__button--clamp']]:
                     !props.filter_phrase,
                 })}
-                dangerouslySetInnerHTML={{ __html: html }}
                 title={original_prompt}
-              />
+              >
+                {is_default_prompt ? (
+                  <UiIcon variant="STAR_FILLED" />
+                ) : (
+                  <div className={styles.prompts__inner__button__dot} />
+                )}
+                <HighlightedText
+                  text={prompt_to_display}
+                  highlight={
+                    filtered_prompts.length > 0 ? props.filter_phrase : ''
+                  }
+                />
+              </button>
             )
           })}
         </div>
@@ -105,11 +111,3 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
     </div>
   )
 }
-
-const star = `<svg viewBox="0 0 182 173" xmlns="http://www.w3.org/2000/svg">
-  <path
-    fill-rule="evenodd"
-    clip-rule="evenodd"
-    d="M80.0381 6.90805C84.1793 -2.3027 97.2777 -2.30267 101.419 6.90805L121.645 51.8979L170.755 57.1993C180.81 58.2847 184.858 70.7215 177.362 77.4991L140.753 110.606L150.878 158.872C152.951 168.754 142.354 176.44 133.581 171.419L90.7289 146.889L47.8761 171.419C39.1029 176.44 28.5057 168.754 30.5787 158.872L40.7042 110.606L4.09439 77.4991C-3.40069 70.7214 0.64712 58.2847 10.7014 57.1993L59.8118 51.8979L80.0381 6.90805Z"
-  />
-</svg>`

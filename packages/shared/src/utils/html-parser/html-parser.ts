@@ -100,11 +100,11 @@ export namespace HtmlParser {
     )
     const messages: ReaderData.Chat['conversation'] = []
     let plain_text = ''
-    message_divs.forEach((el) => {
+    message_divs.forEach((el, i) => {
       if (el.matches(params.user_selector)) {
         const content = el.textContent?.trim() || ''
         messages.push({ role: 'user', content })
-        plain_text += `**User:** ${content}\n\n`
+        plain_text += `<user>\n${content}\n</user>\n`
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
@@ -114,16 +114,9 @@ export namespace HtmlParser {
           role: 'assistant',
           content,
         })
-        // Check if the content starts with a special markdown character
-        const markdown_chars = ['#', '*', '`', '>', '-', '+', '1.']
-        const starts_with_markdown = markdown_chars.some((char) =>
-          content.startsWith(char),
-        )
-        if (starts_with_markdown) {
-          plain_text += `**Assistant:**\n${content}\n\n`
-        } else {
-          plain_text += `**Assistant:** ${content}\n\n`
-        }
+        plain_text += `<assistant>\n${content}\n</assistant>${
+          i != message_divs.length - 1 ? '\n' : ''
+        }`
       }
     })
     return { messages, plain_text }
@@ -168,7 +161,7 @@ export namespace HtmlParser {
       // Gemini
       else if (params.url.startsWith('https://gemini.google.com/app/')) {
         const user_selector = '.user-query-container'
-        const assistant_selector = 'message-content.model-response-text'
+        const assistant_selector = '.response-container-content'
         const { messages, plain_text } = parse_chat_messages({
           html: params.html,
           user_selector,
