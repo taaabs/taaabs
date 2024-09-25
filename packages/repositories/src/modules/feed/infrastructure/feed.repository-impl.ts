@@ -14,13 +14,16 @@ export class Feed_RepositoryImpl implements Feed_Repository {
       const created_by = response.users.find(
         (user) => user.id == link.created_by,
       )
-      const followees = link.followees
-        .map((followee_id) =>
-          response.users.find((user) => user.id == followee_id),
-        )
+      const followees = link.followees.map((followee_id) =>
+        response.users.find((user) => user.id == followee_id),
+      )
 
       return {
-        ...link,
+        title: link.title,
+        url: link.url,
+        created_at: link.created_at,
+        first_followee_created_at: link.first_followee_created_at,
+        saves: link.saves,
         created_by: created_by
           ? {
               username: created_by.username,

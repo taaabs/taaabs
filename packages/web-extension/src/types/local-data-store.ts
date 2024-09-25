@@ -7,4 +7,5 @@ export interface LocalDataStore {
   theme?: 'light' | 'dark';
   use_custom_new_tab?: boolean;
   open_chatbot_in_new_tab?: boolean;
+  show_floating_button?: boolean;
 }

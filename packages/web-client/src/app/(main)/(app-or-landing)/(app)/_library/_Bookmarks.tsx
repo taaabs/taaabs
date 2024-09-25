@@ -646,7 +646,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       const modified_bookmark: UpsertBookmark_Params = {
         bookmark_id: bookmark.id,
         tags: bookmark.tags
-          .filter((tag) => tag.id !== tag_id)
+          .filter((tag) => tag.id != tag_id)
           .map((tag) => ({
             name: tag.name,
             is_public: tag.is_public,

@@ -283,7 +283,7 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             ? false
             : undefined
           : params.is_unsorted,
-      tags: tags.length ? tags : undefined,
+      tags: params.tags ? tags : undefined,
       links: links.length ? links : undefined,
       cover: params.is_public ? cover : undefined,
       cover_aes:

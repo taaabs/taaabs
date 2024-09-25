@@ -153,5 +153,6 @@ browser.webNavigation.onCommitted.addListener((details) => {
 
 browser.runtime.onInstalled.addListener(async () => {
   await browser.storage.local.set({ use_custom_new_tab: true })
+  await browser.storage.local.set({ show_floating_button: true })
   await browser.tabs.create({ url: 'https://taaabs.com/library' })
 })
