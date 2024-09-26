@@ -20,6 +20,7 @@ export namespace _Item {
     on_link_middle_click: () => void
     on_new_tab_click: () => void
     on_is_visible: () => void
+    on_menu_toggled: (is_open: boolean) => void
     created_at: Date
     is_public?: boolean
     title?: string
@@ -35,7 +36,6 @@ export namespace _Item {
 export const _Item: React.FC<_Item.Props> = (props) => {
   const ref = useRef<HTMLDivElement>(null)
   const is_visible = useViewportSpy(ref)
-  const [was_recently_visited, set_was_recently_visited] = useState<boolean>()
   const [is_menu_opened, set_is_menu_opened] = useState<boolean>()
 
   useUpdateEffect(() => {
@@ -102,7 +102,6 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           onClick={async (e) => {
             e.stopPropagation()
             e.preventDefault()
-            set_was_recently_visited(true)
             props.on_link_click()
           }}
           onAuxClick={props.on_link_middle_click}
@@ -117,7 +116,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           <span>{props.title}</span>
         </a>
       </div>
-      <div className={styles.item__actions}>
+      <div className={cn(styles.item__actions, 'no-drag')}>
         {props.saves !== undefined && props.saves > 0 && (
           <button className={styles['item__actions__public-saves']}>
             {props.saves}
@@ -127,17 +126,17 @@ export const _Item: React.FC<_Item.Props> = (props) => {
           className={styles.item__actions__open}
           onClick={async (e) => {
             e.stopPropagation()
-            set_was_recently_visited(true)
             props.on_new_tab_click()
           }}
         >
           <UiIcon variant="NEW_TAB" />
         </button>
-        <div className={cn([styles.item__actions__menu, 'no-drag'])}>
+        <div className={styles.item__actions__menu}>
           <OutsideClickHandler
             disabled={!is_menu_opened}
             onOutsideClick={() => {
               set_is_menu_opened(false)
+              props.on_menu_toggled(false)
             }}
           >
             <button
@@ -147,6 +146,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
               })}
               onClick={() => {
                 set_is_menu_opened(!is_menu_opened)
+                props.on_menu_toggled(true)
               }}
             >
               <UiIcon variant="MORE" />

@@ -64,6 +64,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
         ...item,
       })),
     )
+    const [is_sortable_disabled, set_is_sortable_disabled] = useState<boolean>()
 
     let relevant_items = 0
 
@@ -165,6 +166,9 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
             props.on_video_player_click(item)
           }}
           on_is_visible={() => props.on_is_visible(item)}
+          on_menu_toggled={(is_open: boolean) => {
+            set_is_sortable_disabled(is_open)
+          }}
           should_dim_visited_links={false}
           url={item.url}
           created_at={item.created_at}
@@ -201,12 +205,11 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
               props.on_change(new_sortable_items)
             }}
             animation={system_values.sortablejs_animation_duration}
-            forceFallback={true}
             className={styles.items}
-            fallbackClass={styles.dragging}
             delay={system_values.sortablejs_delay}
             delayOnTouchOnly={true}
             filter=".no-drag"
+            disabled={is_sortable_disabled}
           >
             {items_dom}
           </ReactSortable>
