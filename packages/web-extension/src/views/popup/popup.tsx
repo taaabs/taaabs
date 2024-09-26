@@ -59,6 +59,7 @@ export const Popup: React.FC = () => {
       `Plain text for Assistant parsed in ${
         Date.now() - getting_parsed_html_started_at_timestamp.current!
       }ms.`,
+      parsed_html,
     )
   }, [parsed_html])
 
@@ -126,7 +127,11 @@ export const Popup: React.FC = () => {
 
   const unsaved_items = [
     <UiButton
-      on_click={create_bookmark_hook.create_bookmark}
+      on_click={() => {
+        create_bookmark_hook.create_bookmark({
+          reader_data: parsed_html?.reader_data,
+        })
+      }}
       is_disabled={create_bookmark_hook.is_creating}
     >
       Clip this page

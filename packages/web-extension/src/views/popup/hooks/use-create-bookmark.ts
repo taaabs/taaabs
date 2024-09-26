@@ -17,7 +17,9 @@ export type TabData = {
 export const use_create_bookmark = () => {
   const [is_creating, set_is_creating] = useState<boolean>()
 
-  const create_bookmark = async () => {
+  const create_bookmark = async (params: {
+    reader_data?: HtmlParser.ParsedResult['reader_data']
+  }) => {
     try {
       set_is_creating(true)
       const before_bookmark_parsed = Date.now()
@@ -152,13 +154,6 @@ export const use_create_bookmark = () => {
       }
       const title = get_title()
 
-      const reader_data = (
-        await HtmlParser.parse({
-          url: url.href,
-          html: document.getElementsByTagName('html')[0].outerHTML,
-        })
-      )?.reader_data
-
       const favicon_base64 = favicon ? favicon.split(',')[1] : undefined
 
       let cover: string | undefined = undefined
@@ -180,12 +175,14 @@ export const use_create_bookmark = () => {
           {
             url: url_cleaner(url.href),
             favicon: favicon_base64,
-            reader_data,
+            reader_data: params.reader_data,
           },
         ],
         cover,
         blurhash,
       }
+
+      console.log(bookmark)
 
       console.debug(`Page parsed in ${Date.now() - before_bookmark_parsed}ms.`)
       send_message({ action: 'create-bookmark', bookmark })

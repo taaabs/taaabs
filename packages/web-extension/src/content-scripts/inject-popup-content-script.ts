@@ -348,7 +348,8 @@ const message_handler = async (event: MessageEvent) => {
       is_attach_this_page_checkbox_checked: event.data.is_checked,
     })
   } else if (action == 'parse-html') {
-    // Some sites like gmail restrict us from parsing directly from popup
+    // Some sites like gmail restrict parsing directly from popup
+    // by having strict DOM manipulation security policy
     const parsed_html = await HtmlParser.parse({
       html: event.data.html,
       url: document.location.href,

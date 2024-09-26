@@ -135,10 +135,8 @@ export namespace HtmlParser {
     }
 
     try {
-      if (
-        // ChatGPT
-        params.url.startsWith('https://chatgpt.com/')
-      ) {
+      // ChatGPT
+      if (params.url.startsWith('https://chatgpt.com/')) {
         const user_selector = '[data-message-author-role="user"]'
         const assistant_selector = '[data-message-author-role="assistant"]'
         const { messages, plain_text } = parse_chat_messages({
