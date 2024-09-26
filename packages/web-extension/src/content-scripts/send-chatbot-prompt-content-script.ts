@@ -274,7 +274,7 @@ namespace AssistantBugMitigation {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 1500)
+        }, 2000)
       })
     } else if (url == chatbot_urls.perplexity) {
       await new Promise((resolve) => {
