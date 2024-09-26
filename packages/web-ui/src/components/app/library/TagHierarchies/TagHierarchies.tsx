@@ -191,19 +191,15 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }) => {
       const search_params = new URLSearchParams(window.location.search)
       search_params.set('t', (item as Item).hierarchy_tag_ids.join(','))
+
       return (
         <div className={styles.tag}>
           {collapseIcon ? collapseIcon : <div className={styles.tag__spacer} />}
           <a
             className={cn(styles.tag__button, {
-              [styles['tag__button--active']]:
-                JSON.stringify(item.hierarchy_tag_ids) ==
-                JSON.stringify(
-                  props.selected_tag_ids.slice(
-                    0,
-                    item.hierarchy_tag_ids.length,
-                  ),
-                ),
+              [styles['tag__button--active']]: item.hierarchy_tag_ids.every(
+                (tag_id, index) => props.selected_tag_ids[index] == tag_id,
+              ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
               ),
