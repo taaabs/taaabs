@@ -93,10 +93,7 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
         library_url={username ? `/${username}` : '/library'}
         dragged_tag={tag_view_options_hook.dragged_tag}
         all_bookmarks_yields={tag_hierarchies_hook.total}
-        is_all_bookmarks_selected={
-          !tag_view_options_hook.selected_tags.length &&
-          !bookmarks_hook.showing_bookmarks_fetched_by_ids
-        }
+        is_all_bookmarks_selected={!tag_view_options_hook.selected_tags.length}
         on_click_all_bookmarks={() => {
           tag_view_options_hook.clear_selected_tags()
           if (bookmarks_hook.showing_bookmarks_fetched_by_ids) {
