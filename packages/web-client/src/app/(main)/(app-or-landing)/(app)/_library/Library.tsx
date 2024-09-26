@@ -1,6 +1,13 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { createContext, useContext, useRef, useState } from 'react'
+import {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useRef,
+  useState,
+} from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from './_hooks/use-filter-view-options'
 import { use_tag_view_options } from './_hooks/use-tag-view-options'
@@ -58,7 +65,7 @@ export type LibraryContext = {
   on_tag_rename_click: (params: { id: number; name: string }) => Promise<void>
   search_cache_to_be_cleared: React.MutableRefObject<boolean>
   is_not_interactive: boolean
-  is_initialized: boolean
+  set_is_tag_hierarchy_ready: (new_value: boolean) => void
 }
 
 export const LibraryContext = createContext({} as LibraryContext)
@@ -86,11 +93,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const points_hook = use_points()
   const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
   // START - UI synchronization
+  const [is_tag_hierarchy_ready, set_is_tag_hierarchy_ready] = useState(false) // Tag hierarchy is ready as soon as collapsed state is restored
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
     useState(0)
   const [is_fetching_first_bookmarks, set_is_fetching_first_bookmarks] =
     useState(false)
-  const [is_initialized, set_is_initialized] = useState(false)
   // END - UI synchronization
 
   use_bookmarklet_handler({
@@ -113,6 +120,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       !counts_hook.should_refetch &&
       !tag_hierarchies_hook.is_fetching &&
       !tag_hierarchies_hook.is_updating &&
+      is_tag_hierarchy_ready &&
       !pinned_hook.is_fetching &&
       !pinned_hook.is_updating &&
       !pinned_hook.should_refetch
@@ -134,7 +142,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         search_hook.set_highlights(undefined)
         search_hook.set_highlights_sites_variants(undefined)
       }
-      set_is_initialized(true)
     }
   }, [
     bookmarks_hook.is_fetching_first_bookmarks,
@@ -143,6 +150,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     counts_hook.should_refetch,
     tag_hierarchies_hook.is_fetching,
     tag_hierarchies_hook.is_updating,
+    is_tag_hierarchy_ready,
     pinned_hook.is_fetching,
     pinned_hook.is_updating,
     pinned_hook.should_refetch,
@@ -354,7 +362,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         on_tag_rename_click,
         search_cache_to_be_cleared,
         is_not_interactive,
-        is_initialized,
+        set_is_tag_hierarchy_ready,
       }}
     >
       <Ui_app_library_DraggedCursorTag

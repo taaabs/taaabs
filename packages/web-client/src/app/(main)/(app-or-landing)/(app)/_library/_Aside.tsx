@@ -42,7 +42,6 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     library_updated_at_timestamp,
     is_not_interactive,
     on_tag_rename_click,
-    is_initialized,
   } = useContext(LibraryContext)
   const is_hydrated = use_is_hydrated()
   const { popstate_count } = useContext(PopstateCountContext)
@@ -196,7 +195,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
         )
       }
       slot_custom_range={
-        is_initialized ? (
+        library_updated_at_timestamp ? (
           <div
             style={{
               pointerEvents: is_fetching_first_bookmarks ? 'none' : undefined,
@@ -248,7 +247,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             pointerEvents: is_not_interactive ? 'none' : undefined,
           }}
         >
-          {is_initialized ? (
+          {library_updated_at_timestamp ? (
             <>
               <Ui_app_library_SelectedTags
                 key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}

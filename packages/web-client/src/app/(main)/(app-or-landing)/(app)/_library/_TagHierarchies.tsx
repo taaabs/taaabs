@@ -31,7 +31,7 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
     library_updated_at_timestamp,
     is_not_interactive,
     on_tag_rename_click,
-    is_initialized,
+    set_is_tag_hierarchy_ready,
   } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
 
@@ -39,7 +39,10 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
     <div style={{ pointerEvents: is_not_interactive ? 'none' : undefined }}>
       <Ui_app_library_TagHierarchies
         library_updated_at_timestamp={library_updated_at_timestamp}
-        show_skeleton={!is_initialized}
+        on_ready={() => {
+          set_is_tag_hierarchy_ready(true)
+        }}
+        show_skeleton={!library_updated_at_timestamp}
         is_read_only={!!username}
         tree={tag_hierarchies_hook.tag_hierarchies}
         on_update={async (

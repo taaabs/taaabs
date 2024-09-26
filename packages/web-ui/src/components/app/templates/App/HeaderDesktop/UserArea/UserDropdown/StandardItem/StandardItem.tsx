@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import styles from './StandardItem.module.scss'
 
 export namespace StandardItem {
@@ -9,13 +10,19 @@ export namespace StandardItem {
 }
 
 export const StandardItem: React.FC<StandardItem.Props> = (props) => {
-  return props.on_click ? (
-    <button className={styles.container} onClick={props.on_click}>
-      {props.label}
-    </button>
-  ) : (
-    <a className={styles.container} href={props.href}>
-      {props.label}
-    </a>
-  )
+  if (props.on_click) {
+    return (
+      <button className={styles.container} onClick={props.on_click}>
+        {props.label}
+      </button>
+    )
+  } else if (props.href) {
+    return (
+      <Link className={styles.container} href={props.href!}>
+        {props.label}
+      </Link>
+    )
+  } else {
+    return <div>[StandardItem] Invalid component usage.</div>
+  }
 }
