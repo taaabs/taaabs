@@ -22,9 +22,10 @@ export namespace TagHierarchies {
   }
   export type Props = {
     on_update: (tags: Node[]) => void
+    is_not_interactive?: boolean
     on_item_click: (hierarchy_ids: number[]) => void
     selected_tag_ids: number[]
-    show_skeleton: boolean
+    is_fetching_initial_tag_hierarchies?: boolean
     is_all_bookmarks_selected: boolean
     on_click_all_bookmarks: () => void
     library_url: string
@@ -63,6 +64,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
     const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
+    const [selected_tag_ids_commited, set_selected_tag_ids_commited] = useState<
+      number[]
+    >([])
+    const [
+      is_all_bookmarks_selected_commited,
+      set_is_all_bookmarks_selected_commited,
+    ] = useState<boolean>()
     const [
       is_simplebar_tag_hierarchies_scrolled_to_top,
       set_is_simplebar_tag_hierarchies_scrolled_to_top,
@@ -115,6 +123,11 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         />
       </Ui_Dropdown>,
     )
+
+    useUpdateEffect(() => {
+      set_selected_tag_ids_commited(selected_tag_ids)
+      set_is_all_bookmarks_selected_commited(props.is_all_bookmarks_selected)
+    }, [props.library_updated_at_timestamp])
 
     const clear_mouseover_ids = () => {
       set_mouseover_ids([])
@@ -213,7 +226,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               [styles['tag__button--active']]:
                 JSON.stringify(item.hierarchy_tag_ids) ==
                 JSON.stringify(
-                  selected_tag_ids.slice(0, item.hierarchy_tag_ids.length),
+                  selected_tag_ids_commited.slice(
+                    0,
+                    item.hierarchy_tag_ids.length,
+                  ),
                 ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
@@ -221,6 +237,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             })}
             onClick={(e) => {
               e.preventDefault()
+              if (props.is_not_interactive) return
               props.on_item_click((item as Item).hierarchy_tag_ids)
               set_selected_tag_ids((item as Item).hierarchy_tag_ids)
               clear_mouseover_ids()
@@ -427,7 +444,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         className={cn(styles.simplebar)}
         ref={simplebar_tag_hierarchies}
       >
-        {props.show_skeleton && (
+        {(props.is_fetching_initial_tag_hierarchies ||
+          !props.library_updated_at_timestamp) && (
           <div className={styles.simplebar__skeleton}>
             {[200, 180, 140, 160, 120].map((width, i) => (
               <Skeleton width={width} key={i} />
@@ -454,9 +472,12 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               <button
                 className={cn(styles.tag__button, styles['tag__button--all'], {
                   [styles['tag__button--active']]:
-                    props.is_all_bookmarks_selected,
+                    is_all_bookmarks_selected_commited,
                 })}
-                onClick={props.on_click_all_bookmarks}
+                onClick={() => {
+                  if (props.is_not_interactive) return
+                  props.on_click_all_bookmarks()
+                }}
                 onMouseEnter={() => {
                   if (props.dragged_tag) {
                     document.body.classList.add('adding-tag')
@@ -566,8 +587,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     )
   },
   (o, n) =>
-    o.tree == n.tree &&
-    o.show_skeleton == n.show_skeleton &&
+    o.is_not_interactive == n.is_not_interactive &&
+    o.is_fetching_initial_tag_hierarchies ==
+      n.is_fetching_initial_tag_hierarchies &&
     o.library_updated_at_timestamp == n.library_updated_at_timestamp &&
     o.is_all_bookmarks_selected == n.is_all_bookmarks_selected &&
     o.is_updating == n.is_updating &&

@@ -65,7 +65,7 @@ export const Primary = () => {
         is_updating={false}
         selected_tag_ids={[1, 3, 5]}
         library_url="/"
-        show_skeleton={false}
+        is_fetching_initial_tag_hierarchies={false}
         translations={{
           all_bookmarks: 'All bookmarks',
           drag_here: 'Drag and drop tags here',
@@ -87,7 +87,7 @@ export const Primary = () => {
           is_updating={false}
           selected_tag_ids={[1, 3, 5]}
           library_url="/"
-          show_skeleton={false}
+          is_fetching_initial_tag_hierarchies={false}
           translations={{
             all_bookmarks: 'All bookmarks',
             drag_here: 'Drag and drop tags here',
