@@ -18,7 +18,7 @@ import { Stars as Ui_Dropdown_Stars } from '@web-ui/components/Dropdown/Stars'
 import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark/delete-bookmark-modal-setter'
 import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
 import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
-import { useContext } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { LibraryContext } from './Library'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { use_library_dispatch } from '@/stores/library'
@@ -27,10 +27,11 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/providers/LocalDbProvider'
 import { _Bookmark } from './_bookmarks/_Bookmark'
 import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
 import { AuthContext } from '@/providers/AuthProvider'
 import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 namespace _Bookmarks {
   export type Props = {
@@ -42,7 +43,6 @@ namespace _Bookmarks {
 export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   const auth_context = useContext(AuthContext)
   const modal_context = useContext(ModalContext)
-  const { popstate_count } = useContext(PopstateCountContext)
   const {
     bookmarks_hook,
     counts_hook,
@@ -62,6 +62,21 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   } = useContext(LibraryContext)
   const dispatch = use_library_dispatch()
   const search_params = useSearchParams()
+
+  // Handling back navigation.
+  // "popstate_count" changes before "search_params".
+  const { popstate_count } = useContext(PopstateCountContext)
+  const is_rerender_trigger_update_enabled = useRef(false)
+  const [rerender_trigger, set_rerender_trigger] = useState<number>()
+  useUpdateEffect(() => {
+    is_rerender_trigger_update_enabled.current = true
+  }, [popstate_count])
+  useUpdateEffect(() => {
+    if (is_rerender_trigger_update_enabled.current) {
+      set_rerender_trigger(Date.now())
+      is_rerender_trigger_update_enabled.current = false
+    }
+  }, [search_params])
 
   return bookmarks_hook.bookmarks?.map((bookmark, i) => {
     const render_menu = () => {
@@ -733,7 +748,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
 
     return (
       <_Bookmark
-        key={`${bookmark.id}-${i}-${library_updated_at_timestamp}-${popstate_count}`}
+        key={`${bookmark.id}${i}${library_updated_at_timestamp}${rerender_trigger}`}
         created_at={new Date(bookmark.created_at)}
         locale={props.dictionary.locale}
         search_queried_at_timestamp={search_hook.queried_at_timestamp}

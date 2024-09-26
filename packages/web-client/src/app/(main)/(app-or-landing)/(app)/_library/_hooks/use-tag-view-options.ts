@@ -24,7 +24,7 @@ export const use_tag_view_options = () => {
     yields: number
   }>()
 
-  // Clear dragged tag.
+  // Clear dragged tag
   useEffect(() => {
     const on_mouse_up = () => {
       set_dragged_tag(undefined)
@@ -39,7 +39,7 @@ export const use_tag_view_options = () => {
     const search_params_tags = search_params.get(search_params_keys.tags)
     if (search_params_tags) {
       set_selected_tags(search_params_tags.split(',').map((t) => parseInt(t)))
-    } else if (!search_params_tags) {
+    } else {
       set_selected_tags([])
     }
   }, [search_params])

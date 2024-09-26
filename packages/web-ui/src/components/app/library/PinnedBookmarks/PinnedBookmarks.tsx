@@ -47,7 +47,7 @@ export namespace PinnedBookmarks {
       nothing_pinned: string
       open_original_url: string
       open_snapshot: string
-      unpin: string // Add this line
+      unpin: string
     }
   }
 }
@@ -219,5 +219,5 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
       </>
     )
   },
-  () => true,
+  () => true
 )

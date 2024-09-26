@@ -1,5 +1,5 @@
 import { use_library_dispatch } from '@/stores/library'
-import { useContext } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { browser_storage } from '@/constants/browser-storage'
 import { toast } from 'react-toastify'
 import { Filter } from '@/types/library/filter'
@@ -18,6 +18,9 @@ import { PinnedBookmarks as Ui_app_library_PinnedBookmarks } from '@web-ui/compo
 import { LibraryContext } from './Library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { useSearchParams } from 'next/navigation'
 
 namespace _Pinned {
   export type Props = {
@@ -27,6 +30,7 @@ namespace _Pinned {
 }
 
 export const _Pinned: React.FC<_Pinned.Props> = (props) => {
+  const search_params = useSearchParams()
   const auth_context = useContext(AuthContext)
   const modal_context = useContext(ModalContext)
   const {
@@ -82,9 +86,24 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
     toast.success(props.dictionary.app.library.pinned_links_has_beed_updated)
   }
 
+  // Handling back navigation. 
+  // "popstate_count" changes before "search_params".
+  const { popstate_count } = useContext(PopstateCountContext)
+  const is_rerender_trigger_update_enabled = useRef(false)
+  const [rerender_trigger, set_rerender_trigger] = useState<number>()
+  useUpdateEffect(() => {
+    is_rerender_trigger_update_enabled.current = true
+  }, [popstate_count])
+  useUpdateEffect(() => {
+    if (is_rerender_trigger_update_enabled.current) {
+      set_rerender_trigger(Date.now())
+      is_rerender_trigger_update_enabled.current = false
+    }
+  }, [search_params])
+  
   return (
     <Ui_app_library_PinnedBookmarks
-      key={library_updated_at_timestamp}
+      key={`${library_updated_at_timestamp}${rerender_trigger}`}
       favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
       items={
         pinned_hook.items?.map((item) => ({
