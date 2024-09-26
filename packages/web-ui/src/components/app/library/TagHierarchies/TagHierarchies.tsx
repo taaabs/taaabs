@@ -62,6 +62,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
+    const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
     const [
       is_simplebar_tag_hierarchies_scrolled_to_top,
       set_is_simplebar_tag_hierarchies_scrolled_to_top,
@@ -109,6 +110,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             if (!context_menu_of_item_id) return
             clear_mouseover_ids()
             delete_item({ item_id: context_menu_of_item_id })
+            set_selected_tag_ids([])
           }}
         />
       </Ui_Dropdown>,
@@ -117,6 +119,18 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const clear_mouseover_ids = () => {
       set_mouseover_ids([])
     }
+    const clear_selected_tag_ids = () => {
+      set_selected_tag_ids([])
+    }
+
+    useUpdateEffect(() => {
+      if (
+        JSON.stringify(props.selected_tag_ids) !=
+        JSON.stringify(selected_tag_ids)
+      ) {
+        clear_selected_tag_ids()
+      }
+    }, [props.selected_tag_ids])
 
     useUpdateEffect(() => {
       if (!props.tree) return
@@ -191,15 +205,16 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     }) => {
       const search_params = new URLSearchParams(window.location.search)
       search_params.set('t', (item as Item).hierarchy_tag_ids.join(','))
-
       return (
         <div className={styles.tag}>
           {collapseIcon ? collapseIcon : <div className={styles.tag__spacer} />}
           <a
             className={cn(styles.tag__button, {
-              [styles['tag__button--active']]: item.hierarchy_tag_ids.every(
-                (tag_id, index) => props.selected_tag_ids[index] == tag_id,
-              ),
+              [styles['tag__button--active']]:
+                JSON.stringify(item.hierarchy_tag_ids) ==
+                JSON.stringify(
+                  selected_tag_ids.slice(0, item.hierarchy_tag_ids.length),
+                ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
               ),
@@ -207,6 +222,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             onClick={(e) => {
               e.preventDefault()
               props.on_item_click((item as Item).hierarchy_tag_ids)
+              set_selected_tag_ids((item as Item).hierarchy_tag_ids)
               clear_mouseover_ids()
             }}
             href={`${props.library_url}?${search_params.toString()}`}
