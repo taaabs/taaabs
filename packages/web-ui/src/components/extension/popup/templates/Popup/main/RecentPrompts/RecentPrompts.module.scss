@@ -47,6 +47,7 @@
         margin-bottom: 2px;
       }
       > mark {
+        padding: 0; // Fix for some sites.
         color: var(--text-color-normal);
         background-color: var(--highlight);
       }

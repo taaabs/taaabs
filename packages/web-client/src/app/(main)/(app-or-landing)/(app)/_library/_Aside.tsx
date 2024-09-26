@@ -240,7 +240,9 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
         <div
           style={{
             opacity:
-              is_fetching_first_bookmarks && !search_hook.search_string
+              library_updated_at_timestamp &&
+              is_fetching_first_bookmarks &&
+              !search_hook.search_string
                 ? 'var(--dimmed-opacity)'
                 : undefined,
             pointerEvents: is_not_interactive ? 'none' : undefined,

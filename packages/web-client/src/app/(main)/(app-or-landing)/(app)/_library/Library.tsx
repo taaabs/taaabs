@@ -388,26 +388,26 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           <_Aside dictionary={props.dictionary} local_db={props.local_db} />
         }
         are_bookmarks_dimmed={
-          is_fetching_first_bookmarks || bookmarks_hook.is_upserting || false
+          (library_updated_at_timestamp &&
+            (is_fetching_first_bookmarks || bookmarks_hook.is_upserting)) ||
+          false
         }
         slot_main={
           <>
-            {/* Pinned */}
-            {!bookmarks_hook.showing_bookmarks_fetched_by_ids &&
-              bookmarks_hook.first_bookmarks_fetched_at_timestamp && (
-                <_Pinned
+            {library_updated_at_timestamp ? (
+              <>
+                {!bookmarks_hook.showing_bookmarks_fetched_by_ids && (
+                  <_Pinned
+                    dictionary={props.dictionary}
+                    local_db={props.local_db}
+                  />
+                )}
+
+                <_Bookmarks
                   dictionary={props.dictionary}
                   local_db={props.local_db}
-                  library_updated_at_timestamp={library_updated_at_timestamp}
                 />
-              )}
-
-            {/* Bookmarks */}
-            {bookmarks_hook.first_bookmarks_fetched_at_timestamp ? (
-              <_Bookmarks
-                dictionary={props.dictionary}
-                local_db={props.local_db}
-              />
+              </>
             ) : (
               <Ui_app_library_BookmarksSkeleton />
             )}

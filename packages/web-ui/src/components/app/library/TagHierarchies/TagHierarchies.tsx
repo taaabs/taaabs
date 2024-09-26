@@ -423,20 +423,22 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
         className={cn(styles.simplebar)}
         ref={simplebar_tag_hierarchies}
       >
-        {props.show_skeleton ? (
+        {(props.show_skeleton || !is_tree_ready) && (
           <div className={styles.simplebar__skeleton}>
             {[200, 180, 140, 160, 120].map((width, i) => (
               <Skeleton width={width} key={i} />
             ))}
           </div>
-        ) : (
+        )}
+
+        {!props.show_skeleton && (
           <div
             className={cn({
               [styles['simplebar__scrolled']]:
                 !is_simplebar_tag_hierarchies_scrolled_to_top,
             })}
             style={{
-              display: props.show_skeleton || !is_tree_ready ? 'none' : '',
+              display: !is_tree_ready ? 'none' : '',
             }}
           >
             <div

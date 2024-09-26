@@ -157,13 +157,10 @@ mark {
   --animation-duration: 1.5s;
   --animation-direction: normal;
   --pseudo-element-display: block; /* Enable animation */
-
   background-color: var(--base-color);
-
   width: 100%;
   border-radius: 0.25rem;
   display: inline-flex;
-
   position: relative;
   user-select: none;
   overflow: hidden;
@@ -171,7 +168,7 @@ mark {
 }
 
 .react-loading-skeleton::after {
-  content: ' ';
+  content: '';
   display: var(--pseudo-element-display);
   position: absolute;
   top: 0;
@@ -186,18 +183,11 @@ mark {
     var(--base-color)
   );
   transform: translateX(-100%);
-
   animation-name: react-loading-skeleton;
   animation-direction: var(--animation-direction);
   animation-duration: var(--animation-duration);
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
-}
-
-.react-loading-skeleton {
-  line-height: inherit;
-  --base-color: var(--skeleton-base-color);
-  --highlight-color: var(--skeleton-highlight-color);
 }
 
 .recharts-brush-texts {
