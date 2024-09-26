@@ -23,6 +23,7 @@ namespace _Pinned {
   export type Props = {
     local_db: LocalDb
     dictionary: Dictionary
+    library_updated_at_timestamp: number
   }
 }
 
@@ -83,8 +84,7 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
 
   return (
     <Ui_app_library_PinnedBookmarks
-      key={`${pinned_hook.fetched_at_timestamp}`}
-      rerender_trigger={`${bookmarks_hook.first_bookmarks_fetched_at_timestamp}`}
+      key={props.library_updated_at_timestamp}
       favicon_host={`${process.env.NEXT_PUBLIC_API_URL}/v1/favicons`}
       items={
         pinned_hook.items?.map((item) => ({

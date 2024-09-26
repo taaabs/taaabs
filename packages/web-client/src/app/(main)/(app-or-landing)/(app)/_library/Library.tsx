@@ -398,6 +398,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
                 <_Pinned
                   dictionary={props.dictionary}
                   local_db={props.local_db}
+                  library_updated_at_timestamp={library_updated_at_timestamp}
                 />
               )}
 
