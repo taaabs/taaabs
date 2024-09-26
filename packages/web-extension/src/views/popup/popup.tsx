@@ -41,8 +41,6 @@ export const Popup: React.FC = () => {
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
   const text_selection_hook = use_text_selection()
-  const [is_prompt_field_focused, set_is_propmt_field_focused] =
-    useState<boolean>()
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
   let chatbot_url = chatbot_urls.chatgpt
@@ -192,8 +190,8 @@ export const Popup: React.FC = () => {
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
           filter_phrase={
-            is_prompt_field_focused &&
             attach_this_page_checkbox_hook.is_checked &&
+            (parsed_html || text_selection_hook.selected_text) &&
             !prompts_history_hook.prompts_history.includes(prompt_field_value)
               ? prompt_field_value
               : ''
@@ -209,7 +207,6 @@ export const Popup: React.FC = () => {
           key={popup_restored_count}
           value={prompt_field_value}
           on_focus={() => {
-            set_is_propmt_field_focused(true)
             prompts_history_hook.restore_prompts_history()
           }}
           on_change={(value) => {
