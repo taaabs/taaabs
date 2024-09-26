@@ -19,7 +19,7 @@ import { use_bookmarks } from './_hooks/use-bookmarks'
 import { use_counts } from './_hooks/use-counts'
 import { use_session_storage_cleanup } from './_hooks/use-session-storage-cleanup'
 import { browser_storage } from '@/constants/browser-storage'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { SwipableColumns as Ui_app_templates_App_content_SwipableColumns } from '@web-ui/components/app/templates/App/content/SwipableColumns'
 import { DraggedCursorTag as Ui_app_library_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
 import { BookmarksSkeleton as Ui_app_library_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
@@ -73,6 +73,7 @@ export const LibraryContext = createContext({} as LibraryContext)
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
 ) => {
+  const search_params = useSearchParams()
   const auth_context = useContext(AuthContext)
   use_scroll_restore()
   const is_hydrated = use_is_hydrated()
@@ -130,6 +131,21 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       )
       if (is_fetching_first_bookmarks) {
         window.scrollTo(0, 0)
+      }
+      // Restore scroll position on initial load
+      if (!library_updated_at_timestamp) {
+        const scroll_y = sessionStorage.getItem(
+          browser_storage.session_storage.library.scroll_y({
+            search_params: search_params.toString(),
+            username,
+            hash: window.location.hash,
+          }),
+        )
+        if (scroll_y) {
+          setTimeout(() => {
+            window.scrollTo(0, parseInt(scroll_y))
+          }, 0)
+        }
       }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
