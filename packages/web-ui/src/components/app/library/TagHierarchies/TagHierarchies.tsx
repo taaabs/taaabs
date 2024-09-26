@@ -11,6 +11,7 @@ import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dro
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import Skeleton from 'react-loading-skeleton'
 import Simplebar from 'simplebar-react'
+import { use_is_hydrated } from '@shared/hooks'
 
 export namespace TagHierarchies {
   export type Node = {
@@ -57,10 +58,10 @@ type Item = {
 export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
   function TagHierarchies(props) {
     const nestable = useRef(null)
+    const is_hydrated = use_is_hydrated()
     const [is_dragging, set_is_dragging] = useState(false)
     const [items, set_items] = useState<Item[]>([])
     const [mouseover_ids, set_mouseover_ids] = useState<number[]>([])
-    const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
     const [
       is_simplebar_tag_hierarchies_scrolled_to_top,
       set_is_simplebar_tag_hierarchies_scrolled_to_top,
@@ -108,7 +109,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             if (!context_menu_of_item_id) return
             clear_mouseover_ids()
             delete_item({ item_id: context_menu_of_item_id })
-            set_selected_tag_ids([])
           }}
         />
       </Ui_Dropdown>,
@@ -117,18 +117,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const clear_mouseover_ids = () => {
       set_mouseover_ids([])
     }
-    const clear_selected_tag_ids = () => {
-      set_selected_tag_ids([])
-    }
-
-    useUpdateEffect(() => {
-      if (
-        JSON.stringify(props.selected_tag_ids) !=
-        JSON.stringify(selected_tag_ids)
-      ) {
-        clear_selected_tag_ids()
-      }
-    }, [props.selected_tag_ids])
 
     useUpdateEffect(() => {
       if (!props.tree) return
@@ -211,7 +199,10 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               [styles['tag__button--active']]:
                 JSON.stringify(item.hierarchy_tag_ids) ==
                 JSON.stringify(
-                  selected_tag_ids.slice(0, item.hierarchy_tag_ids.length),
+                  props.selected_tag_ids.slice(
+                    0,
+                    item.hierarchy_tag_ids.length,
+                  ),
                 ),
               [styles['tag__button--highlighted']]: mouseover_ids.includes(
                 (item as Item).id,
@@ -220,12 +211,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             onClick={(e) => {
               e.preventDefault()
               props.on_item_click((item as Item).hierarchy_tag_ids)
-              // Calling before timeout fixes issue when selecting tag after changing filter
-              // TODO: Investigate root cause
-              set_selected_tag_ids((item as Item).hierarchy_tag_ids)
-              setTimeout(() => {
-                set_selected_tag_ids((item as Item).hierarchy_tag_ids)
-              }, 0)
               clear_mouseover_ids()
             }}
             href={`${props.library_url}?${search_params.toString()}`}
@@ -438,112 +423,28 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           </div>
         )}
 
-        <div
-          className={cn({
-            [styles['simplebar__scrolled']]:
-              !is_simplebar_tag_hierarchies_scrolled_to_top,
-          })}
-          style={{ display: !props.library_updated_at_timestamp ? 'none' : '' }}
-        >
+        {is_hydrated && (
           <div
-            className={styles.container}
+            className={cn({
+              [styles['simplebar__scrolled']]:
+                !is_simplebar_tag_hierarchies_scrolled_to_top,
+            })}
             style={{
-              pointerEvents: props.is_updating ? 'none' : undefined,
+              display: !props.library_updated_at_timestamp ? 'none' : '',
             }}
           >
-            <button
-              className={cn(styles.tag__button, styles['tag__button--all'], {
-                [styles['tag__button--active']]:
-                  props.is_all_bookmarks_selected,
-              })}
-              onClick={props.on_click_all_bookmarks}
-              onMouseEnter={() => {
-                if (props.dragged_tag) {
-                  document.body.classList.add('adding-tag')
-                }
-              }}
-              onMouseLeave={() => {
-                if (props.dragged_tag) {
-                  document.body.classList.remove('adding-tag')
-                }
-              }}
-              onMouseUp={() => {
-                if (!props.tree || !props.dragged_tag) return
-                document.body.classList.remove('adding-tag')
-                update_items({
-                  items: [
-                    tag_to_item({
-                      node: {
-                        id: props.dragged_tag.id,
-                        name: props.dragged_tag.name,
-                        children: [],
-                      },
-                      hierarchy_ids: [],
-                      hierarchy_tag_ids: [],
-                    }),
-                    ...items,
-                  ],
-                })
+            <div
+              className={styles.container}
+              style={{
+                pointerEvents: props.is_updating ? 'none' : undefined,
               }}
             >
-              <div>
-                <span>{props.translations.all_bookmarks}</span>
-                <span>{props.all_bookmarks_yields}</span>
-              </div>
-            </button>
-            <Nestable
-              ref={nestable}
-              items={items}
-              renderItem={render_tag as any}
-              onChange={(params) => {
-                clear_mouseover_ids()
-                update_items({ items: params.items as Item[] })
-                set_is_dragging(false)
-              }}
-              maxDepth={5}
-              disableDrag={props.is_read_only}
-              renderCollapseIcon={({ isCollapsed }) =>
-                render_collapse_icon({ is_collapsed: isCollapsed })
-              }
-              collapsed={props.is_read_only}
-              onCollapseChange={(params: any) => {
-                if (params.closedIds) {
-                  localStorage.setItem(
-                    'tag-hierarchy-closed-ids',
-                    JSON.stringify(params.closedIds),
-                  )
-                }
-              }}
-            />
-            {!props.is_read_only && (
-              <div
-                className={cn(
-                  styles['drop-zone'],
-                  {
-                    [styles['drop-zone--active']]: props.dragged_tag,
-                  },
-                  {
-                    [styles['drop-zone--slim']]: items.length,
-                  },
-                )}
-                onMouseUp={() => {
-                  if (!props.tree || !props.dragged_tag) return
-                  document.body.classList.remove('adding-tag')
-                  update_items({
-                    items: [
-                      ...items,
-                      tag_to_item({
-                        node: {
-                          id: props.dragged_tag.id,
-                          name: props.dragged_tag.name,
-                          children: [],
-                        },
-                        hierarchy_ids: [],
-                        hierarchy_tag_ids: [],
-                      }),
-                    ],
-                  })
-                }}
+              <button
+                className={cn(styles.tag__button, styles['tag__button--all'], {
+                  [styles['tag__button--active']]:
+                    props.is_all_bookmarks_selected,
+                })}
+                onClick={props.on_click_all_bookmarks}
                 onMouseEnter={() => {
                   if (props.dragged_tag) {
                     document.body.classList.add('adding-tag')
@@ -554,13 +455,101 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                     document.body.classList.remove('adding-tag')
                   }
                 }}
+                onMouseUp={() => {
+                  if (!props.tree || !props.dragged_tag) return
+                  document.body.classList.remove('adding-tag')
+                  update_items({
+                    items: [
+                      tag_to_item({
+                        node: {
+                          id: props.dragged_tag.id,
+                          name: props.dragged_tag.name,
+                          children: [],
+                        },
+                        hierarchy_ids: [],
+                        hierarchy_tag_ids: [],
+                      }),
+                      ...items,
+                    ],
+                  })
+                }}
               >
-                {!items.length && props.translations.drag_here}
-              </div>
-            )}
-            {contextMenu}
+                <div>
+                  <span>{props.translations.all_bookmarks}</span>
+                  <span>{props.all_bookmarks_yields}</span>
+                </div>
+              </button>
+              <Nestable
+                ref={nestable}
+                items={items}
+                renderItem={render_tag as any}
+                onChange={(params) => {
+                  clear_mouseover_ids()
+                  update_items({ items: params.items as Item[] })
+                  set_is_dragging(false)
+                }}
+                maxDepth={5}
+                disableDrag={props.is_read_only}
+                renderCollapseIcon={({ isCollapsed }) =>
+                  render_collapse_icon({ is_collapsed: isCollapsed })
+                }
+                collapsed={props.is_read_only}
+                onCollapseChange={(params: any) => {
+                  if (params.closedIds) {
+                    localStorage.setItem(
+                      'tag-hierarchy-closed-ids',
+                      JSON.stringify(params.closedIds),
+                    )
+                  }
+                }}
+              />
+              {!props.is_read_only && (
+                <div
+                  className={cn(
+                    styles['drop-zone'],
+                    {
+                      [styles['drop-zone--active']]: props.dragged_tag,
+                    },
+                    {
+                      [styles['drop-zone--slim']]: items.length,
+                    },
+                  )}
+                  onMouseUp={() => {
+                    if (!props.tree || !props.dragged_tag) return
+                    document.body.classList.remove('adding-tag')
+                    update_items({
+                      items: [
+                        ...items,
+                        tag_to_item({
+                          node: {
+                            id: props.dragged_tag.id,
+                            name: props.dragged_tag.name,
+                            children: [],
+                          },
+                          hierarchy_ids: [],
+                          hierarchy_tag_ids: [],
+                        }),
+                      ],
+                    })
+                  }}
+                  onMouseEnter={() => {
+                    if (props.dragged_tag) {
+                      document.body.classList.add('adding-tag')
+                    }
+                  }}
+                  onMouseLeave={() => {
+                    if (props.dragged_tag) {
+                      document.body.classList.remove('adding-tag')
+                    }
+                  }}
+                >
+                  {!items.length && props.translations.drag_here}
+                </div>
+              )}
+              {contextMenu}
+            </div>
           </div>
-        </div>
+        )}
       </Simplebar>
     )
   },
