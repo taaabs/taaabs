@@ -397,7 +397,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
         are_bookmarks_dimmed={
           (library_updated_at_timestamp &&
-            (is_fetching_first_bookmarks || bookmarks_hook.is_upserting)) ||
+            (is_fetching_first_bookmarks ||
+              bookmarks_hook.is_upserting ||
+              pinned_hook.is_updating)) ||
           false
         }
         slot_main={
