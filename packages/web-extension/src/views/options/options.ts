@@ -42,6 +42,12 @@ document
     })
   })
 
+const logout_button = document.getElementById('logout-button')
+logout_button?.addEventListener('click', async () => {
+  await browser.storage.local.remove('auth_data')
+  logout_button.style.display = 'none'
+})
+
 // Retrieve and set initial states from storage
 browser.storage.local
   .get([
@@ -49,6 +55,7 @@ browser.storage.local
     'open_chatbot_in_new_tab',
     'custom_chatbot_url',
     'show_floating_button',
+    'auth_data',
   ])
   .then((data: any) => {
     ;(
@@ -62,4 +69,5 @@ browser.storage.local
     ;(
       document.getElementById('show-floating-button') as HTMLInputElement
     ).checked = data.show_floating_button || false
+    logout_button!.style.display = !data.auth_data ? 'none' : ''
   })
