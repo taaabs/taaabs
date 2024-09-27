@@ -297,6 +297,19 @@ export const Popup: React.FC = () => {
               }}
             />
           }
+          is_plain_text_too_long={
+            ((!!parsed_html_hook.parsed_html ||
+              !!text_selection_hook.selected_text) &&
+              parsed_html_hook.parsed_html?.plain_text &&
+              shortened_plan_text &&
+              parsed_html_hook.parsed_html?.plain_text.length >
+                shortened_plan_text?.length) ||
+            false
+          }
+          is_text_not_found={
+            parsed_html_hook.parsed_html === null &&
+            !text_selection_hook.selected_text
+          }
           translations={{
             placeholder: 'Ask anything!',
             include_page_content: text_selection_hook.selected_text
@@ -305,8 +318,9 @@ export const Popup: React.FC = () => {
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
-                <strong>Heads up!</strong> Text of this page is too long for the
-                selected assistant and has been shortened by{' '}
+                <strong>Text is too long for selected assistant.</strong>
+                <br />
+                Will be shortened by{' '}
                 <strong>
                   {calculate_shortening_percentage(
                     parsed_html_hook.parsed_html?.plain_text,
@@ -317,16 +331,12 @@ export const Popup: React.FC = () => {
                 .
               </>
             ),
+            text_not_found: (
+              <>
+                <strong>Unable to find text.</strong> Make text selection.
+              </>
+            ),
           }}
-          is_plain_text_too_long={
-            ((!!parsed_html_hook.parsed_html ||
-              !!text_selection_hook.selected_text) &&
-              parsed_html_hook.parsed_html?.plain_text &&
-              shortened_plan_text &&
-              parsed_html_hook.parsed_html?.plain_text.length >
-                shortened_plan_text?.length) ||
-            false
-          }
         />
       </Ui_extension_popup_templates_Popup>
     </div>

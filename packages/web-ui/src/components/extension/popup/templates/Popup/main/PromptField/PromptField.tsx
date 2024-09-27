@@ -18,11 +18,13 @@ export namespace PromptField {
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
     is_plain_text_too_long: boolean
+    is_text_not_found: boolean
     translations: {
       placeholder: string
       include_page_content: string
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
+      text_not_found: React.ReactNode
     }
   }
 }
@@ -46,7 +48,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         e.preventDefault()
         if (prompts_history_index > -1) {
           set_prompts_history_index(prompts_history_index - 1)
-          if (prompts_history_index - 1 === -1) {
+          if (prompts_history_index - 1 == -1) {
             props.on_change('')
           } else {
             props.on_change(props.prompts_history[prompts_history_index - 1])
@@ -114,6 +116,11 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       {props.is_plain_text_too_long && (
         <div className={styles.footer__info}>
           {props.translations.plain_text_too_long}
+        </div>
+      )}
+      {props.is_text_not_found && (
+        <div className={styles.footer__info}>
+          {props.translations.text_not_found}
         </div>
       )}
     </div>

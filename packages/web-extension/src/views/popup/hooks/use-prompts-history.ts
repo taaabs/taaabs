@@ -22,7 +22,7 @@ export const use_prompts_history = () => {
 
   useUpdateEffect(() => {
     const prompts_history_copy = new Set<string>(
-      prompts_history.slice(-15).reverse(),
+      prompts_history.slice(-50).reverse(),
     )
     default_prompts.forEach((prompt) => prompts_history_copy.add(prompt))
 
@@ -37,7 +37,7 @@ export const use_prompts_history = () => {
 
   useEffect(() => {
     restore_prompts_history()
-  } , [])
+  }, [])
 
   return {
     prompts_history,
