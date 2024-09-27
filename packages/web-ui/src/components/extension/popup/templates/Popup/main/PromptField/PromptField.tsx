@@ -22,7 +22,7 @@ export namespace PromptField {
       placeholder: string
       include_page_content: string
       active_input_placeholder_suffix: string
-      plain_text_too_long: string
+      plain_text_too_long: React.ReactNode
     }
   }
 }

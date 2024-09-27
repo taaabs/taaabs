@@ -10,10 +10,9 @@ import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } fr
 import { AssistantSelector as Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField/AssistantSelector'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
-import { HtmlParser } from '@shared/utils/html-parser'
 import { use_selected_chatbot } from './hooks/use-selected-chatbot'
 import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
 import { chatbot_urls } from '@/constants/chatbot-urls'
@@ -21,81 +20,64 @@ import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { use_prompts_history } from './hooks/use-prompts-history'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-
-import '../../../../web-ui/src/styles/theme.scss'
 import { use_attach_this_page_checkbox } from './hooks/use-attach-this-page-checkbox'
 import { use_text_selection } from './hooks/use-text-selection'
 import { default_prompts } from './data/default-prompts'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
+import { use_parsed_html } from './hooks/use-parsed-html'
+import { calculate_shortening_percentage } from './helpers/calculate-shortening-percentage'
+
+import '../../../../web-ui/src/styles/theme.scss'
 
 export const Popup: React.FC = () => {
   const saved_check_hook = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
   const delete_bookmark_hook = use_delete_bookmark()
   const prompts_history_hook = use_prompts_history()
-  const { selected_chatbot_name, set_selected_chatbot_name } =
-    use_selected_chatbot()
+  const parsed_html_hook = use_parsed_html()
+  const selected_chatbot_hook = use_selected_chatbot()
   const { custom_chatbot_url } = use_custom_chatbot_url()
   const attach_this_page_checkbox_hook = use_attach_this_page_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
-  const getting_parsed_html_started_at_timestamp = useRef<number>()
-  const [parsed_html, set_parsed_html] =
-    useState<HtmlParser.ParsedResult | null>()
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection()
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
   let chatbot_url = chatbot_urls.chatgpt
-  if (selected_chatbot_name) {
-    if (selected_chatbot_name != 'custom') {
-      chatbot_url = (chatbot_urls as any)[selected_chatbot_name]
+  if (selected_chatbot_hook.selected_chatbot_name) {
+    if (selected_chatbot_hook.selected_chatbot_name != 'custom') {
+      chatbot_url = (chatbot_urls as any)[
+        selected_chatbot_hook.selected_chatbot_name
+      ]
     } else if (custom_chatbot_url) {
       chatbot_url = custom_chatbot_url
     }
   }
 
-  useUpdateEffect(() => {
-    console.debug(
-      `Plain text for Assistant parsed in ${
-        Date.now() - getting_parsed_html_started_at_timestamp.current!
-      }ms.`,
-      parsed_html,
-    )
-  }, [parsed_html])
-
+  // Shorten plain text
   useUpdateEffect(() => {
     const max_length =
-      (PLAIN_TEXT_MAX_LENGTH as any)[selected_chatbot_name!] ||
-      PLAIN_TEXT_MAX_LENGTH['default']
+      (PLAIN_TEXT_MAX_LENGTH as any)[
+        selected_chatbot_hook.selected_chatbot_name!
+      ] || PLAIN_TEXT_MAX_LENGTH['default']
 
-    // Shorten plain text if necessary
     const shortened_plain_text =
-      parsed_html?.plain_text &&
-      (parsed_html.plain_text.length > max_length
-        ? parsed_html.plain_text.substring(0, max_length).trim() + '...'
-        : parsed_html.plain_text)
+      parsed_html_hook.parsed_html?.plain_text &&
+      (parsed_html_hook.parsed_html.plain_text.length > max_length
+        ? parsed_html_hook.parsed_html.plain_text
+            .substring(0, max_length)
+            .trim() + '...'
+        : parsed_html_hook.parsed_html.plain_text)
 
     set_shortened_plain_text(shortened_plain_text)
-  }, [parsed_html, selected_chatbot_name])
+  }, [parsed_html_hook, selected_chatbot_hook.selected_chatbot_name])
 
-  // Get plain text for Assistant on initialization
   useEffect(() => {
     console.debug('Taaabs popup has been initialized.')
 
-    // 150ms is popup entry animation duration
-    setTimeout(() => {
-      console.debug('Getting plain text of the current page for Assistant...')
-      getting_parsed_html_started_at_timestamp.current = Date.now()
-
-      const html = document.getElementsByTagName('html')[0].outerHTML
-      send_message({ action: 'parse-html', html })
-    }, 150)
-
     const listener = (event: MessageEvent) => {
       if (event.source !== window) return
-      if (event.data && event.data.action == 'parsed-html') {
-        set_parsed_html(event.data.parsed_html || null)
-      } else if (event.data && event.data.action == 'popup-restored') {
+      if (event.data && event.data.action == 'popup-restored') {
         set_prompt_field_value('')
         set_popup_restored_count(Math.random())
       }
@@ -114,7 +96,7 @@ export const Popup: React.FC = () => {
 
   if (
     saved_check_hook.is_saved === undefined ||
-    selected_chatbot_name === undefined ||
+    selected_chatbot_hook.selected_chatbot_name === undefined ||
     attach_this_page_checkbox_hook.is_checked === undefined
   ) {
     return <></>
@@ -144,7 +126,7 @@ export const Popup: React.FC = () => {
     <UiButton
       on_click={() => {
         create_bookmark_hook.create_bookmark({
-          reader_data: parsed_html?.reader_data,
+          reader_data: parsed_html_hook.parsed_html?.reader_data,
         })
       }}
       is_disabled={create_bookmark_hook.is_creating}
@@ -154,7 +136,7 @@ export const Popup: React.FC = () => {
   ]
 
   const handle_quick_prompt_click = async (prompt: string) => {
-    if (text_selection_hook.selected_text || parsed_html) {
+    if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
       send_message({
         action: 'send-chatbot-prompt',
         chatbot_url,
@@ -207,14 +189,17 @@ export const Popup: React.FC = () => {
           recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
           filter_phrase={
             attach_this_page_checkbox_hook.is_checked &&
-            (parsed_html || text_selection_hook.selected_text) &&
+            (parsed_html_hook.parsed_html ||
+              text_selection_hook.selected_text) &&
             !prompts_history_hook.prompts_history.includes(prompt_field_value)
               ? prompt_field_value
               : ''
           }
           default_prompts={default_prompts}
           on_recent_prompt_click={handle_quick_prompt_click}
-          is_disabled={!parsed_html && !text_selection_hook.selected_text}
+          is_disabled={
+            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
+          }
         />
 
         <Ui_extension_popup_templates_Popup_main_Separator />
@@ -240,7 +225,8 @@ export const Popup: React.FC = () => {
 
             if (
               attach_this_page_checkbox_hook.is_checked &&
-              (parsed_html || text_selection_hook.selected_text)
+              (parsed_html_hook.parsed_html ||
+                text_selection_hook.selected_text)
             ) {
               // Update prompts history
               const new_prompts_history =
@@ -261,10 +247,11 @@ export const Popup: React.FC = () => {
             })
           }}
           is_include_content_checkbox_disabled={
-            !parsed_html && !text_selection_hook.selected_text
+            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
           }
           is_include_content_checkbox_not_available={
-            parsed_html === null && !text_selection_hook.selected_text
+            parsed_html_hook.parsed_html === null &&
+            !text_selection_hook.selected_text
           }
           is_include_content_selected={
             attach_this_page_checkbox_hook.is_checked || false
@@ -276,11 +263,14 @@ export const Popup: React.FC = () => {
           }}
           prompts_history={[...prompts_history_hook.prompts_history].reverse()}
           is_history_enabled={
-            !!parsed_html || !!text_selection_hook.selected_text
+            !!parsed_html_hook.parsed_html ||
+            !!text_selection_hook.selected_text
           }
           assistant_selector_slot={
             <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
-              selected_chatbot_name={selected_chatbot_name}
+              selected_chatbot_name={
+                selected_chatbot_hook.selected_chatbot_name
+              }
               chatbots={[
                 { name: 'chatgpt', display_name: 'ChatGPT' },
                 { name: 'gemini', display_name: 'Gemini' },
@@ -303,7 +293,7 @@ export const Popup: React.FC = () => {
                   : []),
               ]}
               on_chatbot_change={(chatbot_name) => {
-                set_selected_chatbot_name(chatbot_name)
+                selected_chatbot_hook.set_selected_chatbot_name(chatbot_name)
               }}
             />
           }
@@ -313,14 +303,28 @@ export const Popup: React.FC = () => {
               ? 'Ask selection'
               : 'Ask this page',
             active_input_placeholder_suffix: '(⇅ for history)',
-            plain_text_too_long:
-              "Text of this page exceeds assistant's message length limit and will be shortened.",
+            plain_text_too_long: (
+              <>
+                <strong>Heads up!</strong> Text of this page is too long for the
+                selected assistant and has been shortened by{' '}
+                <strong>
+                  {calculate_shortening_percentage(
+                    parsed_html_hook.parsed_html?.plain_text,
+                    shortened_plan_text,
+                  )}
+                  %
+                </strong>
+                .
+              </>
+            ),
           }}
           is_plain_text_too_long={
-            ((!!parsed_html || !!text_selection_hook.selected_text) &&
-              parsed_html?.plain_text &&
+            ((!!parsed_html_hook.parsed_html ||
+              !!text_selection_hook.selected_text) &&
+              parsed_html_hook.parsed_html?.plain_text &&
               shortened_plan_text &&
-              parsed_html?.plain_text.length > shortened_plan_text?.length) ||
+              parsed_html_hook.parsed_html?.plain_text.length >
+                shortened_plan_text?.length) ||
             false
           }
         />

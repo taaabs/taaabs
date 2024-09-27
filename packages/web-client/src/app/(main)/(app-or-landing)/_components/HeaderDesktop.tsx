@@ -269,7 +269,7 @@ export const HeaderDesktop: React.FC<{
                     }
                     href={`/${
                       auth_context.auth_data!.username
-                    }?back=${pathname}?${search_params.toString()}#fresh`}
+                    }?back=${pathname}?${search_params.toString()}`}
                   />
                 )}
                 <Ui_app_templates_App_HeaderDesktop_AuthorizedUser_UserDropdown_StandardItem
