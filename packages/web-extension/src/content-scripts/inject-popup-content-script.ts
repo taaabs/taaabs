@@ -364,9 +364,13 @@ const message_handler = async (event: MessageEvent) => {
   }
 }
 
-const click_outside_handler = (event: MouseEvent) => {
+const hide_popup_handler = (event: MouseEvent | KeyboardEvent) => {
   const popup = document.getElementById('root-taaabs-popup')
-  if (popup && !popup.contains(event.target as Node)) {
+  if (
+    popup &&
+    (!popup.contains(event.target as Node) ||
+      (event as KeyboardEvent).key == 'Escape')
+  ) {
     popup.style.opacity = '0'
     popup.style.pointerEvents = 'none'
     browser.runtime.sendMessage({ action: 'popup-closed' })
@@ -391,8 +395,9 @@ const inject_popup = () => {
   script.src = browser.runtime.getURL('popup.js')
   document.body.appendChild(script)
 
-  // Add event listener to close popup when clicking outside
-  document.addEventListener('click', click_outside_handler)
+  // Add event listener for both click outside and Escape key
+  document.addEventListener('click', hide_popup_handler)
+  document.addEventListener('keydown', hide_popup_handler)
 
   // Listen for messages from popup
   window.addEventListener('message', message_handler)
@@ -403,6 +408,7 @@ const close_popup = () => {
   document.getElementById('root-taaabs-popup')?.remove()
   const script_src = browser.runtime.getURL('popup.js')
   document.querySelector(`script[src="${script_src}"]`)?.remove()
-  document.removeEventListener('click', click_outside_handler)
+  document.removeEventListener('click', hide_popup_handler)
+  document.removeEventListener('keydown', hide_popup_handler)
   window.removeEventListener('message', message_handler)
 }
