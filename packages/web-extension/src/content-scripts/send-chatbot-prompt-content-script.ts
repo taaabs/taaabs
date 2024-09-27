@@ -2,81 +2,45 @@ import { chatbot_urls } from '@/constants/chatbot-urls'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
-// 15k characters is roughly a little below 4k tokens
-const PART_MAX_LENGTH = {
-  [chatbot_urls.chatgpt]: 15000,
+// Maximum allowed length of a plain text that can be sent to a chatbot
+const PLAIN_TEXT_MAX_LENGTH = {
+  default: 15000, // ChatGPT, Bing Copilot
   [chatbot_urls.gemini]: 30000,
+  [chatbot_urls.claude]: 30000,
   [chatbot_urls.perplexity]: 38000,
   [chatbot_urls.huggingchat]: 45000,
+  [chatbot_urls.deepseek]: 420000, // ~110k tokens
+  [chatbot_urls.mistral]: 200000,
+  [chatbot_urls.aistudio]: 3000000,
 }
 
-// Total length limits for each chatbot
-const TOTAL_LENGTH_LIMIT = {
-  [chatbot_urls.chatgpt]: 100000,
-  [chatbot_urls.gemini]: 1000000,
-  [chatbot_urls.perplexity]: 200000,
-  [chatbot_urls.huggingchat]: 200000,
-}
+browser.runtime.onMessage.addListener(async (message, _, __) => {
+  if (is_message(message) && message.action == 'send-chatbot-prompt') {
+    const current_url = window.location.href
+    const max_length =
+      PLAIN_TEXT_MAX_LENGTH[current_url] || PLAIN_TEXT_MAX_LENGTH.default
 
-const send_prompt = async (params: {
-  url: string
-  prompt: string
-  iteration?: number
-  resolve?: (val: boolean) => void
-}) => {
+    await AssistantBugMitigation.on_load(current_url)
+
+    // Shorten plain text if necessary
+    const shortened_plain_text =
+      message.plain_text && message.plain_text.length > max_length
+        ? message.plain_text.substring(0, max_length) + '...'
+        : message.plain_text
+
+    // Send prompt
+    const prompt = shortened_plain_text
+      ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${shortened_plain_text}\n</text>`
+      : message.prompt
+
+    send_prompt({ url: current_url, prompt })
+
+    AssistantBugMitigation.scroll_to_response()
+  }
+})
+
+const send_prompt = async (params: { url: string; prompt: string }) => {
   try {
-    // For multi-part prompts, check if chatbot has finished generating responses
-    if (params.resolve) {
-      try {
-        if (params.url == chatbot_urls.chatgpt) {
-          const answers = document.querySelectorAll(
-            'button[data-testid="voice-play-turn-action-button"]',
-          )
-          if (params.iteration && params.iteration != answers.length) {
-            throw new Error()
-          }
-        } else if (params.url == chatbot_urls.gemini) {
-          const answers = document.querySelectorAll('message-actions')
-          if (params.iteration && params.iteration != answers.length) {
-            throw new Error()
-          } else if (params.iteration) {
-            // Slowish animations must finish, otherwise it hangs
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(true)
-              }, 500)
-            })
-          }
-        } else if (params.url == chatbot_urls.perplexity) {
-          const answers = document.querySelectorAll('svg[data-icon="repeat"]')
-          if (params.iteration && params.iteration != answers.length) {
-            throw new Error()
-          } else if (params.iteration) {
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(true)
-              }, 0)
-            })
-          }
-        } else if (params.url == chatbot_urls.huggingchat) {
-          const stop_button = document.querySelector(
-            '.ml-auto.dark\\:hover\\:bg-gray-600.dark\\:bg-gray-700.dark\\:border-gray-600.hover\\:bg-gray-100.transition-all.shadow-sm.py-1.px-3.bg-white.border.rounded-lg.h-8.flex.btn',
-          )
-          if (params.iteration && stop_button) {
-            throw new Error()
-          } else if (params.iteration) {
-            await new Promise((resolve) => {
-              setTimeout(() => {
-                resolve(true)
-              }, 500)
-            })
-          }
-        }
-      } catch {
-        throw new Error()
-      }
-    }
-
     const input_element = AssistantBugMitigation.get_input_element(params.url)
 
     if (input_element && input_element.isContentEditable) {
@@ -96,12 +60,10 @@ const send_prompt = async (params: {
               'button[aria-label="Send Message"]',
             ) as HTMLElement
           ).click()
-          params.resolve?.(true)
         }, 500)
       } else if (form) {
         setTimeout(() => {
           form.requestSubmit()
-          params.resolve?.(true)
         }, 0)
       } else {
         const enter_event = new KeyboardEvent('keydown', {
@@ -112,7 +74,6 @@ const send_prompt = async (params: {
           bubbles: true,
         })
         input_element.dispatchEvent(enter_event)
-        params.resolve?.(true)
       }
     } else if (input_element && input_element.tagName == 'TEXTAREA') {
       // Handle input or textarea element
@@ -126,7 +87,6 @@ const send_prompt = async (params: {
       if (form && params.url != chatbot_urls.copilot) {
         setTimeout(() => {
           form.requestSubmit()
-          params.resolve?.(true)
         }, 0)
       } else if (params.url == chatbot_urls.cohere) {
         ;(
@@ -134,13 +94,11 @@ const send_prompt = async (params: {
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
-        params.resolve?.(true)
       } else if (params.url == chatbot_urls.aistudio) {
         setTimeout(() => {
           ;(
             document.querySelector('button[aria-label=Run]') as HTMLElement
           )?.click()
-          params.resolve?.(true)
         }, 0)
       } else {
         const enter_event = new KeyboardEvent('keydown', {
@@ -151,7 +109,6 @@ const send_prompt = async (params: {
           bubbles: true,
         })
         input_element.dispatchEvent(enter_event)
-        params.resolve?.(true)
       }
     } else {
       throw new Error()
@@ -160,104 +117,6 @@ const send_prompt = async (params: {
     setTimeout(() => send_prompt(params), 100)
   }
 }
-
-browser.runtime.onMessage.addListener(async (message, _, __) => {
-  if (is_message(message) && message.action == 'send-chatbot-prompt') {
-    const current_url = window.location.href
-
-    await AssistantBugMitigation.on_load(current_url)
-
-    // Send prompt
-    if (
-      message.plain_text &&
-      message.plain_text.length > PART_MAX_LENGTH[current_url] &&
-      (current_url == chatbot_urls.chatgpt ||
-        current_url == chatbot_urls.gemini ||
-        current_url == chatbot_urls.perplexity ||
-        current_url == chatbot_urls.huggingchat)
-    ) {
-      let prompt_parts = []
-      let total_length = 0
-      let start_index = 0
-
-      while (start_index < message.plain_text.length) {
-        let part_length = Math.min(
-          PART_MAX_LENGTH[current_url],
-          message.plain_text.length - start_index,
-        )
-
-        // Adjust part length to ensure total length does not exceed limit
-        if (total_length + part_length > TOTAL_LENGTH_LIMIT[current_url]) {
-          part_length = TOTAL_LENGTH_LIMIT[current_url] - total_length
-        }
-
-        if (part_length <= 0) break
-
-        const part = message.plain_text.substring(
-          start_index,
-          start_index + part_length,
-        )
-        prompt_parts.push(part)
-        total_length += part_length
-        start_index += part_length
-      }
-
-      // Send each part sequentially in a non blocking way
-      const send_prompt_sequentially = async () => {
-        for (let i = 0; i < prompt_parts.length; i++) {
-          const part = prompt_parts[i]
-          let prompt = ''
-          if (i < prompt_parts.length - 1) {
-            prompt = `Part ${i + 1} of ${
-              prompt_parts.length
-            }\n\n<text>\n\n${part}\n\n</text>\n\nText of this part ends here. Please reply with a single "OK gesture" emoji.`
-          } else if (i == prompt_parts.length - 1) {
-            prompt = `Part ${i + 1} of ${
-              prompt_parts.length
-            }:\n\n<text>\n\n${part}\n\n</text>\n\nText of the last part ends here. Now, as you have all the parts, treat them all as a single piece of text.\n\n<instructon>\n${
-              message.prompt
-            }\n</instruction>`
-          }
-
-          await new Promise((resolve) =>
-            send_prompt({
-              url: current_url,
-              prompt,
-              iteration: i,
-              resolve,
-            }),
-          )
-        }
-      }
-      send_prompt_sequentially()
-    } else if (current_url == chatbot_urls.mistral) {
-      const prompt = message.plain_text
-        ? `<instruction>\n${
-            message.prompt
-          }\n</instruction>\n\n<text>\n${message.plain_text.substring(
-            0,
-            100000,
-          )}\n</text>`
-        : message.prompt
-
-      send_prompt({
-        url: current_url,
-        prompt,
-      })
-    } else {
-      const prompt = message.plain_text
-        ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
-        : message.prompt
-
-      send_prompt({
-        url: current_url,
-        prompt,
-      })
-    }
-
-    AssistantBugMitigation.scroll_to_response()
-  }
-})
 
 namespace AssistantBugMitigation {
   export const on_load = async (url: string) => {
