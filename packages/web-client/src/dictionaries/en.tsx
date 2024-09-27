@@ -66,7 +66,7 @@ const dictionary: Dictionary = {
             // 'Highlights',
             'Secondary links',
             'Premium support',
-            'Claim shorter username',
+            'Shorter username',
           ],
           button_label: 'Subscribe now',
         },

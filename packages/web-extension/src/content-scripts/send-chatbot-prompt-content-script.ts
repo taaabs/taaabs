@@ -2,49 +2,26 @@ import { chatbot_urls } from '@/constants/chatbot-urls'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
-// Maximum allowed length of a plain text that can be sent to a chatbot
-const PLAIN_TEXT_MAX_LENGTH = {
-  default: 15000, // ChatGPT, Bing Copilot
-  [chatbot_urls.gemini]: 30000,
-  [chatbot_urls.claude]: 30000,
-  [chatbot_urls.perplexity]: 38000,
-  [chatbot_urls.huggingchat]: 45000,
-  [chatbot_urls.deepseek]: 420000, // ~110k tokens
-  [chatbot_urls.mistral]: 200000,
-  [chatbot_urls.cohere]: 200000,
-  [chatbot_urls.aistudio]: 3000000,
-}
+const url = window.location.href
 
 browser.runtime.onMessage.addListener(async (message, _, __) => {
   if (is_message(message) && message.action == 'send-chatbot-prompt') {
-    const current_url = window.location.href
-    const max_length =
-      PLAIN_TEXT_MAX_LENGTH[current_url] || PLAIN_TEXT_MAX_LENGTH.default
-
-    await AssistantBugMitigation.on_load(current_url)
-
-    // Shorten plain text if necessary
-    const shortened_plain_text =
-      !current_url.startsWith('http://localhost') &&
-      message.plain_text &&
-      message.plain_text.length > max_length
-        ? message.plain_text.substring(0, max_length) + '...'
-        : message.plain_text
+    await AssistantBugMitigation.on_load()
 
     // Send prompt
-    const prompt = shortened_plain_text
-      ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${shortened_plain_text}\n</text>`
+    const prompt = message.plain_text
+      ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
       : message.prompt
 
-    send_prompt({ url: current_url, prompt })
+    send_prompt({ prompt })
 
     AssistantBugMitigation.scroll_to_response()
   }
 })
 
-const send_prompt = async (params: { url: string; prompt: string }) => {
+const send_prompt = async (params: { prompt: string }) => {
   try {
-    const input_element = AssistantBugMitigation.get_input_element(params.url)
+    const input_element = AssistantBugMitigation.get_input_element()
 
     if (input_element && input_element.isContentEditable) {
       // Handle contenteditable element
@@ -56,7 +33,7 @@ const send_prompt = async (params: { url: string; prompt: string }) => {
 
       const form = input_element.closest('form')
 
-      if (params.url == chatbot_urls.claude) {
+      if (url == chatbot_urls.claude) {
         setTimeout(() => {
           ;(
             document.querySelector(
@@ -87,17 +64,17 @@ const send_prompt = async (params: { url: string; prompt: string }) => {
       input_element.dispatchEvent(new Event('change', { bubbles: true }))
 
       const form = input_element.closest('form')
-      if (form && params.url != chatbot_urls.copilot) {
+      if (form && url != chatbot_urls.copilot) {
         setTimeout(() => {
           form.requestSubmit()
         }, 0)
-      } else if (params.url == chatbot_urls.cohere) {
+      } else if (url == chatbot_urls.cohere) {
         ;(
           document.querySelector(
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
-      } else if (params.url == chatbot_urls.aistudio) {
+      } else if (url == chatbot_urls.aistudio) {
         setTimeout(() => {
           ;(
             document.querySelector('button[aria-label=Run]') as HTMLElement
@@ -122,7 +99,7 @@ const send_prompt = async (params: { url: string; prompt: string }) => {
 }
 
 namespace AssistantBugMitigation {
-  export const on_load = async (url: string) => {
+  export const on_load = async () => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
     if (url == chatbot_urls.aistudio) {
@@ -171,8 +148,8 @@ namespace AssistantBugMitigation {
     }
   }
 
-  export const get_input_element = (chatbot_url: string) => {
-    if (chatbot_url == chatbot_urls.copilot) {
+  export const get_input_element = () => {
+    if (url == chatbot_urls.copilot) {
       return (document as any)
         .querySelector('cib-serp')
         .shadowRoot.querySelector('cib-action-bar')
@@ -190,7 +167,7 @@ namespace AssistantBugMitigation {
         [chatbot_urls.librechat]: 'textarea[placeholder*="Message "]',
       }
 
-      const selector = chatbot_selectors[chatbot_url]
+      const selector = chatbot_selectors[url]
       if (selector) {
         active_element = document.querySelector(selector) as HTMLElement
       }

@@ -17,10 +17,12 @@ export namespace PromptField {
     is_history_enabled: boolean
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
+    is_plain_text_too_long: boolean
     translations: {
       placeholder: string
       include_page_content: string
       active_input_placeholder_suffix: string
+      plain_text_too_long: string
     }
   }
 }
@@ -109,6 +111,11 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         </div>
         {props.assistant_selector_slot}
       </div>
+      {props.is_plain_text_too_long && (
+        <div className={styles.footer__info}>
+          {props.translations.plain_text_too_long}
+        </div>
+      )}
     </div>
   )
 }

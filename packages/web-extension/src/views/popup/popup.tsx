@@ -26,6 +26,7 @@ import '../../../../web-ui/src/styles/theme.scss'
 import { use_attach_this_page_checkbox } from './hooks/use-attach-this-page-checkbox'
 import { use_text_selection } from './hooks/use-text-selection'
 import { default_prompts } from './data/default-prompts'
+import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 
 export const Popup: React.FC = () => {
   const saved_check_hook = use_saved_check()
@@ -40,6 +41,7 @@ export const Popup: React.FC = () => {
   const getting_parsed_html_started_at_timestamp = useRef<number>()
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
+  const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection()
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
@@ -60,6 +62,21 @@ export const Popup: React.FC = () => {
       parsed_html,
     )
   }, [parsed_html])
+
+  useUpdateEffect(() => {
+    const max_length =
+      (PLAIN_TEXT_MAX_LENGTH as any)[selected_chatbot_name!] ||
+      PLAIN_TEXT_MAX_LENGTH['default']
+
+    // Shorten plain text if necessary
+    const shortened_plain_text =
+      parsed_html?.plain_text &&
+      (parsed_html.plain_text.length > max_length
+        ? parsed_html.plain_text.substring(0, max_length).trim() + '...'
+        : parsed_html.plain_text)
+
+    set_shortened_plain_text(shortened_plain_text)
+  }, [parsed_html, selected_chatbot_name])
 
   // Get plain text for Assistant on initialization
   useEffect(() => {
@@ -142,8 +159,7 @@ export const Popup: React.FC = () => {
         action: 'send-chatbot-prompt',
         chatbot_url,
         prompt,
-        plain_text:
-          text_selection_hook.selected_text || parsed_html!.plain_text,
+        plain_text: text_selection_hook.selected_text || shortened_plan_text,
       })
 
       // Update prompts history when a quick prompt is clicked
@@ -241,7 +257,7 @@ export const Popup: React.FC = () => {
               prompt: prompt_field_value,
               plain_text:
                 attach_this_page_checkbox_hook.is_checked &&
-                (text_selection_hook.selected_text || parsed_html?.plain_text),
+                (text_selection_hook.selected_text || shortened_plan_text),
             })
           }}
           is_include_content_checkbox_disabled={
@@ -297,7 +313,16 @@ export const Popup: React.FC = () => {
               ? 'Ask selection'
               : 'Ask this page',
             active_input_placeholder_suffix: '(⇅ for history)',
+            plain_text_too_long:
+              "Text of this page exceeds assistant's message length limit and will be shortened.",
           }}
+          is_plain_text_too_long={
+            ((!!parsed_html || !!text_selection_hook.selected_text) &&
+              parsed_html?.plain_text &&
+              shortened_plan_text &&
+              parsed_html?.plain_text.length > shortened_plan_text?.length) ||
+            false
+          }
         />
       </Ui_extension_popup_templates_Popup>
     </div>
