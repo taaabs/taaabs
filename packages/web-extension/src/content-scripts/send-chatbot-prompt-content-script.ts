@@ -11,6 +11,7 @@ const PLAIN_TEXT_MAX_LENGTH = {
   [chatbot_urls.huggingchat]: 45000,
   [chatbot_urls.deepseek]: 420000, // ~110k tokens
   [chatbot_urls.mistral]: 200000,
+  [chatbot_urls.cohere]: 200000,
   [chatbot_urls.aistudio]: 3000000,
 }
 
@@ -24,7 +25,9 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
     // Shorten plain text if necessary
     const shortened_plain_text =
-      message.plain_text && message.plain_text.length > max_length
+      !current_url.startsWith('http://localhost') &&
+      message.plain_text &&
+      message.plain_text.length > max_length
         ? message.plain_text.substring(0, max_length) + '...'
         : message.plain_text
 
