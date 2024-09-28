@@ -28,8 +28,10 @@ import { use_parsed_html } from './hooks/use-parsed-html'
 import { calculate_shortening_percentage } from './helpers/calculate-shortening-percentage'
 
 import '../../../../web-ui/src/styles/theme.scss'
+import { use_auth_state } from './hooks/use-auth-state'
 
 export const Popup: React.FC = () => {
+  const auth_state_hook = use_auth_state()
   const saved_check_hook = use_saved_check()
   const create_bookmark_hook = use_create_bookmark()
   const delete_bookmark_hook = use_delete_bookmark()
@@ -53,6 +55,13 @@ export const Popup: React.FC = () => {
       chatbot_url = custom_chatbot_url
     }
   }
+
+  // Check if current page is saved
+  useUpdateEffect(() => {
+    if (auth_state_hook.is_authenticated) {
+      saved_check_hook.check_is_saved()
+    }
+  }, [auth_state_hook.is_authenticated])
 
   // Shorten plain text
   useUpdateEffect(() => {
@@ -95,7 +104,9 @@ export const Popup: React.FC = () => {
   }, [saved_check_hook.is_saved])
 
   if (
-    saved_check_hook.is_saved === undefined ||
+    auth_state_hook.is_authenticated === undefined ||
+    (auth_state_hook.is_authenticated &&
+      saved_check_hook.is_saved === undefined) ||
     selected_chatbot_hook.selected_chatbot_name === undefined ||
     attach_this_page_checkbox_hook.is_checked === undefined
   ) {
@@ -179,9 +190,10 @@ export const Popup: React.FC = () => {
               rel="noreferrer noopener"
               is_outlined={true}
             >
-              Go to library
+              {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
             </UiButton>
-            {saved_check_hook.is_saved ? saved_items : unsaved_items}
+            {auth_state_hook.is_authenticated &&
+              (saved_check_hook.is_saved ? saved_items : unsaved_items)}
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 

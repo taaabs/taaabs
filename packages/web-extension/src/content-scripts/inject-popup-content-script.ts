@@ -65,10 +65,25 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
   }
 })
 
+// Detect auth_data deletion from storage
+browser.storage.onChanged.addListener((changes) => {
+  if (changes.auth_data && !changes.auth_data.newValue) {
+    window.postMessage({ action: 'auth-state', is_logged_id: false }, '*')
+  }
+})
+
 const message_handler = async (event: MessageEvent) => {
   if (event.source !== window) return
   const action = event.data.action
-  if (action == 'check-url-saved') {
+  if (action == 'get-auth-state') {
+    try {
+      if (await get_auth_data()) {
+        window.postMessage({ action: 'auth-state', is_logged_id: true }, '*')
+      }
+    } catch {
+      window.postMessage({ action: 'auth-state', is_logged_id: false }, '*')
+    }
+  } else if (action == 'check-url-saved') {
     browser.runtime
       .sendMessage({ action: 'check-url-saved' })
       .then((response: any) => {

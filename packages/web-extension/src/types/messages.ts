@@ -35,6 +35,7 @@ export type BookmarkDeletedMessage = {
 }
 export type InjectPopupContentScriptMessage = { action: 'inject-popup' }
 export type ClosePopupContentScriptMessage = { action: 'close-popup' }
+export type LogoutMessage = { action: 'logout' }
 
 export type Message =
   | CheckUrlSavedMessage
@@ -54,6 +55,7 @@ export type Message =
   | BookmarkDeletedMessage
   | InjectPopupContentScriptMessage
   | ClosePopupContentScriptMessage
+  | LogoutMessage
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type CreateBookmarkResponse = any // TODO: Replace 'any' with the actual type

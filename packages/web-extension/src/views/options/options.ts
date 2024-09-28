@@ -46,6 +46,7 @@ const logout_button = document.getElementById('logout-button')
 logout_button?.addEventListener('click', async () => {
   await browser.storage.local.remove('auth_data')
   logout_button.style.display = 'none'
+  browser.runtime.sendMessage({ action: 'logout' })
 })
 
 // Retrieve and set initial states from storage

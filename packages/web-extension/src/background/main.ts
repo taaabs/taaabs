@@ -5,6 +5,7 @@ import { update_icon } from './helpers/update-icon'
 import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
 import { ensure_tab_is_ready } from './helpers/ensure-tab-is-ready'
+import { get_auth_data } from '@/helpers/get-auth-data'
 
 // Use browser.browserAction for Firefox, browser.action for Chrome
 const action = browser.browserAction || browser.action
@@ -103,14 +104,16 @@ const handle_tab_change = async (tab_id: number, url: string) => {
   ) {
     update_icon(tab_id)
   } else {
-    const cleaned_url = url_cleaner(url)
-    const is_saved = await get_url_is_saved(cleaned_url)
-    update_icon(tab_id, is_saved)
-    await ensure_tab_is_ready(tab_id)
-    await browser.tabs.sendMessage(tab_id, {
-      action: 'url-saved-status',
-      is_saved,
-    })
+    if (await get_auth_data()) {
+      const cleaned_url = url_cleaner(url)
+      const is_saved = await get_url_is_saved(cleaned_url)
+      update_icon(tab_id, is_saved)
+      await ensure_tab_is_ready(tab_id)
+      await browser.tabs.sendMessage(tab_id, {
+        action: 'url-saved-status',
+        is_saved,
+      })
+    }
   }
 }
 

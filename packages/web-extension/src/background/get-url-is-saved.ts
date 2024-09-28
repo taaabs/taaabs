@@ -7,7 +7,7 @@ export async function get_url_is_saved(url: string): Promise<boolean> {
   try {
     const auth_data = await get_auth_data()
     if (!auth_data) {
-      console.error('[get_url_is_saved] Auth data is missing.')
+      console.debug('[get_url_is_saved] Auth data is missing.')
       return false
     }
 
