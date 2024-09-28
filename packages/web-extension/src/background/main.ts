@@ -12,21 +12,9 @@ action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 action.setBadgeTextColor({ color: 'white' })
 
 action.onClicked.addListener(async (tab) => {
-  const data = await browser.storage.local.get('auth_data')
-  if (tab.url == 'chrome://newtab/') {
-    await browser.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
-  } else {
-    if (!data.auth_data) {
-      await browser.tabs.create({ url: 'https://taaabs.com/library' })
-      setTimeout(() => {
-        browser.tabs.reload(tab.id!)
-      }, 2000)
-    } else {
-      await browser.tabs
-        .sendMessage(tab.id!, { action: 'inject-popup' })
-        .catch(() => {})
-    }
-  }
+  await browser.tabs
+    .sendMessage(tab.id!, { action: 'inject-popup' })
+    .catch(() => {})
 })
 
 message_listeners()

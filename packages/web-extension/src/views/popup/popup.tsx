@@ -318,22 +318,21 @@ export const Popup: React.FC = () => {
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
-                <strong>Text is too long for selected assistant.</strong>
+                <strong>Text is too long for selected assistant</strong>
                 <br />
                 Will be shortened by{' '}
-                <strong>
-                  {calculate_shortening_percentage(
-                    parsed_html_hook.parsed_html?.plain_text,
-                    shortened_plan_text,
-                  )}
-                  %
-                </strong>
-                .
+                {calculate_shortening_percentage(
+                  parsed_html_hook.parsed_html?.plain_text,
+                  shortened_plan_text,
+                )}
+                %
               </>
             ),
             text_not_found: (
               <>
-                <strong>Unable to find text.</strong> Make text selection.
+                <strong>Unable to find text</strong>
+                <br />
+                Make selection
               </>
             ),
           }}

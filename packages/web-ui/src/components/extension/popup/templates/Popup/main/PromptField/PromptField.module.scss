@@ -21,9 +21,10 @@
   justify-content: space-between;
   align-items: center;
   &__info {
-    color: var(--red);
+    color: var(--text-color-dimmed);
     font-size: var(--font-size-13px);
     > strong {
+      color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-medium);
     }
   }
