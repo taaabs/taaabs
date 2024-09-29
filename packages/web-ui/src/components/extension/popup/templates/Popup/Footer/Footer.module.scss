@@ -8,6 +8,8 @@
   height: 40px;
   border-top: var(--border-primary);
   padding: 0 var(--padding-24px);
+  gap: var(--padding-4px);
+  color: var(--text-color-dimmed);
   > a {
     font-size: var(--font-size-14px);
     color: var(--accent-color);

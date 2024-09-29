@@ -34,8 +34,14 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 browser.tabs.onCreated.addListener(async (tab) => {
   if (tab.pendingUrl == 'chrome://newtab/') {
-    const data = await browser.storage.local.get('use_custom_new_tab')
-    if (!data.use_custom_new_tab) {
+    try {
+      await get_auth_data() // Check authentication status
+      const data = await browser.storage.local.get('use_custom_new_tab')
+      if (!data.use_custom_new_tab) {
+        // Only override if authenticated and option is false
+        await browser.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
+      }
+    } catch {
       await browser.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
     }
   }
@@ -123,6 +129,7 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.url) {
     // It throws error when Popup is not injected, we want to ignore that
     browser.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
+    browser.tabs.sendMessage(tabId, { action: 'show-floating-button' }).catch(() => {});
     updated_tab_ids.add(tabId)
     setTimeout(() => {
       // Other option could be await handle tab change and not use this timeout

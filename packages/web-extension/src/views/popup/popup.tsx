@@ -20,7 +20,7 @@ import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { use_prompts_history } from './hooks/use-prompts-history'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_attach_this_page_checkbox } from './hooks/use-attach-this-page-checkbox'
+import { use_attach_text_checkbox } from './hooks/use-attach-text-checkbox'
 import { use_text_selection } from './hooks/use-text-selection'
 import { default_prompts } from './data/default-prompts'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
@@ -29,6 +29,8 @@ import { calculate_shortening_percentage } from './helpers/calculate-shortening-
 
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_auth_state } from './hooks/use-auth-state'
+import { get_attach_text_checkbox_label } from './helpers/get-attach-text-checkbox-label'
+import { SendChatbotPrompt_Message } from '@/types/messages'
 
 export const Popup: React.FC = () => {
   const auth_state_hook = use_auth_state()
@@ -39,10 +41,10 @@ export const Popup: React.FC = () => {
   const parsed_html_hook = use_parsed_html()
   const selected_chatbot_hook = use_selected_chatbot()
   const { custom_chatbot_url } = use_custom_chatbot_url()
-  const attach_this_page_checkbox_hook = use_attach_this_page_checkbox()
+  const attach_text_checkbox_hook = use_attach_text_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
-  const text_selection_hook = use_text_selection()
+  const text_selection_hook = use_text_selection({ prompt_field_value })
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
   let chatbot_url = chatbot_urls.chatgpt
@@ -87,8 +89,7 @@ export const Popup: React.FC = () => {
     const listener = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'popup-restored') {
-        set_prompt_field_value('')
-        set_popup_restored_count(Math.random())
+        set_popup_restored_count(Date.now())
       }
     }
     window.addEventListener('message', listener)
@@ -108,7 +109,7 @@ export const Popup: React.FC = () => {
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
     selected_chatbot_hook.selected_chatbot_name === undefined ||
-    attach_this_page_checkbox_hook.is_checked === undefined
+    attach_text_checkbox_hook.is_checked === undefined
   ) {
     return <></>
   }
@@ -146,14 +147,18 @@ export const Popup: React.FC = () => {
     </UiButton>,
   ]
 
-  const handle_quick_prompt_click = async (prompt: string) => {
+  const handle_quick_prompt_click = async (
+    prompt: string,
+    is_middle_click?: boolean,
+  ) => {
     if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
       send_message({
         action: 'send-chatbot-prompt',
         chatbot_url,
         prompt,
         plain_text: text_selection_hook.selected_text || shortened_plan_text,
-      })
+        open_in_new_tab: is_middle_click,
+      } as SendChatbotPrompt_Message)
 
       // Update prompts history when a quick prompt is clicked
       const new_prompts_history = prompts_history_hook.prompts_history.filter(
@@ -178,6 +183,7 @@ export const Popup: React.FC = () => {
           <Ui_extension_popup_templates_Popup_Footer
             feedback_url="https://github.com/taaabs/taaabs/discussions"
             transaltions={{
+              star_on_github: 'Built on GitHub',
               send_feedback: 'Send feedback',
             }}
           />
@@ -200,7 +206,7 @@ export const Popup: React.FC = () => {
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
           filter_phrase={
-            attach_this_page_checkbox_hook.is_checked &&
+            attach_text_checkbox_hook.is_checked &&
             (parsed_html_hook.parsed_html ||
               text_selection_hook.selected_text) &&
             !prompts_history_hook.prompts_history.includes(prompt_field_value)
@@ -209,6 +215,9 @@ export const Popup: React.FC = () => {
           }
           default_prompts={default_prompts}
           on_recent_prompt_click={handle_quick_prompt_click}
+          on_recent_prompt_middle_click={(prompt) => {
+            handle_quick_prompt_click(prompt, true)
+          }}
           is_disabled={
             !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
           }
@@ -229,14 +238,14 @@ export const Popup: React.FC = () => {
             if (
               !prompt_field_value &&
               !(
-                attach_this_page_checkbox_hook.is_checked &&
+                attach_text_checkbox_hook.is_checked &&
                 text_selection_hook.selected_text
               )
             )
               return
 
             if (
-              attach_this_page_checkbox_hook.is_checked &&
+              attach_text_checkbox_hook.is_checked &&
               (parsed_html_hook.parsed_html ||
                 text_selection_hook.selected_text)
             ) {
@@ -254,26 +263,30 @@ export const Popup: React.FC = () => {
               chatbot_url,
               prompt: prompt_field_value,
               plain_text:
-                attach_this_page_checkbox_hook.is_checked &&
+                attach_text_checkbox_hook.is_checked &&
                 (text_selection_hook.selected_text || shortened_plan_text),
             })
           }}
-          is_include_content_checkbox_disabled={
+          is_attach_text_checkbox_disabled={
             !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
           }
-          is_include_content_checkbox_not_available={
+          is_attach_text_checkbox_not_available={
             parsed_html_hook.parsed_html === null &&
             !text_selection_hook.selected_text
           }
-          is_include_content_selected={
-            attach_this_page_checkbox_hook.is_checked || false
+          is_attach_text_checkbox_checked={
+            attach_text_checkbox_hook.is_checked || false
           }
           on_include_content_click={() => {
-            attach_this_page_checkbox_hook.set_is_checked(
-              !attach_this_page_checkbox_hook.is_checked,
+            attach_text_checkbox_hook.set_is_checked(
+              !attach_text_checkbox_hook.is_checked,
             )
           }}
-          prompts_history={[...prompts_history_hook.prompts_history].reverse()}
+          prompts_history={[
+            ...prompts_history_hook.prompts_history.filter(
+              (prompt) => !default_prompts.includes(prompt),
+            ),
+          ].reverse()}
           is_history_enabled={
             !!parsed_html_hook.parsed_html ||
             !!text_selection_hook.selected_text
@@ -286,12 +299,12 @@ export const Popup: React.FC = () => {
               chatbots={[
                 { name: 'chatgpt', display_name: 'ChatGPT' },
                 { name: 'gemini', display_name: 'Gemini' },
+                { name: 'aistudio', display_name: 'AI Studio' },
                 { name: 'perplexity', display_name: 'Perplexity' },
                 { name: 'copilot', display_name: 'Bing Copilot' },
                 { name: 'claude', display_name: 'Claude' },
                 { name: 'grok', display_name: 'Grok' },
                 { name: 'meta', display_name: 'Meta AI' },
-                { name: 'aistudio', display_name: 'AI Studio' },
                 { name: 'mistral', display_name: 'Mistral' },
                 { name: 'cohere', display_name: 'Cohere' },
                 { name: 'huggingchat', display_name: 'HuggingChat' },
@@ -318,15 +331,15 @@ export const Popup: React.FC = () => {
                 shortened_plan_text?.length) ||
             false
           }
-          is_text_not_found={
+          text_not_found={
             parsed_html_hook.parsed_html === null &&
             !text_selection_hook.selected_text
           }
           translations={{
             placeholder: 'Ask anything!',
-            include_page_content: text_selection_hook.selected_text
-              ? 'Ask selection'
-              : 'Ask this page',
+            checkbox: text_selection_hook.selected_text
+              ? 'Attach selection'
+              : get_attach_text_checkbox_label(document.location.href),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
@@ -340,13 +353,11 @@ export const Popup: React.FC = () => {
                 %
               </>
             ),
-            text_not_found: (
-              <>
-                <strong>Unable to find text</strong>
-                <br />
-                Make selection
-              </>
-            ),
+            text_not_found: document.location.href.startsWith(
+              'https://www.youtube.com/watch',
+            )
+              ? '🛈 Missing transcript'
+              : '🛈 Text not found',
           }}
         />
       </Ui_extension_popup_templates_Popup>

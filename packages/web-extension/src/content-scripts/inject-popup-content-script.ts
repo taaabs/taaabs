@@ -110,6 +110,7 @@ const message_handler = async (event: MessageEvent) => {
       plain_text: event.data.plain_text,
       window_width: window.outerWidth,
       window_height: window.outerHeight,
+      open_in_new_tab: event.data.open_in_new_tab,
     })
   } else if (action == 'get-last-used-chatbot-name') {
     // Use browser.storage.local for Firefox
@@ -346,19 +347,19 @@ const message_handler = async (event: MessageEvent) => {
     })
   } else if (action == 'set-prompts-history') {
     browser.storage.local.set({ prompts_history: event.data.prompts_history })
-  } else if (action == 'get-attach-this-page-checkbox-state') {
+  } else if (action == 'get-attach-text-checkbox-state') {
     browser.storage.local
       .get('is_attach_this_page_checkbox_checked')
       .then(({ is_attach_this_page_checkbox_checked }) => {
         window.postMessage(
           {
-            action: 'attach-this-page-checkbox-state',
+            action: 'attach-text-checkbox-state',
             is_checked: is_attach_this_page_checkbox_checked,
           },
           '*',
         )
       })
-  } else if (action == 'set-attach-this-page-checkbox-state') {
+  } else if (action == 'set-attach-text-checkbox-state') {
     browser.storage.local.set({
       is_attach_this_page_checkbox_checked: event.data.is_checked,
     })

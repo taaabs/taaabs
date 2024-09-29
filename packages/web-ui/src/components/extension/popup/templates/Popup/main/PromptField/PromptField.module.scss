@@ -11,6 +11,7 @@
   // Fixes for some sites
   textarea {
     box-shadow: none;
+    margin-bottom: 0;
     &:focus {
       box-shadow: none;
     }
@@ -21,14 +22,16 @@
   justify-content: space-between;
   align-items: center;
   &__info {
-    color: var(--text-color-dimmed);
+    color: var(--red);
     font-size: var(--font-size-13px);
     > strong {
-      color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-medium);
     }
   }
   &__checkbox {
     position: relative;
+  }
+  &__text_not_found {
+    color: var(--red);
   }
 }

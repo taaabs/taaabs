@@ -64,5 +64,12 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
       '#taaabs.floating-button',
     )!.style.transform = ''
     window.postMessage({ action: 'popup-closed' }, '*')
+  } else if (is_message(message) && message.action == 'show-floating-button') {
+    const floating_button_element = document.querySelector<HTMLElement>(
+      '#taaabs.floating-button',
+    )
+    if (floating_button_element) {
+      floating_button_element.style.transform = ''
+    }
   }
 })

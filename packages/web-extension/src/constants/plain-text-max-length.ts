@@ -8,5 +8,6 @@ export const PLAIN_TEXT_MAX_LENGTH = {
   deepseek: 420000, // ~110k tokens
   mistral: 200000,
   cohere: 200000,
-  aistudio: 3000000,
+  aistudio: Infinity,
+  custom: Infinity,
 }

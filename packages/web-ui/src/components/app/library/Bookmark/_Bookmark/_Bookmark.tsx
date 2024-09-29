@@ -1,7 +1,7 @@
 import styles from './_Bookmark.module.scss'
 import cn from 'classnames'
 import { BlurhashCanvas } from 'react-blurhash'
-import { memo, useState } from 'react'
+import { memo, useRef, useState } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pl'
 import { ReactSortable } from 'react-sortablejs'
@@ -185,6 +185,18 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         />
       </Ui_Dropdown>,
     )
+
+    const coverRef = useRef<any | null>(null);
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      if (!coverRef) return;
+
+      const rect = coverRef.current!.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+      coverRef.current!.style.setProperty('--x', `${50 - x / 3}%`); // Divide by 3 to reduce panning speed
+      coverRef.current!.style.setProperty('--y', `${50 - y / 3}%`);
+    };
 
     useUpdateEffect(() => {
       if (!props.on_give_point_click) return
@@ -691,6 +703,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
                       <img
+                      ref={coverRef}
+                      onMouseMove={handleMouseMove}
                         className={styles.bookmark__card__cover__image__top}
                         loading="lazy"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}

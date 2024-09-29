@@ -10,18 +10,18 @@ export namespace PromptField {
     on_submit: () => void
     on_change: (value: string) => void
     on_focus: () => void
-    is_include_content_checkbox_disabled: boolean
-    is_include_content_checkbox_not_available: boolean
-    is_include_content_selected: boolean
+    is_attach_text_checkbox_disabled: boolean
+    is_attach_text_checkbox_not_available: boolean
+    is_attach_text_checkbox_checked: boolean
     on_include_content_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
     is_plain_text_too_long: boolean
-    is_text_not_found: boolean
+    text_not_found: boolean
     translations: {
       placeholder: string
-      include_page_content: string
+      checkbox: string
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
       text_not_found: React.ReactNode
@@ -35,7 +35,8 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     useState<number>(-1)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_include_content_selected || !props.is_history_enabled) return
+    if (!props.is_attach_text_checkbox_checked || !props.is_history_enabled)
+      return
 
     if (is_focused) {
       if (e.key == 'ArrowUp') {
@@ -83,7 +84,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           props.translations.placeholder +
           (is_focused &&
           props.is_history_enabled &&
-          props.is_include_content_selected
+          props.is_attach_text_checkbox_checked
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }
@@ -103,24 +104,25 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        <div className={styles.footer__checkbox}>
-          <Checkbox
-            label={props.translations.include_page_content}
-            on_click={props.on_include_content_click}
-            is_checked={props.is_include_content_selected}
-            is_disabled={props.is_include_content_checkbox_disabled}
-          />
-        </div>
+        {!props.text_not_found ? (
+          <div className={styles.footer__checkbox}>
+            <Checkbox
+              label={props.translations.checkbox}
+              on_click={props.on_include_content_click}
+              is_checked={props.is_attach_text_checkbox_checked}
+              is_disabled={props.is_attach_text_checkbox_disabled}
+            />
+          </div>
+        ) : (
+          <div className={styles.footer__text_not_found}>
+            {props.translations.text_not_found}
+          </div>
+        )}
         {props.assistant_selector_slot}
       </div>
       {props.is_plain_text_too_long && (
         <div className={styles.footer__info}>
           {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.is_text_not_found && (
-        <div className={styles.footer__info}>
-          {props.translations.text_not_found}
         </div>
       )}
     </div>

@@ -23,7 +23,7 @@ export const use_parsed_html = () => {
       if (event.data && event.data.action == 'parsed-html') {
         set_parsed_html(event.data.parsed_html || null)
         console.debug(
-          `Plain text for Assistant parsed in ${
+          `Plain text for Assistant processed in ${
             Date.now() - getting_parsed_html_started_at_timestamp
           }ms.`,
         )

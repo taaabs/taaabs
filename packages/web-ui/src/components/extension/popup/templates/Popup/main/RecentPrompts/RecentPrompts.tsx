@@ -8,6 +8,7 @@ export namespace RecentPrompts {
     recent_prompts: string[]
     default_prompts: string[]
     on_recent_prompt_click: (prompt: string) => void
+    on_recent_prompt_middle_click: (prompt: string) => void
     is_disabled: boolean
     filter_phrase: string
   }
@@ -38,7 +39,15 @@ const HighlightedText = ({
   const parts = text.split(regex)
 
   return parts.map((part, i) =>
-    words.includes(part.toLowerCase()) ? <mark key={i}>{part}</mark> : part,
+    words.includes(part.toLowerCase()) ||
+    (i > 0 &&
+      // Current part is " " ". " ", "
+      /^(?:\s|\. |\s,)\s*$/.test(part) &&
+      words.includes(parts[i - 1].toLowerCase())) ? (
+      <mark key={i}>{part}</mark>
+    ) : (
+      part
+    ),
   )
 }
 
@@ -83,9 +92,13 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
               props.default_prompts.includes(original_prompt)
 
             return (
-              <button
+              <div
                 key={i}
+                role="button"
                 onClick={() => props.on_recent_prompt_click(original_prompt)}
+                onAuxClick={() =>
+                  props.on_recent_prompt_middle_click(original_prompt)
+                }
                 className={cn(styles.prompts__inner__button, {
                   [styles['prompts__inner__button--clamp']]:
                     !props.filter_phrase,
@@ -103,7 +116,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                     filtered_prompts.length > 0 ? props.filter_phrase : ''
                   }
                 />
-              </button>
+              </div>
             )
           })}
         </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { send_message } from '../helpers/send-message'
-import { DeleteBookmarkMessage } from '@/types/messages'
+import { DeleteBookmark_Message } from '@/types/messages'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 
 export const use_delete_bookmark = () => {
@@ -12,7 +12,7 @@ export const use_delete_bookmark = () => {
     send_message({
       action: 'delete-bookmark',
       url,
-    } as DeleteBookmarkMessage)
+    } as DeleteBookmark_Message)
   }
 
   useEffect(() => {

@@ -68,14 +68,14 @@ export const Primary = () => {
           on_submit={() => {}}
           on_change={(value) => {}}
           on_focus={() => {}}
-          is_include_content_selected={true}
+          is_attach_text_checkbox_checked={true}
           on_include_content_click={() => {}}
           prompts_history={['a', 'b']}
-          is_include_content_checkbox_disabled={false}
+          is_attach_text_checkbox_disabled={false}
           translations={{
             heading: 'Custom prompt',
             placeholder: 'Ask anything',
-            include_page_content: 'Include page content',
+            checkbox: 'Include page content',
             active_input_placeholder_suffix: '(⇅ for history)',
           }}
         />

@@ -22,17 +22,11 @@
       opacity: var(--dimmed-opacity);
     }
     &__button {
-      font-family: unset;
       font-size: var(--font-size-14px);
       padding: 0;
       padding-right: 2px;
-      text-align: left;
-      border: none;
-      background: none;
       color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-regular);
-      height: unset !important;
-      line-height: 1.4;
       @include hover {
         @include text-decoration-underlinie-thin;
       }

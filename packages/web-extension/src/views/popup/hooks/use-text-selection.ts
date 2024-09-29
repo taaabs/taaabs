@@ -1,7 +1,7 @@
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 
-export const use_text_selection = () => {
+export const use_text_selection = (params: { prompt_field_value: string }) => {
   const [selected_text, set_selected_text] = useState<string>()
   const [is_popup_open, set_is_popup_open] = useState<boolean>()
 
@@ -19,11 +19,8 @@ export const use_text_selection = () => {
 
     const handle_selection_change = () => {
       const selection = window.getSelection()?.toString()
-      if (selection) {
-        // Fix for closing popup jank
-        setTimeout(() => {
-          set_selected_text(selection)
-        }, 150)
+      if (selection && selection != params.prompt_field_value) {
+        set_selected_text(selection)
       }
     }
 
@@ -31,7 +28,7 @@ export const use_text_selection = () => {
     return () => {
       document.removeEventListener('selectionchange', handle_selection_change)
     }
-  }, [is_popup_open])
+  }, [is_popup_open, params.prompt_field_value])
 
   useEffect(() => {
     const handle_message = (event: MessageEvent) => {

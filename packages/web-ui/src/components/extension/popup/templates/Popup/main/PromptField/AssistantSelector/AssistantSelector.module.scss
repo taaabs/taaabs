@@ -12,6 +12,7 @@
     appearance: auto;
     font-size: var(--font-size-15px);
     color: var(--text-color-normal);
+    background-color: var(--background);
     cursor: pointer;
     box-shadow: none;
     &:focus-visible {

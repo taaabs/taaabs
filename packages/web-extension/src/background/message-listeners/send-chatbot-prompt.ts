@@ -3,7 +3,7 @@ import browser from 'webextension-polyfill'
 
 export const send_chatbot_prompt = () => {
   browser.runtime.onMessage.addListener((request): any => {
-    if (is_message(request) && request.action === 'send-chatbot-prompt') {
+    if (is_message(request) && request.action == 'send-chatbot-prompt') {
       browser.storage.local
         .get([
           'open_chatbot_in_new_tab',
@@ -11,7 +11,7 @@ export const send_chatbot_prompt = () => {
           'chatbot_window_width',
         ])
         .then(async (data: any) => {
-          const open_in_new_tab = data.open_chatbot_in_new_tab
+          const open_in_new_tab = data.open_chatbot_in_new_tab || request.open_in_new_tab
           const chatbot_window_position =
             data.chatbot_window_position || 'middle'
           const chatbot_window_width = data.chatbot_window_width || 767
