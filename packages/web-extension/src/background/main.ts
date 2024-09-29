@@ -153,10 +153,10 @@ browser.webNavigation.onCommitted.addListener((details) => {
 })
 
 browser.runtime.onInstalled.addListener(async () => {
-  await browser.storage.local.set({ use_custom_new_tab: true })
-  await browser.storage.local.set({ show_floating_button: true })
-  await browser.storage.local.set({
+  browser.storage.local.set({
+    use_custom_new_tab: true,
+    show_floating_button: true,
     local_assistant_port: local_assistant.default_port,
   })
-  await browser.tabs.create({ url: 'https://taaabs.com/library' })
+  browser.tabs.create({ url: 'https://taaabs.com/' })
 })

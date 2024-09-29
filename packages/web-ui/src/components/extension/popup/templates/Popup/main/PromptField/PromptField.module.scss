@@ -10,10 +10,11 @@
   gap: var(--padding-10px);
   // Fixes for some sites
   textarea {
-    box-shadow: none;
-    margin-bottom: 0;
+    box-shadow: unset; // Fix for some sites
+    margin-bottom: 0; // Fix for some sites
     &:focus {
-      box-shadow: none;
+      border-bottom-width: 1.5px; // Fix for some sites
+      box-shadow: unset; // Fix for some sites
     }
   }
 }

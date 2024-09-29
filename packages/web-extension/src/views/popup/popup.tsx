@@ -186,7 +186,7 @@ export const Popup: React.FC = () => {
           <Ui_extension_popup_templates_Popup_Footer
             feedback_url="https://github.com/taaabs/taaabs/discussions"
             transaltions={{
-              star_on_github: 'Built on GitHub',
+              contribute: 'Contribute',
               send_feedback: 'Send feedback',
             }}
           />
