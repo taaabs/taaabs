@@ -4,6 +4,7 @@ export const use_cover_hover_zoom = () => {
   const cover_ref = useRef<any | null>(null)
   const [is_enabled, set_enabled] = useState(false)
   let hover_timeout: NodeJS.Timeout | null = null
+
   const handle_mouse_enter = () => {
     hover_timeout = setTimeout(() => {
       set_enabled(true)
@@ -22,8 +23,8 @@ export const use_cover_hover_zoom = () => {
     const y = e.clientY - rect.top // y position within the element
 
     // Calculate the image's position based on the cursor's position
-    const x_offset = -(x - rect.width / 2) / 2 // Divide by 2.5 to reduce sensitivity and invert the offset
-    const y_offset = -(y - rect.height / 2) / 2 // Divide by 2.5 to reduce sensitivity and invert the offset
+    const x_offset = -(x - rect.width / 2) / 2 // Divide by 2 to reduce sensitivity and invert the offset
+    const y_offset = -(y - rect.height / 2) / 2 // Divide by 2 to reduce sensitivity and invert the offset
 
     // Set the image's position in pixels
     cover_ref.current.style.setProperty('--x', `${x_offset}px`)
