@@ -25,7 +25,7 @@ const dictionary: Dictionary = {
             <strong>End-to-end encryption</strong> of private bookmarks
           </>,
           <>
-            <strong>Source-available</strong> client apps
+            <strong>Source code</strong> on GitHub
           </>,
           <>
             <strong>Free tier</strong> with pro features
