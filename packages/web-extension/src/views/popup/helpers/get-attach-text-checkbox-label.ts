@@ -15,7 +15,7 @@ export const get_attach_text_checkbox_label = (url: string) => {
     'https://mail.google.com/mail/': 'Attach e-mail',
   }
 
-  let label = 'Attach article' // Default label
+  let label = 'Attach page' // Default label
 
   for (const prefix in label_map) {
     if (url.startsWith(prefix)) {
