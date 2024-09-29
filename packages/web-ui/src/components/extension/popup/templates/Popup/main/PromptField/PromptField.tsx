@@ -104,25 +104,24 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        {!props.text_not_found ? (
-          <div className={styles.footer__checkbox}>
-            <Checkbox
-              label={props.translations.checkbox}
-              on_click={props.on_include_content_click}
-              is_checked={props.is_attach_text_checkbox_checked}
-              is_disabled={props.is_attach_text_checkbox_disabled}
-            />
-          </div>
-        ) : (
-          <div className={styles.footer__text_not_found}>
-            {props.translations.text_not_found}
-          </div>
-        )}
+        <div className={styles.footer__checkbox}>
+          <Checkbox
+            label={props.translations.checkbox}
+            on_click={props.on_include_content_click}
+            is_checked={props.is_attach_text_checkbox_checked}
+            is_disabled={props.is_attach_text_checkbox_disabled}
+          />
+        </div>
         {props.assistant_selector_slot}
       </div>
       {props.is_plain_text_too_long && (
         <div className={styles.footer__info}>
           {props.translations.plain_text_too_long}
+        </div>
+      )}
+      {props.text_not_found && (
+        <div className={styles.footer__info}>
+          {props.translations.text_not_found}
         </div>
       )}
     </div>

@@ -334,19 +334,27 @@ export const Popup: React.FC = () => {
               <>
                 <strong>Text is too long for selected assistant</strong>
                 <br />
-                Will be shortened by{' '}
-                {calculate_shortening_percentage(
-                  parsed_html_hook.parsed_html?.plain_text,
-                  shortened_plan_text,
-                )}
-                %
+                <i>
+                  shortening by{' '}
+                  {calculate_shortening_percentage(
+                    parsed_html_hook.parsed_html?.plain_text,
+                    shortened_plan_text,
+                  )}
+                  %
+                </i>
               </>
             ),
             text_not_found: document.location.href.startsWith(
               'https://www.youtube.com/watch',
-            )
-              ? '🛈 Missing transcript'
-              : '🛈 Text not found',
+            ) ? (
+              <strong>This video is missing transcript</strong>
+            ) : (
+              <>
+                <strong>Unable to extract text from this page</strong>
+                <br />
+                <i>Please select manually...</i>
+              </>
+            ),
           }}
         />
       </Ui_extension_popup_templates_Popup>

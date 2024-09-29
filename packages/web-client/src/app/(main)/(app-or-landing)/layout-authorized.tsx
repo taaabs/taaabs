@@ -14,6 +14,7 @@ import { BottomNavigationBar } from './_components/BottomNavigationBar'
 import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/App'
 import { ModalProvider } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
+import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 
 const landing_pathnames = ['/about', '/pricing', '/help', '/updates']
 
@@ -22,6 +23,7 @@ const LayoutAuthorized: React.FC<{
   dictionary: Dictionary
   bookmarklet_script: string
 }> = (props) => {
+  const router = useRouter()
   const pathname = usePathname()
   const auth_context = useContext(AuthContext)
 
@@ -32,7 +34,12 @@ const LayoutAuthorized: React.FC<{
       slot_desktop_user={
         <Ui_landing_templates_Landing_DesktopActions
           library_button_label={props.dictionary.landing.my_library}
-          library_button_href="/library#fresh"
+          library_button_href="/library"
+          library_button_on_click={(e: any) => {
+            e.preventDefault()
+            clear_library_session_storage({})
+            router.push('/library')
+          }}
           github_url="https://github.com/taaabs/taaabs"
         />
       }

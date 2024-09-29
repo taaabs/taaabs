@@ -8,13 +8,16 @@
   display: flex;
   flex-direction: column;
   gap: var(--padding-10px);
-  // Fixes for some sites
+  // All these are fixes for some sites:
   textarea {
-    box-shadow: unset; // Fix for some sites
-    margin-bottom: 0; // Fix for some sites
+    box-shadow: unset;
+    margin-bottom: 0;
+    &::placeholder {
+      font-weight: unset;
+    }
     &:focus {
-      border-bottom-width: 1.5px; // Fix for some sites
-      box-shadow: unset; // Fix for some sites
+      border-bottom-width: 1.5px;
+      box-shadow: unset;
     }
   }
 }
@@ -24,6 +27,7 @@
   align-items: center;
   &__info {
     color: var(--red);
+    text-align: center;
     font-size: var(--font-size-13px);
     > strong {
       font-weight: var(--font-weight-inter-medium);
@@ -31,8 +35,5 @@
   }
   &__checkbox {
     position: relative;
-  }
-  &__text_not_found {
-    color: var(--red);
   }
 }

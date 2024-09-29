@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styles from './Button.module.scss'
 import cn from 'classnames'
+import { MouseEventHandler } from 'react'
 
 export namespace Button {
   export type Size = 'small' | 'default' | 'medium' | 'large'
@@ -8,7 +9,7 @@ export namespace Button {
     href?: string
     size?: Size
     is_outlined?: boolean
-    on_click?: () => void
+    on_click?: (e: any) => void
     type?: 'submit'
     children?: React.ReactNode
     aria_label?: string
