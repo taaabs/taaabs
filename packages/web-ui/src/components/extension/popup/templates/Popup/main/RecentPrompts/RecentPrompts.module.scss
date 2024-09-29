@@ -28,6 +28,7 @@
       color: var(--text-color-normal);
       font-weight: var(--font-weight-inter-regular);
       @include hover {
+        cursor: pointer;
         @include text-decoration-underlinie-thin;
       }
       &__dot {
