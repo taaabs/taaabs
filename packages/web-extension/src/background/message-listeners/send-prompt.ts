@@ -1,9 +1,10 @@
+import { SendPrompt_Message } from '@/types/messages'
 import { is_message } from '@/utils/is-message'
 import browser from 'webextension-polyfill'
 
-export const send_chatbot_prompt = () => {
+export const send_prompt = () => {
   browser.runtime.onMessage.addListener((request): any => {
-    if (is_message(request) && request.action == 'send-chatbot-prompt') {
+    if (is_message(request) && request.action == 'send-prompt') {
       browser.storage.local
         .get([
           'open_chatbot_in_new_tab',
@@ -11,29 +12,31 @@ export const send_chatbot_prompt = () => {
           'chatbot_window_width',
         ])
         .then(async (data: any) => {
-          const open_in_new_tab = data.open_chatbot_in_new_tab || request.open_in_new_tab
+          const open_in_new_tab =
+            data.open_chatbot_in_new_tab || request.open_in_new_tab
           const chatbot_window_position =
             data.chatbot_window_position || 'middle'
           const chatbot_window_width = data.chatbot_window_width || 767
 
           if (open_in_new_tab) {
             const new_tab = await browser.tabs.create({
-              url: request.chatbot_url,
+              url: request.assistant_url,
             })
             const onCompletedListener = async (details: any) => {
               if (
                 details.tabId == new_tab.id &&
                 details.frameId == 0 &&
-                details.url == request.chatbot_url
+                details.url == request.assistant_url
               ) {
                 browser.webNavigation.onCompleted.removeListener(
                   onCompletedListener,
                 )
                 await browser.tabs.sendMessage(new_tab.id!, {
-                  action: 'send-chatbot-prompt',
+                  action: 'send-prompt',
+                  assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
-                })
+                } as SendPrompt_Message)
               }
             }
             browser.webNavigation.onCompleted.addListener(onCompletedListener)
@@ -53,7 +56,7 @@ export const send_chatbot_prompt = () => {
             }
 
             const new_window = await browser.windows.create({
-              url: request.chatbot_url,
+              url: request.assistant_url,
               type: 'popup',
               width: popup_width,
               height: window_height,
@@ -64,16 +67,17 @@ export const send_chatbot_prompt = () => {
               if (
                 details.tabId === new_window?.tabs![0].id &&
                 details.frameId === 0 &&
-                details.url === request.chatbot_url
+                details.url === request.assistant_url
               ) {
                 browser.webNavigation.onCompleted.removeListener(
                   onCompletedListener,
                 )
                 await browser.tabs.sendMessage(new_window.tabs![0].id!, {
-                  action: 'send-chatbot-prompt',
+                  action: 'send-prompt',
+                  assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
-                })
+                } as SendPrompt_Message)
               }
             }
             browser.webNavigation.onCompleted.addListener(onCompletedListener)

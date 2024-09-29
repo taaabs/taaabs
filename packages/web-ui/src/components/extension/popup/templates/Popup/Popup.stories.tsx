@@ -36,8 +36,8 @@ export const Primary = () => {
             { display_name: 'Assistant 1', name: 'assistant1' },
             { display_name: 'Assistant 2', name: 'assistant2' },
           ]}
-          selected_chatbot_name="assistant1"
-          on_chatbot_change={(chatbot_name) => {
+          selected_assistant_name="assistant1"
+          on_assistant_change={(chatbot_name) => {
             console.log(chatbot_name)
           }}
         />

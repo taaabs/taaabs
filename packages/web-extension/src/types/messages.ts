@@ -1,3 +1,5 @@
+import { AssistantName } from '@/constants/assistants'
+
 export type CheckUrlSaved_Message = { action: 'check-url-saved' }
 export type CreateBookmark_Message = { action: 'create-bookmark'; data: any }
 export type DeleteBookmark_Message = {
@@ -9,9 +11,10 @@ export type OpenOptionsPage_Message = { action: 'open-options-page' }
 export type OpenPopup_Message = { action: 'open-popup' }
 export type PopupClosed_Message = { action: 'popup-closed' }
 export type PopupOpened_Message = { action: 'popup-opened' }
-export type SendChatbotPrompt_Message = {
-  action: 'send-chatbot-prompt'
-  chatbot_url: string
+export type SendPrompt_Message = {
+  action: 'send-prompt'
+  assistant_name: AssistantName
+  assistant_url: string
   prompt: string
   plain_text?: string
   window_width: number
@@ -48,7 +51,7 @@ export type Message =
   | OpenPopup_Message
   | PopupClosed_Message
   | PopupOpened_Message
-  | SendChatbotPrompt_Message
+  | SendPrompt_Message
   | ThemeChanged_Message
   | GetAuthDataContentScript_Message
   | GetThemeContentScript_Message
@@ -63,7 +66,7 @@ export type Message =
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type CreateBookmarkResponse = any // TODO: Replace 'any' with the actual type
 export type GetAuthDataResponse = any // TODO: Replace 'any' with the actual type
-export type GetCustomChatbotUrlResponse = { custom_chatbot_url: string }
+export type GetCustomChatbotUrlResponse = { local_assistant_port: string }
 export type GetLastUsedChatbotNameResponse = { last_used_chatbot_name: string }
 export type OpenOptionsPageResponse = void
 export type SendChatbotPromptResponse = void

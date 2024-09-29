@@ -1,18 +1,20 @@
+import { AssistantName } from '@/constants/assistants'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 
-export const use_selected_chatbot = () => {
-  const [selected_chatbot_name, set_selected_chatbot_name] = useState<string>()
+export const use_selected_assistant = () => {
+  const [selected_assistant_name, set_selected_assistant_name] =
+    useState<AssistantName>()
 
   useUpdateEffect(() => {
     window.postMessage(
       {
         action: 'set-last-used-chatbot-name',
-        last_used_chatbot_name: selected_chatbot_name,
+        last_used_chatbot_name: selected_assistant_name,
       },
       '*',
     )
-  }, [selected_chatbot_name])
+  }, [selected_assistant_name])
 
   useEffect(() => {
     // Send message to content script to check if URL is saved
@@ -22,7 +24,7 @@ export const use_selected_chatbot = () => {
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'last-used-chatbot-name') {
-        set_selected_chatbot_name(event.data.last_used_chatbot_name)
+        set_selected_assistant_name(event.data.last_used_chatbot_name)
       }
     }
 
@@ -31,7 +33,7 @@ export const use_selected_chatbot = () => {
   }, [])
 
   return {
-    selected_chatbot_name,
-    set_selected_chatbot_name,
+    selected_assistant_name,
+    set_selected_assistant_name,
   }
 }

@@ -1,3 +1,4 @@
+import { local_assistant } from '@/constants/local-assistant'
 import browser from 'webextension-polyfill'
 
 // Detect Firefox
@@ -24,14 +25,10 @@ document
   })
 
 document
-  .getElementById('custom-chatbot-url')!
+  .getElementById('local-assistant-port')!
   .addEventListener('input', (event: Event) => {
-    const custom_chatbot_url = (
-      event.target as HTMLInputElement
-    ).value.endsWith('/')
-      ? (event.target as HTMLInputElement).value
-      : (event.target as HTMLInputElement).value + '/'
-    browser.storage.local.set({ custom_chatbot_url })
+    const local_assistant_port = (event.target as HTMLInputElement).value
+    browser.storage.local.set({ local_assistant_port })
   })
 
 document
@@ -54,7 +51,7 @@ browser.storage.local
   .get([
     'use_custom_new_tab',
     'open_chatbot_in_new_tab',
-    'custom_chatbot_url',
+    'local_assistant_port',
     'show_floating_button',
     'auth_data',
   ])
@@ -65,8 +62,9 @@ browser.storage.local
     ;(
       document.getElementById('open-chatbot-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
-    ;(document.getElementById('custom-chatbot-url') as HTMLInputElement).value =
-      data.custom_chatbot_url || ''
+    ;(
+      document.getElementById('local-assistant-port') as HTMLInputElement
+    ).value = data.local_assistant_port || local_assistant.default_port
     ;(
       document.getElementById('show-floating-button') as HTMLInputElement
     ).checked = data.show_floating_button || false

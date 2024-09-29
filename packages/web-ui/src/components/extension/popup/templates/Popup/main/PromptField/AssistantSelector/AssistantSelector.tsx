@@ -6,8 +6,8 @@ export namespace AssistantSelector {
       display_name: string
       name: string
     }[]
-    selected_chatbot_name: string
-    on_chatbot_change: (chatbot_name: string) => void
+    selected_assistant_name: string
+    on_assistant_change: (assistant_name: string) => void
   }
 }
 
@@ -15,8 +15,8 @@ export const AssistantSelector: React.FC<AssistantSelector.Props> = (props) => {
   return (
     <div className={styles.container}>
       <select
-        value={props.selected_chatbot_name}
-        onChange={(e) => props.on_chatbot_change(e.target.value)}
+        value={props.selected_assistant_name}
+        onChange={(e) => props.on_assistant_change(e.target.value)}
       >
         {props.chatbots.map((chatbot) => (
           <option key={chatbot.name} value={chatbot.name}>

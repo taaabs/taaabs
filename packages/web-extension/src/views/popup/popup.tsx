@@ -13,9 +13,8 @@ import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/com
 import { useEffect, useState } from 'react'
 import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
-import { use_selected_chatbot } from './hooks/use-selected-chatbot'
-import { use_custom_chatbot_url } from './hooks/use-custom-chatbot-url'
-import { chatbot_urls } from '@/constants/chatbot-urls'
+import { use_selected_assistant } from './hooks/use-selected-assistant'
+import { use_local_assistant_port } from './hooks/use-local-assistant-port'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { use_prompts_history } from './hooks/use-prompts-history'
@@ -30,7 +29,8 @@ import { calculate_shortening_percentage } from './helpers/calculate-shortening-
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_auth_state } from './hooks/use-auth-state'
 import { get_attach_text_checkbox_label } from './helpers/get-attach-text-checkbox-label'
-import { SendChatbotPrompt_Message } from '@/types/messages'
+import { SendPrompt_Message } from '@/types/messages'
+import { AssistantName, assistants } from '@/constants/assistants'
 
 export const Popup: React.FC = () => {
   const auth_state_hook = use_auth_state()
@@ -39,22 +39,24 @@ export const Popup: React.FC = () => {
   const delete_bookmark_hook = use_delete_bookmark()
   const prompts_history_hook = use_prompts_history()
   const parsed_html_hook = use_parsed_html()
-  const selected_chatbot_hook = use_selected_chatbot()
-  const { custom_chatbot_url } = use_custom_chatbot_url()
+  const selected_chatbot_hook = use_selected_assistant()
+  const { local_assistant_port } = use_local_assistant_port()
   const attach_text_checkbox_hook = use_attach_text_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection({ prompt_field_value })
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
-  let chatbot_url = chatbot_urls.chatgpt
-  if (selected_chatbot_hook.selected_chatbot_name) {
-    if (selected_chatbot_hook.selected_chatbot_name != 'custom') {
-      chatbot_url = (chatbot_urls as any)[
-        selected_chatbot_hook.selected_chatbot_name
-      ]
-    } else if (custom_chatbot_url) {
-      chatbot_url = custom_chatbot_url
+  let assistant_url = assistants['chatgpt'].url
+  if (selected_chatbot_hook.selected_assistant_name) {
+    if (selected_chatbot_hook.selected_assistant_name != 'custom') {
+      assistant_url =
+        assistants[selected_chatbot_hook.selected_assistant_name].url
+    } else if (local_assistant_port) {
+      assistant_url =
+        assistants[selected_chatbot_hook.selected_assistant_name].url +
+        local_assistant_port +
+        '/'
     }
   }
 
@@ -69,7 +71,7 @@ export const Popup: React.FC = () => {
   useUpdateEffect(() => {
     const max_length =
       (PLAIN_TEXT_MAX_LENGTH as any)[
-        selected_chatbot_hook.selected_chatbot_name!
+        selected_chatbot_hook.selected_assistant_name!
       ] || PLAIN_TEXT_MAX_LENGTH['default']
 
     const shortened_plain_text =
@@ -81,7 +83,7 @@ export const Popup: React.FC = () => {
         : parsed_html_hook.parsed_html.plain_text)
 
     set_shortened_plain_text(shortened_plain_text)
-  }, [parsed_html_hook, selected_chatbot_hook.selected_chatbot_name])
+  }, [parsed_html_hook, selected_chatbot_hook.selected_assistant_name])
 
   useEffect(() => {
     console.debug('Taaabs popup has been initialized.')
@@ -108,7 +110,7 @@ export const Popup: React.FC = () => {
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
-    selected_chatbot_hook.selected_chatbot_name === undefined ||
+    selected_chatbot_hook.selected_assistant_name === undefined ||
     attach_text_checkbox_hook.is_checked === undefined
   ) {
     return <></>
@@ -153,12 +155,13 @@ export const Popup: React.FC = () => {
   ) => {
     if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
       send_message({
-        action: 'send-chatbot-prompt',
-        chatbot_url,
+        action: 'send-prompt',
+        assistant_name: selected_chatbot_hook.selected_assistant_name,
+        assistant_url,
         prompt,
         plain_text: text_selection_hook.selected_text || shortened_plan_text,
         open_in_new_tab: is_middle_click,
-      } as SendChatbotPrompt_Message)
+      } as SendPrompt_Message)
 
       // Update prompts history when a quick prompt is clicked
       const new_prompts_history = prompts_history_hook.prompts_history.filter(
@@ -259,13 +262,14 @@ export const Popup: React.FC = () => {
             }
 
             send_message({
-              action: 'send-chatbot-prompt',
-              chatbot_url,
+              action: 'send-prompt',
+              assistant_name: selected_chatbot_hook.selected_assistant_name,
+              assistant_url,
               prompt: prompt_field_value,
               plain_text:
                 attach_text_checkbox_hook.is_checked &&
                 (text_selection_hook.selected_text || shortened_plan_text),
-            })
+            } as SendPrompt_Message)
           }}
           is_attach_text_checkbox_disabled={
             !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
@@ -293,32 +297,17 @@ export const Popup: React.FC = () => {
           }
           assistant_selector_slot={
             <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
-              selected_chatbot_name={
-                selected_chatbot_hook.selected_chatbot_name
+              selected_assistant_name={
+                selected_chatbot_hook.selected_assistant_name
               }
-              chatbots={[
-                { name: 'chatgpt', display_name: 'ChatGPT' },
-                { name: 'gemini', display_name: 'Gemini' },
-                { name: 'aistudio', display_name: 'AI Studio' },
-                { name: 'perplexity', display_name: 'Perplexity' },
-                { name: 'copilot', display_name: 'Bing Copilot' },
-                { name: 'claude', display_name: 'Claude' },
-                { name: 'grok', display_name: 'Grok' },
-                { name: 'meta', display_name: 'Meta AI' },
-                { name: 'mistral', display_name: 'Mistral' },
-                { name: 'cohere', display_name: 'Cohere' },
-                { name: 'huggingchat', display_name: 'HuggingChat' },
-                { name: 'deepseek', display_name: 'DeepSeek' },
-                { name: 'librechat', display_name: 'LibreChat' },
-                { name: 'phind', display_name: 'Phind' },
-                { name: 'poe', display_name: 'Poe' },
-                { name: 'you', display_name: 'You' },
-                ...(custom_chatbot_url
-                  ? [{ name: 'custom', display_name: 'Custom' }]
-                  : []),
-              ]}
-              on_chatbot_change={(chatbot_name) => {
-                selected_chatbot_hook.set_selected_chatbot_name(chatbot_name)
+              chatbots={Object.entries(assistants).map(([key, value]) => ({
+                name: key,
+                display_name: value.display_name,
+              }))}
+              on_assistant_change={(chatbot_name) => {
+                selected_chatbot_hook.set_selected_assistant_name(
+                  chatbot_name as AssistantName,
+                )
               }}
             />
           }

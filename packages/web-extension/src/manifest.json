@@ -74,7 +74,7 @@
         "https://www.perplexity.ai/",
         "https://www.bing.com/chat"
       ],
-      "js": ["send-chatbot-prompt-content-script.js"]
+      "js": ["send-prompt-content-script.js"]
     }
   ],
   "chrome_url_overrides": {

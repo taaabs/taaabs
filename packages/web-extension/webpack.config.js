@@ -60,8 +60,8 @@ module.exports = (_, argv) => {
         './src/content-scripts/inject-floating-button-content-script.ts',
       'inject-popup-content-script':
         './src/content-scripts/inject-popup-content-script.ts',
-      'send-chatbot-prompt-content-script':
-        './src/content-scripts/send-chatbot-prompt-content-script.ts',
+      'send-prompt-content-script':
+        './src/content-scripts/send-prompt-content-script.ts',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),

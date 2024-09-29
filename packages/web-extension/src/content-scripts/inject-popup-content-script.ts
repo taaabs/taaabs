@@ -9,6 +9,7 @@ import { HtmlParser } from '@shared/utils/html-parser'
 import pako from 'pako'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
+import { SendPrompt_Message } from '@/types/messages'
 
 // Avoid flash of unstyled content
 const link_href = browser.runtime.getURL('popup.css')
@@ -102,16 +103,17 @@ const message_handler = async (event: MessageEvent) => {
     )
   } else if (action == 'open-options-page') {
     browser.runtime.sendMessage({ action: 'open-options-page' })
-  } else if (action == 'send-chatbot-prompt') {
+  } else if (action == 'send-prompt') {
     browser.runtime.sendMessage({
-      action: 'send-chatbot-prompt',
-      chatbot_url: event.data.chatbot_url,
+      action: 'send-prompt',
+      assistant_name: event.data.assistant_name,
+      assistant_url: event.data.assistant_url,
       prompt: event.data.prompt,
       plain_text: event.data.plain_text,
       window_width: window.outerWidth,
       window_height: window.outerHeight,
       open_in_new_tab: event.data.open_in_new_tab,
-    })
+    } as SendPrompt_Message)
   } else if (action == 'get-last-used-chatbot-name') {
     // Use browser.storage.local for Firefox
     const storage_area = browser.browserAction
@@ -138,14 +140,14 @@ const message_handler = async (event: MessageEvent) => {
     storageArea.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
-  } else if (action == 'get-custom-chatbot-url') {
+  } else if (action == 'get-local-assistant-port') {
     browser.storage.local
-      .get('custom_chatbot_url')
-      .then(({ custom_chatbot_url }) => {
+      .get('local_assistant_port')
+      .then(({ local_assistant_port }) => {
         window.postMessage(
           {
-            action: 'custom-chatbot-url',
-            custom_chatbot_url,
+            action: 'local-assistant-port',
+            local_assistant_port,
           },
           '*',
         )

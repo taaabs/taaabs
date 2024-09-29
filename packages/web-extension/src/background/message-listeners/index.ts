@@ -6,7 +6,7 @@ import { open_options_page } from './open-options-page'
 import { open_popup } from './open-popup'
 import { popup_closed } from './popup-closed'
 import { popup_opened } from './popup-opened'
-import { send_chatbot_prompt } from './send-chatbot-prompt'
+import { send_prompt } from './send-prompt'
 import { theme_changed } from './theme-changed'
 
 export const message_listeners = () => {
@@ -18,6 +18,6 @@ export const message_listeners = () => {
   open_popup()
   popup_closed()
   popup_opened()
-  send_chatbot_prompt()
+  send_prompt()
   theme_changed()
 }

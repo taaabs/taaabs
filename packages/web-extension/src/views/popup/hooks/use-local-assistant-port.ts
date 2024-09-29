@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 
-export const use_custom_chatbot_url = () => {
-  const [custom_chatbot_url, set_custom_chatbot_url] = useState<string>()
+export const use_local_assistant_port = () => {
+  const [local_assistant_port, set_local_assistant_port] = useState<number>()
 
   useEffect(() => {
-    window.postMessage({ action: 'get-custom-chatbot-url' }, '*')
+    window.postMessage({ action: 'get-local-assistant-port' }, '*')
 
     // Listen for response from content script
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
-      if (event.data && event.data.action == 'custom-chatbot-url') {
-        set_custom_chatbot_url(event.data.custom_chatbot_url || null)
+      if (event.data && event.data.action == 'local-assistant-port') {
+        set_local_assistant_port(event.data.local_assistant_port || null)
       }
     }
 
@@ -19,6 +19,6 @@ export const use_custom_chatbot_url = () => {
   }, [])
 
   return {
-    custom_chatbot_url,
+    local_assistant_port,
   }
 }

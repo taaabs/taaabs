@@ -1,27 +1,32 @@
-import { chatbot_urls } from '@/constants/chatbot-urls'
+import { AssistantName } from '@/constants/assistants'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
-const url = window.location.href
-
 browser.runtime.onMessage.addListener(async (message, _, __) => {
-  if (is_message(message) && message.action == 'send-chatbot-prompt') {
-    await AssistantBugMitigation.on_load()
+  if (is_message(message) && message.action == 'send-prompt') {
+    const assistant_name = message.assistant_name
+
+    await AssistantBugMitigation.on_load({ assistant_name })
 
     // Send prompt
     const prompt = message.plain_text
       ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
       : message.prompt
 
-    send_prompt({ prompt })
+    send_prompt({ prompt, assistant_name })
 
-    AssistantBugMitigation.scroll_to_response()
+    AssistantBugMitigation.scroll_to_response({ assistant_name })
   }
 })
 
-const send_prompt = async (params: { prompt: string }) => {
+const send_prompt = async (params: {
+  prompt: string
+  assistant_name: AssistantName
+}) => {
   try {
-    const input_element = AssistantBugMitigation.get_input_element()
+    const input_element = AssistantBugMitigation.get_input_element(
+      params.assistant_name,
+    )
 
     if (input_element && input_element.isContentEditable) {
       // Handle contenteditable element
@@ -33,7 +38,7 @@ const send_prompt = async (params: { prompt: string }) => {
 
       const form = input_element.closest('form')
 
-      if (url == chatbot_urls.claude) {
+      if (params.assistant_name == 'claude') {
         setTimeout(() => {
           ;(
             document.querySelector(
@@ -64,17 +69,17 @@ const send_prompt = async (params: { prompt: string }) => {
       input_element.dispatchEvent(new Event('change', { bubbles: true }))
 
       const form = input_element.closest('form')
-      if (form && url != chatbot_urls.copilot) {
+      if (form && params.assistant_name != 'copilot') {
         setTimeout(() => {
           form.requestSubmit()
         }, 0)
-      } else if (url == chatbot_urls.cohere) {
+      } else if (params.assistant_name == 'cohere') {
         ;(
           document.querySelector(
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
-      } else if (url == chatbot_urls.aistudio) {
+      } else if (params.assistant_name == 'aistudio') {
         setTimeout(() => {
           ;(
             document.querySelector('button[aria-label=Run]') as HTMLElement
@@ -99,29 +104,29 @@ const send_prompt = async (params: { prompt: string }) => {
 }
 
 namespace AssistantBugMitigation {
-  export const on_load = async () => {
+  export const on_load = async (params: { assistant_name: AssistantName }) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
-    if (url == chatbot_urls.aistudio) {
+    if (params.assistant_name == 'aistudio') {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
         }, 1500)
       })
-    } else if (url == chatbot_urls.mistral) {
+    } else if (params.assistant_name == 'mistral') {
       // Fix for mobile view
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
         }, 2000)
       })
-    } else if (url == chatbot_urls.perplexity) {
+    } else if (params.assistant_name == 'perplexity') {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
         }, 500)
       })
-    } else if (url == chatbot_urls.deepseek) {
+    } else if (params.assistant_name == 'deepseek') {
       // We first check if "Context cleared" element is there, meaning previous
       // conversation is loaded, then we repeatedly click "Clear context" button
       // until previous conversation is gone.
@@ -148,8 +153,8 @@ namespace AssistantBugMitigation {
     }
   }
 
-  export const get_input_element = () => {
-    if (url == chatbot_urls.copilot) {
+  export const get_input_element = (assistant_name: AssistantName) => {
+    if (assistant_name == 'copilot') {
       return (document as any)
         .querySelector('cib-serp')
         .shadowRoot.querySelector('cib-action-bar')
@@ -157,17 +162,17 @@ namespace AssistantBugMitigation {
     } else {
       let active_element = document.activeElement as HTMLElement
 
-      const chatbot_selectors = {
-        [chatbot_urls.huggingchat]:
+      const chatbot_selectors: Partial<Record<AssistantName, string>> = {
+        huggingchat:
           '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
-        [chatbot_urls.deepseek]: '#chat-input',
-        [chatbot_urls.claude]: 'div[contenteditable=true] > p',
-        [chatbot_urls.mistral]: 'textarea[placeholder="Ask anything!"]',
-        [chatbot_urls.you]: 'textarea[name="query"]',
-        [chatbot_urls.librechat]: 'textarea[placeholder*="Message "]',
+        deepseek: '#chat-input',
+        claude: 'div[contenteditable=true] > p',
+        mistral: 'textarea[placeholder="Ask anything!"]',
+        you: 'textarea[name="query"]',
+        librechat: 'textarea[placeholder*="Message "]',
       }
 
-      const selector = chatbot_selectors[url]
+      const selector = chatbot_selectors[assistant_name]
       if (selector) {
         active_element = document.querySelector(selector) as HTMLElement
       }
@@ -176,23 +181,25 @@ namespace AssistantBugMitigation {
     }
   }
 
-  export const scroll_to_response = () => {
+  export const scroll_to_response = (params: {
+    assistant_name: AssistantName
+  }) => {
     // Some chatbots don't follow scroll position with a generated response.
     // This fix first looks for model response container, then tries to scroll down.
     let scroll_container_selector = ''
     let response_container_selector = ''
-    if (document.location.href == chatbot_urls.gemini) {
+    if (params.assistant_name == 'gemini') {
       scroll_container_selector = 'infinite-scroller'
       response_container_selector = 'message-content'
-    } else if (document.location.href == chatbot_urls.chatgpt) {
+    } else if (params.assistant_name == 'chatgpt') {
       scroll_container_selector =
         '[class^="react-scroll-to-bottom--"].h-full > div'
       response_container_selector = 'div[data-message-author-role="assistant"]'
-    } else if (document.location.href.startsWith(chatbot_urls.poe)) {
+    } else if (params.assistant_name == 'poe') {
       scroll_container_selector =
         '[class^="ChatMessagesScrollWrapper_scrollableContainerWrapper"]'
       response_container_selector = '[class^="Message_leftSideMessageBubble"]'
-    } else if (document.location.href.startsWith(chatbot_urls.perplexity)) {
+    } else if (params.assistant_name == 'perplexity') {
       scroll_container_selector = 'html'
       response_container_selector =
         'div.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50:nth-of-type(2) > .dark\\:bg-backgroundDark.bg-background.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.justify-between.items-center.flex'
