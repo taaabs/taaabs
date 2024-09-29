@@ -3,6 +3,7 @@ export const get_attach_text_checkbox_label = (url: string) => {
   const label_map = {
     'https://www.youtube.com/watch': 'Attach transcript',
     'https://x.com': 'Attach tweet',
+    'https://twitter.com': 'Attach tweet',
     'https://www.reddit.com/r/': 'Attach post',
     'https://gemini.google.com/app/': conversation,
     'https://chatgpt.com/c/': conversation,
