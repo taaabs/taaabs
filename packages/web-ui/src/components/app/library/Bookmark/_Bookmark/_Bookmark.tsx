@@ -20,6 +20,7 @@ import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
+import { use_cover_hover_zoom } from './hooks/use-cover-hover-zoom'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -185,18 +186,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         />
       </Ui_Dropdown>,
     )
-
-    const coverRef = useRef<any | null>(null);
-    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!coverRef) return;
-
-      const rect = coverRef.current!.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-      coverRef.current!.style.setProperty('--x', `${50 - x / 3}%`); // Divide by 3 to reduce panning speed
-      coverRef.current!.style.setProperty('--y', `${50 - y / 3}%`);
-    };
+    const cover_hover_zoom_hook = use_cover_hover_zoom()
 
     useUpdateEffect(() => {
       if (!props.on_give_point_click) return
@@ -691,7 +681,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`data:image/webp;base64,${props.cover}`}
                       />
                       <img
-                        className={styles.bookmark__card__cover__image__top}
+                        ref={cover_hover_zoom_hook.cover_ref}
+                        onMouseMove={
+                          cover_hover_zoom_hook.handle_cover_mouse_move
+                        }
+                        onMouseEnter={cover_hover_zoom_hook.handle_mouse_enter}
+                        onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
+                        className={cn(
+                          styles.bookmark__card__cover__image__top,
+                          {
+                            [styles[
+                              'bookmark__card__cover__image__top--hovering-enabled'
+                            ]]: cover_hover_zoom_hook.is_enabled,
+                          },
+                        )}
                         src={`data:image/webp;base64,${props.cover}`}
                       />
                     </>
@@ -703,9 +706,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
                       <img
-                      ref={coverRef}
-                      onMouseMove={handleMouseMove}
-                        className={styles.bookmark__card__cover__image__top}
+                        ref={cover_hover_zoom_hook.cover_ref}
+                        onMouseMove={
+                          cover_hover_zoom_hook.handle_cover_mouse_move
+                        }
+                        onMouseEnter={cover_hover_zoom_hook.handle_mouse_enter}
+                        onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
+                        className={cn(
+                          styles.bookmark__card__cover__image__top,
+                          {
+                            [styles[
+                              'bookmark__card__cover__image__top--hovering-enabled'
+                            ]]: cover_hover_zoom_hook.is_enabled,
+                          },
+                        )}
                         loading="lazy"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />

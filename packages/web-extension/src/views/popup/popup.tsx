@@ -335,7 +335,7 @@ export const Popup: React.FC = () => {
                 <strong>Text is too long for selected assistant</strong>
                 <br />
                 <i>
-                  shortening by{' '}
+                  Shortening by{' '}
                   {calculate_shortening_percentage(
                     parsed_html_hook.parsed_html?.plain_text,
                     shortened_plan_text,

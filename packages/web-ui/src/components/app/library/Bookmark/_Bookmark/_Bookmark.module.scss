@@ -88,10 +88,11 @@
         &__top {
           object-fit: cover;
           position: relative;
-          transition: transform 0.3s ease; // Add transition for smooth scaling
-          &:hover{
-            transform: scale(1.7); // Enlarge on hover
-            object-position: var(--x) var(--y);
+          &--hovering-enabled {
+            @include hover {
+              transform: scale(2.2);
+              object-position: var(--x) var(--y);
+            }
           }
         }
         &__fill {
