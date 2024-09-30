@@ -86,7 +86,7 @@
           position: absolute;
         }
         &__top {
-          object-fit: cover;
+          object-fit: contain;
           position: relative;
           &--hovering-enabled {
             @include hover {
