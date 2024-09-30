@@ -1,10 +1,10 @@
 export const get_attach_text_checkbox_label = (url: string) => {
-  const conversation = 'Attach chat'
+  const conversation = 'Include chat'
   const label_map = {
-    'https://www.youtube.com/watch': 'Attach transcript',
-    'https://x.com': 'Attach tweet',
-    'https://twitter.com': 'Attach tweet',
-    'https://www.reddit.com/r/': 'Attach post',
+    'https://www.youtube.com/watch': 'Incl. transcript',
+    'https://x.com': 'Include tweet',
+    'https://twitter.com': 'Include tweet',
+    'https://www.reddit.com/r/': 'Include post',
     'https://gemini.google.com/app/': conversation,
     'https://chatgpt.com/c/': conversation,
     'https://huggingface.co/chat/conversation/': conversation,
@@ -12,10 +12,10 @@ export const get_attach_text_checkbox_label = (url: string) => {
     'https://chat.mistral.ai/chat/': conversation,
     'https://coral.cohere.com/c/': conversation,
     'https://aistudio.google.com/app/prompts/': conversation,
-    'https://mail.google.com/mail/': 'Attach e-mail',
+    'https://mail.google.com/mail/': 'Include e-mail',
   }
 
-  let label = 'Attach page' // Default label
+  let label = 'Include page' // Default label
 
   for (const prefix in label_map) {
     if (url.startsWith(prefix)) {

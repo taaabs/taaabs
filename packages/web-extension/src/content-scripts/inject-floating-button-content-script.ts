@@ -15,8 +15,8 @@ link.href = browser.runtime.getURL('floating-button.css')
 document.head.appendChild(link)
 
 browser.storage.local
-  .get('show_floating_button')
-  .then(({ show_floating_button }) => {
+  .get(['show_floating_button', 'floating_button_top'])
+  .then(({ show_floating_button, floating_button_top }) => {
     if (show_floating_button) {
       fetch(browser.runtime.getURL('floating-button.html'))
         .then((response) => response.text())
@@ -29,6 +29,10 @@ browser.storage.local
           const button = document.querySelector<HTMLElement>(
             '#taaabs.floating-button',
           )!
+
+          if (floating_button_top) {
+            button!.style.top = floating_button_top + 'px'
+          }
 
           let is_drag_mode_enabled = false
           let was_mouse_moved_while_dragging: boolean
@@ -61,15 +65,6 @@ browser.storage.local
             button!.style.cursor = ''
             document.body.style.userSelect = ''
           })
-
-          // Restore position from local storage
-          browser.storage.local
-            .get('floating_button_top')
-            .then(({ floating_button_top }) => {
-              if (floating_button_top) {
-                button!.style.top = floating_button_top + 'px'
-              }
-            })
 
           document.addEventListener('fullscreenchange', () => {
             if (!button) return

@@ -660,9 +660,16 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             }}
           >
             {props.has_cover && (
-              <div className={styles.bookmark__card__cover}>
+              <div
+                className={styles.bookmark__card__cover}
+              >
                 <div
                   className={styles.bookmark__card__cover__image}
+                  ref={cover_hover_zoom_hook.container_ref}
+                  onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
+                  onMouseMove={
+                    cover_hover_zoom_hook.handle_cover_mouse_move
+                  }
                   onClick={
                     primary_url
                       ? () => {
@@ -681,17 +688,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`data:image/webp;base64,${props.cover}`}
                       />
                       <img
-                        ref={cover_hover_zoom_hook.cover_ref}
-                        onMouseMove={
-                          cover_hover_zoom_hook.handle_cover_mouse_move
-                        }
-                        onMouseEnter={cover_hover_zoom_hook.handle_mouse_enter}
-                        onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
+                        ref={cover_hover_zoom_hook.image_ref}
                         className={cn(
                           styles.bookmark__card__cover__image__top,
                           {
                             [styles[
-                              'bookmark__card__cover__image__top--hovering-enabled'
+                              'bookmark__card__cover__image__top--hovering'
                             ]]: cover_hover_zoom_hook.is_enabled,
                           },
                         )}
@@ -706,17 +708,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
                       <img
-                        ref={cover_hover_zoom_hook.cover_ref}
-                        onMouseMove={
-                          cover_hover_zoom_hook.handle_cover_mouse_move
-                        }
-                        onMouseEnter={cover_hover_zoom_hook.handle_mouse_enter}
-                        onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
+                        ref={cover_hover_zoom_hook.image_ref}
                         className={cn(
                           styles.bookmark__card__cover__image__top,
                           {
                             [styles[
-                              'bookmark__card__cover__image__top--hovering-enabled'
+                              'bookmark__card__cover__image__top--hovering'
                             ]]: cover_hover_zoom_hook.is_enabled,
                           },
                         )}

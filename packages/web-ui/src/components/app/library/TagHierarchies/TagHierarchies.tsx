@@ -240,7 +240,6 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               if (props.is_not_interactive) return
               props.on_item_click((item as Item).hierarchy_tag_ids)
               set_selected_tag_ids((item as Item).hierarchy_tag_ids)
-              clear_mouseover_ids()
             }}
             href={`${props.library_url}?${search_params.toString()}`}
             onMouseEnter={() => {

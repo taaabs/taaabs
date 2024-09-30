@@ -18,7 +18,7 @@
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     border-radius: var(--border-radius-999px);
     height: var(--button-dimension-28px);
-    padding: 0 10px;
+    padding: 0 12px;
     display: flex;
     align-items: center;
     color: white;
@@ -34,6 +34,11 @@
     @include at992 {
       height: var(--button-dimension-40px);
       padding: 0 16px;
+    }
+    @include at1380 {
+      height: var(--button-dimension-44px);
+      padding: 0 18px;
+      font-size: var(--font-size-16px);
     }
     &--toggled {
       background-color: white;

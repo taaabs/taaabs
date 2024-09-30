@@ -28,6 +28,9 @@
   @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral100);
+    @include dark {
+      background-color: var(--dark100);
+    }
   }
   > svg {
     width: var(--icon-dimension-18px);

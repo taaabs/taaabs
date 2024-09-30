@@ -35,14 +35,10 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 browser.tabs.onCreated.addListener(async (tab) => {
   if (tab.pendingUrl == 'chrome://newtab/') {
-    try {
-      await get_auth_data() // Check authentication status
-      const data = await browser.storage.local.get('use_custom_new_tab')
-      if (!data.use_custom_new_tab) {
-        // Only override if authenticated and option is false
-        await browser.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
-      }
-    } catch {
+    await get_auth_data() // Check authentication status
+    const data = await browser.storage.local.get('use_custom_new_tab')
+    if (!data.use_custom_new_tab) {
+      // Only override if authenticated and option is false
       await browser.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
     }
   }

@@ -161,7 +161,7 @@
   justify-content: center;
   border-radius: var(--border-radius-12px);
   @include transition-150ms(opacity);
-  border: 1px dashed var(--neutral200);
+  border: 1px dashed var(--border-color-primary);
   @include dark {
     border-color: var(--dark400);
   }
@@ -188,6 +188,9 @@
     @include hover {
       color: var(--text-color-variant);
       background-color: var(--neutral200);
+      @include dark {
+        background-color: var(--dark200);
+      }
       border-color: transparent;
     }
   }

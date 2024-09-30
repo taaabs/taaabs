@@ -11,20 +11,19 @@ export namespace PromptField {
     on_change: (value: string) => void
     on_focus: () => void
     is_attach_text_checkbox_disabled: boolean
-    is_attach_text_checkbox_not_available: boolean
     is_attach_text_checkbox_checked: boolean
     on_include_content_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
     is_plain_text_too_long: boolean
-    text_not_found: boolean
+    transcript_not_found: boolean
     translations: {
       placeholder: string
       checkbox: string
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
-      text_not_found: React.ReactNode
+      transcript_not_found: React.ReactNode
     }
   }
 }
@@ -119,9 +118,9 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           {props.translations.plain_text_too_long}
         </div>
       )}
-      {props.text_not_found && (
+      {props.transcript_not_found && (
         <div className={styles.footer__info}>
-          {props.translations.text_not_found}
+          {props.translations.transcript_not_found}
         </div>
       )}
     </div>

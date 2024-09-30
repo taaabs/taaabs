@@ -5,10 +5,6 @@
   display: flex;
   align-items: center;
   > span {
-    color: black;
-    @include dark {
-      color: white;
-    }
     font-family: var(--font-family-plus-jakarta-sans);
     font-weight: var(--font-weight-plus-jakarta-sans-bold);
     letter-spacing: var(--letter-spacing-logo);

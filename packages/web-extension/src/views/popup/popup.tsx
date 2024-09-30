@@ -47,6 +47,10 @@ export const Popup: React.FC = () => {
   const text_selection_hook = use_text_selection({ prompt_field_value })
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
 
+  const is_youtube_video = document.location.href.startsWith(
+    'https://www.youtube.com/watch',
+  )
+
   let assistant_url = assistants['chatgpt'].url
   if (selected_chatbot_hook.selected_assistant_name) {
     if (selected_chatbot_hook.selected_assistant_name != 'custom') {
@@ -107,6 +111,7 @@ export const Popup: React.FC = () => {
   }, [saved_check_hook.is_saved])
 
   if (
+    (parsed_html_hook.parsed_html === undefined && !is_youtube_video) ||
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
@@ -206,27 +211,38 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
-        <Ui_extension_popup_templates_Popup_main_RecentPrompts
-          recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
-          filter_phrase={
-            attach_text_checkbox_hook.is_checked &&
-            (parsed_html_hook.parsed_html ||
-              text_selection_hook.selected_text) &&
-            !prompts_history_hook.prompts_history.includes(prompt_field_value)
-              ? prompt_field_value
-              : ''
-          }
-          default_prompts={default_prompts}
-          on_recent_prompt_click={handle_quick_prompt_click}
-          on_recent_prompt_middle_click={(prompt) => {
-            handle_quick_prompt_click(prompt, true)
-          }}
-          is_disabled={
-            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
-          }
-        />
+        {(parsed_html_hook.parsed_html !== null ||
+          is_youtube_video ||
+          text_selection_hook.selected_text) && (
+          <>
+            <Ui_extension_popup_templates_Popup_main_RecentPrompts
+              recent_prompts={[
+                ...prompts_history_hook.prompts_history,
+              ].reverse()}
+              filter_phrase={
+                attach_text_checkbox_hook.is_checked &&
+                (parsed_html_hook.parsed_html ||
+                  text_selection_hook.selected_text) &&
+                !prompts_history_hook.prompts_history.includes(
+                  prompt_field_value,
+                )
+                  ? prompt_field_value
+                  : ''
+              }
+              default_prompts={default_prompts}
+              on_recent_prompt_click={handle_quick_prompt_click}
+              on_recent_prompt_middle_click={(prompt) => {
+                handle_quick_prompt_click(prompt, true)
+              }}
+              is_disabled={
+                !parsed_html_hook.parsed_html &&
+                !text_selection_hook.selected_text
+              }
+            />
 
-        <Ui_extension_popup_templates_Popup_main_Separator />
+            <Ui_extension_popup_templates_Popup_main_Separator />
+          </>
+        )}
 
         <Ui_extension_popup_templates_Popup_main_PromptField
           key={popup_restored_count}
@@ -274,10 +290,6 @@ export const Popup: React.FC = () => {
           is_attach_text_checkbox_disabled={
             !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
           }
-          is_attach_text_checkbox_not_available={
-            parsed_html_hook.parsed_html === null &&
-            !text_selection_hook.selected_text
-          }
           is_attach_text_checkbox_checked={
             attach_text_checkbox_hook.is_checked || false
           }
@@ -320,22 +332,26 @@ export const Popup: React.FC = () => {
                 shortened_plan_text?.length) ||
             false
           }
-          text_not_found={
-            parsed_html_hook.parsed_html === null &&
-            !text_selection_hook.selected_text
+          transcript_not_found={
+            is_youtube_video && parsed_html_hook.parsed_html === null
           }
           translations={{
             placeholder: 'Ask anything!',
-            checkbox: text_selection_hook.selected_text
-              ? 'Attach selection'
-              : get_attach_text_checkbox_label(document.location.href),
+            checkbox:
+              text_selection_hook.selected_text ||
+              (parsed_html_hook.parsed_html === null && !is_youtube_video)
+                ? 'Attach selection'
+                : get_attach_text_checkbox_label(document.location.href),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
-                <strong>Text is too long for selected assistant</strong>
+                <strong>
+                  {is_youtube_video ? 'Transcript' : 'Text'} is too long for
+                  sel. assistant {sad_face()}
+                </strong>
                 <br />
                 <i>
-                  Shortening by{' '}
+                  ...shortening by{' '}
                   {calculate_shortening_percentage(
                     parsed_html_hook.parsed_html?.plain_text,
                     shortened_plan_text,
@@ -344,16 +360,8 @@ export const Popup: React.FC = () => {
                 </i>
               </>
             ),
-            text_not_found: document.location.href.startsWith(
-              'https://www.youtube.com/watch',
-            ) ? (
-              <strong>This video is missing transcript</strong>
-            ) : (
-              <>
-                <strong>Unable to extract text from this page</strong>
-                <br />
-                <i>Please select manually...</i>
-              </>
+            transcript_not_found: (
+              <strong>Transcript not found {sad_face()}</strong>
             ),
           }}
         />
@@ -366,3 +374,8 @@ const root = ReactDOM.createRoot(
   document.getElementById('root-taaabs-popup') as HTMLElement,
 )
 root.render(<Popup />)
+
+const sad_face = () => {
+  const emojis = ['💔', '😪', '😢', '😓', '😭']
+  return emojis[Math.floor(Math.random() * emojis.length)]
+}

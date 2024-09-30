@@ -3,12 +3,12 @@
 
 .container {
   min-height: 100vh;
+  position: relative;
 }
 .header {
   width: 100%;
   z-index: 3;
-  background: var(--header-transparent-background);
-  backdrop-filter: var(--backdrop-filter);
+  position: absolute;
   &__inner {
     display: flex;
     justify-content: space-between;

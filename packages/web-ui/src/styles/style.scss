@@ -259,7 +259,10 @@ mark {
   margin-left: 7px !important;
 }
 .nestable-item.is-dragging::before {
-  background: var(--neutral200) !important;
+  background-color: var(--neutral200) !important;
+  @include dark {
+    background-color: var(--dark200) !important;
+  }
   border: none !important;
   border-radius: var(--border-radius-12px) !important;
 }

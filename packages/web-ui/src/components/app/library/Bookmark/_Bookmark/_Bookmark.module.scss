@@ -86,13 +86,10 @@
           position: absolute;
         }
         &__top {
-          object-fit: contain;
           position: relative;
-          &--hovering-enabled {
-            @include hover {
-              transform: scale(2.2);
-              object-position: var(--x) var(--y);
-            }
+          object-fit: contain;
+          &--hovering {
+            transform: scale(2) translateX(var(--x)) translateY(var(--y));
           }
         }
         &__fill {

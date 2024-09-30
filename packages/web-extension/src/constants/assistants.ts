@@ -15,6 +15,7 @@ export type AssistantName =
   | 'phind'
   | 'poe'
   | 'you'
+  | 'lobechat'
   | 'custom'
 
 export interface AssistantDetails {
@@ -86,6 +87,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   you: {
     display_name: 'You',
     url: 'https://you.com/',
+  },
+  lobechat: {
+    display_name: 'LobeChat',
+    url: 'https://lobechat.com/chat',
   },
   custom: {
     display_name: 'Custom',
