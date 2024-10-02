@@ -36,6 +36,7 @@ export const send_prompt = () => {
                   assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
+                  image: request.image
                 } as SendPrompt_Message)
               }
             }
@@ -77,6 +78,7 @@ export const send_prompt = () => {
                   assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
+                  image: request.image
                 } as SendPrompt_Message)
               }
             }

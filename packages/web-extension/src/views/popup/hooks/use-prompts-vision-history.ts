@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { default_prompts } from '../data/default-prompts'
+import { default_vision_prompts } from '../data/default-prompts'
 
-export const use_prompts_history = () => {
+export const use_prompts_vision_history = () => {
   const [prompts_history, set_prompts_history] =
-    useState<string[]>(default_prompts)
+    useState<string[]>(default_vision_prompts)
 
   const restore_prompts_history = () => {
-    window.postMessage({ action: 'get-prompts-history' }, '*')
+    window.postMessage({ action: 'get-prompts-vision-history' }, '*')
 
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
-      if (event.data && event.data.action == 'prompts-history') {
-        set_prompts_history(event.data.prompts_history)
+      if (event.data && event.data.action == 'prompts-vision-history') {
+        set_prompts_history(event.data.prompts_vision_history)
       }
     }
 
@@ -24,12 +24,12 @@ export const use_prompts_history = () => {
     const prompts_history_copy = new Set<string>(
       prompts_history.slice(-30).reverse(),
     )
-    default_prompts.forEach((prompt) => prompts_history_copy.add(prompt))
+    default_vision_prompts.forEach((prompt) => prompts_history_copy.add(prompt))
 
     window.postMessage(
       {
-        action: 'set-prompts-history',
-        prompts_history: [...prompts_history_copy].reverse(),
+        action: 'set-prompts-vision-history',
+        prompts_vision_history: [...prompts_history_copy].reverse(),
       },
       '*',
     )

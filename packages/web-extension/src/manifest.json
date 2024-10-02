@@ -29,10 +29,9 @@
       "matches": ["<all_urls>"]
     }
   ],
-  "author": "Taaabs, Inc.",
+  "author": "Robert Piosik",
   "permissions": [
     "storage",
-    "background",
     "contextMenus",
     "activeTab",
     "tabs",

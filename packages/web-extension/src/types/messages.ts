@@ -20,6 +20,7 @@ export type SendPrompt_Message = {
   window_width: number
   window_height: number
   open_in_new_tab?: boolean
+  image?: string
 }
 export type ThemeChanged_Message = {
   action: 'theme-changed'
@@ -41,6 +42,10 @@ export type InjectPopupContentScript_Message = { action: 'inject-popup' }
 export type ClosePopupContentScript_Message = { action: 'close-popup' }
 export type Logout_Message = { action: 'logout' }
 export type ShowFloatingButton_Message = { action: 'show-floating-button' }
+export type CapturedImage_Message = {
+  action: 'captured-image'
+  captured_image: string
+}
 
 export type Message =
   | CheckUrlSaved_Message
@@ -62,6 +67,7 @@ export type Message =
   | ClosePopupContentScript_Message
   | Logout_Message
   | ShowFloatingButton_Message
+  | CapturedImage_Message
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type CreateBookmarkResponse = any // TODO: Replace 'any' with the actual type

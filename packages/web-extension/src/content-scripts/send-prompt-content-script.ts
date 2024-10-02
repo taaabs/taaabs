@@ -8,16 +8,81 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
     await AssistantBugMitigation.on_load({ assistant_name })
 
+    // Handle image upload if present
+    if (message.image) {
+      await handle_image_upload({
+        assistant_name,
+        image: message.image,
+      })
+    }
+
     // Send prompt
     const prompt = message.plain_text
       ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
       : message.prompt
-
     send_prompt({ prompt, assistant_name })
 
     AssistantBugMitigation.scroll_to_response({ assistant_name })
   }
 })
+
+const handle_image_upload = async (params: {
+  assistant_name: AssistantName
+  image: string
+}) => {
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true)
+    }, 2000)
+  })
+  const img_input = document.querySelector(
+    'input[type="file"]',
+  ) as HTMLInputElement
+  if (img_input) {
+    const blob = await fetch(params.image).then((res) => res.blob())
+    const file = new File([blob], 'image.png', { type: 'image/png' })
+    const data_transfer = new DataTransfer()
+    data_transfer.items.add(file)
+    img_input.files = data_transfer.files
+    img_input.dispatchEvent(new Event('change', { bubbles: true }))
+    if (params.assistant_name == 'chatgpt') {
+      await new Promise(async (resolve) => {
+        while (
+          document.querySelector('button[data-testid="send-button"][disabled]')
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 500)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'claude') {
+      await new Promise(async (resolve) => {
+        while (
+          // X button appearing on uploaded image
+          !document.querySelector(
+            '.hover\\:scale-105.transition.p-1.rounded-full.-translate-y-1\\/2.-translate-x-1\\/2.hover\\:text-oncolor-100.hover\\:bg-danger-100.bg-bg-000.text-text-500.border-border-200.border-0\\.5',
+          )
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 500)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'mistral') {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 100)
+      })
+    }
+  }
+}
 
 const send_prompt = async (params: {
   prompt: string

@@ -17,8 +17,8 @@
       @include text-decoration-underlinie-thin;
     }
     &:visited {
-      // Fix for instagram.com
-      color: var(--accent-color);
+      // Fix for some sites
+      color: var(--accent-color) !important;
     }
   }
 }

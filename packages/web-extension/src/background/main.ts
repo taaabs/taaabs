@@ -6,7 +6,7 @@ import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
 import { ensure_tab_is_ready } from './helpers/ensure-tab-is-ready'
 import { get_auth_data } from '@/helpers/get-auth-data'
-import { local_assistant } from '@/constants/local-assistant'
+import { various_values } from '@/constants/various_values'
 
 // Use browser.browserAction for Firefox, browser.action for Chrome
 const action = browser.browserAction || browser.action
@@ -22,14 +22,69 @@ action.onClicked.addListener(async (tab) => {
 message_listeners()
 
 browser.contextMenus.create({
-  id: 'open_my_library',
-  title: 'Go to library',
-  contexts: ['page'],
+  id: 'root',
+  title: 'Taaabs Web Clipper',
+  contexts: ['page', 'image'],
+})
+
+browser.contextMenus.create({
+  id: 'capture-image',
+  parentId: 'root',
+  title: 'Vision: image',
+  contexts: ['image'],
+})
+
+browser.contextMenus.create({
+  id: 'capture-screenshot',
+  parentId: 'root',
+  title: 'Vision: full screen',
+  contexts: ['page', 'image'],
+})
+
+browser.contextMenus.create({
+  id: 'open-popup',
+  parentId: 'root',
+  title: 'Show popup',
+  contexts: ['page', 'image'],
 })
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId == 'open_my_library') {
-    await browser.tabs.update(tab?.id!, { url: 'https://taaabs.com/library' })
+  if (info.menuItemId == 'open-popup') {
+    browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
+  } else if (info.menuItemId == 'capture-screenshot') {
+    const captured_image = await browser.tabs.captureVisibleTab()
+    browser.tabs.sendMessage(tab?.id!, {
+      action: 'captured-image',
+      captured_image,
+    })
+    browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
+  } else if (info.menuItemId == 'capture-image') {
+    const image_url = info.srcUrl
+    if (image_url) {
+      try {
+        const response = await fetch(image_url)
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch image: ${response.status} ${response.statusText}`,
+          )
+        }
+        const blob = await response.blob()
+        const reader = new FileReader()
+        reader.onloadend = () => {
+          const captured_image = reader.result
+          browser.tabs.sendMessage(tab?.id!, {
+            action: 'captured-image',
+            captured_image,
+          })
+          browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
+        }
+        reader.readAsDataURL(blob)
+      } catch (error) {
+        console.error('Error converting image to base64:', error)
+      }
+    } else {
+      console.error('Image URL is missing.')
+    }
   }
 })
 
@@ -152,7 +207,7 @@ browser.runtime.onInstalled.addListener(async () => {
   browser.storage.local.set({
     use_custom_new_tab: true,
     show_floating_button: true,
-    local_assistant_port: local_assistant.default_port,
+    local_assistant_port: various_values.local_assistant_default_port,
   })
   browser.tabs.create({ url: 'https://taaabs.com/' })
 })

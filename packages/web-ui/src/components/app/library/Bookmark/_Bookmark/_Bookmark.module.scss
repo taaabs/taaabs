@@ -200,7 +200,7 @@
         }
         &:is(a) {
           @include hover {
-            @include text-decoration-underlinie-thin;
+            @include text-decoration-underline;
           }
         }
       }
