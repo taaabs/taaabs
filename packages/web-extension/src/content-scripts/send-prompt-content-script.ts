@@ -2,6 +2,12 @@ import { AssistantName } from '@/constants/assistants'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
+const is_open_webui = document
+  .getElementsByTagName('html')[0]
+  .outerHTML.includes(
+    '<link rel="search" type="application/opensearchdescription+xml" title="Open WebUI" href="/opensearch.xml">',
+  )
+
 browser.runtime.onMessage.addListener(async (message, _, __) => {
   if (is_message(message) && message.action == 'send-prompt') {
     const assistant_name = message.assistant_name
@@ -35,10 +41,24 @@ const handle_image_upload = async (params: {
     file_input_selector = 'input[type="file"][name="img-upload"]'
   }
 
+  // In OpenWebUI and ChatGPT file input is not immediately available
+  if (is_open_webui || params.assistant_name == 'chatgpt') {
+    await new Promise(async (resolve) => {
+      while (!document.querySelector(file_input_selector)) {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 100)
+        })
+      }
+      resolve(null)
+    })
+  }
+
   const file_input = document.querySelector(
     file_input_selector,
   ) as HTMLInputElement
-
+  console.log('file_input', file_input)
   if (file_input) {
     const blob = await fetch(params.image).then((res) => res.blob())
     const file = new File([blob], 'image.png', { type: 'image/png' })
@@ -95,6 +115,20 @@ const handle_image_upload = async (params: {
         setTimeout(() => {
           resolve(true)
         }, 500)
+      })
+    } else if (is_open_webui) {
+      await new Promise(async (resolve) => {
+        while (
+          // Thumbnail
+          !document.querySelector('img[alt="input"]')
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     }
   }

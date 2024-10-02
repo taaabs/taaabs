@@ -480,7 +480,7 @@ const inject_popup = () => {
   container.style.position = 'fixed'
   container.style.top = '0'
   container.style.right = '0'
-  container.style.width = '300px'
+  container.style.width = '360px'
   container.style.margin = '24px'
   container.style.zIndex = '99999999'
   container.style.transition = '150ms opacity ease-in-out'
@@ -494,6 +494,7 @@ const inject_popup = () => {
   // Add event listener for both click outside and Escape key
   document.addEventListener('click', hide_popup_handler)
   document.addEventListener('contextmenu', hide_popup_handler)
+  document.addEventListener('scrollend', hide_popup_handler as any)
   document.addEventListener('keydown', hide_popup_handler)
 
   // Listen for messages from popup

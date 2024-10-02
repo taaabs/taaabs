@@ -142,9 +142,16 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           )
         }
 
-        const resized_image = canvas.toDataURL()
-        props.on_resize(resized_image)
-        set_image(resized_image)
+        // Check for minimum size
+        const MIN_DIMENSION = 50
+        if (
+          adjusted_width >= MIN_DIMENSION &&
+          adjusted_height >= MIN_DIMENSION
+        ) {
+          const resized_image = canvas.toDataURL()
+          props.on_resize(resized_image)
+          set_image(resized_image)
+        }
       }
 
       set_preview_rect({ x: 0, y: 0, width: 0, height: 0 })
