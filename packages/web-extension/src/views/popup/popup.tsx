@@ -4,6 +4,7 @@ import { use_create_bookmark } from './hooks/use-create-bookmark'
 import { use_saved_check } from './hooks/use-saved-check'
 import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
 import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/components/extension/popup/templates/Popup/Header'
+import { HeaderVision as Ui_extension_popup_templates_Popup_HeaderVision } from '@web-ui/components/extension/popup/templates/Popup/HeaderVision'
 import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web-ui/components/extension/popup/templates/Popup/main/Actions'
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
@@ -21,7 +22,7 @@ import { use_prompts_history } from './hooks/use-prompts-history'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_attach_text_checkbox } from './hooks/use-attach-text-checkbox'
 import { use_text_selection } from './hooks/use-text-selection'
-import { default_prompts } from './data/default-prompts'
+import { default_prompts, default_vision_prompts } from './data/default-prompts'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { use_parsed_html } from './hooks/use-parsed-html'
 import { calculate_shortening_percentage } from './helpers/calculate-shortening-percentage'
@@ -29,8 +30,9 @@ import { calculate_shortening_percentage } from './helpers/calculate-shortening-
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_auth_state } from './hooks/use-auth-state'
 import { get_attach_text_checkbox_label } from './helpers/get-attach-text-checkbox-label'
-import { SendPrompt_Message } from '@/types/messages'
 import { AssistantName, assistants } from '@/constants/assistants'
+import { use_captured_image } from './hooks/use-captured-image'
+import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
 
 export const Popup: React.FC = () => {
   const auth_state_hook = use_auth_state()
@@ -38,6 +40,7 @@ export const Popup: React.FC = () => {
   const create_bookmark_hook = use_create_bookmark()
   const delete_bookmark_hook = use_delete_bookmark()
   const prompts_history_hook = use_prompts_history()
+  const prompts_vision_history_hook = use_prompts_vision_history()
   const parsed_html_hook = use_parsed_html()
   const selected_chatbot_hook = use_selected_assistant()
   const { local_assistant_port } = use_local_assistant_port()
@@ -46,6 +49,7 @@ export const Popup: React.FC = () => {
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection({ prompt_field_value })
   const [popup_restored_count, set_popup_restored_count] = useState<number>()
+  const captured_image_hook = use_captured_image()
 
   const is_youtube_video = document.location.href.startsWith(
     'https://www.youtube.com/watch',
@@ -166,7 +170,7 @@ export const Popup: React.FC = () => {
         prompt,
         plain_text: text_selection_hook.selected_text || shortened_plan_text,
         open_in_new_tab: is_middle_click,
-      } as SendPrompt_Message)
+      })
 
       // Update prompts history when a quick prompt is clicked
       const new_prompts_history = prompts_history_hook.prompts_history.filter(
@@ -177,15 +181,47 @@ export const Popup: React.FC = () => {
     }
   }
 
+  const handle_quick_prompt_vision_click = async (
+    prompt: string,
+    is_middle_click?: boolean,
+  ) => {
+    send_message({
+      action: 'send-prompt',
+      assistant_name: selected_chatbot_hook.selected_assistant_name,
+      assistant_url,
+      prompt,
+      open_in_new_tab: is_middle_click,
+      image: captured_image_hook.image,
+    })
+
+    // Update prompts history when a quick prompt is clicked
+    const new_prompts_history =
+      prompts_vision_history_hook.prompts_history.filter(
+        (item) => item != prompt,
+      )
+    new_prompts_history.push(prompt)
+    prompts_vision_history_hook.set_prompts_history(new_prompts_history)
+  }
+
   return (
     <div className={styles.container}>
       <Ui_extension_popup_templates_Popup
         header_slot={
-          <Ui_extension_popup_templates_Popup_Header
-            settings_on_click={() => {
-              send_message({ action: 'open-options-page' })
-            }}
-          />
+          captured_image_hook.image ? (
+            <Ui_extension_popup_templates_Popup_HeaderVision
+              back_button_on_click={captured_image_hook.remove}
+              image={captured_image_hook.image}
+              translations={{
+                title: 'Vision',
+              }}
+            />
+          ) : (
+            <Ui_extension_popup_templates_Popup_Header
+              settings_on_click={() => {
+                send_message({ action: 'open-options-page' })
+              }}
+            />
+          )
         }
         footer_slot={
           <Ui_extension_popup_templates_Popup_Footer
@@ -197,174 +233,272 @@ export const Popup: React.FC = () => {
           />
         }
       >
-        {!window.location.href.startsWith('https://taaabs.com') && (
-          <Ui_extension_popup_templates_Popup_main_Actions>
-            <UiButton
-              href={'https://taaabs.com/library#fresh'}
-              rel="noreferrer noopener"
-              is_outlined={true}
-            >
-              {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
-            </UiButton>
-            {auth_state_hook.is_authenticated &&
-              (saved_check_hook.is_saved ? saved_items : unsaved_items)}
-          </Ui_extension_popup_templates_Popup_main_Actions>
-        )}
+        {!window.location.href.startsWith('https://taaabs.com') &&
+          !captured_image_hook.image && (
+            <Ui_extension_popup_templates_Popup_main_Actions>
+              <UiButton
+                href={'https://taaabs.com/library#fresh'}
+                rel="noreferrer noopener"
+                is_outlined={true}
+              >
+                {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
+              </UiButton>
+              {auth_state_hook.is_authenticated &&
+                (saved_check_hook.is_saved ? saved_items : unsaved_items)}
+            </Ui_extension_popup_templates_Popup_main_Actions>
+          )}
 
-        {(parsed_html_hook.parsed_html !== null ||
-          is_youtube_video ||
-          text_selection_hook.selected_text) && (
+        {captured_image_hook.image ? (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
-                ...prompts_history_hook.prompts_history,
+                ...prompts_vision_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                attach_text_checkbox_hook.is_checked &&
-                (parsed_html_hook.parsed_html ||
-                  text_selection_hook.selected_text) &&
-                !prompts_history_hook.prompts_history.includes(
+                !prompts_vision_history_hook.prompts_history.includes(
                   prompt_field_value,
                 )
                   ? prompt_field_value
                   : ''
               }
-              default_prompts={default_prompts}
-              on_recent_prompt_click={handle_quick_prompt_click}
+              default_prompts={default_vision_prompts}
+              on_recent_prompt_click={handle_quick_prompt_vision_click}
               on_recent_prompt_middle_click={(prompt) => {
-                handle_quick_prompt_click(prompt, true)
+                handle_quick_prompt_vision_click(prompt, true)
               }}
-              is_disabled={
-                !parsed_html_hook.parsed_html &&
-                !text_selection_hook.selected_text
-              }
+              is_disabled={false}
             />
 
             <Ui_extension_popup_templates_Popup_main_Separator />
           </>
+        ) : (
+          (parsed_html_hook.parsed_html !== null ||
+            is_youtube_video ||
+            text_selection_hook.selected_text) && (
+            <>
+              <Ui_extension_popup_templates_Popup_main_RecentPrompts
+                recent_prompts={[
+                  ...prompts_history_hook.prompts_history,
+                ].reverse()}
+                filter_phrase={
+                  attach_text_checkbox_hook.is_checked &&
+                  (parsed_html_hook.parsed_html ||
+                    text_selection_hook.selected_text) &&
+                  !prompts_history_hook.prompts_history.includes(
+                    prompt_field_value,
+                  )
+                    ? prompt_field_value
+                    : ''
+                }
+                default_prompts={default_prompts}
+                on_recent_prompt_click={handle_quick_prompt_click}
+                on_recent_prompt_middle_click={(prompt) => {
+                  handle_quick_prompt_click(prompt, true)
+                }}
+                is_disabled={
+                  !parsed_html_hook.parsed_html &&
+                  !text_selection_hook.selected_text
+                }
+              />
+
+              <Ui_extension_popup_templates_Popup_main_Separator />
+            </>
+          )
         )}
 
-        <Ui_extension_popup_templates_Popup_main_PromptField
-          key={popup_restored_count}
-          value={prompt_field_value}
-          on_focus={() => {
-            prompts_history_hook.restore_prompts_history()
-          }}
-          on_change={(value) => {
-            set_prompt_field_value(value)
-          }}
-          on_submit={() => {
-            if (
-              !prompt_field_value &&
-              !(
-                attach_text_checkbox_hook.is_checked &&
-                text_selection_hook.selected_text
-              )
-            )
-              return
+        {captured_image_hook.image ? (
+          <Ui_extension_popup_templates_Popup_main_PromptField
+            key={popup_restored_count}
+            value={prompt_field_value}
+            on_focus={() => {
+              prompts_vision_history_hook.restore_prompts_history()
+            }}
+            on_change={(value) => {
+              set_prompt_field_value(value)
+            }}
+            on_submit={() => {
+              if (!prompt_field_value) return
 
-            if (
-              attach_text_checkbox_hook.is_checked &&
-              (parsed_html_hook.parsed_html ||
-                text_selection_hook.selected_text)
-            ) {
               // Update prompts history
               const new_prompts_history =
-                prompts_history_hook.prompts_history.filter(
+                prompts_vision_history_hook.prompts_history.filter(
                   (item) => item != prompt_field_value,
                 )
               new_prompts_history.push(prompt_field_value)
-              prompts_history_hook.set_prompts_history(new_prompts_history)
-            }
+              prompts_vision_history_hook.set_prompts_history(
+                new_prompts_history,
+              )
 
-            send_message({
-              action: 'send-prompt',
-              assistant_name: selected_chatbot_hook.selected_assistant_name,
-              assistant_url,
-              prompt: prompt_field_value,
-              plain_text:
-                attach_text_checkbox_hook.is_checked &&
-                (text_selection_hook.selected_text || shortened_plan_text),
-            } as SendPrompt_Message)
-          }}
-          is_attach_text_checkbox_disabled={
-            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
-          }
-          is_attach_text_checkbox_checked={
-            attach_text_checkbox_hook.is_checked || false
-          }
-          on_include_content_click={() => {
-            attach_text_checkbox_hook.set_is_checked(
-              !attach_text_checkbox_hook.is_checked,
-            )
-          }}
-          prompts_history={[
-            ...prompts_history_hook.prompts_history.filter(
-              (prompt) => !default_prompts.includes(prompt),
-            ),
-          ].reverse()}
-          is_history_enabled={
-            !!parsed_html_hook.parsed_html ||
-            !!text_selection_hook.selected_text
-          }
-          assistant_selector_slot={
-            <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
-              selected_assistant_name={
-                selected_chatbot_hook.selected_assistant_name
-              }
-              chatbots={Object.entries(assistants).map(([key, value]) => ({
-                name: key,
-                display_name: value.display_name,
-              }))}
-              on_assistant_change={(chatbot_name) => {
-                selected_chatbot_hook.set_selected_assistant_name(
-                  chatbot_name as AssistantName,
+              send_message({
+                action: 'send-prompt',
+                assistant_name: selected_chatbot_hook.selected_assistant_name,
+                assistant_url,
+                prompt: prompt_field_value,
+                image: captured_image_hook.image,
+              })
+            }}
+            is_attach_text_checkbox_disabled={true}
+            is_attach_text_checkbox_checked={true}
+            on_include_content_click={() => {}}
+            prompts_history={[
+              ...prompts_vision_history_hook.prompts_history.filter(
+                (prompt) => !default_vision_prompts.includes(prompt),
+              ),
+            ].reverse()}
+            is_history_enabled={true}
+            assistant_selector_slot={
+              <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
+                selected_assistant_name={
+                  selected_chatbot_hook.selected_assistant_name
+                }
+                chatbots={Object.entries(assistants).map(([key, value]) => ({
+                  name: key,
+                  display_name: value.display_name,
+                }))}
+                on_assistant_change={(chatbot_name) => {
+                  selected_chatbot_hook.set_selected_assistant_name(
+                    chatbot_name as AssistantName,
+                  )
+                }}
+              />
+            }
+            is_plain_text_too_long={false}
+            transcript_not_found={false}
+            translations={{
+              placeholder: 'Ask anything!',
+              checkbox: 'Attach image',
+              active_input_placeholder_suffix: '(⇅ for history)',
+              plain_text_too_long: <></>,
+              transcript_not_found: <></>,
+            }}
+          />
+        ) : (
+          <Ui_extension_popup_templates_Popup_main_PromptField
+            key={popup_restored_count}
+            value={prompt_field_value}
+            on_focus={() => {
+              prompts_history_hook.restore_prompts_history()
+            }}
+            on_change={(value) => {
+              set_prompt_field_value(value)
+            }}
+            on_submit={() => {
+              if (
+                !prompt_field_value &&
+                !(
+                  attach_text_checkbox_hook.is_checked &&
+                  text_selection_hook.selected_text
                 )
-              }}
-            />
-          }
-          is_plain_text_too_long={
-            ((!!parsed_html_hook.parsed_html ||
-              !!text_selection_hook.selected_text) &&
-              parsed_html_hook.parsed_html?.plain_text &&
-              shortened_plan_text &&
-              parsed_html_hook.parsed_html?.plain_text.length >
-                shortened_plan_text?.length) ||
-            false
-          }
-          transcript_not_found={
-            is_youtube_video && parsed_html_hook.parsed_html === null
-          }
-          translations={{
-            placeholder: 'Ask anything!',
-            checkbox:
-              text_selection_hook.selected_text ||
-              (parsed_html_hook.parsed_html === null && !is_youtube_video)
-                ? 'Attach selection'
-                : get_attach_text_checkbox_label(document.location.href),
-            active_input_placeholder_suffix: '(⇅ for history)',
-            plain_text_too_long: (
-              <>
-                <strong>
-                  {is_youtube_video ? 'Transcript' : 'Text'} is too long for
-                  sel. assistant {sad_face()}
-                </strong>
-                <br />
-                <i>
-                  ...shortening by{' '}
-                  {calculate_shortening_percentage(
-                    parsed_html_hook.parsed_html?.plain_text,
-                    shortened_plan_text,
-                  )}
-                  %
-                </i>
-              </>
-            ),
-            transcript_not_found: (
-              <strong>Transcript not found {sad_face()}</strong>
-            ),
-          }}
-        />
+              )
+                return
+
+              if (
+                attach_text_checkbox_hook.is_checked &&
+                (parsed_html_hook.parsed_html ||
+                  text_selection_hook.selected_text)
+              ) {
+                // Update prompts history
+                const new_prompts_history =
+                  prompts_history_hook.prompts_history.filter(
+                    (item) => item != prompt_field_value,
+                  )
+                new_prompts_history.push(prompt_field_value)
+                prompts_history_hook.set_prompts_history(new_prompts_history)
+              }
+
+              send_message({
+                action: 'send-prompt',
+                assistant_name: selected_chatbot_hook.selected_assistant_name,
+                assistant_url,
+                prompt: prompt_field_value,
+                plain_text:
+                  attach_text_checkbox_hook.is_checked &&
+                  (text_selection_hook.selected_text || shortened_plan_text),
+              })
+            }}
+            is_attach_text_checkbox_disabled={
+              !parsed_html_hook.parsed_html &&
+              !text_selection_hook.selected_text
+            }
+            is_attach_text_checkbox_checked={
+              !parsed_html_hook.parsed_html &&
+              !text_selection_hook.selected_text
+                ? false
+                : attach_text_checkbox_hook.is_checked
+            }
+            on_include_content_click={() => {
+              attach_text_checkbox_hook.set_is_checked(
+                !attach_text_checkbox_hook.is_checked,
+              )
+            }}
+            prompts_history={[
+              ...prompts_history_hook.prompts_history.filter(
+                (prompt) => !default_prompts.includes(prompt),
+              ),
+            ].reverse()}
+            is_history_enabled={
+              !!parsed_html_hook.parsed_html ||
+              !!text_selection_hook.selected_text
+            }
+            assistant_selector_slot={
+              <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
+                selected_assistant_name={
+                  selected_chatbot_hook.selected_assistant_name
+                }
+                chatbots={Object.entries(assistants).map(([key, value]) => ({
+                  name: key,
+                  display_name: value.display_name,
+                }))}
+                on_assistant_change={(chatbot_name) => {
+                  selected_chatbot_hook.set_selected_assistant_name(
+                    chatbot_name as AssistantName,
+                  )
+                }}
+              />
+            }
+            is_plain_text_too_long={
+              ((!!parsed_html_hook.parsed_html ||
+                !!text_selection_hook.selected_text) &&
+                parsed_html_hook.parsed_html?.plain_text &&
+                shortened_plan_text &&
+                parsed_html_hook.parsed_html?.plain_text.length >
+                  shortened_plan_text?.length) ||
+              false
+            }
+            transcript_not_found={
+              is_youtube_video && parsed_html_hook.parsed_html === null
+            }
+            translations={{
+              placeholder: 'Ask anything!',
+              checkbox:
+                text_selection_hook.selected_text ||
+                (parsed_html_hook.parsed_html === null && !is_youtube_video)
+                  ? 'Attach selection'
+                  : get_attach_text_checkbox_label(document.location.href),
+              active_input_placeholder_suffix: '(⇅ for history)',
+              plain_text_too_long: (
+                <>
+                  <strong>
+                    {is_youtube_video ? 'Transcript' : 'Text'} is too long for
+                    this assistant {sad_emoji()}
+                  </strong>
+                  <br />
+                  <i>
+                    ...shortening by{' '}
+                    {calculate_shortening_percentage(
+                      parsed_html_hook.parsed_html?.plain_text,
+                      shortened_plan_text,
+                    )}
+                    %
+                  </i>
+                </>
+              ),
+              transcript_not_found: (
+                <strong>Transcript not found {sad_emoji()}</strong>
+              ),
+            }}
+          />
+        )}
       </Ui_extension_popup_templates_Popup>
     </div>
   )
@@ -375,7 +509,7 @@ const root = ReactDOM.createRoot(
 )
 root.render(<Popup />)
 
-const sad_face = () => {
+const sad_emoji = () => {
   const emojis = ['💔', '😪', '😢', '😓', '😭']
   return emojis[Math.floor(Math.random() * emojis.length)]
 }

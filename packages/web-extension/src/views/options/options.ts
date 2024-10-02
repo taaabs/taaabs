@@ -1,4 +1,3 @@
-import { local_assistant } from '@/constants/local-assistant'
 import browser from 'webextension-polyfill'
 
 // Detect Firefox
@@ -64,7 +63,7 @@ browser.storage.local
     ).checked = data.open_chatbot_in_new_tab || false
     ;(
       document.getElementById('local-assistant-port') as HTMLInputElement
-    ).value = data.local_assistant_port || local_assistant.default_port
+    ).value = data.local_assistant_port
     ;(
       document.getElementById('show-floating-button') as HTMLInputElement
     ).checked = data.show_floating_button || false

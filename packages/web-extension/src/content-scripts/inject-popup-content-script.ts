@@ -31,6 +31,8 @@ const text_selection_handler = () => {
 }
 document.addEventListener('selectionchange', text_selection_handler)
 
+let captured_image: string | undefined
+
 browser.runtime.onMessage.addListener((message: any, _, __): any => {
   if (is_message(message) && message.action == 'inject-popup') {
     const popup = document.getElementById('root-taaabs-popup')
@@ -50,6 +52,14 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
         console.debug('Popup visibility has been hidden')
         browser.runtime.sendMessage({ action: 'popup-closed' })
       } else {
+        // Receiving hook should have always up to date image
+        window.postMessage(
+          {
+            action: 'captured-image',
+            captured_image,
+          },
+          '*',
+        )
         popup.style.opacity = '1'
         popup.style.pointerEvents = 'all'
         console.debug('Popup visibility has been restored')
@@ -63,6 +73,8 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
     window.postMessage({ action: 'url-saved-status', is_saved: true }, '*')
   } else if (is_message(message) && message.action == 'bookmark-deleted') {
     window.postMessage({ action: 'url-saved-status', is_saved: false }, '*')
+  } else if (is_message(message) && message.action == 'captured-image') {
+    captured_image = message.captured_image
   }
 })
 
@@ -113,6 +125,7 @@ const message_handler = async (event: MessageEvent) => {
       window_width: window.outerWidth,
       window_height: window.outerHeight,
       open_in_new_tab: event.data.open_in_new_tab,
+      image: event.data.image,
     } as SendPrompt_Message)
   } else if (action == 'get-last-used-chatbot-name') {
     // Use browser.storage.local for Firefox
@@ -349,6 +362,20 @@ const message_handler = async (event: MessageEvent) => {
     })
   } else if (action == 'set-prompts-history') {
     browser.storage.local.set({ prompts_history: event.data.prompts_history })
+  } else if (action == 'get-prompts-vision-history') {
+    browser.storage.local.get('prompts_vision_history').then(({ prompts_vision_history }) => {
+      if (prompts_vision_history) {
+        window.postMessage(
+          {
+            action: 'prompts-vision-history',
+            prompts_vision_history,
+          },
+          '*',
+        )
+      }
+    })
+  } else if (action == 'set-prompts-vision-history') {
+    browser.storage.local.set({ prompts_vision_history: event.data.prompts_vision_history })
   } else if (action == 'get-attach-text-checkbox-state') {
     browser.storage.local
       .get('is_attach_this_page_checkbox_checked')
@@ -376,6 +403,23 @@ const message_handler = async (event: MessageEvent) => {
       {
         action: 'parsed-html',
         parsed_html,
+      },
+      '*',
+    )
+  } else if (action == 'get-captured-image') {
+    window.postMessage(
+      {
+        action: 'captured-image',
+        captured_image,
+      },
+      '*',
+    )
+  } else if (action == 'remove-captured-image') {
+    captured_image = undefined
+    window.postMessage(
+      {
+        action: 'captured-image',
+        captured_image,
       },
       '*',
     )
@@ -415,6 +459,7 @@ const inject_popup = () => {
 
   // Add event listener for both click outside and Escape key
   document.addEventListener('click', hide_popup_handler)
+  document.addEventListener('contextmenu', hide_popup_handler)
   document.addEventListener('keydown', hide_popup_handler)
 
   // Listen for messages from popup
