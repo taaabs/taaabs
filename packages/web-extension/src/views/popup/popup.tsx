@@ -30,9 +30,14 @@ import { calculate_shortening_percentage } from './helpers/calculate-shortening-
 import '../../../../web-ui/src/styles/theme.scss'
 import { use_auth_state } from './hooks/use-auth-state'
 import { get_attach_text_checkbox_label } from './helpers/get-attach-text-checkbox-label'
-import { AssistantName, assistants } from '@/constants/assistants'
+import {
+  AssistantName,
+  assistants,
+  assistants_vision,
+} from '@/constants/assistants'
 import { use_captured_image } from './hooks/use-captured-image'
 import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
+import { use_selected_assistant_vision } from './hooks/use-selected-assistant-vision'
 
 export const Popup: React.FC = () => {
   const auth_state_hook = use_auth_state()
@@ -42,7 +47,8 @@ export const Popup: React.FC = () => {
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
   const parsed_html_hook = use_parsed_html()
-  const selected_chatbot_hook = use_selected_assistant()
+  const selected_assistant_hook = use_selected_assistant()
+  const selected_assistant_vision_hook = use_selected_assistant_vision()
   const { local_assistant_port } = use_local_assistant_port()
   const attach_text_checkbox_hook = use_attach_text_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
@@ -55,14 +61,26 @@ export const Popup: React.FC = () => {
     'https://www.youtube.com/watch',
   )
 
+  const is_in_vision_mode = captured_image_hook.image
+
   let assistant_url = assistants['chatgpt'].url
-  if (selected_chatbot_hook.selected_assistant_name) {
-    if (selected_chatbot_hook.selected_assistant_name != 'custom') {
+  if (!is_in_vision_mode && selected_assistant_hook.selected_assistant_name) {
+    if (selected_assistant_hook.selected_assistant_name != 'custom') {
       assistant_url =
-        assistants[selected_chatbot_hook.selected_assistant_name].url
+        assistants[selected_assistant_hook.selected_assistant_name].url
     } else if (local_assistant_port) {
       assistant_url =
-        assistants[selected_chatbot_hook.selected_assistant_name].url +
+        assistants[selected_assistant_hook.selected_assistant_name].url +
+        local_assistant_port +
+        '/'
+    }
+  } else if (selected_assistant_vision_hook.selected_assistant_name) {
+    if (selected_assistant_vision_hook.selected_assistant_name != 'custom') {
+      assistant_url =
+        assistants[selected_assistant_vision_hook.selected_assistant_name].url
+    } else if (local_assistant_port) {
+      assistant_url =
+        assistants[selected_assistant_vision_hook.selected_assistant_name].url +
         local_assistant_port +
         '/'
     }
@@ -79,7 +97,7 @@ export const Popup: React.FC = () => {
   useUpdateEffect(() => {
     const max_length =
       (PLAIN_TEXT_MAX_LENGTH as any)[
-        selected_chatbot_hook.selected_assistant_name!
+        selected_assistant_hook.selected_assistant_name!
       ] || PLAIN_TEXT_MAX_LENGTH['default']
 
     const shortened_plain_text =
@@ -91,7 +109,7 @@ export const Popup: React.FC = () => {
         : parsed_html_hook.parsed_html.plain_text)
 
     set_shortened_plain_text(shortened_plain_text)
-  }, [parsed_html_hook, selected_chatbot_hook.selected_assistant_name])
+  }, [parsed_html_hook, selected_assistant_hook.selected_assistant_name])
 
   useEffect(() => {
     console.debug('Taaabs popup has been initialized.')
@@ -115,11 +133,13 @@ export const Popup: React.FC = () => {
   }, [saved_check_hook.is_saved])
 
   if (
+    captured_image_hook.image === undefined ||
     (parsed_html_hook.parsed_html === undefined && !is_youtube_video) ||
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
-    selected_chatbot_hook.selected_assistant_name === undefined ||
+    selected_assistant_hook.selected_assistant_name === undefined ||
+    selected_assistant_vision_hook.selected_assistant_name === undefined ||
     attach_text_checkbox_hook.is_checked === undefined
   ) {
     return <></>
@@ -165,7 +185,7 @@ export const Popup: React.FC = () => {
     if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
       send_message({
         action: 'send-prompt',
-        assistant_name: selected_chatbot_hook.selected_assistant_name,
+        assistant_name: selected_assistant_hook.selected_assistant_name,
         assistant_url,
         prompt,
         plain_text: text_selection_hook.selected_text || shortened_plan_text,
@@ -187,7 +207,7 @@ export const Popup: React.FC = () => {
   ) => {
     send_message({
       action: 'send-prompt',
-      assistant_name: selected_chatbot_hook.selected_assistant_name,
+      assistant_name: selected_assistant_vision_hook.selected_assistant_name,
       assistant_url,
       prompt,
       open_in_new_tab: is_middle_click,
@@ -207,10 +227,10 @@ export const Popup: React.FC = () => {
     <div className={styles.container}>
       <Ui_extension_popup_templates_Popup
         header_slot={
-          captured_image_hook.image ? (
+          is_in_vision_mode ? (
             <Ui_extension_popup_templates_Popup_HeaderVision
               back_button_on_click={captured_image_hook.remove}
-              image={captured_image_hook.image}
+              image={captured_image_hook.image!}
               translations={{
                 title: 'Vision',
               }}
@@ -234,7 +254,7 @@ export const Popup: React.FC = () => {
         }
       >
         {!window.location.href.startsWith('https://taaabs.com') &&
-          !captured_image_hook.image && (
+          !is_in_vision_mode && (
             <Ui_extension_popup_templates_Popup_main_Actions>
               <UiButton
                 href={'https://taaabs.com/library#fresh'}
@@ -248,7 +268,7 @@ export const Popup: React.FC = () => {
             </Ui_extension_popup_templates_Popup_main_Actions>
           )}
 
-        {captured_image_hook.image ? (
+        {is_in_vision_mode ? (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
@@ -306,7 +326,7 @@ export const Popup: React.FC = () => {
           )
         )}
 
-        {captured_image_hook.image ? (
+        {is_in_vision_mode ? (
           <Ui_extension_popup_templates_Popup_main_PromptField
             key={popup_restored_count}
             value={prompt_field_value}
@@ -331,7 +351,7 @@ export const Popup: React.FC = () => {
 
               send_message({
                 action: 'send-prompt',
-                assistant_name: selected_chatbot_hook.selected_assistant_name,
+                assistant_name: selected_assistant_hook.selected_assistant_name,
                 assistant_url,
                 prompt: prompt_field_value,
                 image: captured_image_hook.image,
@@ -349,15 +369,19 @@ export const Popup: React.FC = () => {
             assistant_selector_slot={
               <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
                 selected_assistant_name={
-                  selected_chatbot_hook.selected_assistant_name
+                  selected_assistant_vision_hook.selected_assistant_name
                 }
-                chatbots={Object.entries(assistants).map(([key, value]) => ({
-                  name: key,
-                  display_name: value.display_name,
-                }))}
-                on_assistant_change={(chatbot_name) => {
-                  selected_chatbot_hook.set_selected_assistant_name(
-                    chatbot_name as AssistantName,
+                chatbots={Object.entries(assistants)
+                  .filter(([key]) =>
+                    assistants_vision.includes(key as AssistantName),
+                  )
+                  .map(([key, value]) => ({
+                    name: key,
+                    display_name: value.display_name,
+                  }))}
+                on_assistant_change={(assistant_name) => {
+                  selected_assistant_vision_hook.set_selected_assistant_name(
+                    assistant_name as AssistantName,
                   )
                 }}
               />
@@ -408,7 +432,7 @@ export const Popup: React.FC = () => {
 
               send_message({
                 action: 'send-prompt',
-                assistant_name: selected_chatbot_hook.selected_assistant_name,
+                assistant_name: selected_assistant_hook.selected_assistant_name,
                 assistant_url,
                 prompt: prompt_field_value,
                 plain_text:
@@ -443,14 +467,14 @@ export const Popup: React.FC = () => {
             assistant_selector_slot={
               <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
                 selected_assistant_name={
-                  selected_chatbot_hook.selected_assistant_name
+                  selected_assistant_hook.selected_assistant_name
                 }
                 chatbots={Object.entries(assistants).map(([key, value]) => ({
                   name: key,
                   display_name: value.display_name,
                 }))}
                 on_assistant_change={(chatbot_name) => {
-                  selected_chatbot_hook.set_selected_assistant_name(
+                  selected_assistant_hook.set_selected_assistant_name(
                     chatbot_name as AssistantName,
                   )
                 }}

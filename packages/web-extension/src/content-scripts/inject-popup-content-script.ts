@@ -60,11 +60,14 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
           },
           '*',
         )
-        popup.style.opacity = '1'
-        popup.style.pointerEvents = 'all'
-        console.debug('Popup visibility has been restored')
-        browser.runtime.sendMessage({ action: 'popup-opened' })
-        window.postMessage({ action: 'popup-restored' }, '*')
+        // Fix for jank
+        setTimeout(() => {
+          popup.style.opacity = '1'
+          popup.style.pointerEvents = 'all'
+          console.debug('Popup visibility has been restored')
+          browser.runtime.sendMessage({ action: 'popup-opened' })
+          window.postMessage({ action: 'popup-restored' }, '*')
+        }, 50)
       }
     }
   } else if (is_message(message) && message.action == 'close-popup') {
@@ -152,6 +155,33 @@ const message_handler = async (event: MessageEvent) => {
 
     storageArea.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
+    })
+  } else if (action == 'get-last-used-chatbot-vision-name') {
+    // Use browser.storage.local for Firefox
+    const storage_area = browser.browserAction
+      ? browser.storage.local
+      : browser.storage.sync
+
+    storage_area
+      .get('last_used_chatbot_vision_name')
+      .then(({ last_used_chatbot_vision_name }) => {
+        window.postMessage(
+          {
+            action: 'last-used-chatbot-vision-name',
+            last_used_chatbot_vision_name:
+              last_used_chatbot_vision_name || 'chatgpt',
+          },
+          '*',
+        )
+      })
+  } else if (action == 'set-last-used-chatbot-vision-name') {
+    // Use browser.storage.local for Firefox
+    const storageArea = browser.browserAction
+      ? browser.storage.local
+      : browser.storage.sync
+
+    storageArea.set({
+      last_used_chatbot_vision_name: event.data.last_used_chatbot_vision_name,
     })
   } else if (action == 'get-local-assistant-port') {
     browser.storage.local
@@ -363,19 +393,23 @@ const message_handler = async (event: MessageEvent) => {
   } else if (action == 'set-prompts-history') {
     browser.storage.local.set({ prompts_history: event.data.prompts_history })
   } else if (action == 'get-prompts-vision-history') {
-    browser.storage.local.get('prompts_vision_history').then(({ prompts_vision_history }) => {
-      if (prompts_vision_history) {
-        window.postMessage(
-          {
-            action: 'prompts-vision-history',
-            prompts_vision_history,
-          },
-          '*',
-        )
-      }
-    })
+    browser.storage.local
+      .get('prompts_vision_history')
+      .then(({ prompts_vision_history }) => {
+        if (prompts_vision_history) {
+          window.postMessage(
+            {
+              action: 'prompts-vision-history',
+              prompts_vision_history,
+            },
+            '*',
+          )
+        }
+      })
   } else if (action == 'set-prompts-vision-history') {
-    browser.storage.local.set({ prompts_vision_history: event.data.prompts_vision_history })
+    browser.storage.local.set({
+      prompts_vision_history: event.data.prompts_vision_history,
+    })
   } else if (action == 'get-attach-text-checkbox-state') {
     browser.storage.local
       .get('is_attach_this_page_checkbox_checked')

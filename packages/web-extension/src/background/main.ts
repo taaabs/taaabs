@@ -30,15 +30,15 @@ browser.contextMenus.create({
 browser.contextMenus.create({
   id: 'capture-image',
   parentId: 'root',
-  title: 'Vision: image',
+  title: 'Image vision',
   contexts: ['image'],
 })
 
 browser.contextMenus.create({
   id: 'capture-screenshot',
   parentId: 'root',
-  title: 'Vision: full screen',
-  contexts: ['page', 'image'],
+  title: 'Full screen vision',
+  contexts: ['page'],
 })
 
 browser.contextMenus.create({

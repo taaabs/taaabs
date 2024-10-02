@@ -53,7 +53,7 @@ const handle_image_upload = async (params: {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
-            }, 500)
+            }, 100)
           })
         }
         resolve(null)
@@ -69,16 +69,26 @@ const handle_image_upload = async (params: {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
-            }, 500)
+            }, 100)
           })
         }
         resolve(null)
       })
     } else if (params.assistant_name == 'mistral') {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 100)
+      await new Promise(async (resolve) => {
+        while (
+          // Thumbnail
+          !document.querySelector(
+            '.object-cover.rounded-md.max-w-full.w-full.max-h-full.h-full',
+          )
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     }
   }

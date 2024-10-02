@@ -97,3 +97,11 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     url: 'http://localhost:',
   },
 }
+
+export const assistants_vision: AssistantName[] = [
+  'chatgpt',
+  'claude',
+  'mistral',
+  'perplexity',
+  'custom',
+]
