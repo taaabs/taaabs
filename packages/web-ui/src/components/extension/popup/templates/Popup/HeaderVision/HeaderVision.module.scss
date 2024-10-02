@@ -66,8 +66,9 @@
   background-color: var(--neutral150);
   position: relative;
   overflow: hidden;
+  cursor: crosshair;
   &--selecting {
-    cursor: nw-resize;
+    cursor: move;
     > img {
       filter: brightness(0.7);
     }
@@ -79,5 +80,5 @@
   }
 }
 .area {
-  border-radius: var(--border-radius-8px);
+  border-radius: var(--border-radius-4px);
 }

@@ -508,4 +508,5 @@ const close_popup = () => {
   document.removeEventListener('click', hide_popup_handler)
   document.removeEventListener('keydown', hide_popup_handler)
   window.removeEventListener('message', message_handler)
+  captured_image = undefined
 }

@@ -38,7 +38,13 @@ browser.contextMenus.create({
   id: 'capture-screenshot',
   parentId: 'root',
   title: 'Full screen vision',
-  contexts: ['page', 'image'],
+  contexts: ['page', 'image', 'action'],
+})
+
+browser.contextMenus.create({
+  id: 'capture-screenshot-action',
+  title: 'Full screen vision',
+  contexts: ['action'],
 })
 
 browser.contextMenus.create({
@@ -51,7 +57,10 @@ browser.contextMenus.create({
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId == 'open-popup') {
     browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (info.menuItemId == 'capture-screenshot') {
+  } else if (
+    info.menuItemId == 'capture-screenshot' ||
+    info.menuItemId == 'capture-screenshot-action'
+  ) {
     const captured_image = await browser.tabs.captureVisibleTab()
     browser.tabs.sendMessage(tab?.id!, {
       action: 'captured-image',

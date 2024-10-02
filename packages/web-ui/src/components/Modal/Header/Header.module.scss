@@ -7,7 +7,7 @@
   align-items: center;
   text-align: center;
   position: relative;
-  border-bottom: var(--border-secondary);
+  border-bottom: var(--border-primary);
   height: 50px;
   background-color: var(--header-background);
   @include to768 {

@@ -31,6 +31,14 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     const image_ref = useRef<HTMLImageElement>(null)
     const container_ref = useRef<HTMLDivElement>(null)
 
+    // Fix for Firefox to prevent image box selection highligh during resizing
+    const handle_mouse_enter = () => {
+      document.body.style.userSelect = 'none'
+    }
+    const handle_mouse_leave = () => {
+      document.body.style.userSelect = ''
+    }
+
     const handle_mouse_down = (e: React.MouseEvent<HTMLDivElement>) => {
       set_is_selecting(true)
       set_start_x(e.nativeEvent.offsetX)
@@ -148,9 +156,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     return (
-      <div
-        className={styles.container}
-      >
+      <div className={styles.container}>
         <div
           role="button"
           className={styles.back}
@@ -173,6 +179,8 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           className={cn(styles.image, {
             [styles['image--selecting']]: is_selecting,
           })}
+          onMouseEnter={handle_mouse_enter}
+          onMouseLeave={handle_mouse_leave}
           onMouseDown={handle_mouse_down}
           onMouseMove={handle_mouse_move}
           onMouseUp={handle_mouse_up}

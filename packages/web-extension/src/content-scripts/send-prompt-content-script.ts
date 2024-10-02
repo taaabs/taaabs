@@ -91,6 +91,11 @@ const handle_image_upload = async (params: {
         }
         resolve(null)
       })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
+      })
     }
   }
 }
