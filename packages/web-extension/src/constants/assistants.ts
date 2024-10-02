@@ -103,5 +103,6 @@ export const assistants_vision: AssistantName[] = [
   'claude',
   'mistral',
   'perplexity',
+  'huggingchat',
   'custom',
 ]

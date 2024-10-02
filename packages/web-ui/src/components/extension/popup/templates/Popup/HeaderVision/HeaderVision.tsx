@@ -64,48 +64,41 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
         const img = image_ref.current
         const container = container_ref.current
 
-        // Calculate scaling factors and offsets
         const container_rect = container.getBoundingClientRect()
-        const container_aspect = container_rect.width / container_rect.height
-        const img_aspect = img.naturalWidth / img.naturalHeight
+        const container_width = container_rect.width
+        const container_height = container_rect.height
 
-        let scale_x, scale_y, offset_x, offset_y
+        const img_width = img.naturalWidth
+        const img_height = img.naturalHeight
 
-        if (container_aspect > img_aspect) {
-          // Image is constrained by height
-          scale_y = container_rect.height / img.naturalHeight
-          scale_x = scale_y
-          offset_y = 0
-          offset_x = (container_rect.width - img.naturalWidth * scale_x) / 2
-        } else {
-          // Image is constrained by width
-          scale_x = container_rect.width / img.naturalWidth
-          scale_y = scale_x
-          offset_x = 0
-          offset_y = (container_rect.height - img.naturalHeight * scale_y) / 2
-        }
+        const scale_x = container_width / img_width
+        const scale_y = container_height / img_height
+        const scale = Math.min(scale_x, scale_y)
 
-        // Calculate crop dimensions in the original image space
-        const crop_x = (preview_rect.x - offset_x) / scale_x
-        const crop_y = (preview_rect.y - offset_y) / scale_y
-        const crop_width = preview_rect.width / scale_x
-        const crop_height = preview_rect.height / scale_y
+        const scaled_width = img_width * scale
+        const scaled_height = img_height * scale
 
-        // Set canvas dimensions to match the crop size
-        canvas.width = crop_width
-        canvas.height = crop_height
+        const offset_x = (container_width - scaled_width) / 2
+        const offset_y = (container_height - scaled_height) / 2
 
-        // Perform the crop
+        const adjusted_x = (preview_rect.x - offset_x) / scale
+        const adjusted_y = (preview_rect.y - offset_y) / scale
+        const adjusted_width = preview_rect.width / scale
+        const adjusted_height = preview_rect.height / scale
+
+        canvas.width = adjusted_width
+        canvas.height = adjusted_height
+
         ctx.drawImage(
           img,
-          crop_x,
-          crop_y,
-          crop_width,
-          crop_height,
+          adjusted_x,
+          adjusted_y,
+          adjusted_width,
+          adjusted_height,
           0,
           0,
-          crop_width,
-          crop_height,
+          adjusted_width,
+          adjusted_height,
         )
 
         const resized_image = canvas.toDataURL()
