@@ -148,7 +148,9 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     return (
-      <div className={styles.container}>
+      <div
+        className={styles.container}
+      >
         <div
           role="button"
           className={styles.back}
@@ -161,7 +163,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           role="button"
           onClick={handle_restore_original}
           className={cn(styles.restore, {
-            [styles['restore--active']]: props.image !== image,
+            [styles['restore--active']]: props.image != image,
           })}
           title={props.translations.restore}
         >

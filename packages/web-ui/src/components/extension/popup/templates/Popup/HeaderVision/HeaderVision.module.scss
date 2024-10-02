@@ -67,6 +67,7 @@
   position: relative;
   overflow: hidden;
   &--selecting {
+    cursor: nw-resize;
     > img {
       filter: brightness(0.7);
     }
