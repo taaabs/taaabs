@@ -86,20 +86,53 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
         const adjusted_width = preview_rect.width / scale
         const adjusted_height = preview_rect.height / scale
 
-        canvas.width = adjusted_width
-        canvas.height = adjusted_height
+        // Check if the selected area is outside the image bounds
+        if (
+          adjusted_x < 0 ||
+          adjusted_y < 0 ||
+          adjusted_x + adjusted_width > img.naturalWidth ||
+          adjusted_y + adjusted_height > img.naturalHeight
+        ) {
+          // Adjust the selection to fit within the image bounds
+          const new_width = Math.min(
+            adjusted_width,
+            img.naturalWidth - adjusted_x,
+          )
+          const new_height = Math.min(
+            adjusted_height,
+            img.naturalHeight - adjusted_y,
+          )
 
-        ctx.drawImage(
-          img,
-          adjusted_x,
-          adjusted_y,
-          adjusted_width,
-          adjusted_height,
-          0,
-          0,
-          adjusted_width,
-          adjusted_height,
-        )
+          canvas.width = new_width
+          canvas.height = new_height
+
+          ctx.drawImage(
+            img,
+            Math.max(0, adjusted_x),
+            Math.max(0, adjusted_y),
+            new_width,
+            new_height,
+            0,
+            0,
+            new_width,
+            new_height,
+          )
+        } else {
+          canvas.width = adjusted_width
+          canvas.height = adjusted_height
+
+          ctx.drawImage(
+            img,
+            adjusted_x,
+            adjusted_y,
+            adjusted_width,
+            adjusted_height,
+            0,
+            0,
+            adjusted_width,
+            adjusted_height,
+          )
+        }
 
         const resized_image = canvas.toDataURL()
         props.on_resize(resized_image)
