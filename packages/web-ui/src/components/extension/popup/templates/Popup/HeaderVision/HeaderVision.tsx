@@ -18,7 +18,7 @@ export namespace HeaderVision {
 export const HeaderVision: React.FC<HeaderVision.Props> = memo(
   (props) => {
     const [image, set_image] = useState(props.image)
-    const [is_dragging, set_is_dragging] = useState(false)
+    const [is_selecting, set_is_selecting] = useState(false)
     const [start_x, set_start_x] = useState(0)
     const [start_y, set_start_y] = useState(0)
     const [preview_rect, set_preview_rect] = useState({
@@ -32,13 +32,13 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     const container_ref = useRef<HTMLDivElement>(null)
 
     const handle_mouse_down = (e: React.MouseEvent<HTMLDivElement>) => {
-      set_is_dragging(true)
+      set_is_selecting(true)
       set_start_x(e.nativeEvent.offsetX)
       set_start_y(e.nativeEvent.offsetY)
     }
 
     const handle_mouse_move = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!is_dragging) return
+      if (!is_selecting) return
 
       const current_x = e.nativeEvent.offsetX
       const current_y = e.nativeEvent.offsetY
@@ -51,7 +51,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     const handle_mouse_up = useCallback(async () => {
-      set_is_dragging(false)
+      set_is_selecting(false)
 
       if (
         preview_rect.width > 0 &&
@@ -135,19 +135,16 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           <Icon variant="RESTORE" />
         </div>
         <div
-          className={styles.image}
+          className={cn(styles.image, {
+            [styles['image--selecting']]: is_selecting,
+          })}
           onMouseDown={handle_mouse_down}
           onMouseMove={handle_mouse_move}
           onMouseUp={handle_mouse_up}
           ref={container_ref}
         >
-          <img
-            src={image}
-            ref={image_ref}
-            draggable={false}
-            style={{ objectFit: 'contain', width: '100%', height: '100%' }}
-          />
-          {is_dragging && (
+          <img src={image} ref={image_ref} draggable={false} />
+          {is_selecting && (
             <div
               style={{
                 position: 'absolute',
@@ -155,6 +152,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
                 top: preview_rect.y,
                 width: preview_rect.width,
                 height: preview_rect.height,
+                backdropFilter: 'brightness(1.5)',
               }}
               className={styles.area}
             />

@@ -8,8 +8,10 @@ export const use_captured_image = () => {
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'captured-image') {
-        set_image(event.data.captured_image || null)
-        set_captured_at(Date.now())
+        if (event.data.captured_image != image || image === undefined) {
+          set_image(event.data.captured_image || null)
+          set_captured_at(Date.now())
+        }
       }
     }
     window.addEventListener('message', handle_message)

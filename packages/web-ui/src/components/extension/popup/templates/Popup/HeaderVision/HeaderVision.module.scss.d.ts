@@ -3,6 +3,7 @@ declare const styles: {
   readonly "back": string;
   readonly "container": string;
   readonly "image": string;
+  readonly "image--selecting": string;
   readonly "restore": string;
   readonly "restore--active": string;
   readonly "title": string;

@@ -38,7 +38,7 @@ browser.contextMenus.create({
   id: 'capture-screenshot',
   parentId: 'root',
   title: 'Full screen vision',
-  contexts: ['page'],
+  contexts: ['page', 'image'],
 })
 
 browser.contextMenus.create({

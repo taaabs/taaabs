@@ -30,21 +30,22 @@ const handle_image_upload = async (params: {
   assistant_name: AssistantName
   image: string
 }) => {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true)
-    }, 2000)
-  })
-  const img_input = document.querySelector(
-    'input[type="file"]',
+  let file_input_selector = 'input[type="file"]'
+  if (params.assistant_name == 'mistral') {
+    file_input_selector = 'input[type="file"][name="img-upload"]'
+  }
+
+  const file_input = document.querySelector(
+    file_input_selector,
   ) as HTMLInputElement
-  if (img_input) {
+
+  if (file_input) {
     const blob = await fetch(params.image).then((res) => res.blob())
     const file = new File([blob], 'image.png', { type: 'image/png' })
     const data_transfer = new DataTransfer()
     data_transfer.items.add(file)
-    img_input.files = data_transfer.files
-    img_input.dispatchEvent(new Event('change', { bubbles: true }))
+    file_input.files = data_transfer.files
+    file_input.dispatchEvent(new Event('change', { bubbles: true }))
     if (params.assistant_name == 'chatgpt') {
       await new Promise(async (resolve) => {
         while (
