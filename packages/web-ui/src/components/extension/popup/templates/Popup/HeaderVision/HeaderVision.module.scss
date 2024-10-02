@@ -32,13 +32,46 @@
   font-size: var(--font-size-16px);
   font-weight: var(--font-weight-inter-semi-bold);
 }
+.restore {
+  position: absolute;
+  right: 11px;
+  top: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--button-dimension-34px);
+  height: var(--button-dimension-34px);
+  > svg {
+    fill: var(--border-color-secondary);
+    height: var(--icon-dimension-20px);
+    width: var(--icon-dimension-20px);
+    @include transition-150ms;
+  }
+  &--active {
+    @include hover {
+      cursor: pointer;
+      > svg {
+        fill: var(--black);
+        transform: rotate(10deg);
+      }
+    }
+    > svg {
+      fill: var(--black);
+    }
+  }
+}
 .image {
   border-radius: var(--border-radius-8px);
   height: 150px;
   background-color: var(--neutral100);
+  position: relative;
   > img {
-    object-fit: contain;
     width: 100%;
     height: 100%;
+    object-fit: contain;
   }
+}
+.area {
+  border: 1.5px dashed var(--accent-color);
+  border-radius: var(--border-radius-3px);
 }

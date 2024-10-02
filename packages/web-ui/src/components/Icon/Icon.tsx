@@ -34,6 +34,7 @@ import Logo from '../../assets/icons/logo.svg'
 import Pin from '../../assets/icons/pin.svg'
 import Recent from '../../assets/icons/recent.svg'
 import Resize from '../../assets/icons/resize.svg'
+import Restore from '../../assets/icons/restore.svg'
 import Search from '../../assets/icons/search.svg'
 import SelectedBold from '../../assets/icons/selected-bold.svg'
 import Selected from '../../assets/icons/selected.svg'
@@ -95,6 +96,7 @@ export namespace Icon {
     | 'RECENT'
     | 'CROSS'
     | 'RESIZE'
+    | 'RESTORE'
     | 'SEARCH'
     | 'SELECTED_BOLD'
     | 'SELECTED'
@@ -252,6 +254,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'RESIZE':
       icon = <Resize />
+      break
+    case 'RESTORE':
+      icon = <Restore />
       break
     case 'SEARCH':
       icon = <Search />
