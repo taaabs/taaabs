@@ -4,9 +4,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  padding: var(--padding-20px) var(--padding-16px) var(--padding-16px)
-    var(--padding-16px);
-  gap: var(--padding-16px);
+  padding: 0 var(--padding-16px) var(--padding-16px) var(--padding-16px);
   position: relative;
   border-bottom: var(--border-primary);
 }
@@ -29,13 +27,15 @@
 }
 .title {
   text-align: center;
-  font-size: var(--font-size-16px);
-  font-weight: var(--font-weight-inter-semi-bold);
+  font-weight: var(--font-weight-plus-jakarta-sans-bold);
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-size: var(--font-size-19px);
+  padding: 18px 0 14px 0;
 }
 .restore {
   position: absolute;
-  right: 11px;
-  top: 13px;
+  right: var(--padding-12px);
+  top: var(--padding-14px);
   display: flex;
   align-items: center;
   justify-content: center;
