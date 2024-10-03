@@ -42,7 +42,7 @@ Please visit [discussions](https://github.com/taaabs/taaabs/discussions) tab.
 
 ## License
 
-Our extension (`packages/web-extension`) is distributed under open-source AGPLv3 license.
+Taaabs Web Clipper extension (`packages/web-extension`) is distributed under open-source AGPLv3 license. Other packages are source-available.
 
 ## Acknowledgements
 
