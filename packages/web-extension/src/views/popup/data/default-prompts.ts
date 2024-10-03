@@ -7,9 +7,10 @@ export const default_prompts = [
 ]
 
 export const default_vision_prompts = [
-  'Describe the image in detail, including objects, actions, and emotions depicted.',
-  'Identify all the objects present in the image and their approximate locations.',
-  'Generate a set of captions for this image suitable for social media.',
+  'Give detailed description of the image.',
+  'Identify all the objects present in the image.',
+  "Describe the image in layman's terms so that anyone can understand it.",
+  "Describe the image like I'm five (ELI5).",
   'Describe the image as if you were writing a scene in a novel.',
-  'If this image were a scene from a movie, what kind of narrative or storyline could this image fit into?'
+  'Generate a set of captions for this image.',
 ]
