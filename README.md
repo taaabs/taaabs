@@ -1,9 +1,9 @@
 <h3 align="center">Taaabs</h3>
 
 <p align="center">
-    Codebase powering our front-ends.
+    <b>Unlock the joy of your web research.</b>
     <br />
-    <i>apps and browser extension</i>
+    Privately clip any page to your personal library. Assist browsing with top AI chatbots.
     <br />
     <a href="https://taaabs.com"><strong>Learn more »</strong></a>
     <br />
@@ -12,19 +12,37 @@
 
 ## About
 
-Taaabs is the hugginest social bookmarking platform built for courious characters!
+Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with top AI chatbots.
 
-## End-to-end encryption
+Perfect for students, professionals, and curious minds.
 
-Every person should have the right for privacy and Taaabs encrypts all private bookmarks using state-of-the-art algorithms, so no one, not even us can know what they are. For transparency, complete source code of all our apps is available in this repository so that anyone interested in how we handle user data can learn from this codebase. Open [discussion](https://github.com/taaabs/taaabs/discussions) if you have questions or suggestions.
+Key features:
 
-## Who's behind it?'
+- Extension is free and open source. Has no tracking and no ads.
+- Ask top AI assistant anything for free, forever! Send article text, YouTube transcript, screenshot or a single image. Get your answers from ChatGPT, Gemini, Perplexity or one of 10+ other popular chatbots.
+- Organize your personal library of links with 1000 free bookmarks.
+- Private bookmarks are encrypted End-to-End with AES-CBC 256-bit, encryption key is derived with Argon2.
+- Share selected bookmarks on your public profile and follow like-minded people.
 
-This application is designed and programmed by [Robert Piosik](https://x.com/robertpiosik), standing on the shoulders of giants.
+Add Taaabs Web Clipper to your browser and unlock the joy of your web research!
 
-## Give feedback, get help
+## Privacy
+
+Taaabs is world's only bookmark manager that employs state-of-the-art alghoritms, no one, not even us can see what links you privately saved.
+
+Private bookmarks are encrypted End-to-End with AES-CBC 256-bit, encryption key is derived with Argon2id. This mirrors [bitwarden's approach](https://bitwarden.com/help/what-encryption-is-used/). Complete source code of all our apps is public and anyone interested in inner-workings can learn from this repository.
+
+## Who's behind it?
+
+Designed and programmed by [Robert Piosik](https://x.com/robertpiosik), standing on the shoulders of giants. All the programming is done from a beautiful city of Poznan, Poland. Let me know when you come by!
+
+## Send feedback, get help
 
 Please visit [discussions](https://github.com/taaabs/taaabs/discussions) tab.
+
+## License
+
+Our extension (`packages/web-extension`) is distributed under open-source AGPLv3 license.
 
 ## Acknowledgements
 
