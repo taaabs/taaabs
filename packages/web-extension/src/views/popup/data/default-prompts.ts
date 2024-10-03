@@ -13,4 +13,5 @@ export const default_vision_prompts = [
   "Describe the image like I'm five (ELI5).",
   'Describe the image as if you were writing a scene in a novel.',
   'Generate a set of captions for this image.',
+  "Quiz me on the image's content with multiple choice type of questions. Wait for my answer before moving on to the next one.",
 ]
