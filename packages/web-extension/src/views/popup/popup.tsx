@@ -229,9 +229,9 @@ export const Popup: React.FC = () => {
         header_slot={
           is_in_vision_mode ? (
             <Ui_extension_popup_templates_Popup_HeaderVision
-              key={captured_image_hook.captured_at}
+              key={captured_image_hook.original_image}
               back_button_on_click={captured_image_hook.remove}
-              image={captured_image_hook.image!}
+              image={captured_image_hook.original_image!}
               on_resize={captured_image_hook.set_image}
               translations={{
                 title: 'Vision',

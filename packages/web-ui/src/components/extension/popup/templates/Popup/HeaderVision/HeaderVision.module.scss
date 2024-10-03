@@ -29,7 +29,7 @@
   text-align: center;
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   font-family: var(--font-family-plus-jakarta-sans);
-  font-size: var(--font-size-19px);
+  font-size: var(--font-size-20px);
   padding: 18px 0 14px 0;
 }
 .restore {
@@ -41,6 +41,7 @@
   justify-content: center;
   width: var(--button-dimension-34px);
   height: var(--button-dimension-34px);
+  pointer-events: none;
   > svg {
     fill: var(--border-color-secondary);
     height: var(--icon-dimension-20px);
@@ -48,6 +49,7 @@
     @include transition-150ms;
   }
   &--active {
+    pointer-events: unset;
     @include hover {
       cursor: pointer;
       > svg {

@@ -22,36 +22,43 @@ action.onClicked.addListener(async (tab) => {
 message_listeners()
 
 browser.contextMenus.create({
-  id: 'root',
+  id: 'main',
   title: 'Taaabs Web Clipper',
-  contexts: ['page', 'image'],
+  contexts: ['page', 'image', 'selection', 'link'],
 })
 
 browser.contextMenus.create({
   id: 'capture-image',
-  parentId: 'root',
-  title: 'Image vision',
+  parentId: 'main',
+  title: 'Enter vision mode (image)',
   contexts: ['image'],
 })
 
 browser.contextMenus.create({
   id: 'capture-screenshot',
-  parentId: 'root',
-  title: 'Full screen vision',
-  contexts: ['page', 'image'],
+  parentId: 'main',
+  title: 'Enter vision mode (full screen)',
+  contexts: ['image'],
+})
+
+browser.contextMenus.create({
+  id: 'capture-screenshot-2',
+  parentId: 'main',
+  title: 'Enter vision mode',
+  contexts: ['page', 'selection', 'link'],
 })
 
 browser.contextMenus.create({
   id: 'capture-screenshot-action',
-  title: 'Full screen vision',
+  title: 'Enter vision mode',
   contexts: ['action'],
 })
 
 browser.contextMenus.create({
   id: 'open-popup',
-  parentId: 'root',
+  parentId: 'main',
   title: 'Show popup',
-  contexts: ['page', 'image'],
+  contexts: ['all'],
 })
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -65,7 +72,10 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       captured_image,
     })
     browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (info.menuItemId == 'capture-screenshot') {
+  } else if (
+    info.menuItemId == 'capture-screenshot' ||
+    info.menuItemId == 'capture-screenshot-2'
+  ) {
     const captured_image = await browser.tabs.captureVisibleTab()
     browser.tabs.sendMessage(tab?.id!, {
       action: 'captured-image',

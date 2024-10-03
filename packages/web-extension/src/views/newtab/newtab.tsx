@@ -42,10 +42,16 @@ export const NewTab: React.FC = () => {
         }
         slot_header_mobile={<></>}
       >
-        <div className={styles.wrapper}>
-          <div className={styles.inner}>
-            <Search />
-            <Bookmarks />
+        <div
+          onClick={() => {
+            document.location = 'https://taaabs.com/library'
+          }}
+        >
+          <div className={styles.wrapper}>
+            <div className={styles.inner}>
+              <Search />
+              <Bookmarks />
+            </div>
           </div>
         </div>
       </Ui_app_templates_App>

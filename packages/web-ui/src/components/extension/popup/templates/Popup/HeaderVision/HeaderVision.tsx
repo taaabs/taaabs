@@ -27,7 +27,6 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       width: 0,
       height: 0,
     })
-
     const image_ref = useRef<HTMLImageElement>(null)
     const container_ref = useRef<HTMLDivElement>(null)
 
@@ -58,7 +57,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       set_preview_rect({ x, y, width, height })
     }
 
-    const handle_mouse_up = useCallback(async () => {
+    const handle_mouse_up = async () => {
       set_is_selecting(false)
 
       if (
@@ -155,7 +154,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       }
 
       set_preview_rect({ x: 0, y: 0, width: 0, height: 0 })
-    }, [preview_rect, props])
+    }
 
     const handle_restore_original = () => {
       props.on_resize(props.image)

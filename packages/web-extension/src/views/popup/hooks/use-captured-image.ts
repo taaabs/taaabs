@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react'
 
 export const use_captured_image = () => {
+  const [original_image, set_original_image] = useState<string | null>()
   const [image, set_image] = useState<string | null>()
-  const [captured_at, set_captured_at] = useState<number>()
 
   useEffect(() => {
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
       if (event.data && event.data.action == 'captured-image') {
-        if (event.data.captured_image != image || image === undefined) {
+        if (
+          event.data.captured_image != original_image ||
+          original_image === undefined
+        ) {
+          set_original_image(event.data.captured_image || null)
           set_image(event.data.captured_image || null)
-          set_captured_at(Date.now())
         }
       }
     }
@@ -24,8 +27,8 @@ export const use_captured_image = () => {
   }
 
   return {
+    original_image,
     image,
-    captured_at,
     set_image,
     remove,
   }

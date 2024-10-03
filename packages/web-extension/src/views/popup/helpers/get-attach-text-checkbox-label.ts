@@ -1,7 +1,7 @@
 export const get_attach_text_checkbox_label = (url: string) => {
-  const conversation = 'Include chat'
+  const conversation = 'Include conversation'
   const label_map = {
-    'https://www.youtube.com/watch': 'Incl. transcript',
+    'https://www.youtube.com/watch': 'Include transcript',
     'https://x.com': 'Include tweet',
     'https://twitter.com': 'Include tweet',
     'https://www.reddit.com/r/': 'Include post',
