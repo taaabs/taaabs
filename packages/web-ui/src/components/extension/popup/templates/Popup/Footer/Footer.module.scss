@@ -8,17 +8,16 @@
   height: 40px;
   border-top: var(--border-primary);
   padding: 0 var(--padding-24px);
-  gap: var(--padding-4px);
-  color: var(--text-color-dimmed);
+  gap: var(--padding-10px);
   > a {
     font-size: var(--font-size-14px);
-    color: var(--accent-color);
+    color: var(--text-color-dimmed);
     @include hover {
       @include text-decoration-underlinie-thin;
     }
     &:visited {
       // Fix for some sites
-      color: var(--accent-color) !important;
+      color: var(--text-color-dimmed) !important;
     }
   }
 }

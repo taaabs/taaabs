@@ -11,11 +11,9 @@ export type AssistantName =
   | 'cohere'
   | 'huggingchat'
   | 'deepseek'
-  | 'librechat'
   | 'phind'
   | 'poe'
   | 'you'
-  | 'lobechat'
   | 'custom'
 
 export interface AssistantDetails {
@@ -72,10 +70,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'DeepSeek',
     url: 'https://chat.deepseek.com/',
   },
-  librechat: {
-    display_name: 'LibreChat',
-    url: 'https://librechat-librechat.hf.space/c/new',
-  },
   phind: {
     display_name: 'Phind',
     url: 'https://www.phind.com/agent',
@@ -87,10 +81,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   you: {
     display_name: 'You',
     url: 'https://you.com/',
-  },
-  lobechat: {
-    display_name: 'LobeChat',
-    url: 'https://lobechat.com/chat',
   },
   custom: {
     display_name: 'Custom',

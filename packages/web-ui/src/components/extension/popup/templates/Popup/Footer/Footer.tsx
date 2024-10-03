@@ -2,24 +2,21 @@ import styles from './Footer.module.scss'
 
 export namespace Footer {
   export type Props = {
-    transaltions: {
-      contribute: string
-      send_feedback: string
-    }
-    feedback_url: string
+    items: {
+      label: string
+      url: string
+    }[]
   }
 }
 
 export const Footer: React.FC<Footer.Props> = (props) => {
   return (
     <div className={styles.container}>
-      <a href={'https://github.com/taaabs/taaabs'} target={'_blank'}>
-        {props.transaltions.contribute}
-      </a>
-      {'·'}
-      <a href={props.feedback_url} target={'_blank'}>
-        {props.transaltions.send_feedback}
-      </a>
+      {props.items.map((item, i) => (
+        <a href={item.url} target={'_blank'} key={i}>
+          {item.label}
+        </a>
+      ))}
     </div>
   )
 }

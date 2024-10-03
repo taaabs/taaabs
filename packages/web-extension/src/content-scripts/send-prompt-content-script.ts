@@ -241,12 +241,6 @@ namespace AssistantBugMitigation {
           resolve(true)
         }, 500)
       })
-    } else if (params.assistant_name == 'lobechat') {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 500)
-      })
     } else if (params.assistant_name == 'deepseek') {
       // We first check if "Context cleared" element is there, meaning previous
       // conversation is loaded, then we repeatedly click "Clear context" button
@@ -290,7 +284,6 @@ namespace AssistantBugMitigation {
         claude: 'div[contenteditable=true] > p',
         mistral: 'textarea[placeholder="Ask anything!"]',
         you: 'textarea[name="query"]',
-        librechat: 'textarea[placeholder*="Message "]',
       }
 
       const selector = chatbot_selectors[assistant_name]

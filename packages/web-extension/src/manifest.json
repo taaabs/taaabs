@@ -69,10 +69,8 @@
         "https://www.phind.com/agent",
         "https://poe.com/",
         "https://you.com/",
-        "https://librechat-librechat.hf.space/c/new",
         "https://www.perplexity.ai/",
-        "https://www.bing.com/chat",
-        "https://lobechat.com/chat"
+        "https://www.bing.com/chat"
       ],
       "js": ["send-prompt-content-script.js"]
     }

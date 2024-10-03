@@ -248,11 +248,20 @@ export const Popup: React.FC = () => {
         }
         footer_slot={
           <Ui_extension_popup_templates_Popup_Footer
-            feedback_url="https://github.com/taaabs/taaabs/discussions"
-            transaltions={{
-              contribute: 'Contribute',
-              send_feedback: 'Send feedback',
-            }}
+            items={[
+              {
+                label: 'Contribute',
+                url: 'https://github.com/taaabs/taaabs',
+              },
+              {
+                label: 'Send feedback',
+                url: 'https://github.com/taaabs/taaabs/discussions',
+              },
+              {
+                label: 'Follow on X',
+                url: 'https://x.com/HeyTaaabs',
+              },
+            ]}
           />
         }
       >
