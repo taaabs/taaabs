@@ -1,5 +1,6 @@
 {
   "name": "@taaabs/web-extension",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production && node create-firefox-build.js",
