@@ -17,7 +17,10 @@ document.head.appendChild(link)
 browser.storage.local
   .get(['show_floating_button', 'floating_button_top'])
   .then(({ show_floating_button, floating_button_top }) => {
-    if (show_floating_button) {
+    if (
+      show_floating_button ||
+      document.location.href.startsWith('https://taaabs.com/')
+    ) {
       fetch(browser.runtime.getURL('floating-button.html'))
         .then((response) => response.text())
         .then((html) => {
