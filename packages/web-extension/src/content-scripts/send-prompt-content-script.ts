@@ -82,7 +82,6 @@ const handle_image_upload = async (params: {
     } else if (params.assistant_name == 'claude') {
       await new Promise(async (resolve) => {
         while (
-          // X button appearing on uploaded image
           !document.querySelector(
             '.hover\\:scale-105.transition.p-1.rounded-full.-translate-y-1\\/2.-translate-x-1\\/2.hover\\:text-oncolor-100.hover\\:bg-danger-100.bg-bg-000.text-text-500.border-border-200.border-0\\.5',
           )
@@ -98,7 +97,6 @@ const handle_image_upload = async (params: {
     } else if (params.assistant_name == 'mistral') {
       await new Promise(async (resolve) => {
         while (
-          // Thumbnail
           !document.querySelector(
             '.object-cover.rounded-md.max-w-full.w-full.max-h-full.h-full',
           )
@@ -116,12 +114,20 @@ const handle_image_upload = async (params: {
           resolve(true)
         }, 500)
       })
+    } else if (params.assistant_name == 'lobechat') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('.anticon-check-circle.anticon')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
     } else if (is_open_webui) {
       await new Promise(async (resolve) => {
-        while (
-          // Thumbnail
-          !document.querySelector('img[alt="input"]')
-        ) {
+        while (!document.querySelector('img[alt="input"]')) {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
@@ -154,13 +160,16 @@ const send_prompt = async (params: {
       const form = input_element.closest('form')
 
       if (params.assistant_name == 'claude') {
-        setTimeout(() => {
-          ;(
-            document.querySelector(
-              'button[aria-label="Send Message"]',
-            ) as HTMLElement
-          ).click()
-        }, 500)
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 500)
+        })
+        ;(
+          document.querySelector(
+            'button[aria-label="Send Message"]',
+          ) as HTMLElement
+        ).click()
       } else if (form) {
         setTimeout(() => {
           form.requestSubmit()
@@ -223,47 +232,75 @@ namespace AssistantBugMitigation {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
     // Deepseek automatically restores previous conversation, we need to clear it.
     if (params.assistant_name == 'aistudio') {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 1500)
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('ms-zero-state')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     } else if (params.assistant_name == 'mistral') {
-      // Fix for mobile view
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 2000)
+      await new Promise(async (resolve) => {
+        while (
+          document.querySelector(
+            'template[data-dgst="BAILOUT_TO_CLIENT_SIDE_RENDERING"]',
+          )
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     } else if (params.assistant_name == 'perplexity') {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 500)
+      await new Promise(async (resolve) => {
+        while (
+          !document.querySelector(
+            '.md\\:grid-cols-2.md\\:auto-rows-fr.gap-sm.grid-cols-1.grid',
+          )
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     } else if (params.assistant_name == 'deepseek') {
-      // We first check if "Context cleared" element is there, meaning previous
-      // conversation is loaded, then we repeatedly click "Clear context" button
-      // until previous conversation is gone.
-      await new Promise((resolve) => {
-        const interval = setInterval(() => {
-          const context_cleared_text = document.querySelector(
-            '#latest-context-divider',
-          )
-          if (!context_cleared_text) return
-
-          const chat_message_sent_by_user = document.querySelector(
-            '#latest-context-divider + ._18fe68b',
-          )
-          if (!chat_message_sent_by_user) {
-            clearInterval(interval)
-            resolve(true)
-          } else {
-            ;(
-              document.querySelector('.ba62c862._64447e7') as HTMLElement
-            ).click()
-          }
-        }, 500)
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('#latest-context-divider')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        const chat_message_sent_by_user = document.querySelector(
+          '#latest-context-divider + ._18fe68b',
+        )
+        if (chat_message_sent_by_user) {
+          ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'lobechat') {
+      await new Promise(async (resolve) => {
+        while (
+          !document.querySelector('div[data-testid="virtuoso-item-list"]')
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     }
   }

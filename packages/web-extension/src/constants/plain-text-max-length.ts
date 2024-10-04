@@ -10,4 +10,5 @@ export const PLAIN_TEXT_MAX_LENGTH = {
   cohere: 200000,
   aistudio: Infinity,
   custom: Infinity,
+  lobechat: Infinity,
 }

@@ -5,8 +5,8 @@ export type AssistantName =
   | 'perplexity'
   | 'copilot'
   | 'claude'
-  | 'grok'
-  | 'meta'
+  // | 'grok'
+  // | 'meta'
   | 'mistral'
   | 'cohere'
   | 'huggingchat'
@@ -14,6 +14,7 @@ export type AssistantName =
   | 'phind'
   | 'poe'
   | 'you'
+  | 'lobechat'
   | 'custom'
 
 export interface AssistantDetails {
@@ -46,14 +47,14 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Claude',
     url: 'https://claude.ai/new',
   },
-  grok: {
-    display_name: 'Grok',
-    url: 'https://x.com/i/grok',
-  },
-  meta: {
-    display_name: 'Meta AI',
-    url: 'https://www.meta.ai/',
-  },
+  // grok: {
+  //   display_name: 'Grok',
+  //   url: 'https://x.com/i/grok',
+  // },
+  // meta: {
+  //   display_name: 'Meta AI',
+  //   url: 'https://www.meta.ai/',
+  // },
   mistral: {
     display_name: 'Mistral',
     url: 'https://chat.mistral.ai/chat',
@@ -82,6 +83,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'You',
     url: 'https://you.com/',
   },
+  lobechat: {
+    display_name: 'LobeChat',
+    url: 'https://chat-preview.lobehub.com/chat',
+  },
   custom: {
     display_name: 'Custom',
     url: 'http://localhost:',
@@ -92,7 +97,8 @@ export const assistants_vision: AssistantName[] = [
   'chatgpt',
   'claude',
   'mistral',
-  'perplexity',
+  // 'perplexity',
   'huggingchat',
+  'lobechat',
   'custom',
 ]
