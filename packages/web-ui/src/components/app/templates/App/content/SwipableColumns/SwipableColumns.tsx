@@ -17,7 +17,7 @@ export namespace SwipableColumns {
     slot_search: React.ReactNode
     slot_main: React.ReactNode
     are_bookmarks_dimmed: boolean
-    on_page_bottom_reached: () => void
+    on_page_bottom_reached?: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
     info_text: React.ReactNode
@@ -222,9 +222,10 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   }
 
   useUpdateEffect(() => {
-    if (!is_end_of_bookmarks_visible) return
-    props.on_page_bottom_reached()
-  }, [is_end_of_bookmarks_visible])
+    if (is_end_of_bookmarks_visible) {
+      props.on_page_bottom_reached?.()
+    }
+  }, [is_end_of_bookmarks_visible, props.on_page_bottom_reached])
 
   return (
     <div className={styles.container} {...swipeable_handlers}>

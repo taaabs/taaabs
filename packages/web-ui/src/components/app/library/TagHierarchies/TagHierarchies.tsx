@@ -149,9 +149,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       if (!props.tree) return
 
       set_items(
-        props.tree.map((node) =>
-          tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
-        ),
+        props.tree
+          .filter((node) =>
+            props.is_read_only ? (node.yields == 0 ? false : true) : true,
+          )
+          .map((node) =>
+            tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
+          ),
       )
 
       if (!props.is_read_only) {
