@@ -7,20 +7,4 @@
   padding: var(--padding-16px);
   gap: var(--padding-12px);
   border-bottom: var(--border-primary);
-  // Fixes for some sites
-  > a {
-    font-weight: var(--font-weight-plus-jakarta-sans-bold) !important;
-  }
-  > button {
-    align-self: unset;
-    border: unset;
-    width: unset !important;
-    font-size: var(--font-size-16px) !important;
-    font-family: var(--font-family-plus-jakarta-sans) !important;
-    font-weight: var(--font-weight-plus-jakarta-sans-bold) !important;
-    text-transform: unset;
-  }
-  > button:hover {
-    font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  }
 }

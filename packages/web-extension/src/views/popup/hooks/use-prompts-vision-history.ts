@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { default_vision_prompts } from '../data/default-prompts'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const use_prompts_vision_history = () => {
-  const [prompts_history, set_prompts_history] =
-    useState<string[]>(default_vision_prompts)
+  const [prompts_history, set_prompts_history] = useState<string[]>([])
 
   const restore_prompts_history = () => {
     window.postMessage({ action: 'get-prompts-vision-history' }, '*')

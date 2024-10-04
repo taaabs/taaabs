@@ -14,57 +14,45 @@ action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 action.setBadgeTextColor({ color: 'white' })
 
 action.onClicked.addListener(async (tab) => {
-  await browser.tabs
-    .sendMessage(tab.id!, { action: 'inject-popup' })
-    .catch(() => {})
+  if (
+    tab.url == 'chrome://newtab/' ||
+    tab.url == 'chrome://new-tab-page/' ||
+    tab.url == 'about:newtab' ||
+    tab.url?.startsWith('moz-extension://')
+  ) {
+    await browser.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
+  } else {
+    await browser.tabs
+      .sendMessage(tab.id!, { action: 'inject-popup' })
+      .catch(() => {})
+  }
 })
 
 message_listeners()
 
 browser.contextMenus.create({
-  id: 'main',
-  title: 'Taaabs Web Clipper',
-  contexts: ['page', 'image', 'selection', 'link'],
-})
-
-browser.contextMenus.create({
   id: 'capture-image',
-  parentId: 'main',
-  title: 'Enter vision mode (image)',
+  title: 'Ask with image',
   contexts: ['image'],
 })
 
 browser.contextMenus.create({
   id: 'capture-screenshot',
-  parentId: 'main',
-  title: 'Enter vision mode (full screen)',
-  contexts: ['image'],
+  title: 'Ask with image',
+  contexts: ['page'],
 })
 
-browser.contextMenus.create({
-  id: 'capture-screenshot-2',
-  parentId: 'main',
-  title: 'Enter vision mode',
-  contexts: ['page', 'selection', 'link'],
-})
-
-browser.contextMenus.create({
-  id: 'capture-screenshot-action',
-  title: 'Enter vision mode',
-  contexts: ['action'],
-})
-
-browser.contextMenus.create({
-  id: 'open-popup',
-  parentId: 'main',
-  title: 'Show popup',
-  contexts: ['all'],
-})
+// Chrome only
+if (browser.action) {
+  browser.contextMenus.create({
+    id: 'capture-screenshot-action',
+    title: 'Ask with image',
+    contexts: ['action'],
+  })
+}
 
 browser.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId == 'open-popup') {
-    browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (info.menuItemId == 'capture-screenshot-action') {
+  if (info.menuItemId == 'capture-screenshot-action') {
     browser.tabs.sendMessage(tab?.id!, { action: 'close-popup' })
     const captured_image = await browser.tabs.captureVisibleTab()
     browser.tabs.sendMessage(tab?.id!, {
@@ -72,10 +60,7 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       captured_image,
     })
     browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (
-    info.menuItemId == 'capture-screenshot' ||
-    info.menuItemId == 'capture-screenshot-2'
-  ) {
+  } else if (info.menuItemId == 'capture-screenshot') {
     const captured_image = await browser.tabs.captureVisibleTab()
     browser.tabs.sendMessage(tab?.id!, {
       action: 'captured-image',

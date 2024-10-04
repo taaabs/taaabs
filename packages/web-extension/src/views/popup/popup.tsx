@@ -6,6 +6,7 @@ import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/
 import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/components/extension/popup/templates/Popup/Header'
 import { HeaderVision as Ui_extension_popup_templates_Popup_HeaderVision } from '@web-ui/components/extension/popup/templates/Popup/HeaderVision'
 import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web-ui/components/extension/popup/templates/Popup/main/Actions'
+import { Button as Ui_extension_popup_templates_Popup_main_Actions_Button } from '@web-ui/components/extension/popup/templates/Popup/main/Actions/Button'
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
 import { AssistantSelector as Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField/AssistantSelector'
@@ -146,7 +147,7 @@ export const Popup: React.FC = () => {
   }
 
   const saved_items = [
-    <UiButton
+    <Ui_extension_popup_templates_Popup_main_Actions_Button
       href={
         'https://taaabs.com/library#url=' +
         encodeURIComponent(url_cleaner(window.location.href))
@@ -155,18 +156,18 @@ export const Popup: React.FC = () => {
       is_disabled={delete_bookmark_hook.is_deleting}
     >
       Edit
-    </UiButton>,
-    <UiButton
+    </Ui_extension_popup_templates_Popup_main_Actions_Button>,
+    <Ui_extension_popup_templates_Popup_main_Actions_Button
       on_click={delete_bookmark_hook.delete_bookmark}
       is_danger={true}
       is_disabled={delete_bookmark_hook.is_deleting}
     >
       Delete
-    </UiButton>,
+    </Ui_extension_popup_templates_Popup_main_Actions_Button>,
   ]
 
   const unsaved_items = [
-    <UiButton
+    <Ui_extension_popup_templates_Popup_main_Actions_Button
       on_click={() => {
         create_bookmark_hook.create_bookmark({
           reader_data: parsed_html_hook.parsed_html?.reader_data,
@@ -175,7 +176,7 @@ export const Popup: React.FC = () => {
       is_disabled={create_bookmark_hook.is_creating}
     >
       Clip this page
-    </UiButton>,
+    </Ui_extension_popup_templates_Popup_main_Actions_Button>,
   ]
 
   const handle_quick_prompt_click = async (
@@ -268,13 +269,13 @@ export const Popup: React.FC = () => {
         {!window.location.href.startsWith('https://taaabs.com') &&
           !is_in_vision_mode && (
             <Ui_extension_popup_templates_Popup_main_Actions>
-              <UiButton
+              <Ui_extension_popup_templates_Popup_main_Actions_Button
                 href={'https://taaabs.com/library#fresh'}
                 rel="noreferrer noopener"
                 is_outlined={true}
               >
                 {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
-              </UiButton>
+              </Ui_extension_popup_templates_Popup_main_Actions_Button>
               {auth_state_hook.is_authenticated &&
                 (saved_check_hook.is_saved ? saved_items : unsaved_items)}
             </Ui_extension_popup_templates_Popup_main_Actions>

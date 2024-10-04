@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import styles from './Button.module.scss'
 import cn from 'classnames'
-import { MouseEventHandler } from 'react'
 
 export namespace Button {
   export type Size = 'small' | 'default' | 'medium' | 'large'
