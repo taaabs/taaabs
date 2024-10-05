@@ -3,10 +3,12 @@
 import { browser_storage } from '@/constants/browser-storage'
 import { Auth_DataSourceImpl } from '@repositories/modules/auth/infrastructure/auth.data-source-impl'
 import { Auth_RepositoryImpl } from '@repositories/modules/auth/infrastructure/auth.repository-impl'
+import { ErrorCodes } from '@shared/types/common/error-codes'
 import Cookies from 'js-cookie'
 import ky, { KyInstance } from 'ky'
 import localforage from 'localforage'
 import { ReactNode, createContext, useEffect, useRef, useState } from 'react'
+import { toast } from 'react-toastify'
 
 export type AuthDataLocalStorage = {
   id: string
@@ -160,6 +162,15 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = (props) => {
                     )
                   }
                 }
+              }
+            } else if (response.status == 400) {
+              const error_data = (await response.json()) as any
+              if (error_data.error == ErrorCodes.BOOKMARK_DAILY_LIMIT_EXCEEDED) {
+                toast.error(
+                  'You have reached the limit of 100 bookmarks created within 24 hours.',
+                )
+              } else {
+                console.error('HTTP Error:', error_data)
               }
             }
           },
