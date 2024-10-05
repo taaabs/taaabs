@@ -57,6 +57,25 @@ export const Search: React.FC<Search.Props> = memo(
     const [sizer_width, set_sizer_width] = useState(0)
     const sizer = useRef<HTMLDivElement>(null)
 
+    const [is_spinner_spinning, set_is_spinner_spinning] = useState(
+      props.is_loading,
+    )
+
+    // Spin spinner only after 500ms of loading
+    useEffect(() => {
+      let timeoutId: NodeJS.Timeout | undefined = undefined
+      if (props.is_loading) {
+        timeoutId = setTimeout(() => {
+          set_is_spinner_spinning(true)
+        }, 500)
+      } else {
+        clearTimeout(timeoutId)
+        set_is_spinner_spinning(false)
+      }
+
+      return () => clearTimeout(timeoutId)
+    }, [props.is_loading])
+
     useUpdateEffect(() => {
       set_sizer_width(sizer.current?.getBoundingClientRect().width || 0)
     }, [props.search_string])
@@ -73,10 +92,7 @@ export const Search: React.FC<Search.Props> = memo(
 
       if (event.code == 'Escape' && props.is_focused) {
         input.current?.blur()
-      } else if (
-        event.code == 'Slash' &&
-        !props.is_slash_shortcut_disabled
-      ) {
+      } else if (event.code == 'Slash' && !props.is_slash_shortcut_disabled) {
         // Check if the active element is an input or textarea
         const activeElement = document.activeElement
         if (
@@ -174,7 +190,7 @@ export const Search: React.FC<Search.Props> = memo(
                 }
               }}
             >
-              {props.is_loading ? (
+              {is_spinner_spinning ? (
                 <div className={styles.box__loader} />
               ) : (
                 <UiIcon variant="SEARCH" />

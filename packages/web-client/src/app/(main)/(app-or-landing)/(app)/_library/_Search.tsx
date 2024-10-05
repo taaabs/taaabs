@@ -99,7 +99,12 @@ export const _Search: React.FC<_Search.Props> = (props) => {
               undefined,
           })
           search_cache_to_be_cleared.current = false
-        } else {
+        } else if (
+          !username ||
+          (username &&
+            ((!is_archived_filter && !props.local_db.db) ||
+              (is_archived_filter && !props.local_db.archived_db)))
+        ) {
           await props.local_db.init({
             is_archived: is_archived_filter,
           })
