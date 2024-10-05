@@ -287,6 +287,11 @@ namespace AssistantBugMitigation {
         if (chat_message_sent_by_user) {
           ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
         }
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 0)
+        })
         resolve(null)
       })
     } else if (params.assistant_name == 'lobechat') {

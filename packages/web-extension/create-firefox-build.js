@@ -52,7 +52,7 @@ if (firefox_manifest.content_scripts) {
 firefox_manifest.browser_specific_settings = {
   gecko: {
     id: 'heytaaabs@gmail.com',
-    strict_min_version: '120',
+    strict_min_version: '129.0',
   },
 }
 
