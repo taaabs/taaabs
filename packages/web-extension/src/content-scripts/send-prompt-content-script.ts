@@ -114,17 +114,6 @@ const handle_image_upload = async (params: {
           resolve(true)
         }, 500)
       })
-    } else if (params.assistant_name == 'lobechat') {
-      await new Promise(async (resolve) => {
-        while (!document.querySelector('.anticon-check-circle.anticon')) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
-        resolve(null)
-      })
     } else if (is_open_webui) {
       await new Promise(async (resolve) => {
         while (!document.querySelector('img[alt="input"]')) {
@@ -292,19 +281,6 @@ namespace AssistantBugMitigation {
             resolve(true)
           }, 0)
         })
-        resolve(null)
-      })
-    } else if (params.assistant_name == 'lobechat') {
-      await new Promise(async (resolve) => {
-        while (
-          !document.querySelector('div[data-testid="virtuoso-item-list"]')
-        ) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
         resolve(null)
       })
     }

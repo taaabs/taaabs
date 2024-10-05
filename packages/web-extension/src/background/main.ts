@@ -218,5 +218,5 @@ browser.runtime.onInstalled.addListener(async () => {
     show_floating_button: true,
     local_assistant_port: various_values.local_assistant_default_port,
   })
-  browser.tabs.create({ url: 'https://taaabs.com/' })
+  browser.runtime.openOptionsPage()
 })

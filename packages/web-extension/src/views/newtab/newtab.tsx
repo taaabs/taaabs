@@ -22,7 +22,7 @@ export const NewTab: React.FC = () => {
                 items={[
                   {
                     title: 'Home',
-                    href: 'https://taaabs.com',
+                    href: 'https://taaabs.com/',
                     icon: 'HOME',
                     filled_icon: 'HOME',
                     is_active: false,

@@ -70,8 +70,7 @@
         "https://poe.com/",
         "https://you.com/",
         "https://www.perplexity.ai/",
-        "https://www.bing.com/chat",
-        "https://chat-preview.lobehub.com/chat"
+        "https://www.bing.com/chat"
       ],
       "js": ["send-prompt-content-script.js"]
     }

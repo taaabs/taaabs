@@ -14,7 +14,6 @@ export type AssistantName =
   | 'phind'
   | 'poe'
   | 'you'
-  | 'lobechat'
   | 'custom'
 
 export interface AssistantDetails {
@@ -83,10 +82,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'You',
     url: 'https://you.com/',
   },
-  lobechat: {
-    display_name: 'LobeChat',
-    url: 'https://chat-preview.lobehub.com/chat',
-  },
   custom: {
     display_name: 'Custom',
     url: 'http://localhost:',
@@ -99,6 +94,5 @@ export const assistants_vision: AssistantName[] = [
   'mistral',
   // 'perplexity',
   'huggingchat',
-  'lobechat',
   'custom',
 ]

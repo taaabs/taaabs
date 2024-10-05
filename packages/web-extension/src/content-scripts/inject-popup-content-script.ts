@@ -10,6 +10,7 @@ import pako from 'pako'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 import { SendPrompt_Message } from '@/types/messages'
+import { assistants, assistants_vision } from '@/constants/assistants'
 
 // Avoid flash of unstyled content
 const link_href = browser.runtime.getURL('popup.css')
@@ -142,7 +143,11 @@ const message_handler = async (event: MessageEvent) => {
         window.postMessage(
           {
             action: 'last-used-chatbot-name',
-            last_used_chatbot_name: last_used_chatbot_name || 'chatgpt',
+            last_used_chatbot_name:
+              last_used_chatbot_name &&
+              Object.keys(assistants).includes(last_used_chatbot_name as any)
+                ? last_used_chatbot_name
+                : 'chatgpt',
           },
           '*',
         )
@@ -169,7 +174,12 @@ const message_handler = async (event: MessageEvent) => {
           {
             action: 'last-used-chatbot-vision-name',
             last_used_chatbot_vision_name:
-              last_used_chatbot_vision_name || 'chatgpt',
+              last_used_chatbot_vision_name &&
+              Object.keys(assistants_vision).includes(
+                last_used_chatbot_vision_name as any,
+              )
+                ? last_used_chatbot_vision_name
+                : 'chatgpt',
           },
           '*',
         )
