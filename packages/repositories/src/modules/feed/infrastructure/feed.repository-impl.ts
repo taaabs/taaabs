@@ -28,6 +28,7 @@ export class Feed_RepositoryImpl implements Feed_Repository {
           ? {
               username: created_by.username,
               display_name: created_by.display_name,
+              is_followed: link.is_creator_followed,
             }
           : undefined,
         followees,

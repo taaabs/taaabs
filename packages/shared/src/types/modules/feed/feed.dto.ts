@@ -17,6 +17,7 @@ export namespace Feed_Dto {
       followees: string[]
       saves?: number
       created_by?: string // First saver, not necessarily a followed user
+      is_creator_followed?: boolean
     }[]
     users: {
       id: string

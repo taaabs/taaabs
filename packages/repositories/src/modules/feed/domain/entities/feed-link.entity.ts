@@ -5,6 +5,7 @@ export type FeedLink_Entity = {
   created_by?: {
     username: string
     display_name?: string
+    is_followed: boolean
   }
   first_followee_created_at: string
   followees: {
