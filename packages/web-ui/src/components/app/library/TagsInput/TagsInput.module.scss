@@ -41,6 +41,7 @@
   }
 }
 .input {
+  flex: 1;
   padding-left: var(--padding-2px);
   width: 150px;
   &::placeholder {

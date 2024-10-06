@@ -175,7 +175,7 @@ export const TagsInput: React.FC<TagsInput.Props> = (props) => {
             ? undefined
             : new_tag_name
             ? `${input_width}px`
-            : '10px',
+            : '40px',
           flex: !props.selected_tags.length ? '1' : undefined,
         }}
         className={cn(styles.input, {

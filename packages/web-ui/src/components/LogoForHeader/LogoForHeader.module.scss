@@ -11,6 +11,9 @@
     font-size: var(--font-size-23px);
     padding-left: 7px;
     margin-bottom: 2px;
+    @include dark {
+      color: white;
+    }
     @include at992 {
       font-size: var(--font-size-28px);
       padding-left: 9px;

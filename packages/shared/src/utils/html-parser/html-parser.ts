@@ -78,7 +78,7 @@ export namespace HtmlParser {
       },
     })
     turndown_service.addRule('stripElements', {
-      filter: ['figure', 'picture', 'img', 'sup'],
+      filter: ['figure', 'picture', 'sup'],
       replacement: () => '',
     })
     return turndown_service

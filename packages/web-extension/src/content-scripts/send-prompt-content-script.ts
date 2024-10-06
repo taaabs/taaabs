@@ -231,6 +231,11 @@ namespace AssistantBugMitigation {
         }
         resolve(null)
       })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 100)
+      })
     } else if (params.assistant_name == 'mistral') {
       await new Promise(async (resolve) => {
         while (
