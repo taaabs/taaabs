@@ -2,7 +2,7 @@ import browser from 'webextension-polyfill'
 
 // Event listeners for checkboxes and input field
 document
-  .getElementById('open-chatbot-in-new-tab')!
+  .getElementById('open-assistant-in-new-tab')!
   .addEventListener('change', (event: Event) => {
     browser.storage.local.set({
       open_chatbot_in_new_tab: (event.target as HTMLInputElement).checked,
@@ -41,7 +41,7 @@ browser.storage.local
   ])
   .then((data: any) => {
     ;(
-      document.getElementById('open-chatbot-in-new-tab') as HTMLInputElement
+      document.getElementById('open-assistant-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
     ;(
       document.getElementById('local-assistant-port') as HTMLInputElement
