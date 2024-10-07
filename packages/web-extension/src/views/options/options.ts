@@ -1,20 +1,6 @@
 import browser from 'webextension-polyfill'
 
-// Detect Firefox
-if (/firefox/i.test(navigator.userAgent)) {
-  // Remove the "Use custom new tab page" option
-  document.getElementById('use-custom-new-tab-option')!.style.display = 'none'
-}
-
 // Event listeners for checkboxes and input field
-document
-  .getElementById('use-custom-new-tab')!
-  .addEventListener('change', (event: Event) => {
-    browser.storage.local.set({
-      use_custom_new_tab: (event.target as HTMLInputElement).checked,
-    })
-  })
-
 document
   .getElementById('open-chatbot-in-new-tab')!
   .addEventListener('change', (event: Event) => {
@@ -48,16 +34,12 @@ logout_button?.addEventListener('click', async () => {
 // Retrieve and set initial states from storage
 browser.storage.local
   .get([
-    'use_custom_new_tab',
     'open_chatbot_in_new_tab',
     'local_assistant_port',
     'show_floating_button',
     'auth_data',
   ])
   .then((data: any) => {
-    ;(
-      document.getElementById('use-custom-new-tab') as HTMLInputElement
-    ).checked = data.use_custom_new_tab || false
     ;(
       document.getElementById('open-chatbot-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false

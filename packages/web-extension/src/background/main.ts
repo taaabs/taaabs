@@ -15,10 +15,9 @@ action.setBadgeTextColor({ color: 'white' })
 
 action.onClicked.addListener(async (tab) => {
   if (
-    tab.url == 'chrome://newtab/' ||
-    tab.url == 'chrome://new-tab-page/' ||
-    tab.url == 'about:newtab' ||
-    tab.url?.startsWith('moz-extension://')
+    tab.url?.startsWith('chrome://') ||
+    tab.url?.startsWith('moz-extension://') ||
+    tab.url == 'about:newtab'
   ) {
     await browser.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
   } else {
@@ -93,17 +92,6 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       }
     } else {
       console.error('Image URL is missing.')
-    }
-  }
-})
-
-browser.tabs.onCreated.addListener(async (tab) => {
-  if (tab.pendingUrl == 'chrome://newtab/') {
-    await get_auth_data() // Check authentication status
-    const data = await browser.storage.local.get('use_custom_new_tab')
-    if (!data.use_custom_new_tab) {
-      // Only override if authenticated and option is false
-      await browser.tabs.update(tab.id!, { url: 'chrome://new-tab-page' })
     }
   }
 })
