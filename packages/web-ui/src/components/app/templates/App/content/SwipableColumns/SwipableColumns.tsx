@@ -225,7 +225,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     if (is_end_of_bookmarks_visible) {
       props.on_page_bottom_reached?.()
     }
-  }, [is_end_of_bookmarks_visible, props.on_page_bottom_reached])
+  }, [is_end_of_bookmarks_visible])
 
   return (
     <div className={styles.container} {...swipeable_handlers}>

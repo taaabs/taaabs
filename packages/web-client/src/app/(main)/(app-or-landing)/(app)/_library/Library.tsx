@@ -433,39 +433,37 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           </>
         }
         on_page_bottom_reached={
-          !bookmarks_hook.is_fetching
-            ? async () => {
-                if (!bookmarks_hook.bookmarks?.length) {
-                  console.log(
-                    'Returning early because fetching or no bookmarks.',
-                  )
-                  return
-                }
+          async () => {
+            if (!bookmarks_hook.bookmarks?.length) {
+              console.debug(
+                'Returning early because fetching or no bookmarks.',
+              )
+              return
+            }
 
-                if (
-                  !search_hook.search_string &&
-                  bookmarks_hook.has_more_bookmarks
-                ) {
-                  console.log(
-                    'Calling get_bookmarks (no search, more bookmarks)',
-                  )
-                  bookmarks_hook.get_bookmarks({ should_get_next_page: true })
-                } else if (
-                  search_hook.search_string &&
-                  search_hook.count &&
-                  bookmarks_hook.bookmarks &&
-                  bookmarks_hook.bookmarks.length &&
-                  bookmarks_hook.bookmarks.length < search_hook.count
-                ) {
-                  bookmarks_hook.get_bookmarks_by_ids({
-                    all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
-                      parseInt(hit.document.id),
-                    ),
-                    should_get_next_page: true,
-                  })
-                }
-              }
-            : undefined
+            if (
+              !search_hook.search_string &&
+              bookmarks_hook.has_more_bookmarks
+            ) {
+              console.debug(
+                'Calling get_bookmarks (no search, more bookmarks)',
+              )
+              bookmarks_hook.get_bookmarks({ should_get_next_page: true })
+            } else if (
+              search_hook.search_string &&
+              search_hook.count &&
+              bookmarks_hook.bookmarks &&
+              bookmarks_hook.bookmarks.length &&
+              bookmarks_hook.bookmarks.length < search_hook.count
+            ) {
+              bookmarks_hook.get_bookmarks_by_ids({
+                all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
+                  parseInt(hit.document.id),
+                ),
+                should_get_next_page: true,
+              })
+            }
+          }
         }
         clear_selected_tags={
           !is_fetching_first_bookmarks &&

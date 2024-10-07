@@ -148,15 +148,13 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     useUpdateEffect(() => {
       if (!props.tree) return
 
-      set_items(
-        props.tree
-          .filter((node) =>
-            props.is_read_only ? (node.yields == 0 ? false : true) : true,
-          )
-          .map((node) =>
-            tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
-          ),
-      )
+      const filteredItems = props.tree
+        .map((node) =>
+          tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
+        )
+        .filter((item): item is Item => item != null)
+
+      set_items(filteredItems)
 
       if (!props.is_read_only) {
         const stored_closed_ids = localStorage.getItem(
@@ -195,21 +193,27 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       node: TagHierarchies.Node
       hierarchy_ids: number[]
       hierarchy_tag_ids: number[]
-    }): Item => {
+    }): Item | null => {
+      if (props.is_read_only && params.node.yields == 0) {
+        return null
+      }
+
       const id = generate_unique_id(params.hierarchy_ids, params.node.id)
       const hierarchy_ids = [...params.hierarchy_ids, id]
       const hierarchy_tag_ids = [...params.hierarchy_tag_ids, params.node.id]
+
+      const children = params.node.children
+        .map((node) => tag_to_item({ node, hierarchy_ids, hierarchy_tag_ids }))
+        .filter((child): child is Item => child != null)
+
       return {
-        // Nestable requires unique ids for items
         id,
         tag_id: params.node.id,
         name: params.node.name,
         yields: params.node.yields,
         hierarchy_ids,
         hierarchy_tag_ids,
-        children: params.node.children.map((node) =>
-          tag_to_item({ node, hierarchy_ids, hierarchy_tag_ids }),
-        ),
+        children,
       }
     }
 
@@ -422,9 +426,11 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       // We need to regenerate ids so on mouseover highlight can work with the new tree
       const new_tree = params.items.map((item) => item_to_tag(item))
       set_items(
-        new_tree.map((node) =>
-          tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
-        ),
+        new_tree
+          .map((node) =>
+            tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
+          )
+          .filter((item): item is Item => item != null),
       )
       props.on_update(new_tree)
     }
@@ -506,7 +512,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                         hierarchy_tag_ids: [],
                       }),
                       ...items,
-                    ],
+                    ].filter((item): item is Item => item != null),
                   })
                 }}
               >
@@ -565,7 +571,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                           hierarchy_ids: [],
                           hierarchy_tag_ids: [],
                         }),
-                      ],
+                      ].filter((item): item is Item => item != null),
                     })
                   }}
                   onMouseEnter={() => {
