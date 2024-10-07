@@ -7,10 +7,12 @@ import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 
 export namespace SelectedTags {
+  type Tag = { name: string; id: number }
   export type Props = {
-    selected_tags: { name: string; id: number }[]
+    selected_tags: Tag[]
     on_selected_tag_click: (tagId: number) => void
     on_tag_rename_click?: (tag_id: number) => void
+    on_tag_drag_start?: (tag: Tag) => void
     translations: {
       rename: string
     }
@@ -52,6 +54,11 @@ export const SelectedTags: React.FC<SelectedTags.Props> = memo(
             className={styles.tag}
             onClick={() => props.on_selected_tag_click(tag.id)}
             key={tag.id}
+            onMouseDown={
+              props.on_tag_drag_start
+                ? () => props.on_tag_drag_start!(tag)
+                : undefined
+            }
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
                 e.preventDefault()

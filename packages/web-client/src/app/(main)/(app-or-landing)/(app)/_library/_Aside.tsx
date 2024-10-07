@@ -264,6 +264,16 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                 on_selected_tag_click={(tag_id) =>
                   tag_view_options_hook.remove_tags_from_search_params([tag_id])
                 }
+                on_tag_drag_start={
+                  !username
+                    ? (tag) => {
+                        tag_view_options_hook.set_dragged_tag({
+                          id: tag.id,
+                          name: tag.name,
+                        })
+                      }
+                    : undefined
+                }
                 on_tag_rename_click={(id: number) => {
                   const name = counts_hook.tags![id].name
                   on_tag_rename_click({ name, id })
