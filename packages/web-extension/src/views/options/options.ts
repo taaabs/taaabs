@@ -10,10 +10,10 @@ document
   })
 
 document
-  .getElementById('local-assistant-port')!
+  .getElementById('local-assistant-url')!
   .addEventListener('input', (event: Event) => {
-    const local_assistant_port = (event.target as HTMLInputElement).value
-    browser.storage.local.set({ local_assistant_port })
+    const local_assistant_url = (event.target as HTMLInputElement).value
+    browser.storage.local.set({ local_assistant_url })
   })
 
 document
@@ -35,7 +35,7 @@ logout_button?.addEventListener('click', async () => {
 browser.storage.local
   .get([
     'open_chatbot_in_new_tab',
-    'local_assistant_port',
+    'local_assistant_url',
     'show_floating_button',
     'auth_data',
   ])
@@ -44,8 +44,8 @@ browser.storage.local
       document.getElementById('open-assistant-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
     ;(
-      document.getElementById('local-assistant-port') as HTMLInputElement
-    ).value = data.local_assistant_port
+      document.getElementById('local-assistant-url') as HTMLInputElement
+    ).value = data.local_assistant_url
     ;(
       document.getElementById('show-floating-button') as HTMLInputElement
     ).checked = data.show_floating_button || false

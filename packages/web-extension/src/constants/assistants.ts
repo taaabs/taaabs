@@ -84,7 +84,7 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   },
   custom: {
     display_name: 'Custom',
-    url: 'http://localhost:',
+    url: '',
   },
 }
 
