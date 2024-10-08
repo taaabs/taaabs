@@ -1,6 +1,7 @@
 declare const styles: {
-  readonly items: string
-  readonly dragging: string
-  readonly 'nothing-pinned': string
-}
-export = styles
+  readonly "dragging": string;
+  readonly "items": string;
+  readonly "nothing-pinned": string;
+};
+export = styles;
+

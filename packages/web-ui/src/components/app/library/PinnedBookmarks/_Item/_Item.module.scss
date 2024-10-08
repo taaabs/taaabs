@@ -9,15 +9,19 @@
   padding: 0 16px 0 12px;
   border-bottom: var(--border-secondary);
   height: var(--button-dimension-52px);
-  background-color: var(--background);
   @include at992 {
-    padding: 0 13px;
+    padding: 0 12px;
   }
-  &:nth-child(even) {
+  &:nth-of-type(even) {
     background-color: var(--neutral25);
     @include dark {
       background-color: var(--dark100);
     }
+  }
+  &:last-of-type {
+    border-bottom: none;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
   }
   &--recently-visited {
     &::after {
@@ -245,7 +249,7 @@
 }
 .slot {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: calc(var(--button-dimension-28px));
   right: 0;
   bottom: 0;

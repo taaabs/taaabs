@@ -20,6 +20,9 @@ export const url_cleaner = (url: string): string => {
     // Reconstruct the URL without the tracking parameters
     parsed_url.search = search_params.toString()
 
+    // Remove the fragment (hash) from the URL
+    parsed_url.hash = ''
+
     // Special handling for YouTube URLs
     if (
       parsed_url.hostname == 'www.youtube.com' &&

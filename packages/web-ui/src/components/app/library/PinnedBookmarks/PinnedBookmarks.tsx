@@ -109,7 +109,7 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
       }
 
       return is_not_relevant ? (
-        <div key={item.id} />
+        <span key={item.id} />
       ) : (
         <_Item
           key={item.id}

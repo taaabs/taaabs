@@ -4,7 +4,8 @@
 .items {
   display: flex;
   flex-direction: column;
-  border-top: var(--border-secondary);
+  border: var(--border-secondary);
+  border-radius: var(--border-radius-12px);
 }
 .dragging {
   background-color: var(--border-color-secondary);
@@ -20,5 +21,4 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
-  border-bottom: var(--border-secondary);
 }

@@ -27,7 +27,6 @@ Supported sites:
 - generic articles,
 - youtube videos with transcripts,
 - reddit posts,
-- slack threads,
 - gmail emails,
 - x posts,
 - telegram posts,

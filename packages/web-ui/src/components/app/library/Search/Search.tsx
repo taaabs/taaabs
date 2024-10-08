@@ -61,13 +61,13 @@ export const Search: React.FC<Search.Props> = memo(
       props.is_loading,
     )
 
-    // Spin spinner only after 500ms of loading
+    // Spin spinner only after 300ms of loading
     useEffect(() => {
       let timeoutId: NodeJS.Timeout | undefined = undefined
       if (props.is_loading) {
         timeoutId = setTimeout(() => {
           set_is_spinner_spinning(true)
-        }, 500)
+        }, 300)
       } else {
         clearTimeout(timeoutId)
         set_is_spinner_spinning(false)

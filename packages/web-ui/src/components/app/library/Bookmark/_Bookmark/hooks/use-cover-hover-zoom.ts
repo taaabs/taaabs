@@ -20,7 +20,7 @@ export const use_cover_hover_zoom = () => {
         if (last_position.current == `${e.clientX}${e.clientY}`) {
           set_enabled(true)
         }
-      }, 100)
+      }, 50)
     }
     const cover_container_rect = container_ref.current.getBoundingClientRect()
     const x = e.clientX - cover_container_rect.left
