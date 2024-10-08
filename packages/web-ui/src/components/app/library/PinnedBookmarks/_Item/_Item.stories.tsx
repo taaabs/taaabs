@@ -32,6 +32,8 @@ export const Default = () => {
         favicon={undefined}
         is_parsed={true}
         stars={0}
+        on_menu_toggled={() => {}}
+        on_video_player_click={() => {}}
       />
     </div>
   )
