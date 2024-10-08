@@ -438,59 +438,6 @@ export namespace HtmlParser {
           }
         }
       }
-      // Slack threads
-      else if (params.url.startsWith('https://app.slack.com/client/')) {
-        const temp_el = document.createElement('div')
-        temp_el.innerHTML = DOMPurify.sanitize(params.html)
-
-        // Select the threads flexpane
-        const threads_flexpane = temp_el.querySelector<HTMLElement>(
-          'div[data-qa="threads_flexpane"]',
-        )
-        if (threads_flexpane) {
-          // Select all messages within the threads flexpane
-          const message_elements =
-            threads_flexpane.querySelectorAll<HTMLElement>(
-              'div[data-qa="message_content"]',
-            )
-          let concatenated_messages = ''
-
-          message_elements.forEach((message_element, i) => {
-            const author = message_element.querySelector(
-              'button[data-qa="message_sender_name"]',
-            )
-            const date = message_element.querySelector(
-              'span[data-qa="timestamp_label"]',
-            )
-            const message = message_element.querySelector(
-              'div[data-qa="message-text"]',
-            )
-            if (author && date && message) {
-              const parser = new DOMParser()
-              const doc = parser.parseFromString(message.innerHTML, 'text/html')
-              const readableMessage = new Readability(doc, {
-                keepClasses: true,
-              }).parse()
-              if (readableMessage) {
-                concatenated_messages +=
-                  `**@${author.textContent}** (${date.textContent})\n\n` +
-                  turndown_service.turndown(readableMessage.content) +
-                  (i == 0 ? '\n\n---\n\n' : '\n\n\n')
-              }
-            }
-          })
-
-          return {
-            reader_data: JSON.stringify({
-              type: ReaderData.ContentType.ARTICLE,
-              title: title_element_text,
-              site_name: 'Slack',
-              content: concatenated_messages.trim(),
-            } as ReaderData.Article),
-            plain_text: concatenated_messages.trim(),
-          }
-        }
-      }
       // Issues like https://github.com/facebook/react/issues/29640
       else if (
         /^https:\/\/github\.com\/[^\/]+\/[^\/]+\/issues\/\d+$/.test(params.url)
