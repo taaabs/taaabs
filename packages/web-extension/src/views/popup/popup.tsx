@@ -13,10 +13,9 @@ import { AssistantSelector as Ui_extension_popup_templates_Popup_main_PromptFiel
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { Footer as Ui_extension_popup_templates_Popup_Footer } from '@web-ui/components/extension/popup/templates/Popup/Footer'
 import { useEffect, useState } from 'react'
-import { Button as UiButton } from '@web-ui/components/Button'
 import { send_message } from './helpers/send-message'
 import { use_selected_assistant } from './hooks/use-selected-assistant'
-import { use_local_assistant_port } from './hooks/use-local-assistant-port'
+import { use_local_assistant_url } from './hooks/use-local-assistant-url'
 import { use_delete_bookmark } from './hooks/use-delete-bookmark'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { use_prompts_history } from './hooks/use-prompts-history'
@@ -50,7 +49,7 @@ export const Popup: React.FC = () => {
   const parsed_html_hook = use_parsed_html()
   const selected_assistant_hook = use_selected_assistant()
   const selected_assistant_vision_hook = use_selected_assistant_vision()
-  const { local_assistant_port } = use_local_assistant_port()
+  const { local_assistant_url } = use_local_assistant_url()
   const attach_text_checkbox_hook = use_attach_text_checkbox()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
@@ -69,21 +68,15 @@ export const Popup: React.FC = () => {
     if (selected_assistant_hook.selected_assistant_name != 'custom') {
       assistant_url =
         assistants[selected_assistant_hook.selected_assistant_name].url
-    } else if (local_assistant_port) {
-      assistant_url =
-        assistants[selected_assistant_hook.selected_assistant_name].url +
-        local_assistant_port +
-        '/'
+    } else if (local_assistant_url) {
+      assistant_url = local_assistant_url
     }
   } else if (selected_assistant_vision_hook.selected_assistant_name) {
     if (selected_assistant_vision_hook.selected_assistant_name != 'custom') {
       assistant_url =
         assistants[selected_assistant_vision_hook.selected_assistant_name].url
-    } else if (local_assistant_port) {
-      assistant_url =
-        assistants[selected_assistant_vision_hook.selected_assistant_name].url +
-        local_assistant_port +
-        '/'
+    } else if (local_assistant_url) {
+      assistant_url = local_assistant_url
     }
   }
 

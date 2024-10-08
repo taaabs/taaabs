@@ -193,14 +193,14 @@ const message_handler = async (event: MessageEvent) => {
     storageArea.set({
       last_used_chatbot_vision_name: event.data.last_used_chatbot_vision_name,
     })
-  } else if (action == 'get-local-assistant-port') {
+  } else if (action == 'get-local-assistant-url') {
     browser.storage.local
-      .get('local_assistant_port')
-      .then(({ local_assistant_port }) => {
+      .get('local_assistant_url')
+      .then(({ local_assistant_url }) => {
         window.postMessage(
           {
-            action: 'local-assistant-port',
-            local_assistant_port,
+            action: 'local-assistant-url',
+            local_assistant_url,
           },
           '*',
         )

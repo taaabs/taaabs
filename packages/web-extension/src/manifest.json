@@ -47,32 +47,11 @@
     },
     {
       "matches": ["<all_urls>"],
-      "js": ["inject-floating-button-content-script.js"]
-    },
-    {
-      "matches": ["<all_urls>"],
-      "js": ["inject-popup-content-script.js"]
-    },
-    {
-      "matches": [
-        "http://localhost/*",
-        "https://chatgpt.com/",
-        "https://gemini.google.com/app",
-        "https://chat.mistral.ai/chat",
-        "https://claude.ai/new",
-        "https://coral.cohere.com/",
-        "https://x.com/i/grok",
-        "https://www.meta.ai/",
-        "https://huggingface.co/chat/",
-        "https://aistudio.google.com/app/prompts/new_chat",
-        "https://chat.deepseek.com/",
-        "https://www.phind.com/agent",
-        "https://poe.com/",
-        "https://you.com/",
-        "https://www.perplexity.ai/",
-        "https://www.bing.com/chat"
-      ],
-      "js": ["send-prompt-content-script.js"]
+      "js": [
+        "inject-floating-button-content-script.js",
+        "inject-popup-content-script.js",
+        "send-prompt-content-script.js"
+      ]
     }
   ],
   "options_ui": {

@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
 
-export const use_local_assistant_port = () => {
-  const [local_assistant_port, set_local_assistant_port] = useState<number>()
+export const use_local_assistant_url = () => {
+  const [local_assistant_url, set_local_assistant_url] = useState<string>()
 
   useEffect(() => {
-    window.postMessage({ action: 'get-local-assistant-port' }, '*')
+    window.postMessage({ action: 'get-local-assistant-url' }, '*')
 
     // Listen for response from content script
     const handle_message = (event: MessageEvent) => {
       if (event.source !== window) return
-      if (event.data && event.data.action == 'local-assistant-port') {
-        set_local_assistant_port(event.data.local_assistant_port || null)
+      if (event.data && event.data.action == 'local-assistant-url') {
+        set_local_assistant_url(event.data.local_assistant_url || null)
       }
     }
 
@@ -19,6 +19,6 @@ export const use_local_assistant_port = () => {
   }, [])
 
   return {
-    local_assistant_port,
+    local_assistant_url,
   }
 }

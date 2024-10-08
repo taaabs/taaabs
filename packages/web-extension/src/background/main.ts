@@ -204,7 +204,7 @@ browser.runtime.onInstalled.addListener(async () => {
   browser.storage.local.set({
     use_custom_new_tab: true,
     show_floating_button: true,
-    local_assistant_port: various_values.local_assistant_default_port,
+    local_assistant_url: 'http://localhost:8080/',
   })
   browser.runtime.openOptionsPage()
 })
