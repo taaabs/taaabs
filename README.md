@@ -20,7 +20,7 @@ Perfect for students, professionals, and curious minds.
 
 ## Browser extension
 
-Our extension is completely free and open-source. The same techology used to process pages for your personal library helps getting plain text of anything you consume straight (100% locally) to an AI assistant of your choice, ChatGPT, Gemini, Claude, you name it!
+Our extension is completely free and open-source. The same technology used to process pages for your personal library helps getting plain text of anything you consume straight (100% locally) to an AI assistant of your choice, ChatGPT, Gemini, Claude, you name it!
 
 Supported sites:
 
