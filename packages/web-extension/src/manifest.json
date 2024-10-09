@@ -3,7 +3,7 @@
   "name": "Taaabs Web Clipper, clip any page to ChatGPT!",
   "short_name": "taaabs",
   "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with top AI chatbots.",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "homepage_url": "https://taaabs.com/",
   "action": {
     "default_icon": {

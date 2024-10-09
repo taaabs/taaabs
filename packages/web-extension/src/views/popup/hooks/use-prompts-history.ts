@@ -3,7 +3,7 @@ import { default_prompts } from '../data/default-prompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const use_prompts_history = () => {
-  const [prompts_history, set_prompts_history] = useState<string[]>([])
+  const [prompts_history, set_prompts_history] = useState<string[]>(default_prompts.reverse());
 
   const restore_prompts_history = () => {
     window.postMessage({ action: 'get-prompts-history' }, '*')

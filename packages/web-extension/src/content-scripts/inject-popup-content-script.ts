@@ -10,7 +10,11 @@ import pako from 'pako'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 import { SendPrompt_Message } from '@/types/messages'
-import { assistants, assistants_vision } from '@/constants/assistants'
+import {
+  AssistantName,
+  assistants,
+  assistants_vision,
+} from '@/constants/assistants'
 
 // Avoid flash of unstyled content
 const link_href = browser.runtime.getURL('popup.css')
@@ -132,12 +136,7 @@ const message_handler = async (event: MessageEvent) => {
       image: event.data.image,
     } as SendPrompt_Message)
   } else if (action == 'get-last-used-chatbot-name') {
-    // Use browser.storage.local for Firefox
-    const storage_area = browser.browserAction
-      ? browser.storage.local
-      : browser.storage.sync
-
-    storage_area
+    browser.storage.local
       .get('last_used_chatbot_name')
       .then(({ last_used_chatbot_name }) => {
         window.postMessage(
@@ -145,7 +144,9 @@ const message_handler = async (event: MessageEvent) => {
             action: 'last-used-chatbot-name',
             last_used_chatbot_name:
               last_used_chatbot_name &&
-              Object.keys(assistants).includes(last_used_chatbot_name as any)
+              Object.keys(assistants).includes(
+                last_used_chatbot_name as AssistantName,
+              )
                 ? last_used_chatbot_name
                 : 'chatgpt',
           },
@@ -153,21 +154,11 @@ const message_handler = async (event: MessageEvent) => {
         )
       })
   } else if (action == 'set-last-used-chatbot-name') {
-    // Use browser.storage.local for Firefox
-    const storageArea = browser.browserAction
-      ? browser.storage.local
-      : browser.storage.sync
-
-    storageArea.set({
+    browser.storage.local.set({
       last_used_chatbot_name: event.data.last_used_chatbot_name,
     })
   } else if (action == 'get-last-used-chatbot-vision-name') {
-    // Use browser.storage.local for Firefox
-    const storage_area = browser.browserAction
-      ? browser.storage.local
-      : browser.storage.sync
-
-    storage_area
+    browser.storage.local
       .get('last_used_chatbot_vision_name')
       .then(({ last_used_chatbot_vision_name }) => {
         window.postMessage(
@@ -175,8 +166,8 @@ const message_handler = async (event: MessageEvent) => {
             action: 'last-used-chatbot-vision-name',
             last_used_chatbot_vision_name:
               last_used_chatbot_vision_name &&
-              Object.keys(assistants_vision).includes(
-                last_used_chatbot_vision_name as any,
+              assistants_vision.includes(
+                last_used_chatbot_vision_name as AssistantName,
               )
                 ? last_used_chatbot_vision_name
                 : 'chatgpt',
@@ -185,12 +176,7 @@ const message_handler = async (event: MessageEvent) => {
         )
       })
   } else if (action == 'set-last-used-chatbot-vision-name') {
-    // Use browser.storage.local for Firefox
-    const storageArea = browser.browserAction
-      ? browser.storage.local
-      : browser.storage.sync
-
-    storageArea.set({
+    browser.storage.local.set({
       last_used_chatbot_vision_name: event.data.last_used_chatbot_vision_name,
     })
   } else if (action == 'get-local-assistant-url') {
