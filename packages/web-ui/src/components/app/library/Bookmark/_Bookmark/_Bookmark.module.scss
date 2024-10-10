@@ -31,472 +31,189 @@
       border-color: var(--border-color-hover);
     }
   }
-}
-.bookmark {
-  display: flex;
-  flex-direction: column;
-  &__card {
-    display: grid;
-    grid-template: 'title cover' 'date cover' 1fr 'tags tags' / 1fr auto;
-    background-color: var(--white);
-    @include dark {
-      background-color: var(--dark100);
-    }
-    @include at992 {
-      grid-template: 'cover title' 'cover date' 1fr 'cover tags' / auto 1fr;
-      border-top-left-radius: 11px;
-      border-top-right-radius: 11px;
-    }
-    &--corners-fix {
-      @include at992 {
-        border-bottom-left-radius: 11px;
-        border-bottom-right-radius: 11px;
+  &__inner {
+    display: flex;
+    flex-direction: column;
+    &__card {
+      display: grid;
+      grid-template: 'title cover' 'date cover' 1fr 'tags tags' / 1fr auto;
+      background-color: var(--white);
+      @include dark {
+        background-color: var(--dark100);
       }
-    }
-    &--no-cover {
       @include at992 {
-        padding-left: var(--padding-14px);
+        grid-template: 'cover title' 'cover date' 1fr 'cover tags' / auto 1fr;
+        border-top-left-radius: 11px;
+        border-top-right-radius: 11px;
       }
-    }
-    &__cover {
-      grid-area: cover;
-      position: relative;
-      padding: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
-      @include at992 {
-        padding: var(--padding-10px);
+      &--corners-fix {
+        @include at992 {
+          border-bottom-left-radius: 11px;
+          border-bottom-right-radius: 11px;
+        }
       }
-      &__image {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      &--no-cover {
+        @include at992 {
+          padding-left: var(--padding-14px);
+        }
+      }
+      &__cover {
+        grid-area: cover;
         position: relative;
-        border-radius: var(--border-radius-7px);
-        overflow: hidden;
-        width: 111px;
-        height: 58px;
+        padding: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
         @include at992 {
-          width: 156px;
-          height: 82px;
+          padding: var(--padding-10px);
         }
-        > * {
-          width: 100%;
-          height: 100%;
-        }
-        > canvas {
-          position: absolute;
-        }
-        &__top {
-          position: relative;
-          object-fit: contain;
-          &--hovering {
-            transform: scale(2) translateX(var(--x)) translateY(var(--y));
-          }
-        }
-        &__fill {
-          position: absolute;
-          z-index: 0;
-          top: 0;
-          left: 0;
-          object-fit: cover;
-          transform: scale(1.04, 1.14);
-          filter: blur(3px);
-        }
-        > svg {
-          fill: var(--neutral200);
-          @include dark {
-            fill: var(--dark500);
-          }
-          width: 18px;
-          @include at992 {
-            width: 20px;
-          }
-        }
-      }
-    }
-    &__date {
-      grid-area: date;
-      position: relative;
-      padding: 3px 0 5px var(--padding-14px);
-      @include at992 {
-        padding: 3px 0 5px 0;
-      }
-      &__text {
-        display: flex;
-        color: var(--text-color-variant);
-        font-size: var(--font-size-13px);
-        @include at992 {
-          font-size: var(--font-size-14px);
-        }
-      }
-    }
-    &__title {
-      grid-area: title;
-      display: inline;
-      padding: 11px 10px 0 var(--padding-14px);
-      @include at992 {
-        padding: 10px 14px 0 0;
-      }
-      &__unsorted {
-        display: inline-flex;
-        align-items: center;
-        position: relative;
-        font-size: 11px;
-        font-weight: var(--font-weight-inter-bold);
-        color: white;
-        @include dark {
-          color: var(--dark900);
-        }
-        transform: translateY(-2px);
-        margin-right: 9px;
-        margin-left: 4px;
-        line-height: 1;
-        @include at992 {
-          font-size: 12px;
-        }
-        &::after {
-          content: '';
-          position: absolute;
-          width: calc(100% + 0.7em);
-          left: 50%;
-          transform: translateX(-50%);
-          height: calc(100% + 0.6em);
-          background-color: var(--red);
-          border-radius: 4px;
-          z-index: -1;
-        }
-      }
-      &__stars {
-        display: inline-flex;
-        align-items: center;
-        gap: 3px;
-        transform: translateY(1px);
-        height: 0;
-        margin-right: 5px;
-        @include at992 {
-          gap: 4px;
-          margin-right: 6px;
-        }
-        > svg {
-          width: 17px;
-          @include at992 {
-            width: 18px;
-          }
-          fill: var(--yellow);
-        }
-      }
-      &__text {
-        position: relative;
-        display: inline;
-        font-size: var(--font-size-1-6rem);
-        margin-bottom: 0.8rem;
-        overflow-wrap: anywhere;
-        font-weight: var(--font-weight-inter-bold);
-        @include at992 {
-          font-size: var(--font-size-1-8rem);
-        }
-        &--untitled {
-          font-style: italic;
-          font-weight: var(--font-weight-inter-medium);
-        }
-        &:is(a) {
-          @include hover {
-            @include text-decoration-underline;
-          }
-        }
-      }
-      &__menu {
-        @include to992 {
-          display: none;
-        }
-        @include at992 {
-          float: right;
-          display: inline-flex;
-          flex-direction: column;
-          margin-top: -12px;
-          transform: translateX(2px) translateY(12px);
-          padding-left: 10px;
-        }
-        &__button {
+        &__image {
           display: flex;
           align-items: center;
           justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
-          background-color: var(--blue100);
-          @include dark {
-            background-color: var(--dark300);
+          position: relative;
+          border-radius: var(--border-radius-7px);
+          overflow: hidden;
+          width: 111px;
+          height: 58px;
+          @include at992 {
+            width: 156px;
+            height: 82px;
           }
-          svg {
-            fill: var(--blue600);
-            @include dark {
-              fill: var(--blue500);
-            }
-            @include transition-150ms(fill);
-            width: var(--icon-dimension-16px);
-          }
-          @include hover {
-            background-color: var(--blue200);
-            @include dark {
-              background-color: var(--dark400);
-            }
-          }
-        }
-        &--toggled {
-          background-color: var(--blue200);
-          @include dark {
-            background-color: var(--dark400);
-          }
-        }
-      }
-    }
-    &__tags {
-      grid-area: tags;
-      margin-bottom: -6px;
-      padding-bottom: var(--padding-10px);
-      @include to992 {
-        padding-left: 12px;
-      }
-      > * {
-        margin-right: 6px;
-        margin-bottom: 6px;
-      }
-      > span {
-        color: var(--text-color-dimmed);
-      }
-      &__edit {
-        display: inline-flex;
-        float: left;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        width: var(--button-dimension-28px);
-        height: var(--button-dimension-28px);
-        @include transition-150ms(background-color);
-        background-color: var(--green100);
-        @include dark {
-          background-color: var(--green900);
-        }
-        > svg {
-          width: var(--icon-dimension-13px);
-          fill: var(--green600);
-          @include dark {
-            fill: var(--green500);
-          }
-        }
-        @include hover {
-          background-color: var(--green200);
-          @include dark {
-            background-color: var(--green800);
-          }
-        }
-      }
-      &__tag {
-        display: inline-flex;
-        float: left;
-        align-items: center;
-        gap: 4px;
-        border-radius: var(--border-radius-999px);
-        height: var(--button-dimension-28px);
-        padding: 0 var(--padding-10px);
-        color: var(--green600);
-        background-color: var(--green100);
-        @include dark {
-          color: var(--green400);
-          background-color: var(--green900);
-        }
-        @include transition-150ms;
-        // Needed by swipable and sortable - element touch hold detection
-        @include touch-screen {
           > * {
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
           }
-        }
-        font-family: var(--font-family-inter-tight);
-        font-size: var(--font-size-14px);
-        @include hover {
-          background-color: var(--green200);
-          @include dark {
-            background-color: var(--green800);
+          > canvas {
+            position: absolute;
           }
-        }
-        &--selected {
-          background-color: var(--green600);
-          @include dark {
-            background-color: var(--green700);
+          &__top {
+            position: relative;
+            object-fit: contain;
+            &--hovering {
+              transform: scale(1.5) translateX(var(--x)) translateY(var(--y));
+            }
           }
-          @include hover {
-            background-color: var(--green700);
+          &__fill {
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            object-fit: cover;
+            transform: scale(1.04, 1.14);
+            filter: blur(3px);
           }
-        }
-        &__name {
-          font-weight: var(--font-weight-inter-medium);
-          &--selected {
-            color: var(--white);
+          > svg {
+            fill: var(--neutral200);
             @include dark {
-              color: var(--text-color-normal);
+              fill: var(--dark500);
+            }
+            width: 18px;
+            @include at992 {
+              width: 20px;
             }
           }
         }
-        &__yields {
-          opacity: 0.8;
+      }
+      &__date {
+        grid-area: date;
+        position: relative;
+        padding: 3px 0 5px var(--padding-14px);
+        @include at992 {
+          padding: 3px 0 5px 0;
+        }
+        &__text {
+          display: flex;
+          color: var(--text-color-variant);
+          font-size: var(--font-size-13px);
+          @include at992 {
+            font-size: var(--font-size-14px);
+          }
         }
       }
-      &__actions {
-        float: right;
-        display: flex;
-        gap: 14px;
-        padding-right: 10px;
+      &__title {
+        grid-area: title;
+        display: inline;
+        padding: 11px 10px 0 var(--padding-14px);
         @include at992 {
-          padding-right: 8px;
+          padding: 10px 14px 0 0;
         }
-        &__huggs {
-          display: flex;
+        &__unsorted {
+          display: inline-flex;
+          align-items: center;
+          position: relative;
+          font-size: 11px;
+          font-weight: var(--font-weight-inter-bold);
+          color: white;
+          @include dark {
+            color: var(--dark900);
+          }
+          transform: translateY(-2px);
+          margin-right: 9px;
+          margin-left: 4px;
+          line-height: 1;
+          @include at992 {
+            font-size: 12px;
+          }
+          &::after {
+            content: '';
+            position: absolute;
+            width: calc(100% + 0.7em);
+            left: 50%;
+            transform: translateX(-50%);
+            height: calc(100% + 0.6em);
+            background-color: var(--red);
+            border-radius: 4px;
+            z-index: -1;
+          }
+        }
+        &__stars {
+          display: inline-flex;
           align-items: center;
           gap: 3px;
-          height: var(--button-dimension-28px);
-          border-radius: var(--border-radius-999px);
-          padding-left: 10px;
-          font-weight: var(--font-weight-inter-semi-bold);
-          font-size: var(--font-size-14px);
-          &--has-poits {
-            background: linear-gradient(to right, var(--blue100), transparent);
-            @include dark {
-              background: linear-gradient(
-                to right,
-                var(--dark300),
-                transparent
-              );
-            }
+          transform: translateY(1px);
+          height: 0;
+          margin-right: 5px;
+          @include at992 {
+            gap: 4px;
+            margin-right: 6px;
           }
-          &__emoji {
-            position: relative;
-            width: 32px;
-            transform: translateX(4px);
-            > div {
-              @include transition-150ms(transform);
+          > svg {
+            width: 17px;
+            @include at992 {
+              width: 18px;
             }
-            &::before {
-              content: '';
-              background-color: var(--yellow);
-              border-radius: 8px 8px 12px 12px;
-              position: absolute;
-              width: 100%;
-              height: 28px;
-              top: -5px;
-              left: 0;
-            }
-            @include hover {
-              .bookmark__card__tags__actions__huggs__emoji__hugging__eyes {
-                transform: translateY(-1px);
-              }
-              .bookmark__card__tags__actions__huggs__emoji__hugging__mouth {
-                transform: translateY(-0.3px) scaleY(1.15);
-              }
-              .bookmark__card__tags__actions__huggs__emoji__hugging__left-hand {
-                transform: rotate(5deg) translateX(1px);
-              }
-              .bookmark__card__tags__actions__huggs__emoji__hugging__right-hand {
-                transform: scaleX(-1) rotate(5deg) translateX(1px);
-              }
-              .bookmark__card__tags__actions__huggs__emoji__silent__handle {
-                animation: bookmark_shake 0.8s ease-in-out both;
-                transform-origin: left;
-              }
-            }
-            &__hugging {
-              &__eyes {
-                position: absolute;
-                bottom: 0;
-                top: -7.5px;
-                left: 5px;
-                > svg {
-                  width: 22px;
-                }
-              }
-              &__mouth {
-                position: absolute;
-                bottom: 0;
-                top: 4px;
-                left: 8px;
-                > svg {
-                  width: 16px;
-                }
-              }
-              &__blush {
-                position: absolute;
-                bottom: 0;
-                top: -3.5px;
-                left: 2.5px;
-                > svg {
-                  width: 27px;
-                }
-              }
-              &__left-hand {
-                position: absolute;
-                top: 14.5px;
-                left: -2px;
-                > svg {
-                  width: 16px;
-                }
-              }
-              &__right-hand {
-                transform: scaleX(-1);
-                position: absolute;
-                top: 14.5px;
-                left: 18.5px;
-                > svg {
-                  width: 16px;
-                }
-              }
-            }
-            &__silent {
-              &__eyes {
-                position: absolute;
-                bottom: 0;
-                top: -6px;
-                left: 5px;
-                > svg {
-                  width: 22px;
-                }
-              }
-              &__zip {
-                position: absolute;
-                bottom: 0;
-                top: 3px;
-                left: 6.5px;
-                > svg {
-                  width: 16px;
-                }
-              }
-              &__handle {
-                position: absolute;
-                bottom: 0;
-                top: 10px;
-                left: 22px;
-                > svg {
-                  width: 15px;
-                }
-              }
-            }
+            fill: var(--yellow);
           }
-          &__amount {
-            color: var(--accent-color);
-            @include dark {
-              color: inherit;
-            }
+        }
+        &__text {
+          position: relative;
+          display: inline;
+          font-size: var(--font-size-1-6rem);
+          margin-bottom: 0.8rem;
+          overflow-wrap: anywhere;
+          font-weight: var(--font-weight-inter-bold);
+          @include at992 {
+            font-size: var(--font-size-1-8rem);
+          }
+          &--untitled {
+            font-style: italic;
+            font-weight: var(--font-weight-inter-medium);
+          }
+          &:is(a) {
             @include hover {
               @include text-decoration-underline;
             }
           }
         }
         &__menu {
-          display: inline-flex;
-          flex-direction: column;
-          position: relative;
-          @include at992 {
+          @include to992 {
             display: none;
+          }
+          @include at992 {
+            float: right;
+            display: inline-flex;
+            flex-direction: column;
+            margin-top: -12px;
+            transform: translateX(2px) translateY(12px);
+            padding-left: 10px;
           }
           &__button {
             display: flex;
@@ -518,211 +235,463 @@
               @include transition-150ms(fill);
               width: var(--icon-dimension-16px);
             }
+            @include hover {
+              background-color: var(--blue200);
+              @include dark {
+                background-color: var(--dark400);
+              }
+            }
           }
           &--toggled {
             background-color: var(--blue200);
-          }
-        }
-      }
-    }
-  }
-  &__note {
-    border-top: var(--border-secondary);
-    padding: var(--padding-14px);
-  }
-  &__links {
-    display: block;
-    &--compact {
-      visibility: hidden;
-      height: 0;
-    }
-    &__item {
-      display: flex;
-      gap: 12px;
-      justify-content: space-between;
-      position: relative;
-      padding: 0 16px 0 12px;
-      border-top: var(--border-secondary);
-      height: 52px;
-      @include at992 {
-        padding: 0 12px;
-      }
-      &--recently-visited {
-        background: linear-gradient(to right, var(--blue50), transparent);
-        @include dark {
-          background: linear-gradient(
-            to right,
-            rgba(97, 50, 20, 0.3),
-            transparent
-          );
-        }
-      }
-      &:last-of-type {
-        @include at992 {
-          border-bottom-left-radius: 11px;
-          border-bottom-right-radius: 11px;
-        }
-      }
-      &__link {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        &__site {
-          display: flex;
-          flex-shrink: 0;
-          align-items: center;
-          justify-content: center;
-          width: 32px;
-          height: 32px;
-          background-color: var(--outlined-button-background);
-          border-radius: var(--border-radius-999px);
-          border: var(--border-primary);
-          @include transition-150ms(border-color);
-          @include hover {
-            border-color: var(--border-color-hover);
-          }
-          > img {
-            width: 16px;
-            height: 16px;
-          }
-          > svg {
-            width: 16px;
-            fill: #737373;
             @include dark {
-              fill: var(--dark500);
+              background-color: var(--dark400);
             }
-          }
-          &--highlighted {
-            box-shadow: 0 0 10px 3px var(--highlight);
-          }
-        }
-        &__in-app {
-          display: flex;
-          flex-shrink: 0;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
-          width: var(--button-dimension-40px);
-          height: var(--button-dimension-28px);
-          background-color: var(--blue100);
-          @include dark {
-            background-color: var(--dark200);
-          }
-          svg {
-            fill: var(--blue600);
-            @include dark {
-              fill: var(--blue500);
-            }
-            @include transition-150ms(fill);
-            width: 14px;
-          }
-          @include hover {
-            background-color: var(--blue200);
-            @include dark {
-              background-color: var(--dark300);
-            }
-          }
-        }
-        &__url {
-          display: flex;
-          flex-direction: column;
-          @include hover {
-            > span {
-              @include text-decoration-underlinie-thin;
-            }
-            > span:first-child {
-              text-decoration-color: var(--text-color-normal);
-            }
-            > span:last-child {
-              text-decoration-color: var(--text-color-variant);
-            }
-          }
-          &--dim-visited {
-            @include hover {
-              &:visited > span {
-                text-decoration-color: var(--text-color-dimmed);
-              }
-            }
-          }
-          &--via-wayback {
-            font-style: italic;
-          }
-          > span {
-            overflow-wrap: anywhere;
-            padding-right: 1px;
-            overflow: hidden;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-          }
-          > span:first-child {
-            color: var(--text-color-normal);
-            display: -webkit-box;
-          }
-          > span:last-child {
-            color: var(--text-color-variant);
-            font-size: var(--font-size-13px);
-            word-wrap: break-word;
-            display: -webkit-box;
-            @include to768 {
-              font-family: var(--font-family-inter-tight);
-            }
-          }
-          &--dim-visited:visited > span {
-            color: var(--text-color-dimmed);
           }
         }
       }
-      &__actions {
-        display: flex;
-        align-items: center;
-        gap: var(--padding-8px);
-        &__public-saves {
-          white-space: nowrap;
-          margin-right: 5px;
+      &__tags {
+        grid-area: tags;
+        margin-bottom: -6px;
+        padding-bottom: var(--padding-10px);
+        @include to992 {
+          padding-left: 12px;
+        }
+        > * {
+          margin-right: 6px;
+          margin-bottom: 6px;
+        }
+        > span {
           color: var(--text-color-dimmed);
-          font-size: var(--font-size-13px);
-          padding: 0 3px;
-          @include hover {
-            text-decoration: underline;
-          }
         }
-        &__open {
-          display: flex;
+        &__edit {
+          display: inline-flex;
+          float: left;
           align-items: center;
           justify-content: center;
-          border-radius: var(--border-radius-999px);
-          @include transition-150ms(background-color);
+          border-radius: 50%;
           width: var(--button-dimension-28px);
           height: var(--button-dimension-28px);
-          background-color: var(--neutral100);
+          @include transition-150ms(background-color);
+          background-color: var(--green100);
           @include dark {
-            background-color: var(--dark200);
+            background-color: var(--green900);
           }
           > svg {
-            fill: var(--neutral500);
+            width: var(--icon-dimension-13px);
+            fill: var(--green600);
             @include dark {
-              fill: var(--dark500);
+              fill: var(--green500);
             }
-            @include transition-150ms(fill);
-            width: 10px;
           }
           @include hover {
-            background-color: var(--neutral200);
+            background-color: var(--green200);
             @include dark {
-              background-color: var(--dark300);
-            }
-            > svg {
-              @include light {
-                fill: var(--neutral600);
-              }
+              background-color: var(--green800);
             }
           }
         }
-        &__menu {
-          position: relative;
-          &__button {
+        &__tag {
+          display: inline-flex;
+          float: left;
+          align-items: center;
+          gap: 4px;
+          border-radius: var(--border-radius-999px);
+          height: var(--button-dimension-28px);
+          padding: 0 var(--padding-10px);
+          color: var(--green600);
+          background-color: var(--green100);
+          @include dark {
+            color: var(--green400);
+            background-color: var(--green900);
+          }
+          @include transition-150ms;
+          // Needed by swipable and sortable - element touch hold detection
+          @include touch-screen {
+            > * {
+              pointer-events: none;
+            }
+          }
+          font-family: var(--font-family-inter-tight);
+          font-size: var(--font-size-14px);
+          @include hover {
+            background-color: var(--green200);
+            @include dark {
+              background-color: var(--green800);
+            }
+          }
+          &--selected {
+            background-color: var(--green600);
+            @include dark {
+              background-color: var(--green700);
+            }
+            @include hover {
+              background-color: var(--green700);
+            }
+          }
+          &__name {
+            font-weight: var(--font-weight-inter-medium);
+            &--selected {
+              color: var(--white);
+              @include dark {
+                color: var(--text-color-normal);
+              }
+            }
+          }
+          &__yields {
+            opacity: 0.8;
+          }
+        }
+        &__actions {
+          float: right;
+          display: flex;
+          gap: 14px;
+          padding-right: 10px;
+          @include at992 {
+            padding-right: 8px;
+          }
+          &__huggs {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: var(--button-dimension-28px);
+            border-radius: var(--border-radius-999px);
+            padding-left: 10px;
+            font-weight: var(--font-weight-inter-semi-bold);
+            font-size: var(--font-size-14px);
+            &--has-poits {
+              background: linear-gradient(
+                to right,
+                var(--blue100),
+                transparent
+              );
+              @include dark {
+                background: linear-gradient(
+                  to right,
+                  var(--dark300),
+                  transparent
+                );
+              }
+            }
+            &__emoji {
+              position: relative;
+              width: 32px;
+              transform: translateX(4px);
+              > div {
+                @include transition-150ms(transform);
+              }
+              &::before {
+                content: '';
+                background-color: var(--yellow);
+                border-radius: 8px 8px 12px 12px;
+                position: absolute;
+                width: 100%;
+                height: 28px;
+                top: -5px;
+                left: 0;
+              }
+              @include hover {
+                .bookmark__card__tags__actions__huggs__emoji__hugging__eyes {
+                  transform: translateY(-1px);
+                }
+                .bookmark__card__tags__actions__huggs__emoji__hugging__mouth {
+                  transform: translateY(-0.3px) scaleY(1.15);
+                }
+                .bookmark__card__tags__actions__huggs__emoji__hugging__left-hand {
+                  transform: rotate(5deg) translateX(1px);
+                }
+                .bookmark__card__tags__actions__huggs__emoji__hugging__right-hand {
+                  transform: scaleX(-1) rotate(5deg) translateX(1px);
+                }
+                .bookmark__card__tags__actions__huggs__emoji__silent__handle {
+                  animation: bookmark_shake 0.8s ease-in-out both;
+                  transform-origin: left;
+                }
+              }
+              &__hugging {
+                &__eyes {
+                  position: absolute;
+                  bottom: 0;
+                  top: -7.5px;
+                  left: 5px;
+                  > svg {
+                    width: 22px;
+                  }
+                }
+                &__mouth {
+                  position: absolute;
+                  bottom: 0;
+                  top: 4px;
+                  left: 8px;
+                  > svg {
+                    width: 16px;
+                  }
+                }
+                &__blush {
+                  position: absolute;
+                  bottom: 0;
+                  top: -3.5px;
+                  left: 2.5px;
+                  > svg {
+                    width: 27px;
+                  }
+                }
+                &__left-hand {
+                  position: absolute;
+                  top: 14.5px;
+                  left: -2px;
+                  > svg {
+                    width: 16px;
+                  }
+                }
+                &__right-hand {
+                  transform: scaleX(-1);
+                  position: absolute;
+                  top: 14.5px;
+                  left: 18.5px;
+                  > svg {
+                    width: 16px;
+                  }
+                }
+              }
+              &__silent {
+                &__eyes {
+                  position: absolute;
+                  bottom: 0;
+                  top: -6px;
+                  left: 5px;
+                  > svg {
+                    width: 22px;
+                  }
+                }
+                &__zip {
+                  position: absolute;
+                  bottom: 0;
+                  top: 3px;
+                  left: 6.5px;
+                  > svg {
+                    width: 16px;
+                  }
+                }
+                &__handle {
+                  position: absolute;
+                  bottom: 0;
+                  top: 10px;
+                  left: 22px;
+                  > svg {
+                    width: 15px;
+                  }
+                }
+              }
+            }
+            &__amount {
+              color: var(--accent-color);
+              @include dark {
+                color: inherit;
+              }
+              @include hover {
+                @include text-decoration-underline;
+              }
+            }
+          }
+          &__menu {
+            display: inline-flex;
+            flex-direction: column;
+            position: relative;
+            @include at992 {
+              display: none;
+            }
+            &__button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: var(--border-radius-999px);
+              @include transition-150ms(background-color);
+              width: var(--button-dimension-28px);
+              height: var(--button-dimension-28px);
+              background-color: var(--blue100);
+              @include dark {
+                background-color: var(--dark300);
+              }
+              svg {
+                fill: var(--blue600);
+                @include dark {
+                  fill: var(--blue500);
+                }
+                @include transition-150ms(fill);
+                width: var(--icon-dimension-16px);
+              }
+            }
+            &--toggled {
+              background-color: var(--blue200);
+            }
+          }
+        }
+      }
+    }
+    &__note {
+      border-top: var(--border-secondary);
+      padding: var(--padding-14px);
+    }
+    &__links {
+      display: block;
+      &--compact {
+        visibility: hidden;
+        height: 0;
+      }
+      &__item {
+        display: flex;
+        gap: 12px;
+        justify-content: space-between;
+        position: relative;
+        padding: 0 16px 0 12px;
+        border-top: var(--border-secondary);
+        height: 52px;
+        @include at992 {
+          padding: 0 12px;
+        }
+        &--recently-visited {
+          background: linear-gradient(to right, var(--blue50), transparent);
+          @include dark {
+            background: linear-gradient(
+              to right,
+              rgba(97, 50, 20, 0.3),
+              transparent
+            );
+          }
+        }
+        &:last-of-type {
+          @include at992 {
+            border-bottom-left-radius: 11px;
+            border-bottom-right-radius: 11px;
+          }
+        }
+        &__link {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          &__site {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background-color: var(--outlined-button-background);
+            border-radius: var(--border-radius-999px);
+            border: var(--border-primary);
+            @include transition-150ms(border-color);
+            @include hover {
+              border-color: var(--border-color-hover);
+            }
+            > img {
+              width: 16px;
+              height: 16px;
+            }
+            > svg {
+              width: 16px;
+              fill: #737373;
+              @include dark {
+                fill: var(--dark500);
+              }
+            }
+            &--highlighted {
+              box-shadow: 0 0 10px 3px var(--highlight);
+            }
+          }
+          &__in-app {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-999px);
+            @include transition-150ms(background-color);
+            width: var(--button-dimension-40px);
+            height: var(--button-dimension-28px);
+            background-color: var(--blue100);
+            @include dark {
+              background-color: var(--dark200);
+            }
+            svg {
+              fill: var(--blue600);
+              @include dark {
+                fill: var(--blue500);
+              }
+              @include transition-150ms(fill);
+              width: 14px;
+            }
+            @include hover {
+              background-color: var(--blue200);
+              @include dark {
+                background-color: var(--dark300);
+              }
+            }
+          }
+          &__url {
+            display: flex;
+            flex-direction: column;
+            @include hover {
+              > span {
+                @include text-decoration-underlinie-thin;
+              }
+              > span:first-child {
+                text-decoration-color: var(--text-color-normal);
+              }
+              > span:last-child {
+                text-decoration-color: var(--text-color-variant);
+              }
+            }
+            &--dim-visited {
+              @include hover {
+                &:visited > span {
+                  text-decoration-color: var(--text-color-dimmed);
+                }
+              }
+            }
+            &--via-wayback {
+              font-style: italic;
+            }
+            > span {
+              overflow-wrap: anywhere;
+              padding-right: 1px;
+              overflow: hidden;
+              -webkit-line-clamp: 1;
+              -webkit-box-orient: vertical;
+            }
+            > span:first-child {
+              color: var(--text-color-normal);
+              display: -webkit-box;
+            }
+            > span:last-child {
+              color: var(--text-color-variant);
+              font-size: var(--font-size-13px);
+              word-wrap: break-word;
+              display: -webkit-box;
+              @include to768 {
+                font-family: var(--font-family-inter-tight);
+              }
+            }
+            &--dim-visited:visited > span {
+              color: var(--text-color-dimmed);
+            }
+          }
+        }
+        &__actions {
+          display: flex;
+          align-items: center;
+          gap: var(--padding-8px);
+          &__public-saves {
+            white-space: nowrap;
+            margin-right: 5px;
+            color: var(--text-color-dimmed);
+            font-size: var(--font-size-13px);
+            padding: 0 3px;
+            @include hover {
+              text-decoration: underline;
+            }
+          }
+          &__open {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -736,11 +705,11 @@
             }
             > svg {
               fill: var(--neutral500);
-              @include transition-150ms(fill);
-              width: var(--icon-dimension-16px);
               @include dark {
                 fill: var(--dark500);
               }
+              @include transition-150ms(fill);
+              width: 10px;
             }
             @include hover {
               background-color: var(--neutral200);
@@ -753,29 +722,64 @@
                 }
               }
             }
-            &--toggled {
-              background-color: var(--neutral200);
+          }
+          &__menu {
+            position: relative;
+            &__button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              border-radius: var(--border-radius-999px);
+              @include transition-150ms(background-color);
+              width: var(--button-dimension-28px);
+              height: var(--button-dimension-28px);
+              background-color: var(--neutral100);
               @include dark {
-                background-color: var(--dark300);
+                background-color: var(--dark200);
               }
               > svg {
-                @include light {
-                  fill: var(--neutral600);
+                fill: var(--neutral500);
+                @include transition-150ms(fill);
+                width: var(--icon-dimension-16px);
+                @include dark {
+                  fill: var(--dark500);
+                }
+              }
+              @include hover {
+                background-color: var(--neutral200);
+                @include dark {
+                  background-color: var(--dark300);
+                }
+                > svg {
+                  @include light {
+                    fill: var(--neutral600);
+                  }
+                }
+              }
+              &--toggled {
+                background-color: var(--neutral200);
+                @include dark {
+                  background-color: var(--dark300);
+                }
+                > svg {
+                  @include light {
+                    fill: var(--neutral600);
+                  }
                 }
               }
             }
           }
         }
-      }
-      &__pinned {
-        position: absolute;
-        top: 2px;
-        left: 3.5px;
-        > svg {
-          width: 9px;
-          fill: var(--neutral300);
-          @include dark {
-            fill: var(--dark400);
+        &__pinned {
+          position: absolute;
+          top: 2px;
+          left: 3.5px;
+          > svg {
+            width: 9px;
+            fill: var(--neutral300);
+            @include dark {
+              fill: var(--dark400);
+            }
           }
         }
       }

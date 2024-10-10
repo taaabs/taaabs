@@ -229,8 +229,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         return (
           <a
             key={tag.id}
-            className={cn(styles.bookmark__card__tags__tag, {
-              [styles['bookmark__card__tags__tag--selected']]: tag.is_selected,
+            className={cn(styles.container__inner__card__tags__tag, {
+              [styles['container__inner__card__tags__tag--selected']]:
+                tag.is_selected,
             })}
             onClick={(e) => {
               e.preventDefault()
@@ -266,9 +267,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           >
             <span
               className={cn([
-                styles.bookmark__card__tags__tag__name,
+                styles.container__inner__card__tags__tag__name,
                 {
-                  [styles['bookmark__card__tags__tag__name--selected']]:
+                  [styles['container__inner__card__tags__tag__name--selected']]:
                     tag.is_selected,
                 },
               ])}
@@ -282,7 +283,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 : tag.name}
             </span>
             {!tag.is_selected && tag.yields && (
-              <span className={styles.bookmark__card__tags__tag__yields}>
+              <span
+                className={styles.container__inner__card__tags__tag__yields}
+              >
                 {tag.yields}
               </span>
             )}
@@ -294,14 +297,16 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       props.tags.findIndex((tag) => tag.id == props.dragged_tag!.id) == -1
         ? [
             <button
-              className={styles.bookmark__card__tags__tag}
+              className={styles.container__inner__card__tags__tag}
               style={{ opacity: 'var(--dimmed-opacity)' }}
               key="candidate"
             >
-              <span className={styles.bookmark__card__tags__tag__name}>
+              <span className={styles.container__inner__card__tags__tag__name}>
                 {props.dragged_tag.name}
               </span>
-              <span className={styles.bookmark__card__tags__tag__yields}>
+              <span
+                className={styles.container__inner__card__tags__tag__yields}
+              >
                 {props.dragged_tag.yields + 1}
               </span>
             </button>,
@@ -310,16 +315,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     ]
 
     const actions_dom = (
-      <div className={cn(styles.bookmark__card__tags__actions, 'static')}>
+      <div
+        className={cn(styles.container__inner__card__tags__actions, 'static')}
+      >
         <div
-          className={cn(styles.bookmark__card__tags__actions__huggs, {
-            [styles['bookmark__card__tags__actions__huggs--has-poits']]:
+          className={cn(styles.container__inner__card__tags__actions__huggs, {
+            [styles['container__inner__card__tags__actions__huggs--has-poits']]:
               props.points,
           })}
         >
           {props.is_public && (
             <button
-              className={styles.bookmark__card__tags__actions__huggs__amount}
+              className={
+                styles.container__inner__card__tags__actions__huggs__amount
+              }
               onClick={() => {}}
             >
               {props.points}
@@ -327,7 +336,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           )}
           {props.is_public ? (
             <button
-              className={styles.bookmark__card__tags__actions__huggs__emoji}
+              className={
+                styles.container__inner__card__tags__actions__huggs__emoji
+              }
               style={{
                 pointerEvents:
                   !props.on_give_point_click || !props.on_get_points_given_click
@@ -380,7 +391,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               {/* Empty space needed by inline element to render correctly. */}⠀
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__hugging__eyes
+                  styles.container__inner__card__tags__actions__huggs__emoji__hugging__eyes
                 }
               >
                 <svg viewBox="0 0 433 129" xmlns="http://www.w3.org/2000/svg">
@@ -396,7 +407,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__hugging__mouth
+                  styles.container__inner__card__tags__actions__huggs__emoji__hugging__mouth
                 }
               >
                 <svg viewBox="0 0 12 7" xmlns="http://www.w3.org/2000/svg">
@@ -414,7 +425,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__hugging__blush
+                  styles.container__inner__card__tags__actions__huggs__emoji__hugging__blush
                 }
               >
                 <svg viewBox="0 0 550 75" xmlns="http://www.w3.org/2000/svg">
@@ -482,11 +493,15 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
             </button>
           ) : (
-            <div className={styles.bookmark__card__tags__actions__huggs__emoji}>
+            <div
+              className={
+                styles.container__inner__card__tags__actions__huggs__emoji
+              }
+            >
               ⠀
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__silent__eyes
+                  styles.container__inner__card__tags__actions__huggs__emoji__silent__eyes
                 }
               >
                 <svg viewBox="0 0 433 129" xmlns="http://www.w3.org/2000/svg">
@@ -502,7 +517,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__silent__zip
+                  styles.container__inner__card__tags__actions__huggs__emoji__silent__zip
                 }
               >
                 <svg viewBox="0 0 9 3" xmlns="http://www.w3.org/2000/svg">
@@ -522,7 +537,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
               <div
                 className={
-                  styles.bookmark__card__tags__actions__huggs__emoji__silent__handle
+                  styles.container__inner__card__tags__actions__huggs__emoji__silent__handle
                 }
               >
                 <svg
@@ -541,7 +556,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             </div>
           )}
         </div>
-        <div className={styles.bookmark__card__tags__actions__menu}>
+        <div className={styles.container__inner__card__tags__actions__menu}>
           <OutsideClickHandler
             disabled={!is_mobile_menu_open}
             onOutsideClick={() => {
@@ -550,10 +565,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           >
             <button
               className={cn(
-                styles.bookmark__card__tags__actions__menu__button,
+                styles.container__inner__card__tags__actions__menu__button,
                 {
-                  [styles['bookmark__card__tags__actions__menu--toggled']]:
-                    is_mobile_menu_open,
+                  [styles[
+                    'container__inner__card__tags__actions__menu--toggled'
+                  ]]: is_mobile_menu_open,
                 },
               )}
               onClick={(e) => {
@@ -641,15 +657,15 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           }
         }}
       >
-        <div className={styles.bookmark}>
+        <div className={styles.container__inner}>
           {tag_context_menu.contextMenu}
           {main_context_menu.contextMenu}
           {link_context_menu.contextMenu}
           <div
-            className={cn(styles.bookmark__card, {
-              [styles['bookmark__card--corners-fix']]:
+            className={cn(styles.container__inner__card, {
+              [styles['container__inner__card--corners-fix']]:
                 (!props.links.length && !props.note) || props.is_compact,
-              [styles['bookmark__card--no-cover']]: !props.has_cover,
+              [styles['container__inner__card--no-cover']]: !props.has_cover,
             })}
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
@@ -660,16 +676,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             }}
           >
             {props.has_cover && (
-              <div
-                className={styles.bookmark__card__cover}
-              >
+              <div className={styles.container__inner__card__cover}>
                 <div
-                  className={styles.bookmark__card__cover__image}
+                  className={styles.container__inner__card__cover__image}
                   ref={cover_hover_zoom_hook.container_ref}
                   onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
-                  onMouseMove={
-                    cover_hover_zoom_hook.handle_cover_mouse_move
-                  }
+                  onMouseMove={cover_hover_zoom_hook.handle_cover_mouse_move}
                   onClick={
                     primary_url
                       ? () => {
@@ -684,16 +696,18 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   {props.cover ? (
                     <>
                       <img
-                        className={styles.bookmark__card__cover__image__fill}
+                        className={
+                          styles.container__inner__card__cover__image__fill
+                        }
                         src={`data:image/webp;base64,${props.cover}`}
                       />
                       <img
                         ref={cover_hover_zoom_hook.image_ref}
                         className={cn(
-                          styles.bookmark__card__cover__image__top,
+                          styles.container__inner__card__cover__image__top,
                           {
                             [styles[
-                              'bookmark__card__cover__image__top--hovering'
+                              'container__inner__card__cover__image__top--hovering'
                             ]]: cover_hover_zoom_hook.is_enabled,
                           },
                         )}
@@ -703,17 +717,19 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   ) : props.cover_hash ? (
                     <>
                       <img
-                        className={styles.bookmark__card__cover__image__fill}
+                        className={
+                          styles.container__inner__card__cover__image__fill
+                        }
                         loading="lazy"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
                       <img
                         ref={cover_hover_zoom_hook.image_ref}
                         className={cn(
-                          styles.bookmark__card__cover__image__top,
+                          styles.container__inner__card__cover__image__top,
                           {
                             [styles[
-                              'bookmark__card__cover__image__top--hovering'
+                              'container__inner__card__cover__image__top--hovering'
                             ]]: cover_hover_zoom_hook.is_enabled,
                           },
                         )}
@@ -728,15 +744,15 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
             )}
 
-            <div className={styles.bookmark__card__date}>
-              <div className={styles.bookmark__card__date__text}>
+            <div className={styles.container__inner__card__date}>
+              <div className={styles.container__inner__card__date__text}>
                 {bookmark_date}
               </div>
             </div>
 
-            <div className={styles.bookmark__card__title}>
+            <div className={styles.container__inner__card__title}>
               <div
-                className={styles.bookmark__card__title__menu}
+                className={styles.container__inner__card__title__menu}
                 style={
                   is_desktop_menu_open
                     ? { position: 'relative', zIndex: 1 }
@@ -748,10 +764,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   onOutsideClick={toggle_is_desktop_menu_open}
                 >
                   <button
-                    className={cn(styles.bookmark__card__title__menu__button, {
-                      [styles['bookmark__card__title__menu--toggled']]:
-                        is_desktop_menu_open,
-                    })}
+                    className={cn(
+                      styles.container__inner__card__title__menu__button,
+                      {
+                        [styles[
+                          'container__inner__card__title__menu--toggled'
+                        ]]: is_desktop_menu_open,
+                      },
+                    )}
                     onClick={(e) => {
                       e.stopPropagation()
                       toggle_is_desktop_menu_open()
@@ -770,12 +790,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 </OutsideClickHandler>
               </div>
               {props.is_unsorted && (
-                <div className={styles.bookmark__card__title__unsorted}>
+                <div className={styles.container__inner__card__title__unsorted}>
                   UNSORTED
                 </div>
               )}
               {props.stars >= 1 && (
-                <div className={styles.bookmark__card__title__stars}>
+                <div className={styles.container__inner__card__title__stars}>
                   {[...new Array(props.stars)].map((_, i) => (
                     <UiIcon variant="STAR_FILLED" key={i} />
                   ))}
@@ -785,7 +805,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 primary_url ? (
                   <a
                     href={primary_url}
-                    className={styles.bookmark__card__title__text}
+                    className={styles.container__inner__card__title__text}
                     onClick={(e) => {
                       e.stopPropagation()
                       e.preventDefault()
@@ -797,7 +817,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     {title}
                   </a>
                 ) : (
-                  <div className={styles.bookmark__card__title__text}>
+                  <div className={styles.container__inner__card__title__text}>
                     {title}
                   </div>
                 )
@@ -805,8 +825,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 <a
                   href={primary_url}
                   className={cn(
-                    styles.bookmark__card__title__text,
-                    styles['bookmark__card__title__text--untitled'],
+                    styles.container__inner__card__title__text,
+                    styles['container__inner__card__title__text--untitled'],
                   )}
                 >
                   {title}
@@ -814,8 +834,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               ) : (
                 <div
                   className={cn(
-                    styles.bookmark__card__title__text,
-                    styles['bookmark__card__title__text--untitled'],
+                    styles.container__inner__card__title__text,
+                    styles['container__inner__card__title__text--untitled'],
                   )}
                 >
                   {title}
@@ -836,7 +856,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 dropBubble={true} // Needed for clearing dragged tag UI
                 delay={system_values.sortablejs_delay}
                 delayOnTouchOnly={true}
-                className={styles.bookmark__card__tags}
+                className={styles.container__inner__card__tags}
                 filter={`.static`}
                 fallbackClass={
                   !('ontouchstart' in window)
@@ -848,21 +868,24 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 <button
                   key={'edit-tags'}
                   onClick={props.on_modify_tags_click}
-                  className={cn(styles.bookmark__card__tags__edit, 'static')}
+                  className={cn(
+                    styles.container__inner__card__tags__edit,
+                    'static',
+                  )}
                 >
                   <UiIcon variant="TAG" />
                 </button>
                 {actions_dom}
               </ReactSortable>
             ) : (
-              <div className={styles.bookmark__card__tags}>
+              <div className={styles.container__inner__card__tags}>
                 {tags_dom}
                 {actions_dom}
               </div>
             )}
           </div>
           {props.note && !props.is_compact && (
-            <div className={styles.bookmark__note}>
+            <div className={styles.container__inner__note}>
               {props.highlights
                 ? highlight_text(
                     props.note,
@@ -878,8 +901,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             }}
           >
             <div
-              className={cn(styles.bookmark__links, {
-                [styles['bookmark__links--compact']]: props.is_compact,
+              className={cn(styles.container__inner__links, {
+                [styles['container__inner__links--compact']]: props.is_compact,
               })}
             >
               {props.links.map((link, i) => {
@@ -922,9 +945,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
 
                 return (
                   <div
-                    className={cn(styles.bookmark__links__item, {
-                      [styles['bookmark__links__item--recently-visited']]:
-                        recently_visited_link_idx == i,
+                    className={cn(styles.container__inner__links__item, {
+                      [styles[
+                        'container__inner__links__item--recently-visited'
+                      ]]: recently_visited_link_idx == i,
                     })}
                     onClick={() => {
                       set_recently_visited_link_idx(undefined)
@@ -944,13 +968,13 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       }
                     }}
                   >
-                    <div className={styles.bookmark__links__item__link}>
+                    <div className={styles.container__inner__links__item__link}>
                       <button
                         className={cn(
-                          styles.bookmark__links__item__link__site,
+                          styles.container__inner__links__item__link__site,
                           {
                             [styles[
-                              'bookmark__links__item__link__site--highlighted'
+                              'container__inner__links__item__link__site--highlighted'
                             ]]: is_site_highlighted,
                           },
                         )}
@@ -983,7 +1007,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         ) && (
                           <button
                             className={
-                              styles['bookmark__links__item__link__in-app']
+                              styles[
+                                'container__inner__links__item__link__in-app'
+                              ]
                             }
                             onClick={() => {
                               props.on_reading_mode_click(link.url)
@@ -995,7 +1021,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       {is_video_url(link.url) && (
                         <button
                           className={
-                            styles['bookmark__links__item__link__in-app']
+                            styles[
+                              'container__inner__links__item__link__in-app'
+                            ]
                           }
                           onClick={() => {
                             props.on_video_player_click(link.url)
@@ -1006,15 +1034,15 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       )}
                       <a
                         className={cn(
-                          styles.bookmark__links__item__link__url,
+                          styles.container__inner__links__item__link__url,
                           {
                             [styles[
-                              'bookmark__links__item__link__url--dim-visited'
+                              'container__inner__links__item__link__url--dim-visited'
                             ]]: props.should_dim_visited_links,
                           },
                           {
                             [styles[
-                              'bookmark__links__item__link__url--via-wayback'
+                              'container__inner__links__item__link__url--via-wayback'
                             ]]: link.open_snapshot,
                           },
                         )}
@@ -1053,12 +1081,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         </span>
                       </a>
                     </div>
-                    <div className={styles.bookmark__links__item__actions}>
+                    <div
+                      className={styles.container__inner__links__item__actions}
+                    >
                       {link.saves !== undefined && link.saves > 0 && (
                         <button
                           className={
                             styles[
-                              'bookmark__links__item__actions__public-saves'
+                              'container__inner__links__item__actions__public-saves'
                             ]
                           }
                           onClick={() => {
@@ -1072,7 +1102,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         </button>
                       )}
                       <button
-                        className={styles.bookmark__links__item__actions__open}
+                        className={
+                          styles.container__inner__links__item__actions__open
+                        }
                         onClick={async (e) => {
                           e.stopPropagation()
                           set_recently_visited_link_idx(i)
@@ -1082,7 +1114,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         <UiIcon variant="NEW_TAB" />
                       </button>
                       <div
-                        className={styles.bookmark__links__item__actions__menu}
+                        className={
+                          styles.container__inner__links__item__actions__menu
+                        }
                       >
                         <OutsideClickHandler
                           disabled={link_url_menu_opened != link.url}
@@ -1092,10 +1126,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         >
                           <button
                             className={cn(
-                              styles.bookmark__links__item__actions__menu__button,
+                              styles.container__inner__links__item__actions__menu__button,
                               {
                                 [styles[
-                                  'bookmark__links__item__actions__menu__button--toggled'
+                                  'container__inner__links__item__actions__menu__button--toggled'
                                 ]]: link_url_menu_opened == link.url,
                               },
                             )}
@@ -1123,7 +1157,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       </div>
                     </div>
                     {link.is_pinned && (
-                      <div className={styles.bookmark__links__item__pinned}>
+                      <div
+                        className={styles.container__inner__links__item__pinned}
+                      >
                         <UiIcon variant="PIN" />
                       </div>
                     )}
