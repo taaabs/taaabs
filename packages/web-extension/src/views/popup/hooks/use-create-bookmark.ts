@@ -66,19 +66,25 @@ export const use_create_bookmark = () => {
         return undefined
       }
 
-      const get_favicon_url = () => {
+      const get_favicon_url = (): string => {
         // Check for 32x32 favicon
         const favicon_32x32 = document.querySelector(
           'link[rel="icon"][sizes="32x32"]',
         )
         if (favicon_32x32) {
-          return favicon_32x32.getAttribute('href')
+          const href = favicon_32x32.getAttribute('href')
+          if (href) {
+            return href
+          }
         }
 
         // Look for .ico
         const favicon = document.querySelector('link[href$=".ico"]')
         if (favicon) {
-          return favicon.getAttribute('href')
+          const href = favicon.getAttribute('href')
+          if (href) {
+            return href
+          }
         }
 
         // If no specific favicon found, use the default favicon.ico
@@ -86,10 +92,10 @@ export const use_create_bookmark = () => {
       }
 
       const get_base64_of_image_url = async (
-        image_url: any,
-        width?: any,
-        height?: any,
-      ) => {
+        image_url: string,
+        max_width: number,
+        max_height: number,
+      ): Promise<string> => {
         const img = document.createElement('img')
         img.src = image_url
         img.setAttribute('crossorigin', 'anonymous')
@@ -97,15 +103,23 @@ export const use_create_bookmark = () => {
           img.onload = resolve
           img.onerror = () => reject(new Error('Image not found'))
         })
+
+        let width = img.width
+        let height = img.height
+
+        const width_ratio = max_width / width
+        const height_ratio = max_height / height
+        const ratio = Math.min(width_ratio, height_ratio)
+
+        width *= ratio
+        height *= ratio
+
         const canvas = document.createElement('canvas')
-        canvas.width = width || img.width
-        canvas.height = height || img.height
+        canvas.width = width
+        canvas.height = height
         const ctx = canvas.getContext('2d')!
-        if (width && height) {
-          ctx.drawImage(img, 0, 0, width, height)
-        } else {
-          ctx.drawImage(img, 0, 0)
-        }
+        ctx.drawImage(img, 0, 0, width, height)
+
         return canvas.toDataURL('image/webp')
       }
 
@@ -113,7 +127,7 @@ export const use_create_bookmark = () => {
       let og_image = undefined
       if (og_image_url) {
         try {
-          og_image = await get_base64_of_image_url(og_image_url)
+          og_image = await get_base64_of_image_url(og_image_url, 312, 164)
         } catch {}
       }
 
