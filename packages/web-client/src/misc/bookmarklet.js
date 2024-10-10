@@ -17,30 +17,43 @@ const fill_clipboard = async (doc) => {
     }
     return new URL(window.location.href).origin + '/favicon.ico';
   };
-  const get_base64_of_image_url = async (url, width, height) => {
-    const img = doc.createElement('img');
-    img.src = url;
+  const get_base64_of_image_url = async (image_url, max_width, max_height) => {
+    const img = document.createElement('img');
+    img.src = image_url;
     img.setAttribute('crossorigin', 'anonymous');
-    await new Promise((resolve, reject) => {
-      img.onload = resolve;
-      img.onerror = () => reject(new Error('Image not found'));
-    });
-    const canvas = doc.createElement('canvas');
-    canvas.width = width || img.width;
-    canvas.height = height || img.height;
-    const ctx = canvas.getContext('2d');
-    if (width && height) {
-      ctx.drawImage(img, 0, 0, width, height);
-    } else {
-      ctx.drawImage(img, 0, 0);
+  
+    try {
+      await new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject; 
+      });
+    } catch (error) {
+      throw new Error('Image not found or could not be loaded: ' + (error?.message || error));
     }
-    return canvas.toDataURL('image/webp');
+  
+    let width = img.width;
+    let height = img.height;
+  
+    const width_ratio = max_width / width;
+    const height_ratio = max_height / height;
+    const ratio = Math.min(width_ratio, height_ratio);
+  
+    width *= ratio;
+    height *= ratio;
+  
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, width, height);
+  
+    return canvas.toDataURL('image/webp'); // Or 'image/jpeg'
   };
   const og_image_url = get_og_image_url();
   let og_image = undefined;
   if (og_image_url) {
     try {
-      og_image = await get_base64_of_image_url(og_image_url);
+      og_image = await get_base64_of_image_url(og_image_url, 312, 164);
     } catch {}
   }
   let favicon = undefined;
