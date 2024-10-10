@@ -88,7 +88,7 @@
             position: relative;
             object-fit: contain;
             &--hovering {
-              transform: scale(1.5) translateX(var(--x)) translateY(var(--y));
+              transform: scale(2) translateX(var(--x)) translateY(var(--y));
             }
           }
           &__fill {
