@@ -47,7 +47,7 @@ const fill_clipboard = async (doc) => {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0, width, height);
   
-    return canvas.toDataURL('image/webp'); // Or 'image/jpeg'
+    return canvas.toDataURL('image/webp');
   };
   const og_image_url = get_og_image_url();
   let og_image = undefined;
