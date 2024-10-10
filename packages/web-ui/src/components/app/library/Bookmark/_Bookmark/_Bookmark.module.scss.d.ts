@@ -1,9 +1,4 @@
 declare const styles: {
-  readonly "bookmark__card__tags__actions__huggs__emoji__hugging__eyes": string;
-  readonly "bookmark__card__tags__actions__huggs__emoji__hugging__left-hand": string;
-  readonly "bookmark__card__tags__actions__huggs__emoji__hugging__mouth": string;
-  readonly "bookmark__card__tags__actions__huggs__emoji__hugging__right-hand": string;
-  readonly "bookmark__card__tags__actions__huggs__emoji__silent__handle": string;
   readonly "bookmark_shake": string;
   readonly "container": string;
   readonly "container--clickable": string;

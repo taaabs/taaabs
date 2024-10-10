@@ -391,19 +391,19 @@
                 left: 0;
               }
               @include hover {
-                .bookmark__card__tags__actions__huggs__emoji__hugging__eyes {
+                .container__inner__card__tags__actions__huggs__emoji__hugging__eyes {
                   transform: translateY(-1px);
                 }
-                .bookmark__card__tags__actions__huggs__emoji__hugging__mouth {
+                .container__inner__card__tags__actions__huggs__emoji__hugging__mouth {
                   transform: translateY(-0.3px) scaleY(1.15);
                 }
-                .bookmark__card__tags__actions__huggs__emoji__hugging__left-hand {
+                .container__inner__card__tags__actions__huggs__emoji__hugging__left-hand {
                   transform: rotate(5deg) translateX(1px);
                 }
-                .bookmark__card__tags__actions__huggs__emoji__hugging__right-hand {
+                .container__inner__card__tags__actions__huggs__emoji__hugging__right-hand {
                   transform: scaleX(-1) rotate(5deg) translateX(1px);
                 }
-                .bookmark__card__tags__actions__huggs__emoji__silent__handle {
+                .container__inner__card__tags__actions__huggs__emoji__silent__handle {
                   animation: bookmark_shake 0.8s ease-in-out both;
                   transform-origin: left;
                 }

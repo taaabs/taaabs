@@ -442,7 +442,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               <div
                 className={
                   styles[
-                    'bookmark__card__tags__actions__huggs__emoji__hugging__left-hand'
+                    'container__inner__card__tags__actions__huggs__emoji__hugging__left-hand'
                   ]
                 }
               >
@@ -468,7 +468,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               <div
                 className={
                   styles[
-                    'bookmark__card__tags__actions__huggs__emoji__hugging__right-hand'
+                    'container__inner__card__tags__actions__huggs__emoji__hugging__right-hand'
                   ]
                 }
               >
