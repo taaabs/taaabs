@@ -25,14 +25,6 @@ module.exports = (_, argv) => {
         { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
         { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
-        {
-          from: 'src/views/floating-button/floating-button.html',
-          to: 'floating-button.html',
-        },
-        {
-          from: 'src/views/floating-button/floating-button.css',
-          to: 'floating-button.css',
-        },
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
       ],
     }),
@@ -56,8 +48,6 @@ module.exports = (_, argv) => {
         './src/content-scripts/get-auth-data-content-script.ts',
       'get-theme-content-script':
         './src/content-scripts/get-theme-content-script.ts',
-      'inject-floating-button-content-script':
-        './src/content-scripts/inject-floating-button-content-script.ts',
       'inject-popup-content-script':
         './src/content-scripts/inject-popup-content-script.ts',
       'send-prompt-content-script':
@@ -111,7 +101,7 @@ module.exports = (_, argv) => {
       port: 9000,
     },
     optimization: {
-      minimize: false,
+      // minimize: false,
     },
     cache: {
       type: 'filesystem',

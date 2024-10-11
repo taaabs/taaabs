@@ -6,7 +6,6 @@ import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
 import { ensure_tab_is_ready } from './helpers/ensure-tab-is-ready'
 import { get_auth_data } from '@/helpers/get-auth-data'
-import { various_values } from '@/constants/various_values'
 
 // Use browser.browserAction for Firefox, browser.action for Chrome
 const action = browser.browserAction || browser.action
@@ -178,9 +177,6 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
   if (changeInfo.url) {
     // It throws error when Popup is not injected, we want to ignore that
     browser.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
-    browser.tabs
-      .sendMessage(tabId, { action: 'show-floating-button' })
-      .catch(() => {})
     updated_tab_ids.add(tabId)
     setTimeout(() => {
       // Other option could be await handle tab change and not use this timeout
@@ -200,11 +196,11 @@ browser.webNavigation.onCommitted.addListener((details) => {
   }
 })
 
-browser.runtime.onInstalled.addListener(async () => {
-  browser.storage.local.set({
-    use_custom_new_tab: true,
-    show_floating_button: true,
-    local_assistant_url: 'http://localhost:8080/',
-  })
-  browser.runtime.openOptionsPage()
+browser.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason == 'install') {
+    browser.storage.local.set({
+      local_assistant_url: 'http://localhost:8080/',
+    })
+    browser.runtime.openOptionsPage()
+  }
 })
