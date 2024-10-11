@@ -41,7 +41,6 @@ export type BookmarkDeleted_Message = {
 export type InjectPopupContentScript_Message = { action: 'inject-popup' }
 export type ClosePopupContentScript_Message = { action: 'close-popup' }
 export type Logout_Message = { action: 'logout' }
-export type ShowFloatingButton_Message = { action: 'show-floating-button' }
 export type CapturedImage_Message = {
   action: 'captured-image'
   captured_image: string
@@ -66,7 +65,6 @@ export type Message =
   | InjectPopupContentScript_Message
   | ClosePopupContentScript_Message
   | Logout_Message
-  | ShowFloatingButton_Message
   | CapturedImage_Message
 
 export type CheckUrlSavedResponse = { is_saved: boolean }

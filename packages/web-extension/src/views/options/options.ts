@@ -16,14 +16,6 @@ document
     browser.storage.local.set({ local_assistant_url })
   })
 
-document
-  .getElementById('show-floating-button')!
-  .addEventListener('change', (event: Event) => {
-    browser.storage.local.set({
-      show_floating_button: (event.target as HTMLInputElement).checked,
-    })
-  })
-
 const logout_button = document.getElementById('logout-button')
 logout_button?.addEventListener('click', async () => {
   await browser.storage.local.remove('auth_data')
@@ -36,7 +28,6 @@ browser.storage.local
   .get([
     'open_chatbot_in_new_tab',
     'local_assistant_url',
-    'show_floating_button',
     'auth_data',
   ])
   .then((data: any) => {
@@ -46,8 +37,5 @@ browser.storage.local
     ;(
       document.getElementById('local-assistant-url') as HTMLInputElement
     ).value = data.local_assistant_url
-    ;(
-      document.getElementById('show-floating-button') as HTMLInputElement
-    ).checked = data.show_floating_button || false
     logout_button!.style.display = !data.auth_data ? 'none' : ''
   })

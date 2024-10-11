@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Taaabs Web Clipper, clip any page to ChatGPT!",
+  "name": "Taaabs Web Clipper, clip any site to ChatGPT!",
   "short_name": "taaabs",
-  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with top AI chatbots.",
-  "version": "0.3.7",
+  "description": "Unlock the joy of your web research. Privately clip any page to your personal library, searchable and organized. Invoke top AI assistants as you browse the Web.",
+  "version": "0.3.8",
   "homepage_url": "https://taaabs.com/",
   "action": {
     "default_icon": {
@@ -22,9 +22,7 @@
     {
       "resources": [
         "popup.js",
-        "popup.css",
-        "floating-button.html",
-        "floating-button.css"
+        "popup.css"
       ],
       "matches": ["<all_urls>"]
     }
@@ -48,7 +46,6 @@
     {
       "matches": ["<all_urls>"],
       "js": [
-        "inject-floating-button-content-script.js",
         "inject-popup-content-script.js",
         "send-prompt-content-script.js"
       ]

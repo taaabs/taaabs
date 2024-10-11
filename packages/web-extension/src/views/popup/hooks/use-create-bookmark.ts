@@ -120,14 +120,14 @@ export const use_create_bookmark = () => {
         const ctx = canvas.getContext('2d')!
         ctx.drawImage(img, 0, 0, width, height)
 
-        return canvas.toDataURL('image/webp')
+        return canvas.toDataURL('image/webp', 0.7)
       }
 
       const og_image_url = await get_og_image_url()
       let og_image = undefined
       if (og_image_url) {
         try {
-          og_image = await get_base64_of_image_url(og_image_url, 312, 164)
+          og_image = await get_base64_of_image_url(og_image_url, 624, 328)
         } catch {}
       }
 
