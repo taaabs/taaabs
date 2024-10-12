@@ -20,18 +20,17 @@
     }
   }
 }
+.info {
+  color: var(--red);
+  font-size: var(--font-size-13px);
+  > strong {
+    font-weight: var(--font-weight-inter-medium);
+  }
+}
 .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  &__info {
-    color: var(--red);
-    text-align: center;
-    font-size: var(--font-size-13px);
-    > strong {
-      font-weight: var(--font-weight-inter-medium);
-    }
-  }
   &__checkbox {
     position: relative;
   }

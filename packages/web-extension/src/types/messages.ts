@@ -35,8 +35,8 @@ export type SendPrompt_Message = {
   assistant_url: string
   prompt: string
   plain_text?: string
-  window_width: number
-  window_height: number
+  window_width?: number
+  window_height?: number
   open_in_new_tab?: boolean
   image?: string
 }

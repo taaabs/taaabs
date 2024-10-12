@@ -70,6 +70,17 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   return (
     <div className={styles.container}>
+      {props.is_plain_text_too_long && (
+        <div className={styles.info}>
+          {props.translations.plain_text_too_long}
+        </div>
+      )}
+      {props.transcript_not_found && (
+        <div className={styles.info}>
+          {props.translations.transcript_not_found}
+        </div>
+      )}
+
       <Input
         value={props.value}
         on_change={handle_change}
@@ -111,16 +122,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         </div>
         {props.assistant_selector_slot}
       </div>
-      {props.is_plain_text_too_long && (
-        <div className={styles.footer__info}>
-          {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.transcript_not_found && (
-        <div className={styles.footer__info}>
-          {props.translations.transcript_not_found}
-        </div>
-      )}
     </div>
   )
 }

@@ -18,7 +18,40 @@ export const send_prompt = () => {
             data.chatbot_window_position || 'middle'
           const chatbot_window_width = data.chatbot_window_width || 767
 
-          if (open_in_new_tab) {
+          if (!request.window_width || !request.window_height) {
+            // User is in the new tab
+            const new_tab = await browser.tabs.update({
+              url: request.assistant_url,
+            })
+            const onCompletedListener = async (details: any) => {
+              if (
+                details.tabId == new_tab.id &&
+                details.frameId == 0 &&
+                details.url == request.assistant_url
+              ) {
+                browser.webNavigation.onCompleted.removeListener(
+                  onCompletedListener,
+                )
+                const message = {
+                  action: 'send-prompt',
+                  assistant_name: request.assistant_name,
+                  prompt: request.prompt,
+                  plain_text: request.plain_text,
+                  image: request.image,
+                } as SendPrompt_Message
+
+                // Fix for firefox which needs a little time to settle its focus on loaded page
+                if (browser.browserAction) {
+                  setTimeout(() => {
+                    browser.tabs.sendMessage(new_tab.id!, message)
+                  }, 100)
+                } else {
+                  browser.tabs.sendMessage(new_tab.id!, message)
+                }
+              }
+            }
+            browser.webNavigation.onCompleted.addListener(onCompletedListener)
+          } else if (open_in_new_tab) {
             const new_tab = await browser.tabs.create({
               url: request.assistant_url,
             })
@@ -36,7 +69,7 @@ export const send_prompt = () => {
                   assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
-                  image: request.image
+                  image: request.image,
                 } as SendPrompt_Message)
               }
             }
@@ -78,7 +111,7 @@ export const send_prompt = () => {
                   assistant_name: request.assistant_name,
                   prompt: request.prompt,
                   plain_text: request.plain_text,
-                  image: request.image
+                  image: request.image,
                 } as SendPrompt_Message)
               }
             }

@@ -106,14 +106,16 @@ export const Popup: React.FC = () => {
 
   if (
     // captured_image_hook.image === undefined ||
-    (parsed_html_hook.parsed_html === undefined && !is_youtube_video) ||
+    (parsed_html_hook.parsed_html === undefined &&
+      !is_youtube_video &&
+      !current_url_hook.is_new_tab_page) ||
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
     selected_assistant_hook.selected_assistant_name === undefined ||
     selected_assistant_vision_hook.selected_assistant_name === undefined ||
     attach_text_checkbox_hook.is_checked === undefined ||
-    !window_dimensions_hook.dimensions
+    (!window_dimensions_hook.dimensions && !current_url_hook.is_new_tab_page)
   ) {
     return <></>
   }
@@ -206,6 +208,16 @@ export const Popup: React.FC = () => {
 
   return (
     <Ui_extension_popup_templates_Popup
+      should_set_height={
+        // Showing recent prompts which adjust its height dynamically
+        !current_url_hook.is_new_tab_page &&
+        !!(
+          parsed_html_hook.parsed_html !== null ||
+          is_youtube_video ||
+          text_selection_hook.selected_text ||
+          is_in_vision_mode
+        )
+      }
       header_slot={
         is_in_vision_mode ? (
           <Ui_extension_popup_templates_Popup_HeaderVision
@@ -222,7 +234,7 @@ export const Popup: React.FC = () => {
           <Ui_extension_popup_templates_Popup_Header
             settings_on_click={() => {
               browser.runtime.openOptionsPage()
-              // Close popup on firefox
+              // Firefox requires closing manually
               if (browser.browserAction) {
                 window.close()
               }
@@ -253,6 +265,7 @@ export const Popup: React.FC = () => {
               {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
             </UiButton>
             {auth_state_hook.is_authenticated &&
+              !current_url_hook.is_new_tab_page &&
               (saved_check_hook.is_saved ? saved_items : unsaved_items)}
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
@@ -283,7 +296,8 @@ export const Popup: React.FC = () => {
       ) : (
         (parsed_html_hook.parsed_html !== null ||
           is_youtube_video ||
-          text_selection_hook.selected_text) && (
+          text_selection_hook.selected_text) &&
+        !current_url_hook.is_new_tab_page && (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
@@ -414,8 +428,8 @@ export const Popup: React.FC = () => {
                 (attach_text_checkbox_hook.is_checked &&
                   (text_selection_hook.selected_text || shortened_plan_text)) ||
                 '',
-              window_height: window_dimensions_hook.dimensions!.height,
-              window_width: window_dimensions_hook.dimensions!.width,
+              window_height: window_dimensions_hook.dimensions?.height,
+              window_width: window_dimensions_hook.dimensions?.width,
             }
             browser.runtime.sendMessage(message)
             window.close()
