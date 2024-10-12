@@ -58,7 +58,6 @@ const handle_image_upload = async (params: {
   const file_input = document.querySelector(
     file_input_selector,
   ) as HTMLInputElement
-  console.log('file_input', file_input)
   if (file_input) {
     const blob = await fetch(params.image).then((res) => res.blob())
     const file = new File([blob], 'image.png', { type: 'image/png' })

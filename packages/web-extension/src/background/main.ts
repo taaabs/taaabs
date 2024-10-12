@@ -28,73 +28,6 @@ action.onClicked.addListener(async (tab) => {
 
 message_listeners()
 
-browser.contextMenus.create({
-  id: 'capture-image',
-  title: 'Ask with image',
-  contexts: ['image'],
-})
-
-browser.contextMenus.create({
-  id: 'capture-screenshot',
-  title: 'Ask with image',
-  contexts: ['page'],
-})
-
-// Chrome only
-if (browser.action) {
-  browser.contextMenus.create({
-    id: 'capture-screenshot-action',
-    title: 'Ask with image',
-    contexts: ['action'],
-  })
-}
-
-browser.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId == 'capture-screenshot-action') {
-    browser.tabs.sendMessage(tab?.id!, { action: 'close-popup' })
-    const captured_image = await browser.tabs.captureVisibleTab()
-    browser.tabs.sendMessage(tab?.id!, {
-      action: 'captured-image',
-      captured_image,
-    })
-    browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (info.menuItemId == 'capture-screenshot') {
-    const captured_image = await browser.tabs.captureVisibleTab()
-    browser.tabs.sendMessage(tab?.id!, {
-      action: 'captured-image',
-      captured_image,
-    })
-    browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-  } else if (info.menuItemId == 'capture-image') {
-    const image_url = info.srcUrl
-    if (image_url) {
-      try {
-        const response = await fetch(image_url)
-        if (!response.ok) {
-          throw new Error(
-            `Failed to fetch image: ${response.status} ${response.statusText}`,
-          )
-        }
-        const blob = await response.blob()
-        const reader = new FileReader()
-        reader.onloadend = () => {
-          const captured_image = reader.result
-          browser.tabs.sendMessage(tab?.id!, {
-            action: 'captured-image',
-            captured_image,
-          })
-          browser.tabs.sendMessage(tab?.id!, { action: 'inject-popup' })
-        }
-        reader.readAsDataURL(blob)
-      } catch (error) {
-        console.error('Error converting image to base64:', error)
-      }
-    } else {
-      console.error('Image URL is missing.')
-    }
-  }
-})
-
 /**
  * Responsibilities:
  *  - updating green tick (saved) indicator,
@@ -147,10 +80,6 @@ const handle_tab_change = async (tab_id: number, url: string) => {
     }, 1000)
 
     await ensure_tab_is_ready(tab_id)
-    await browser.tabs.sendMessage(tab_id, {
-      action: 'url-saved-status',
-      is_saved: false,
-    })
   } else if (
     url.startsWith('chrome://') ||
     url.startsWith('chrome-extension://') ||
@@ -163,10 +92,6 @@ const handle_tab_change = async (tab_id: number, url: string) => {
       const is_saved = await get_url_is_saved(cleaned_url)
       update_icon(tab_id, is_saved)
       await ensure_tab_is_ready(tab_id)
-      await browser.tabs.sendMessage(tab_id, {
-        action: 'url-saved-status',
-        is_saved,
-      })
     }
   }
 }
@@ -199,7 +124,7 @@ browser.webNavigation.onCommitted.addListener((details) => {
 browser.runtime.onInstalled.addListener(async (details) => {
   if (details.reason == 'install') {
     browser.storage.local.set({
-      local_assistant_url: 'http://localhost:8080/',
+      custom_assistant_url: 'http://localhost:8080/',
     })
     browser.runtime.openOptionsPage()
   }

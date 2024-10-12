@@ -4,10 +4,5 @@
 .container {
   display: flex;
   flex-direction: column;
-  background-color: var(--header-background);
-  border-radius: var(--border-radius-30px);
-  box-shadow: var(--box-shadow-long-extra-strong);
-  @include dark {
-    border: var(--border-primary);
-  }
+  background-color: var(--background);
 }

@@ -1,39 +1,31 @@
 import { useEffect, useState } from 'react'
-import { send_message } from '../helpers/send-message'
 import { HtmlParser } from '@shared/utils/html-parser'
+import browser from 'webextension-polyfill'
+import { is_message } from '@/utils/is-message'
+import { GetParsedHtml_Message } from '@/types/messages'
 
 export const use_parsed_html = () => {
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
 
   useEffect(() => {
-    let getting_parsed_html_started_at_timestamp: number
+    browser.tabs
+      .query({
+        active: true,
+        currentWindow: true,
+      })
+      .then(([current_tab]) => {
+        const message: GetParsedHtml_Message = {
+          action: 'get-parsed-html',
+        }
+        browser.tabs.sendMessage(current_tab.id!, message)
+      })
 
-    // 150ms is popup entry animation duration
-    setTimeout(() => {
-      console.debug('Getting plain text of the current page for Assistant...')
-      getting_parsed_html_started_at_timestamp = Date.now()
-
-      const html = document.getElementsByTagName('html')[0].outerHTML
-      send_message({ action: 'parse-html', html })
-    }, 150)
-
-    const listener = (event: MessageEvent) => {
-      if (event.source !== window) return
-      if (event.data && event.data.action == 'parsed-html') {
-        set_parsed_html(event.data.parsed_html || null)
-        console.debug(
-          `Plain text for Assistant processed in ${
-            Date.now() - getting_parsed_html_started_at_timestamp
-          }ms.`,
-        )
+    browser.runtime.onMessage.addListener((message: any, _, __): any => {
+      if (is_message(message) && message.action == 'parsed-html') {
+        set_parsed_html(message.parsed_html)
       }
-    }
-    window.addEventListener('message', listener)
-
-    return () => {
-      window.removeEventListener('message', listener)
-    }
+    })
   }, [])
 
   return { parsed_html }

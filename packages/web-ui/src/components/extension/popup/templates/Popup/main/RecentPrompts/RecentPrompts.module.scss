@@ -2,13 +2,11 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--background);
+  flex: 1;
+  overflow: hidden;
 }
 .prompts {
   overflow: auto;
-  height: 20vh;
   padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
     var(--padding-12px);
   &__inner {
