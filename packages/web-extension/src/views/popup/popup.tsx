@@ -169,6 +169,7 @@ export const Popup: React.FC = () => {
     is_middle_click?: boolean,
   ) => {
     if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
+      prompts_history_hook.update_stored_prompts_history(prompt)
       const message: SendPrompt_Message = {
         action: 'send-prompt',
         assistant_name: selected_assistant_hook.selected_assistant_name!,
@@ -180,13 +181,7 @@ export const Popup: React.FC = () => {
         window_width: window_dimensions_hook.dimensions!.width,
       }
       browser.runtime.sendMessage(message)
-
-      // Update prompts history when a quick prompt is clicked
-      const new_prompts_history = prompts_history_hook.prompts_history.filter(
-        (item) => item != prompt,
-      )
-      new_prompts_history.push(prompt)
-      prompts_history_hook.set_prompts_history(new_prompts_history)
+      window.close()
     }
   }
 
@@ -194,6 +189,7 @@ export const Popup: React.FC = () => {
     prompt: string,
     is_middle_click?: boolean,
   ) => {
+    prompts_vision_history_hook.update_stored_prompts_history(prompt)
     const message: SendPrompt_Message = {
       action: 'send-prompt',
       assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
@@ -205,14 +201,7 @@ export const Popup: React.FC = () => {
       image: captured_image_hook.image!,
     }
     browser.runtime.sendMessage(message)
-
-    // Update prompts history when a quick prompt is clicked
-    const new_prompts_history =
-      prompts_vision_history_hook.prompts_history.filter(
-        (item) => item != prompt,
-      )
-    new_prompts_history.push(prompt)
-    prompts_vision_history_hook.set_prompts_history(new_prompts_history)
+    window.close()
   }
 
   return (
@@ -329,22 +318,15 @@ export const Popup: React.FC = () => {
       {is_in_vision_mode ? (
         <Ui_extension_popup_templates_Popup_main_PromptField
           value={prompt_field_value}
-          on_focus={() => {
-            prompts_vision_history_hook.restore_prompts_history()
-          }}
           on_change={(value) => {
             set_prompt_field_value(value)
           }}
           on_submit={() => {
             if (!prompt_field_value) return
 
-            // Update prompts history
-            const new_prompts_history =
-              prompts_vision_history_hook.prompts_history.filter(
-                (item) => item != prompt_field_value,
-              )
-            new_prompts_history.push(prompt_field_value)
-            prompts_vision_history_hook.set_prompts_history(new_prompts_history)
+            prompts_vision_history_hook.update_stored_prompts_history(
+              prompt_field_value,
+            )
 
             const message: SendPrompt_Message = {
               action: 'send-prompt',
@@ -356,6 +338,7 @@ export const Popup: React.FC = () => {
               image: captured_image_hook.image!,
             }
             browser.runtime.sendMessage(message)
+            window.close()
           }}
           is_attach_text_checkbox_disabled={true}
           is_attach_text_checkbox_checked={true}
@@ -399,9 +382,6 @@ export const Popup: React.FC = () => {
       ) : (
         <Ui_extension_popup_templates_Popup_main_PromptField
           value={prompt_field_value}
-          on_focus={() => {
-            prompts_history_hook.restore_prompts_history()
-          }}
           on_change={(value) => {
             set_prompt_field_value(value)
           }}
@@ -420,13 +400,9 @@ export const Popup: React.FC = () => {
               (parsed_html_hook.parsed_html ||
                 text_selection_hook.selected_text)
             ) {
-              // Update prompts history
-              const new_prompts_history =
-                prompts_history_hook.prompts_history.filter(
-                  (item) => item != prompt_field_value,
-                )
-              new_prompts_history.push(prompt_field_value)
-              prompts_history_hook.set_prompts_history(new_prompts_history)
+              prompts_history_hook.update_stored_prompts_history(
+                prompt_field_value,
+              )
             }
 
             const message: SendPrompt_Message = {
@@ -442,6 +418,7 @@ export const Popup: React.FC = () => {
               window_width: window_dimensions_hook.dimensions!.width,
             }
             browser.runtime.sendMessage(message)
+            window.close()
           }}
           is_attach_text_checkbox_disabled={
             !parsed_html_hook.parsed_html && !text_selection_hook.selected_text

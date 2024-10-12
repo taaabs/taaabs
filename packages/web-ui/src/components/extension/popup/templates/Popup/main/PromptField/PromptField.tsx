@@ -9,7 +9,6 @@ export namespace PromptField {
     value: string
     on_submit: () => void
     on_change: (value: string) => void
-    on_focus: () => void
     is_attach_text_checkbox_disabled: boolean
     is_attach_text_checkbox_checked: boolean
     on_include_content_click: () => void
@@ -89,7 +88,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }
         on_focus={(e) => {
           set_is_focused(true)
-          props.on_focus()
           e.target.select()
         }}
         on_blur={() => {
