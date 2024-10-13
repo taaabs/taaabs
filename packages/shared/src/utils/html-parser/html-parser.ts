@@ -544,7 +544,10 @@ export namespace HtmlParser {
         }
       }
       // TODO: YouTube should have it's own type
-      else if (params.url.startsWith('https://www.youtube.com/watch?')) {
+      else if (
+        params.url.startsWith('https://www.youtube.com/watch?') ||
+        params.url.startsWith('https://m.youtube.com/watch?')
+      ) {
         const youtube_transcript_extractor = new YouTubeTranscriptExtractor(
           params.url,
         )

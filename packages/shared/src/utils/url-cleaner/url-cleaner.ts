@@ -25,8 +25,10 @@ export const url_cleaner = (url: string): string => {
 
     // Special handling for YouTube URLs
     if (
-      parsed_url.hostname == 'www.youtube.com' &&
-      parsed_url.pathname == '/watch'
+      (parsed_url.hostname == 'www.youtube.com' &&
+        parsed_url.pathname == '/watch') ||
+      (parsed_url.hostname == 'm.youtube.com' &&
+        parsed_url.pathname == '/watch')
     ) {
       const video_id = search_params.get('v')
       if (video_id) {

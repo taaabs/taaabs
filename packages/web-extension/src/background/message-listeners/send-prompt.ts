@@ -12,6 +12,7 @@ export const send_prompt = () => {
           'chatbot_window_width',
         ])
         .then(async (data: any) => {
+          const is_touch_screen = request.is_touch_screen
           const open_in_new_tab =
             data.open_chatbot_in_new_tab || request.open_in_new_tab
           const chatbot_window_position =
@@ -51,7 +52,7 @@ export const send_prompt = () => {
               }
             }
             browser.webNavigation.onCompleted.addListener(onCompletedListener)
-          } else if (open_in_new_tab) {
+          } else if (open_in_new_tab || is_touch_screen) {
             const new_tab = await browser.tabs.create({
               url: request.assistant_url,
             })

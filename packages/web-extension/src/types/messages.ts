@@ -31,6 +31,7 @@ export type SelectedText_Message = {
 export type GetAuthData_Message = { action: 'get-auth-data' }
 export type SendPrompt_Message = {
   action: 'send-prompt'
+  is_touch_screen: boolean
   assistant_name: AssistantName
   assistant_url: string
   prompt: string

@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import browser from 'webextension-polyfill'
 
 export const use_current_url = () => {
-  const [is_new_tab_page, set_is_new_tab_page] = useState<boolean>()
   const [url, set_url] = useState<string>('')
+  const [is_new_tab_page, set_is_new_tab_page] = useState(false)
+  const [is_youtube_video, set_is_youtube_video] = useState(false)
 
   useEffect(() => {
     browser.tabs
@@ -21,8 +22,12 @@ export const use_current_url = () => {
             url.startsWith('moz-extension://') ||
             url == 'about:newtab',
         )
+        set_is_youtube_video(
+          cleaned_url.startsWith('https://www.youtube.com/watch') ||
+            cleaned_url.startsWith('https://m.youtube.com/watch'),
+        )
       })
   }, [])
 
-  return { url, is_new_tab_page }
+  return { url, is_new_tab_page, is_youtube_video }
 }

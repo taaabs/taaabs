@@ -63,10 +63,6 @@ export const Popup: React.FC = () => {
   const captured_image_hook = use_captured_image()
   const window_dimensions_hook = use_window_dimensions()
 
-  const is_youtube_video = current_url_hook.url.startsWith(
-    'https://www.youtube.com/watch',
-  )
-
   const is_in_vision_mode = captured_image_hook.image
 
   let assistant_url = assistants['chatgpt'].url
@@ -107,7 +103,7 @@ export const Popup: React.FC = () => {
   if (
     // captured_image_hook.image === undefined ||
     (parsed_html_hook.parsed_html === undefined &&
-      !is_youtube_video &&
+      !current_url_hook.is_youtube_video &&
       !current_url_hook.is_new_tab_page) ||
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
@@ -174,6 +170,7 @@ export const Popup: React.FC = () => {
       prompts_history_hook.update_stored_prompts_history(prompt)
       const message: SendPrompt_Message = {
         action: 'send-prompt',
+        is_touch_screen: 'ontouchstart' in window,
         assistant_name: selected_assistant_hook.selected_assistant_name!,
         assistant_url,
         prompt,
@@ -194,6 +191,7 @@ export const Popup: React.FC = () => {
     prompts_vision_history_hook.update_stored_prompts_history(prompt)
     const message: SendPrompt_Message = {
       action: 'send-prompt',
+      is_touch_screen: 'ontouchstart' in window,
       assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
       assistant_url,
       prompt,
@@ -213,7 +211,7 @@ export const Popup: React.FC = () => {
         !current_url_hook.is_new_tab_page &&
         !!(
           parsed_html_hook.parsed_html !== null ||
-          is_youtube_video ||
+          current_url_hook.is_youtube_video ||
           text_selection_hook.selected_text ||
           is_in_vision_mode
         )
@@ -295,7 +293,7 @@ export const Popup: React.FC = () => {
         </>
       ) : (
         (parsed_html_hook.parsed_html !== null ||
-          is_youtube_video ||
+          current_url_hook.is_youtube_video ||
           text_selection_hook.selected_text) &&
         !current_url_hook.is_new_tab_page && (
           <>
@@ -344,6 +342,7 @@ export const Popup: React.FC = () => {
 
             const message: SendPrompt_Message = {
               action: 'send-prompt',
+              is_touch_screen: 'ontouchstart' in window,
               assistant_name: selected_assistant_hook.selected_assistant_name!,
               assistant_url,
               prompt: prompt_field_value,
@@ -421,6 +420,7 @@ export const Popup: React.FC = () => {
 
             const message: SendPrompt_Message = {
               action: 'send-prompt',
+              is_touch_screen: 'ontouchstart' in window,
               assistant_name: selected_assistant_hook.selected_assistant_name!,
               assistant_url,
               prompt: prompt_field_value,
@@ -482,21 +482,23 @@ export const Popup: React.FC = () => {
             false
           }
           transcript_not_found={
-            is_youtube_video && parsed_html_hook.parsed_html === null
+            current_url_hook.is_youtube_video &&
+            parsed_html_hook.parsed_html === null
           }
           translations={{
             placeholder: 'Ask anything!',
             checkbox:
               text_selection_hook.selected_text ||
-              (parsed_html_hook.parsed_html === null && !is_youtube_video)
+              (parsed_html_hook.parsed_html === null &&
+                !current_url_hook.is_youtube_video)
                 ? 'Include text selection'
                 : get_attach_text_checkbox_label(current_url_hook.url),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
                 <strong>
-                  {is_youtube_video ? 'Transcript' : 'Text'} is too long for
-                  this assistant {sad_emoji()}
+                  {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is
+                  too long for this assistant {sad_emoji()}
                 </strong>
                 <br />
                 <i>

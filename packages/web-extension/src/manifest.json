@@ -1,10 +1,11 @@
 {
   "manifest_version": 3,
   "author": "Robert Piosik",
-  "name": "Taaabs Web Clipper, clip any site to ChatGPT!",
+
+  "name": "Taaabs - Zero-knowledge bookmarks & ChatGPT",
   "short_name": "taaabs",
-  "description": "Unlock the joy of your web research. Privately clip any page to your personal library, searchable and organized. Invoke top AI assistants as you browse the Web.",
-  "version": "0.3.10",
+  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Open-source browser integration with ChatGPT.",
+  "version": "0.3.13",
   "homepage_url": "https://taaabs.com/",
   "action": {
     "default_icon": {
