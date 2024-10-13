@@ -2,18 +2,16 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  display: flex;
-  flex-direction: column;
-  background-color: var(--background);
+  flex: 1;
+  overflow: hidden;
 }
 .prompts {
   overflow: auto;
-  height: 20vh;
   padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
     var(--padding-12px);
   &__inner {
     display: flex;
-    gap: var(--padding-8px);
+    gap: var(--padding-10px);
     flex-direction: column;
     align-items: flex-start;
     @include transition-250ms();
@@ -52,9 +50,6 @@
         height: 12px;
         padding-right: var(--padding-4px);
         fill: var(--yellow);
-      }
-      &:nth-child(odd) {
-        font-weight: var(--font-weight-inter-medium);
       }
       &--clamp {
         display: -webkit-box;

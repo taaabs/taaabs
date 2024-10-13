@@ -1,6 +1,5 @@
 import browser from 'webextension-polyfill'
 
-// Event listeners for checkboxes and input field
 document
   .getElementById('open-assistant-in-new-tab')!
   .addEventListener('change', (event: Event) => {
@@ -8,12 +7,19 @@ document
       open_chatbot_in_new_tab: (event.target as HTMLInputElement).checked,
     })
   })
+// Hide the checkbox if the device is a touch screen,
+// required by Firefox mobile extension to work.
+const is_touch_screen = 'ontouchstart' in window || navigator.maxTouchPoints > 0
+if (is_touch_screen) {
+  document.getElementById('open-assistant-in-new-tab-row')!.style.display =
+    'none'
+}
 
 document
-  .getElementById('local-assistant-url')!
+  .getElementById('custom-assistant-url')!
   .addEventListener('input', (event: Event) => {
-    const local_assistant_url = (event.target as HTMLInputElement).value
-    browser.storage.local.set({ local_assistant_url })
+    const custom_assistant_url = (event.target as HTMLInputElement).value
+    browser.storage.local.set({ custom_assistant_url })
   })
 
 const logout_button = document.getElementById('logout-button')
@@ -25,17 +31,13 @@ logout_button?.addEventListener('click', async () => {
 
 // Retrieve and set initial states from storage
 browser.storage.local
-  .get([
-    'open_chatbot_in_new_tab',
-    'local_assistant_url',
-    'auth_data',
-  ])
+  .get(['open_chatbot_in_new_tab', 'custom_assistant_url', 'auth_data'])
   .then((data: any) => {
     ;(
       document.getElementById('open-assistant-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
     ;(
-      document.getElementById('local-assistant-url') as HTMLInputElement
-    ).value = data.local_assistant_url
+      document.getElementById('custom-assistant-url') as HTMLInputElement
+    ).value = data.custom_assistant_url
     logout_button!.style.display = !data.auth_data ? 'none' : ''
   })

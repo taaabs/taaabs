@@ -9,7 +9,6 @@ export namespace PromptField {
     value: string
     on_submit: () => void
     on_change: (value: string) => void
-    on_focus: () => void
     is_attach_text_checkbox_disabled: boolean
     is_attach_text_checkbox_checked: boolean
     on_include_content_click: () => void
@@ -71,6 +70,17 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   return (
     <div className={styles.container}>
+      {props.is_plain_text_too_long && (
+        <div className={styles.info}>
+          {props.translations.plain_text_too_long}
+        </div>
+      )}
+      {props.transcript_not_found && (
+        <div className={styles.info}>
+          {props.translations.transcript_not_found}
+        </div>
+      )}
+
       <Input
         value={props.value}
         on_change={handle_change}
@@ -89,7 +99,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }
         on_focus={(e) => {
           set_is_focused(true)
-          props.on_focus()
           e.target.select()
         }}
         on_blur={() => {
@@ -113,16 +122,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         </div>
         {props.assistant_selector_slot}
       </div>
-      {props.is_plain_text_too_long && (
-        <div className={styles.footer__info}>
-          {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.transcript_not_found && (
-        <div className={styles.footer__info}>
-          {props.translations.transcript_not_found}
-        </div>
-      )}
     </div>
   )
 }

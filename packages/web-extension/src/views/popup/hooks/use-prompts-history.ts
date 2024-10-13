@@ -1,46 +1,35 @@
 import { useEffect, useState } from 'react'
 import { default_prompts } from '../data/default-prompts'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import browser from 'webextension-polyfill'
 
 export const use_prompts_history = () => {
-  const [prompts_history, set_prompts_history] = useState<string[]>(default_prompts.reverse());
+  const [prompts_history, set_prompts_history] = useState<string[]>(
+    default_prompts.reverse(),
+  )
 
-  const restore_prompts_history = () => {
-    window.postMessage({ action: 'get-prompts-history' }, '*')
-
-    const handle_message = (event: MessageEvent) => {
-      if (event.source !== window) return
-      if (event.data && event.data.action == 'prompts-history') {
-        set_prompts_history(event.data.prompts_history)
-      }
-    }
-
-    window.addEventListener('message', handle_message)
-    return () => window.removeEventListener('message', handle_message)
-  }
-
-  useUpdateEffect(() => {
+  const update_stored_prompts_history = (prompt: string) => {
+    const new_prompts_history = prompts_history.filter((item) => item != prompt)
+    new_prompts_history.push(prompt)
     const prompts_history_copy = new Set<string>(
-      prompts_history.slice(-30).reverse(),
+      new_prompts_history.slice(-30).reverse(),
     )
     default_prompts.forEach((prompt) => prompts_history_copy.add(prompt))
 
-    window.postMessage(
-      {
-        action: 'set-prompts-history',
-        prompts_history: [...prompts_history_copy].reverse(),
-      },
-      '*',
-    )
-  }, [prompts_history])
+    browser.storage.local.set({
+      prompts_history: [...prompts_history_copy].reverse(),
+    })
+  }
 
   useEffect(() => {
-    restore_prompts_history()
+    browser.storage.local.get('prompts_history').then((data: any) => {
+      if (data.prompts_history) {
+        set_prompts_history(data.prompts_history)
+      }
+    })
   }, [])
 
   return {
     prompts_history,
-    set_prompts_history,
-    restore_prompts_history,
+    update_stored_prompts_history,
   }
 }

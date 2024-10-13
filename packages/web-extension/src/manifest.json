@@ -1,9 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Taaabs Web Clipper, clip any site to ChatGPT!",
+  "author": "Robert Piosik",
+
+  "name": "Taaabs - Zero-knowledge bookmarks & ChatGPT",
   "short_name": "taaabs",
-  "description": "Unlock the joy of your web research. Privately clip any page to your personal library, searchable and organized. Invoke top AI assistants as you browse the Web.",
-  "version": "0.3.8",
+  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Open-source browser integration with ChatGPT.",
+  "version": "0.3.13",
   "homepage_url": "https://taaabs.com/",
   "action": {
     "default_icon": {
@@ -11,43 +13,31 @@
       "48": "icons/icon48.png",
       "128": "icons/icon128.png"
     },
-    "default_title": "Taaabs Web Clipper"
+    "default_title": "Taaabs Web Clipper",
+    "default_popup": "popup.html"
   },
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
     "128": "icons/icon128.png"
   },
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "popup.js",
-        "popup.css"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
-  "author": "Robert Piosik",
-  "permissions": [
-    "storage",
-    "contextMenus",
-    "activeTab",
-    "tabs",
-    "webNavigation"
-  ],
+  "permissions": ["storage", "activeTab", "tabs", "webNavigation"],
   "background": {
     "service_worker": "background.js"
   },
   "content_scripts": [
     {
       "matches": ["https://taaabs.com/*"],
-      "js": ["get-auth-data-content-script.js", "get-theme-content-script.js"]
+      "js": ["get-auth-data-content-script.js"]
     },
     {
       "matches": ["<all_urls>"],
       "js": [
-        "inject-popup-content-script.js",
-        "send-prompt-content-script.js"
+        "send-prompt-content-script.js",
+        "get-parsed-html-content-script.js",
+        "get-upsert-bookmark-params-content-script.js",
+        "get-window-dimensions-content-script.js",
+        "get-selected-text-content-script.js"
       ]
     }
   ],

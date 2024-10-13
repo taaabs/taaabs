@@ -21,7 +21,8 @@ export class YouTubeTranscriptExtractor {
       throw new Error('Video ID not found in the URL.')
     }
 
-    this._video_url = `https://www.youtube.com/watch?v=${video_id}`
+    // Hostname is www.youtube.com or m.youtube.com
+    this._video_url = `https://${url_obj.hostname}/watch?v=${video_id}`
   }
 
   public async get_transcript(): Promise<{
@@ -83,7 +84,7 @@ export class YouTubeTranscriptExtractor {
   }
 
   private _extract_title(text: string): string {
-    const title_match = text.match(/<meta itemprop="name" content="([^"]+)">/)
+    const title_match = text.match(/"title":\s*"([^"]+)"/)
     if (!title_match || title_match.length < 2) {
       throw new Error('Video title not found.')
     }
@@ -114,12 +115,15 @@ export class YouTubeTranscriptExtractor {
     if (!caption_track) {
       throw new Error('No caption tracks found.')
     }
-
     return caption_track.baseUrl
   }
 
   private async _fetch_caption_track(url: string): Promise<string> {
-    const response = await fetch(url)
+    const response =
+      navigator.userAgent.toLowerCase().includes('firefox') &&
+      !url.startsWith('https://')
+        ? await fetch('https://' + new URL(this._video_url).hostname + url)
+        : await fetch(url)
     if (!response.ok) {
       throw new Error(`Failed to fetch caption track: ${response.statusText}`)
     }

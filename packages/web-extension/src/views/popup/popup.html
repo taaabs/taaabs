@@ -2,63 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Popup</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap"
+      rel="stylesheet"
+    />
     <style>
-      body {
-        background-color: gray;
+      :root {
+        --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
+        --font-family-inter: 'Inter', sans-serif;
       }
-      .popup {
-        position: fixed;
-        top: 0;
-        right: 0;
-        width: 360px;
-        margin-top: 24px;
-        margin-right: 24px;
-        z-index: 99999;
+      @media (hover: hover) and (pointer: fine) {
+        #root {
+          width: 360px;
+        }
       }
     </style>
     <link rel="stylesheet" href="popup.css" />
   </head>
   <body>
-    URL is:
-    <button id="set-saved-true">SAVED</button>
-    <button id="set-saved-false">NOT SAVED</button>
-    <div class="popup">
-      <div id="root-taaabs-popup"></div>
-    </div>
+    <div id="root"></div>
     <script src="popup.js"></script>
-    <script>
-      document
-        .getElementById('set-saved-true')
-        .addEventListener('click', () => {
-          window.postMessage(
-            { action: 'url-saved-status', is_saved: true },
-            '*',
-          )
-          window.postMessage(
-            {
-              action: 'last-used-chatbot-name',
-              last_used_chatbot_name: 'chatgpt',
-            },
-            '*',
-          )
-        })
-      document
-        .getElementById('set-saved-false')
-        .addEventListener('click', () => {
-          window.postMessage(
-            { action: 'url-saved-status', is_saved: false },
-            '*',
-          )
-          window.postMessage(
-            {
-              action: 'last-used-chatbot-name',
-              last_used_chatbot_name: 'chatgpt',
-            },
-            '*',
-          )
-        })
-    </script>
   </body>
 </html>

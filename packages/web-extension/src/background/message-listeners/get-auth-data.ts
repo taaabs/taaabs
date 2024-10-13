@@ -9,8 +9,8 @@ export const get_auth_data = () => {
       browser.storage.local.get('auth_data').then((data: LocalDataStore) => {
         const response: GetAuthDataResponse = data.auth_data!
         sendResponse(response)
-        return true
       })
+      return true
     }
     return false
   })

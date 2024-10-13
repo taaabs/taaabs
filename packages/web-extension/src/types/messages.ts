@@ -1,37 +1,47 @@
 import { AssistantName } from '@/constants/assistants'
+import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
+import { HtmlParser } from '@shared/utils/html-parser'
 
-export type CheckUrlSaved_Message = { action: 'check-url-saved' }
-export type CreateBookmark_Message = { action: 'create-bookmark'; data: any }
-export type DeleteBookmark_Message = {
-  action: 'delete-bookmark'
-  url: string
+export type GetParsedHtml_Message = { action: 'get-parsed-html' }
+export type ParsedHtml_Message = {
+  action: 'parsed-html'
+  parsed_html: HtmlParser.ParsedResult | null
+}
+export type GetWindowDimensions_Message = { action: 'get-window-dimensions' }
+export type WindowDimensions_Message = {
+  action: 'window-dimensions'
+  width: number
+  height: number
+}
+export type GetUpsertBookmarkParams_Message = {
+  action: 'get-upsert-bookmark-params'
+  reader_data?: HtmlParser.ParsedResult['reader_data']
+}
+export type UpsertBookmarkParams_Message = {
+  action: 'upsert-bookmark-params'
+  bookmark: UpsertBookmark_Params
+}
+export type GetSelectedText_Message = {
+  action: 'get-selected-text'
+}
+export type SelectedText_Message = {
+  action: 'selected-text'
+  selected_text: string
 }
 export type GetAuthData_Message = { action: 'get-auth-data' }
-export type OpenOptionsPage_Message = { action: 'open-options-page' }
-export type OpenPopup_Message = { action: 'open-popup' }
-export type PopupClosed_Message = { action: 'popup-closed' }
-export type PopupOpened_Message = { action: 'popup-opened' }
 export type SendPrompt_Message = {
   action: 'send-prompt'
+  is_touch_screen: boolean
   assistant_name: AssistantName
   assistant_url: string
   prompt: string
   plain_text?: string
-  window_width: number
-  window_height: number
+  window_width?: number
+  window_height?: number
   open_in_new_tab?: boolean
   image?: string
 }
-export type ThemeChanged_Message = {
-  action: 'theme-changed'
-  theme: 'light' | 'dark'
-}
 export type GetAuthDataContentScript_Message = { action: 'get-auth-data' }
-export type GetThemeContentScript_Message = { action: 'get-theme' }
-export type UrlSavedStatus_Message = {
-  action: 'url-saved-status'
-  is_saved: boolean
-}
 export type BookmarkCreated_Message = {
   action: 'bookmark-created'
 }
@@ -40,38 +50,28 @@ export type BookmarkDeleted_Message = {
 }
 export type InjectPopupContentScript_Message = { action: 'inject-popup' }
 export type ClosePopupContentScript_Message = { action: 'close-popup' }
-export type Logout_Message = { action: 'logout' }
 export type CapturedImage_Message = {
   action: 'captured-image'
   captured_image: string
 }
 
 export type Message =
-  | CheckUrlSaved_Message
-  | CreateBookmark_Message
-  | DeleteBookmark_Message
+  | GetParsedHtml_Message
+  | ParsedHtml_Message
+  | GetWindowDimensions_Message
+  | WindowDimensions_Message
+  | GetUpsertBookmarkParams_Message
+  | UpsertBookmarkParams_Message
   | GetAuthData_Message
-  | OpenOptionsPage_Message
-  | OpenPopup_Message
-  | PopupClosed_Message
-  | PopupOpened_Message
   | SendPrompt_Message
-  | ThemeChanged_Message
   | GetAuthDataContentScript_Message
-  | GetThemeContentScript_Message
-  | UrlSavedStatus_Message
   | BookmarkCreated_Message
   | BookmarkDeleted_Message
   | InjectPopupContentScript_Message
   | ClosePopupContentScript_Message
-  | Logout_Message
   | CapturedImage_Message
+  | GetSelectedText_Message
+  | SelectedText_Message
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
-export type CreateBookmarkResponse = any // TODO: Replace 'any' with the actual type
 export type GetAuthDataResponse = any // TODO: Replace 'any' with the actual type
-export type GetCustomChatbotUrlResponse = { local_assistant_url: string }
-export type GetLastUsedChatbotNameResponse = { last_used_chatbot_name: string }
-export type OpenOptionsPageResponse = void
-export type SendChatbotPromptResponse = void
-export type ThemeChangedResponse = void

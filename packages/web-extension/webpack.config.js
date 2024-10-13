@@ -40,18 +40,22 @@ module.exports = (_, argv) => {
   return {
     entry: {
       background: './src/background/main.ts',
-      'detect-theme': './src/views/newtab/detect-theme.ts',
+      // 'detect-theme': './src/views/newtab/detect-theme.ts',
       options: './src/views/options/options.ts',
-      newtab: './src/views/newtab/newtab.tsx',
+      // newtab: './src/views/newtab/newtab.tsx',
       popup: './src/views/popup/popup.tsx',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
-      'get-theme-content-script':
-        './src/content-scripts/get-theme-content-script.ts',
-      'inject-popup-content-script':
-        './src/content-scripts/inject-popup-content-script.ts',
       'send-prompt-content-script':
         './src/content-scripts/send-prompt-content-script.ts',
+      'get-parsed-html-content-script':
+        './src/content-scripts/get-parsed-html-content-script.ts',
+      'get-upsert-bookmark-params-content-script':
+        './src/content-scripts/get-upsert-bookmark-params-content-script.ts',
+      'get-window-dimensions-content-script':
+        './src/content-scripts/get-window-dimensions-content-script.ts',
+      'get-selected-text-content-script':
+        './src/content-scripts/get-selected-text-content-script.ts',
     },
     output: {
       path: path.resolve(__dirname, 'dist'),
@@ -101,7 +105,7 @@ module.exports = (_, argv) => {
       port: 9000,
     },
     optimization: {
-      // minimize: false,
+      minimize: false,
     },
     cache: {
       type: 'filesystem',

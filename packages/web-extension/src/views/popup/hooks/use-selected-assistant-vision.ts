@@ -1,35 +1,31 @@
-import { AssistantName } from '@/constants/assistants'
+import { AssistantName, assistants_vision } from '@/constants/assistants'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
+import browser from 'webextension-polyfill'
 
 export const use_selected_assistant_vision = () => {
   const [selected_assistant_name, set_selected_assistant_name] =
     useState<AssistantName>()
 
   useUpdateEffect(() => {
-    window.postMessage(
-      {
-        action: 'set-last-used-chatbot-vision-name',
-        last_used_chatbot_vision_name: selected_assistant_name,
-      },
-      '*',
-    )
+    browser.storage.local.set({
+      last_used_chatbot_vision_name: selected_assistant_name,
+    })
   }, [selected_assistant_name])
 
   useEffect(() => {
-    // Send message to content script to check if URL is saved
-    window.postMessage({ action: 'get-last-used-chatbot-vision-name' }, '*')
-
-    // Listen for response from content script
-    const handle_message = (event: MessageEvent) => {
-      if (event.source !== window) return
-      if (event.data && event.data.action == 'last-used-chatbot-vision-name') {
-        set_selected_assistant_name(event.data.last_used_chatbot_vision_name)
-      }
-    }
-
-    window.addEventListener('message', handle_message)
-    return () => window.removeEventListener('message', handle_message)
+    browser.storage.local
+      .get('last_used_chatbot_vision_name')
+      .then((data: any) => {
+        set_selected_assistant_name(
+          data.last_used_chatbot_vision_name &&
+            assistants_vision.includes(
+              data.last_used_chatbot_vision_name as AssistantName,
+            )
+            ? data.last_used_chatbot_vision_name
+            : 'chatgpt',
+        )
+      })
   }, [])
 
   return {

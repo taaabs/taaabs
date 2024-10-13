@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './RecentPrompts.module.scss'
 import cn from 'classnames'
 import { Icon as UiIcon } from '@web-ui/components/Icon'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace RecentPrompts {
   export type Props = {
@@ -29,7 +30,6 @@ const HighlightedText = ({
   highlight: string
 }) => {
   if (!highlight.trim()) return text
-
   const words = highlight
     .trim()
     .toLowerCase()
@@ -37,7 +37,6 @@ const HighlightedText = ({
     .filter((word) => word.length)
   const regex = new RegExp(`(${words.join('|')})`, 'gi')
   const parts = text.split(regex)
-
   return parts.map((part, i) =>
     words.includes(part.toLowerCase()) ||
     (i > 0 &&
@@ -52,6 +51,10 @@ const HighlightedText = ({
 }
 
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
+  const container_ref = useRef<HTMLDivElement>(null)
+  const prompts_ref = useRef<HTMLDivElement>(null)
+  const [container_height, set_container_height] = useState<number>()
+
   const filtered_prompts: FilteredPrompt[] = props.is_disabled
     ? props.recent_prompts
     : props.filter_phrase
@@ -75,9 +78,29 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   const prompts_to_display =
     filtered_prompts.length > 0 ? filtered_prompts : props.recent_prompts
 
+  // Handle dynamic height
+  useEffect(() => {
+    if (!container_ref.current) return
+    const resize_observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.target === container_ref.current) {
+          set_container_height(entry.contentRect.height)
+        }
+      }
+    })
+    resize_observer.observe(container_ref.current)
+    return () => resize_observer.disconnect()
+  }, [])
+
+  useUpdateEffect(() => {
+    if (prompts_ref.current) {
+      prompts_ref.current.style.height = `${container_height}px`
+    }
+  }, [container_height])
+
   return (
-    <div className={styles.container}>
-      <div className={styles.prompts}>
+    <div className={styles.container} ref={container_ref}>
+      <div className={styles.prompts} ref={prompts_ref}>
         <div
           className={cn(styles.prompts__inner, {
             [styles['prompts__inner--disabled']]: props.is_disabled,
@@ -90,7 +113,6 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
               typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
             const is_default_prompt =
               props.default_prompts.includes(original_prompt)
-
             return (
               <div
                 key={i}

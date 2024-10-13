@@ -1,56 +1,32 @@
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { GetSelectedText_Message } from '@/types/messages'
+import { is_message } from '@/utils/is-message'
 import { useEffect, useState } from 'react'
+import browser from 'webextension-polyfill'
 
-export const use_text_selection = (params: { prompt_field_value: string }) => {
+export const use_text_selection = () => {
   const [selected_text, set_selected_text] = useState<string>()
-  const [is_popup_open, set_is_popup_open] = useState<boolean>()
-
-  useUpdateEffect(() => {
-    if (!is_popup_open) {
-      // Fix for closing popup jank
-      setTimeout(() => {
-        set_selected_text('')
-      }, 150)
-    }
-  }, [is_popup_open])
-
-  useUpdateEffect(() => {
-    if (is_popup_open) return
-
-    const handle_selection_change = () => {
-      const selection = window.getSelection()?.toString()
-      if (selection && selection != params.prompt_field_value) {
-        set_selected_text(selection)
-      }
-    }
-
-    document.addEventListener('selectionchange', handle_selection_change)
-    return () => {
-      document.removeEventListener('selectionchange', handle_selection_change)
-    }
-  }, [is_popup_open, params.prompt_field_value])
 
   useEffect(() => {
-    const handle_message = (event: MessageEvent) => {
-      if (event.source !== window) return
-      if (event.data && event.data.action == 'popup-opened') {
-        set_is_popup_open(true)
-      } else if (event.data && event.data.action == 'popup-closed') {
-        set_is_popup_open(false)
-      } else if (event.data && event.data.action == 'selected-text') {
-        // Selected text is send this way only after popup initialization
-        set_selected_text(event.data.selected_text)
-      }
-    }
+    browser.tabs
+      .query({
+        active: true,
+        currentWindow: true,
+      })
+      .then(([current_tab]) => {
+        const message: GetSelectedText_Message = {
+          action: 'get-selected-text',
+        }
+        browser.tabs.sendMessage(current_tab.id!, message)
+      })
 
-    window.addEventListener('message', handle_message)
-    return () => {
-      window.removeEventListener('message', handle_message)
-    }
+    browser.runtime.onMessage.addListener((message: any, _, __): any => {
+      if (is_message(message) && message.action == 'selected-text') {
+        set_selected_text(message.selected_text)
+      }
+    })
   }, [])
 
   return {
     selected_text,
-    set_selected_text,
   }
 }

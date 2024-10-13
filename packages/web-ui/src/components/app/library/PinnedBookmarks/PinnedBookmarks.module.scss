@@ -4,8 +4,12 @@
 .items {
   display: flex;
   flex-direction: column;
-  border: var(--border-secondary);
-  border-radius: var(--border-radius-12px);
+  border-top: var(--border-secondary);
+  border-bottom: var(--border-secondary);
+  @include at992 {
+    border: var(--border-secondary);
+    border-radius: var(--border-radius-12px);
+  }
 }
 .dragging {
   background-color: var(--border-color-secondary);

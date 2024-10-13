@@ -1,25 +1,39 @@
+import { update_icon } from '@/background/helpers/update-icon'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
+import browser from 'webextension-polyfill'
 
 export const use_saved_check = () => {
   const [is_saved, set_is_saved] = useState<boolean>()
 
-  const check_is_saved = () => {
-    window.postMessage({ action: 'check-url-saved' }, '*')
-  }
+  useUpdateEffect(() => {
+    browser.tabs
+      .query({
+        active: true,
+        currentWindow: true,
+      })
+      .then(([current_tab]) => {
+        update_icon(current_tab.id!, is_saved)
+      })
+  }, [is_saved])
 
   useEffect(() => {
-    const handle_message = (event: MessageEvent) => {
-      if (event.source !== window) return
-      if (event.data && event.data.action == 'url-saved-status') {
-        set_is_saved(event.data.is_saved)
-      }
-    }
-    window.addEventListener('message', handle_message)
-    return () => window.removeEventListener('message', handle_message)
+    browser.tabs
+      .query({
+        active: true,
+        currentWindow: true,
+      })
+      .then(async ([current_tab]) => {
+        const action = browser.browserAction || browser.action
+        const has_badge_text = !!(await action.getBadgeText({
+          tabId: current_tab.id,
+        }))
+        set_is_saved(has_badge_text)
+      })
   }, [])
 
   return {
     is_saved,
-    check_is_saved,
+    set_is_saved,
   }
 }
