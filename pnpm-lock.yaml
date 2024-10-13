@@ -337,9 +337,6 @@ importers:
       turndown:
         specifier: ^7.2.0
         version: 7.2.0
-      webextension-polyfill:
-        specifier: ^0.12.0
-        version: 0.12.0
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -356,9 +353,6 @@ importers:
       '@types/turndown':
         specifier: ^5.0.5
         version: 5.0.5
-      '@types/webextension-polyfill':
-        specifier: ^0.12.1
-        version: 0.12.1
       typescript:
         specifier: ^5.5.4
         version: 5.5.4
