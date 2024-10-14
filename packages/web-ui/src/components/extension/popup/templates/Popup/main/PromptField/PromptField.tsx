@@ -24,6 +24,8 @@ export namespace PromptField {
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
       transcript_not_found: React.ReactNode
+      footer_privacy_info: string
+      active_assistant: string
     }
   }
 }
@@ -125,13 +127,18 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        <a href="https://github.com/taaabs/taaabs/issues" target="_blank">
-          Star on GitHub
-        </a>
-        ·<span>Assistant:</span>
-        {props.assistant_selector_slot}
+        <div className={styles['footer__top-line']}>
+          <span>{props.translations.active_assistant}:</span>
+          {props.assistant_selector_slot}
+        </div>
+        <div className={styles['footer__bottom-line']}>
+          <span>{props.translations.footer_privacy_info}</span>
+          {' · '}
+          <a href="https://github.com/taaabs/taaabs/issues" target="_blank">
+            GitHub ↗
+          </a>
+        </div>
       </div>
     </div>
   )
 }
-

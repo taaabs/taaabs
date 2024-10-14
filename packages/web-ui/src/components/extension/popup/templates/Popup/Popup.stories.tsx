@@ -71,12 +71,15 @@ export const Primary = () => {
           transcript_not_found={false}
           is_attach_text_checkbox_disabled={false}
           translations={{
-            new_prompt: 'New prompt',
-            placeholder: 'Type something',
-            checkbox: 'Include page',
+            new_prompt: 'New chat',
+            placeholder: 'Message ChatGPT',
+            checkbox: 'Send with this page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
             transcript_not_found: '',
+            active_assistant: 'Active assistant',
+            footer_privacy_info:
+              'Prompts never leave your browser',
           }}
         />
       </Popup>

@@ -6,7 +6,7 @@
   margin-right: 14px;
   position: relative;
   > span {
-    @include text-decoration-underlinie-thin;
+    color: var(--text-color-variant)
   }
   > svg {
     position: absolute;

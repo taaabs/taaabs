@@ -427,12 +427,17 @@ export const Popup: React.FC = () => {
           is_plain_text_too_long={false}
           transcript_not_found={false}
           translations={{
-            new_prompt: 'New prompt',
-            placeholder: 'Type something',
-            checkbox: 'Attach image',
+            new_prompt: 'New chat',
+            active_assistant: 'Active assistant',
+            placeholder: `Message ${
+              assistants[selected_assistant_hook.selected_assistant_name]
+                .display_name
+            }`,
+            checkbox: 'Send with image',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
             transcript_not_found: <></>,
+            footer_privacy_info: 'Prompts never leave your browser',
           }}
         />
       ) : (
@@ -529,20 +534,24 @@ export const Popup: React.FC = () => {
             parsed_html_hook.parsed_html === null
           }
           translations={{
-            new_prompt: 'New prompt',
-            placeholder: 'Type something',
+            new_prompt: 'New chat',
+            active_assistant: 'Active assistant',
+            placeholder: `Message ${
+              assistants[selected_assistant_hook.selected_assistant_name]
+                .display_name
+            }`,
             checkbox:
               text_selection_hook.selected_text ||
               (parsed_html_hook.parsed_html === null &&
                 !current_url_hook.is_youtube_video)
-                ? 'Include text selection'
+                ? 'Send with selection'
                 : get_attach_text_checkbox_label(current_url_hook.url),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
                 <strong>
                   {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is
-                  too long for this assistant {sad_emoji()}
+                  too long for this assistant
                 </strong>
                 <br />
                 <i>
@@ -555,9 +564,8 @@ export const Popup: React.FC = () => {
                 </i>
               </>
             ),
-            transcript_not_found: (
-              <strong>Transcript not found {sad_emoji()}</strong>
-            ),
+            transcript_not_found: <strong>Transcript not found</strong>,
+            footer_privacy_info: 'Prompts never leave your browser',
           }}
         />
       )}
@@ -567,8 +575,3 @@ export const Popup: React.FC = () => {
 
 const root = createRoot(document.getElementById('root') as HTMLDivElement)
 root.render(<Popup />)
-
-const sad_emoji = () => {
-  const emojis = ['💔', '😪', '😢', '😓', '😭']
-  return emojis[Math.floor(Math.random() * emojis.length)]
-}

@@ -32,15 +32,25 @@
 }
 .footer {
   display: flex;
-  height: 28px;
-  justify-content: center;
-  align-items: center;
-  color: var(--text-color-dimmed);
-  font-size: var(--font-size-13px);
   gap: var(--padding-4px);
-  > a {
-    @include hover {
-      @include text-decoration-underlinie-thin;
+  padding: var(--padding-8px) 0;
+  flex-direction: column;
+  align-items: center;
+  &__top-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color-dimmed);
+    font-size: var(--font-size-13px);
+    gap: var(--padding-4px);
+  }
+  &__bottom-line {
+    font-size: var(--font-size-13px);
+    color: var(--text-color-dimmed);
+    > a {
+      @include hover {
+        @include text-decoration-underlinie-thin;
+      }
     }
   }
 }
