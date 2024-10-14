@@ -1,0 +1,53 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  --swich-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  cursor: pointer;
+  user-select: none; // Prevent text selection
+  @include transition-150ms;
+  > span {
+    padding-right: calc(var(--swich-width) + var(--padding-8px));
+  }
+  &--disabled {
+    pointer-events: none;
+    opacity: var(--dimmed-opacity);
+  }
+  &--checked {
+    .switch {
+      background-color: var(--accent-color);
+      @include dark {
+        background-color: var(--dark300);
+      }
+    }
+    .thumb {
+      transform: translateX(12px);
+    }
+  }
+}
+.switch {
+  width: var(--swich-width);
+  height: 24px;
+  border-radius: 999px;
+  background-color: var(--neutral300);
+  position: absolute;
+  right: 0;
+  @include transition-150ms;
+  @include dark {
+    background-color: var(--dark300);
+  }
+  .thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: white;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    @include transition-150ms;
+  }
+}

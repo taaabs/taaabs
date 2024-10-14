@@ -33,11 +33,11 @@ import {
 import { use_captured_image } from './hooks/use-captured-image'
 import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
 import { use_selected_assistant_vision } from './hooks/use-selected-assistant-vision'
-
-import '@web-ui/styles/style.scss'
 import { SendPrompt_Message } from '@/types/messages'
 import { use_window_dimensions } from './hooks/use-window-dimensions'
 import { use_current_url } from './hooks/use-current-url'
+
+import '@web-ui/styles/style.scss'
 
 export const Popup: React.FC = () => {
   const current_url_hook = use_current_url()
@@ -385,6 +385,7 @@ export const Popup: React.FC = () => {
           is_plain_text_too_long={false}
           transcript_not_found={false}
           translations={{
+            new_prompt: 'New prompt',
             placeholder: 'Ask anything!',
             checkbox: 'Attach image',
             active_input_placeholder_suffix: '(⇅ for history)',
@@ -486,6 +487,7 @@ export const Popup: React.FC = () => {
             parsed_html_hook.parsed_html === null
           }
           translations={{
+            new_prompt: 'New prompt',
             placeholder: 'Ask anything!',
             checkbox:
               text_selection_hook.selected_text ||

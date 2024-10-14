@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './RecentPrompts.module.scss'
 import cn from 'classnames'
-import { Icon as UiIcon } from '@web-ui/components/Icon'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import SimpleBar from 'simplebar-react'
+
+import 'simplebar-react/dist/simplebar.min.css'
 
 export namespace RecentPrompts {
   export type Props = {
@@ -52,7 +53,6 @@ const HighlightedText = ({
 
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   const container_ref = useRef<HTMLDivElement>(null)
-  const prompts_ref = useRef<HTMLDivElement>(null)
   const [container_height, set_container_height] = useState<number>()
 
   const filtered_prompts: FilteredPrompt[] = props.is_disabled
@@ -92,18 +92,12 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
     return () => resize_observer.disconnect()
   }, [])
 
-  useUpdateEffect(() => {
-    if (prompts_ref.current) {
-      prompts_ref.current.style.height = `${container_height}px`
-    }
-  }, [container_height])
-
   return (
     <div className={styles.container} ref={container_ref}>
-      <div className={styles.prompts} ref={prompts_ref}>
+      <SimpleBar style={{ height: container_height }}>
         <div
-          className={cn(styles.prompts__inner, {
-            [styles['prompts__inner--disabled']]: props.is_disabled,
+          className={cn(styles.prompts, {
+            [styles['prompts--disabled']]: props.is_disabled,
           })}
         >
           {prompts_to_display.map((prompt, i) => {
@@ -111,8 +105,6 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
               typeof prompt == 'string' ? prompt : prompt.original_prompt
             const prompt_to_display =
               typeof prompt == 'string' ? prompt : prompt.highlighted_prompt
-            const is_default_prompt =
-              props.default_prompts.includes(original_prompt)
             return (
               <div
                 key={i}
@@ -121,28 +113,25 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                 onAuxClick={() =>
                   props.on_recent_prompt_middle_click(original_prompt)
                 }
-                className={cn(styles.prompts__inner__button, {
-                  [styles['prompts__inner__button--clamp']]:
-                    !props.filter_phrase,
+                className={cn(styles.prompts__button, {
+                  [styles['prompts__button--clamp']]: !props.filter_phrase,
                 })}
                 title={original_prompt}
               >
-                {is_default_prompt ? (
-                  <UiIcon variant="STAR_FILLED" />
-                ) : (
-                  <div className={styles.prompts__inner__button__dot} />
-                )}
-                <HighlightedText
-                  text={prompt_to_display}
-                  highlight={
-                    filtered_prompts.length > 0 ? props.filter_phrase : ''
-                  }
-                />
+                <sup>{i + 1}</sup>
+                <span>
+                  <HighlightedText
+                    text={prompt_to_display}
+                    highlight={
+                      filtered_prompts.length > 0 ? props.filter_phrase : ''
+                    }
+                  />
+                </span>
               </div>
             )
           })}
         </div>
-      </div>
+      </SimpleBar>
     </div>
   )
 }

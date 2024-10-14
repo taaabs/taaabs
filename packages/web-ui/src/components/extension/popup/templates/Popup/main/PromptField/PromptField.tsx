@@ -1,8 +1,8 @@
 import { Input } from '@web-ui/components/Input'
 import styles from './PromptField.module.scss'
-import { Checkbox } from '@web-ui/components/Checkbox'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { Switch } from '@web-ui/components/Switch/Switch'
 
 export namespace PromptField {
   export type Props = {
@@ -18,6 +18,7 @@ export namespace PromptField {
     is_plain_text_too_long: boolean
     transcript_not_found: boolean
     translations: {
+      new_prompt: string
       placeholder: string
       checkbox: string
       active_input_placeholder_suffix: string
@@ -81,6 +82,18 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         </div>
       )}
 
+      <div className={styles.header}>
+        <span>{props.translations.new_prompt}</span>
+        <div className={styles.header__switch}>
+          <Switch
+            label={props.translations.checkbox}
+            is_checked={props.is_attach_text_checkbox_checked}
+            on_change={props.on_include_content_click}
+            is_disabled={props.is_attach_text_checkbox_disabled}
+          />
+        </div>
+      </div>
+
       <Input
         value={props.value}
         on_change={handle_change}
@@ -112,15 +125,11 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        <div className={styles.footer__checkbox}>
-          <Checkbox
-            label={props.translations.checkbox}
-            on_click={props.on_include_content_click}
-            is_checked={props.is_attach_text_checkbox_checked}
-            is_disabled={props.is_attach_text_checkbox_disabled}
-          />
-        </div>
+        <span>Assistant:</span>
         {props.assistant_selector_slot}
+        <a href="https://github.com/taaabs/taaabs/issues" target="_blank">
+          Star on GitHub
+        </a>
       </div>
     </div>
   )

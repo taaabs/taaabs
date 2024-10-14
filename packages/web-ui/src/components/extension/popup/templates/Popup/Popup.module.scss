@@ -6,7 +6,7 @@
   flex-direction: column;
   background-color: var(--background);
   &--height {
-    height: 100vh;
+    height: 100svh;
     min-height: 550px;
     @media (hover: hover) and (pointer: fine) {
       height: 550px;

@@ -2,36 +2,45 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  padding: var(--padding-16px) var(--padding-16px) var(--padding-10px)
-    var(--padding-16px);
+  padding: 0 var(--padding-16px);
   display: flex;
   flex-direction: column;
-  gap: var(--padding-10px);
-  // All these are fixes for some sites:
-  textarea {
-    box-shadow: unset;
-    margin-bottom: 0;
-    &::placeholder {
-      font-weight: unset;
-    }
-    &:focus {
-      border-bottom-width: 1.5px;
-      box-shadow: unset;
-    }
-  }
 }
 .info {
+  align-self: flex-start;
   color: var(--red);
   font-size: var(--font-size-13px);
+  margin-top: 10px;
+  padding: var(--padding-4px) var(--padding-6px);
+  background-color: var(--red200);
+  border-radius: var(--border-radius-8px);
   > strong {
     font-weight: var(--font-weight-inter-medium);
   }
 }
-.footer {
+.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  &__checkbox {
-    position: relative;
+  height: 36px;
+  > span {
+    font-weight: var(--font-weight-inter-medium);
+  }
+  &__switch {
+    font-size: var(--font-size-14px);
+  }
+}
+.footer {
+  display: flex;
+  height: 28px;
+  justify-content: center;
+  align-items: center;
+  color: var(--text-color-dimmed);
+  font-size: var(--font-size-13px);
+  gap: var(--padding-4px);
+  > a {
+    @include hover {
+      @include text-decoration-underlinie-thin;
+    }
   }
 }

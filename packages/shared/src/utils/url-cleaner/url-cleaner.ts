@@ -34,6 +34,8 @@ export const url_cleaner = (url: string): string => {
       if (video_id) {
         return `https://www.youtube.com/watch?v=${video_id}`
       }
+    } else if (parsed_url.hostname == 'twitter.com') {
+      parsed_url.hostname = 'x.com'
     }
 
     return parsed_url.toString()
