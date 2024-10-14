@@ -73,6 +73,10 @@ module.exports = (_, argv) => {
           exclude: /node_modules/,
         },
         {
+          test: /\.css$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader'], // Add this rule
+        },
+        {
           test: /\.scss$/,
           use: [
             MiniCssExtractPlugin.loader,
@@ -105,13 +109,13 @@ module.exports = (_, argv) => {
       port: 9000,
     },
     optimization: {
-      minimize: false,
+      // minimize: false,
     },
-    cache: {
-      type: 'filesystem',
-      buildDependencies: {
-        config: [__filename], // This makes all dependencies of this file - build dependencies
-      },
-    },
+    // cache: {
+    //   type: 'filesystem',
+    //   buildDependencies: {
+    //     config: [__filename], // This makes all dependencies of this file - build dependencies
+    //   },
+    // },
   }
 }

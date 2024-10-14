@@ -6,52 +6,73 @@
   overflow: hidden;
 }
 .prompts {
-  overflow: auto;
-  padding: var(--padding-12px) var(--padding-16px) var(--padding-12px)
-    var(--padding-12px);
-  &__inner {
+  display: flex;
+  flex-direction: column;
+  @include transition-250ms();
+  &--disabled {
+    pointer-events: none;
+    opacity: var(--dimmed-opacity);
+  }
+  &__button {
     display: flex;
-    gap: var(--padding-10px);
-    flex-direction: column;
-    align-items: flex-start;
-    @include transition-250ms();
-    &--disabled {
-      pointer-events: none;
-      opacity: var(--dimmed-opacity);
+    font-weight: var(--font-weight-inter-regular);
+    padding: var(--padding-8px) var(--padding-16px) 9px var(--padding-16px);
+    position: relative;
+    @include transition-150ms(background-color);
+    &::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background-color: var(--neutral100);
+      @include transition-150ms(opacity);
+      opacity: 0;
     }
-    &__button {
-      font-size: var(--font-size-14px);
-      padding: 0;
-      padding-right: 2px;
+    @include hover {
+      cursor: pointer;
+      background-color: var(--neutral100);
+      &::before {
+        opacity: 1;
+      }
+    }
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      right: 10px;
+      height: 1px;
+      background-color: var(--border-color-secondary);
+      width: calc(100% - 32px);
+    }
+    &:last-child {
+      &::after {
+        display: none;
+      }
+    }
+    > sup {
+      position: absolute;
+      transform: translateX(-100%);
+      color: var(--text-color-dimmed);
+      font-size: 10px;
+      padding-right: 1.5px;
+    }
+    > mark {
+      padding: 0; // Fix for some sites.
       color: var(--text-color-normal);
-      font-weight: var(--font-weight-inter-regular);
-      @include hover {
-        cursor: pointer;
-        @include text-decoration-underlinie-thin;
-      }
-      &__dot {
-        display: inline-flex;
-        width: 7px;
-        height: 7px;
-        background-color: var(--accent-color);
-        border-radius: 50%;
-        margin-right: 7px;
-        margin-left: 3px;
-        margin-bottom: 2px;
-      }
-      > mark {
-        padding: 0; // Fix for some sites.
-        color: var(--text-color-normal);
-        background-color: var(--highlight);
-      }
-      > svg {
-        display: inline;
-        vertical-align: baseline;
-        height: 12px;
-        padding-right: var(--padding-4px);
-        fill: var(--yellow);
-      }
-      &--clamp {
+      background-color: var(--highlight);
+    }
+    > svg {
+      display: inline;
+      vertical-align: baseline;
+      height: 12px;
+      padding-right: var(--padding-4px);
+      fill: var(--yellow);
+    }
+    &--clamp {
+      > span {
         display: -webkit-box;
         overflow: hidden;
         -webkit-line-clamp: 2;

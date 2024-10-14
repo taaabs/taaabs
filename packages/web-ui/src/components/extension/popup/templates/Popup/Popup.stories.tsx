@@ -1,5 +1,4 @@
 import { Button } from '@web-ui/components/Button'
-import { Footer } from './Footer'
 import { Header } from './Header'
 import { Popup } from './Popup'
 import { Actions } from './main/Actions'
@@ -14,69 +13,67 @@ export default {
 
 export const Primary = () => {
   return (
-    <div style={{ width: '300px', margin: '50px' }}>
+    <div style={{ width: '360px', margin: '50px', border: '1px solid black' }}>
       <Popup
         header_slot={<Header settings_on_click={() => {}} />}
-        footer_slot={
-          <Footer
-            feedback_url=""
-            transaltions={{
-              send_feedback: 'Send feedback',
-            }}
-          />
-        }
+        should_set_height={true}
       >
         <Actions>
           <Button on_click={() => {}}>Test 1</Button>
           <Button on_click={() => {}}>Test 2</Button>
         </Actions>
-        <AssistantSelector
-          label="Assistant:"
-          chatbots={[
-            { display_name: 'Assistant 1', name: 'assistant1' },
-            { display_name: 'Assistant 2', name: 'assistant2' },
-          ]}
-          selected_assistant_name="assistant1"
-          on_assistant_change={(chatbot_name) => {
-            console.log(chatbot_name)
-          }}
-        />
-        <Separator />
+
         <RecentPrompts
           on_recent_prompt_click={(id) => {
             console.log(id)
           }}
+          default_prompts={[]}
+          filter_phrase=""
+          on_recent_prompt_middle_click={() => {}}
           is_disabled={false}
           recent_prompts={[
-            {
-              id: '1',
-              name: 'Summarize',
-            },
-            {
-              id: '2',
-              name: 'Rewrite simplified',
-            },
-            {
-              id: '3',
-              name: 'In-depth analysis',
-            },
+            'Summarize sflsd fjlksdjf lksda jf;lks faj;l kfajkl; sfaj;lksf sdlkfj sdlkfj sdlkjfjkdjf lksdjf  dskjflsdjf sdklj flksdj f',
+            'Rewrite simplified',
+            'In-depth analysis',
+            'Summarize',
+            'Rewrite simplified',
+            'In-depth analysis',
+            'Summarize',
+            'Rewrite simplified',
+            'In-depth analysis',
           ]}
         />
         <Separator />
         <PromptField
           value=""
           on_submit={() => {}}
-          on_change={(value) => {}}
-          on_focus={() => {}}
+          on_change={() => {}}
           is_attach_text_checkbox_checked={true}
           on_include_content_click={() => {}}
           prompts_history={['a', 'b']}
+          assistant_selector_slot={
+            <AssistantSelector
+              chatbots={[
+                { display_name: 'Assistant 1', name: 'assistant1' },
+                { display_name: 'Assistant 22222', name: 'assistant2' },
+              ]}
+              selected_assistant_name="assistant1"
+              on_assistant_change={(chatbot_name) => {
+                console.log(chatbot_name)
+              }}
+            />
+          }
+          is_history_enabled={false}
+          is_plain_text_too_long={false}
+          transcript_not_found={false}
           is_attach_text_checkbox_disabled={false}
           translations={{
-            heading: 'Custom prompt',
-            placeholder: 'Ask anything',
-            checkbox: 'Include page content',
+            new_prompt: 'New prompt',
+            placeholder: 'Ask anything!',
+            checkbox: 'Include page',
             active_input_placeholder_suffix: '(⇅ for history)',
+            plain_text_too_long: '',
+            transcript_not_found: '',
           }}
         />
       </Popup>
