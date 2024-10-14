@@ -82,6 +82,41 @@ export const Popup: React.FC = () => {
     }
   }
 
+  // Quick select with keyboard numbers (1-9)
+  useUpdateEffect(() => {
+    const handle_key_down = (e: KeyboardEvent) => {
+      if (prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
+        const index = parseInt(e.key) - 1
+        const recent_prompts = is_in_vision_mode
+          ? prompts_vision_history_hook.prompts_history
+          : prompts_history_hook.prompts_history
+
+        if (index < recent_prompts.length) {
+          e.preventDefault()
+          const selected_prompt =
+            recent_prompts[recent_prompts.length - 1 - index]
+          if (is_in_vision_mode) {
+            handle_quick_prompt_vision_click(selected_prompt)
+          } else {
+            handle_quick_prompt_click(selected_prompt)
+          }
+        }
+      }
+    }
+    window.addEventListener('keydown', handle_key_down)
+    return () => window.removeEventListener('keydown', handle_key_down)
+  }, [
+    prompt_field_value,
+    prompts_history_hook.prompts_history,
+    prompts_vision_history_hook.prompts_history,
+    is_in_vision_mode,
+    text_selection_hook.selected_text,
+    parsed_html_hook.parsed_html,
+    shortened_plan_text,
+    selected_assistant_hook.selected_assistant_name,
+    window_dimensions_hook.dimensions,
+  ])
+
   // Shorten plain text whenever selected assistant is changed
   useUpdateEffect(() => {
     const max_length =
@@ -99,6 +134,48 @@ export const Popup: React.FC = () => {
 
     set_shortened_plain_text(shortened_plain_text)
   }, [parsed_html_hook, selected_assistant_hook.selected_assistant_name])
+
+  const handle_quick_prompt_click = async (
+    prompt: string,
+    is_middle_click?: boolean,
+  ) => {
+    if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
+      prompts_history_hook.update_stored_prompts_history(prompt)
+      const message: SendPrompt_Message = {
+        action: 'send-prompt',
+        is_touch_screen: 'ontouchstart' in window,
+        assistant_name: selected_assistant_hook.selected_assistant_name!,
+        assistant_url,
+        prompt,
+        plain_text: text_selection_hook.selected_text || shortened_plan_text,
+        open_in_new_tab: is_middle_click,
+        window_height: window_dimensions_hook.dimensions!.height,
+        window_width: window_dimensions_hook.dimensions!.width,
+      }
+      browser.runtime.sendMessage(message)
+      window.close()
+    }
+  }
+
+  const handle_quick_prompt_vision_click = async (
+    prompt: string,
+    is_middle_click?: boolean,
+  ) => {
+    prompts_vision_history_hook.update_stored_prompts_history(prompt)
+    const message: SendPrompt_Message = {
+      action: 'send-prompt',
+      is_touch_screen: 'ontouchstart' in window,
+      assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
+      assistant_url,
+      prompt,
+      open_in_new_tab: is_middle_click,
+      window_height: window_dimensions_hook.dimensions!.height,
+      window_width: window_dimensions_hook.dimensions!.width,
+      image: captured_image_hook.image!,
+    }
+    browser.runtime.sendMessage(message)
+    window.close()
+  }
 
   if (
     // captured_image_hook.image === undefined ||
@@ -162,48 +239,6 @@ export const Popup: React.FC = () => {
     </UiButton>,
   ]
 
-  const handle_quick_prompt_click = async (
-    prompt: string,
-    is_middle_click?: boolean,
-  ) => {
-    if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
-      prompts_history_hook.update_stored_prompts_history(prompt)
-      const message: SendPrompt_Message = {
-        action: 'send-prompt',
-        is_touch_screen: 'ontouchstart' in window,
-        assistant_name: selected_assistant_hook.selected_assistant_name!,
-        assistant_url,
-        prompt,
-        plain_text: text_selection_hook.selected_text || shortened_plan_text,
-        open_in_new_tab: is_middle_click,
-        window_height: window_dimensions_hook.dimensions!.height,
-        window_width: window_dimensions_hook.dimensions!.width,
-      }
-      browser.runtime.sendMessage(message)
-      window.close()
-    }
-  }
-
-  const handle_quick_prompt_vision_click = async (
-    prompt: string,
-    is_middle_click?: boolean,
-  ) => {
-    prompts_vision_history_hook.update_stored_prompts_history(prompt)
-    const message: SendPrompt_Message = {
-      action: 'send-prompt',
-      is_touch_screen: 'ontouchstart' in window,
-      assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
-      assistant_url,
-      prompt,
-      open_in_new_tab: is_middle_click,
-      window_height: window_dimensions_hook.dimensions!.height,
-      window_width: window_dimensions_hook.dimensions!.width,
-      image: captured_image_hook.image!,
-    }
-    browser.runtime.sendMessage(message)
-    window.close()
-  }
-
   return (
     <Ui_extension_popup_templates_Popup
       should_set_height={
@@ -214,7 +249,8 @@ export const Popup: React.FC = () => {
           current_url_hook.is_youtube_video ||
           text_selection_hook.selected_text ||
           is_in_vision_mode
-        )
+        ) &&
+        attach_text_checkbox_hook.is_checked
       }
       header_slot={
         is_in_vision_mode ? (
@@ -287,6 +323,9 @@ export const Popup: React.FC = () => {
               handle_quick_prompt_vision_click(prompt, true)
             }}
             is_disabled={false}
+            translations={{
+              heading: 'Recent prompts',
+            }}
           />
 
           <Ui_extension_popup_templates_Popup_main_Separator />
@@ -295,14 +334,14 @@ export const Popup: React.FC = () => {
         (parsed_html_hook.parsed_html !== null ||
           current_url_hook.is_youtube_video ||
           text_selection_hook.selected_text) &&
-        !current_url_hook.is_new_tab_page && (
+        !current_url_hook.is_new_tab_page &&
+        attach_text_checkbox_hook.is_checked && (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                attach_text_checkbox_hook.is_checked &&
                 (parsed_html_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
@@ -320,6 +359,9 @@ export const Popup: React.FC = () => {
                 !parsed_html_hook.parsed_html &&
                 !text_selection_hook.selected_text
               }
+              translations={{
+                heading: 'Recent prompts',
+              }}
             />
 
             <Ui_extension_popup_templates_Popup_main_Separator />
@@ -386,7 +428,7 @@ export const Popup: React.FC = () => {
           transcript_not_found={false}
           translations={{
             new_prompt: 'New prompt',
-            placeholder: 'Ask anything!',
+            placeholder: 'Type something',
             checkbox: 'Attach image',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
@@ -488,7 +530,7 @@ export const Popup: React.FC = () => {
           }
           translations={{
             new_prompt: 'New prompt',
-            placeholder: 'Ask anything!',
+            placeholder: 'Type something',
             checkbox:
               text_selection_hook.selected_text ||
               (parsed_html_hook.parsed_html === null &&

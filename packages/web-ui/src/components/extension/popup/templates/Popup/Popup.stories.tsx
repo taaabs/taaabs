@@ -42,6 +42,9 @@ export const Primary = () => {
             'Rewrite simplified',
             'In-depth analysis',
           ]}
+          translations={{
+            heading: 'Recent prompts',
+          }}
         />
         <Separator />
         <PromptField
@@ -69,7 +72,7 @@ export const Primary = () => {
           is_attach_text_checkbox_disabled={false}
           translations={{
             new_prompt: 'New prompt',
-            placeholder: 'Ask anything!',
+            placeholder: 'Type something',
             checkbox: 'Include page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',

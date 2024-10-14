@@ -4,6 +4,8 @@
 .container {
   flex: 1;
   overflow: hidden;
+  box-shadow: inset 0px 10px 8px -8px rgba(0, 0, 0, 0.06),
+    inset 0px -10px 8px -8px rgba(0, 0, 0, 0.06);
 }
 .prompts {
   display: flex;
@@ -12,6 +14,11 @@
   &--disabled {
     pointer-events: none;
     opacity: var(--dimmed-opacity);
+  }
+  &__heading {
+    font-weight: var(--font-weight-inter-medium);
+    padding: var(--padding-12px) var(--padding-16px) var(--padding-2px)
+      var(--padding-16px);
   }
   &__button {
     display: flex;
@@ -58,6 +65,7 @@
       color: var(--text-color-dimmed);
       font-size: 10px;
       padding-right: 1.5px;
+      margin-top: 1px;
     }
     > mark {
       padding: 0; // Fix for some sites.

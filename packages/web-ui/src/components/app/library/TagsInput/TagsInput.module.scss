@@ -14,7 +14,7 @@
   background-color: var(--white);
   border-radius: var(--border-radius-10px);
   border: 1.5px solid var(--neutral200);
-  box-shadow: var(--box-shadow-inset);
+  box-shadow: var(--box-shadow-inset-top);
   cursor: text;
   @include dark {
     border-color: var(--dark300);

@@ -13,6 +13,9 @@ export namespace RecentPrompts {
     on_recent_prompt_middle_click: (prompt: string) => void
     is_disabled: boolean
     filter_phrase: string
+    translations: {
+      heading: string
+    }
   }
 }
 
@@ -22,34 +25,6 @@ type FilteredPrompt =
       original_prompt: string
       highlighted_prompt: string
     }
-
-const HighlightedText = ({
-  text,
-  highlight,
-}: {
-  text: string
-  highlight: string
-}) => {
-  if (!highlight.trim()) return text
-  const words = highlight
-    .trim()
-    .toLowerCase()
-    .split(/\s+/)
-    .filter((word) => word.length)
-  const regex = new RegExp(`(${words.join('|')})`, 'gi')
-  const parts = text.split(regex)
-  return parts.map((part, i) =>
-    words.includes(part.toLowerCase()) ||
-    (i > 0 &&
-      // Current part is " " ". " ", "
-      /^(?:\s|\. |\s,)\s*$/.test(part) &&
-      words.includes(parts[i - 1].toLowerCase())) ? (
-      <mark key={i}>{part}</mark>
-    ) : (
-      part
-    ),
-  )
-}
 
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   const container_ref = useRef<HTMLDivElement>(null)
@@ -100,6 +75,9 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
             [styles['prompts--disabled']]: props.is_disabled,
           })}
         >
+          <div className={styles.prompts__heading}>
+            {props.translations.heading}
+          </div>
           {prompts_to_display.map((prompt, i) => {
             const original_prompt =
               typeof prompt == 'string' ? prompt : prompt.original_prompt
@@ -118,7 +96,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
                 })}
                 title={original_prompt}
               >
-                <sup>{i + 1}</sup>
+                {!props.filter_phrase && <sup>{i + 1}</sup>}
                 <span>
                   <HighlightedText
                     text={prompt_to_display}
@@ -133,5 +111,33 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
         </div>
       </SimpleBar>
     </div>
+  )
+}
+
+const HighlightedText = ({
+  text,
+  highlight,
+}: {
+  text: string
+  highlight: string
+}) => {
+  if (!highlight.trim()) return text
+  const words = highlight
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter((word) => word.length)
+  const regex = new RegExp(`(${words.join('|')})`, 'gi')
+  const parts = text.split(regex)
+  return parts.map((part, i) =>
+    words.includes(part.toLowerCase()) ||
+    (i > 0 &&
+      // Current part is " " ". " ", "
+      /^(?:\s|\. |\s,)\s*$/.test(part) &&
+      words.includes(parts[i - 1].toLowerCase())) ? (
+      <mark key={i}>{part}</mark>
+    ) : (
+      part
+    ),
   )
 }

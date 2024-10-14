@@ -24,6 +24,14 @@
         background-color: var(--dark300);
       }
     }
+    @include hover {
+      .switch {
+        background-color: var(--blue800);
+        @include dark {
+          background-color: var(--blue700);
+        }
+      }
+    }
     .thumb {
       transform: translateX(10px);
     }
@@ -41,8 +49,9 @@
     background-color: var(--dark300);
   }
   @include hover {
-    .thumb {
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    background-color: var(--neutral400);
+    @include dark {
+      background-color: var(--dark200);
     }
   }
   .thumb {

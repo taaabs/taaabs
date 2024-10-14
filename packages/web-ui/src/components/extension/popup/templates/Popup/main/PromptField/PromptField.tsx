@@ -125,12 +125,13 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       <div className={styles.footer}>
-        <span>Assistant:</span>
-        {props.assistant_selector_slot}
         <a href="https://github.com/taaabs/taaabs/issues" target="_blank">
           Star on GitHub
         </a>
+        ·<span>Assistant:</span>
+        {props.assistant_selector_slot}
       </div>
     </div>
   )
 }
+
