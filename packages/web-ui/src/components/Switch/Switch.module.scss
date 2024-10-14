@@ -2,7 +2,7 @@
 @use '../../styles/foundation' as *;
 
 .container {
-  --swich-width: 36px;
+  --swich-width: 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,13 +25,13 @@
       }
     }
     .thumb {
-      transform: translateX(12px);
+      transform: translateX(10px);
     }
   }
 }
 .switch {
   width: var(--swich-width);
-  height: 24px;
+  height: 22px;
   border-radius: 999px;
   background-color: var(--neutral300);
   position: absolute;
@@ -40,9 +40,14 @@
   @include dark {
     background-color: var(--dark300);
   }
+  @include hover {
+    .thumb {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+  }
   .thumb {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: white;
     position: absolute;
