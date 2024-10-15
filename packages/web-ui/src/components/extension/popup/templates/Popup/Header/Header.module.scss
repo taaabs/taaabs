@@ -9,37 +9,68 @@
   height: 80px;
   border-bottom: var(--border-primary);
   background-color: var(--header-background);
+}
+.logo {
   > svg {
     height: 50px;
     fill: var(--accent-color);
+    @include transition-150ms(fill);
+  }
+  @include hover {
+    > svg {
+      fill: var(--blue800);
+    }
+  }
+}
+.vision {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: var(--padding-16px);
+  > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    @include transition-150ms;
+    @include hover {
+      background-color: var(--neutral100);
+    }
+    > svg {
+      width: var(--icon-dimension-22px);
+    }
   }
 }
 .actions {
   display: flex;
   align-items: center;
-  gap: var(--padding-4px);
+  gap: 6px;
   position: absolute;
   right: var(--padding-10px);
   top: var(--padding-10px);
   &__shortcut {
-    background-color: var(--blue100);
-    gap: 4px;
-    height: 23px;
+    display: flex;
     align-items: center;
+    gap: var(--padding-2px);
     border-radius: var(--border-radius-8px);
-    padding: 0 6px 0 5px;
-    color: var(--blue500);
     font-size: var(--font-size-13px);
     display: none;
     @include desktop {
       display: flex;
     }
-    > span {
-      font-weight: var(--font-weight-inter-medium);
+    &__key {
+      font-weight: var(--font-weight-inter-semi-bold);
+      background-color: var(--blue200);
+      color: var(--blue600);
+      border-radius: 4px;
+      padding: 1px 4px;
+      border: 1px solid var(--blue300);
+      box-shadow: var(--box-shadow-blue);
     }
-    > svg {
-      fill: var(--blue500);
-      height: 14px;
+    &__plus {
+      font-weight: var(--font-weight-inter-medium);
     }
   }
   &__settings {
@@ -49,8 +80,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    border: none;
-    background: none;
     @include transition-150ms(background-color);
     @include hover {
       background-color: var(--neutral100);

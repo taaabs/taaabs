@@ -22,15 +22,13 @@ import { use_text_selection } from './hooks/use-text-selection'
 import { default_prompts, default_vision_prompts } from './data/default-prompts'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { use_parsed_html } from './hooks/use-parsed-html'
-import { calculate_shortening_percentage } from './helpers/calculate-shortening-percentage'
 import { use_auth_state } from './hooks/use-auth-state'
-import { get_attach_text_checkbox_label } from './helpers/get-attach-text-checkbox-label'
 import {
   AssistantName,
   assistants,
   assistants_vision,
 } from '@/constants/assistants'
-import { use_captured_image } from './hooks/use-captured-image'
+import { use_vision_mode } from './hooks/use-vision-mode'
 import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
 import { use_selected_assistant_vision } from './hooks/use-selected-assistant-vision'
 import { SendPrompt_Message } from '@/types/messages'
@@ -60,13 +58,14 @@ export const Popup: React.FC = () => {
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection()
-  const captured_image_hook = use_captured_image()
+  const vision_mode_hook = use_vision_mode()
   const window_dimensions_hook = use_window_dimensions()
 
-  const is_in_vision_mode = captured_image_hook.image
-
   let assistant_url = assistants['chatgpt'].url
-  if (!is_in_vision_mode && selected_assistant_hook.selected_assistant_name) {
+  if (
+    !vision_mode_hook.is_vision_mode &&
+    selected_assistant_hook.selected_assistant_name
+  ) {
     if (selected_assistant_hook.selected_assistant_name != 'custom') {
       assistant_url =
         assistants[selected_assistant_hook.selected_assistant_name].url
@@ -87,7 +86,7 @@ export const Popup: React.FC = () => {
     const handle_key_down = (e: KeyboardEvent) => {
       if (prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
         const index = parseInt(e.key) - 1
-        const recent_prompts = is_in_vision_mode
+        const recent_prompts = vision_mode_hook.is_vision_mode
           ? prompts_vision_history_hook.prompts_history
           : prompts_history_hook.prompts_history
 
@@ -95,7 +94,7 @@ export const Popup: React.FC = () => {
           e.preventDefault()
           const selected_prompt =
             recent_prompts[recent_prompts.length - 1 - index]
-          if (is_in_vision_mode) {
+          if (vision_mode_hook.is_vision_mode) {
             handle_quick_prompt_vision_click(selected_prompt)
           } else {
             handle_quick_prompt_click(selected_prompt)
@@ -109,7 +108,7 @@ export const Popup: React.FC = () => {
     prompt_field_value,
     prompts_history_hook.prompts_history,
     prompts_vision_history_hook.prompts_history,
-    is_in_vision_mode,
+    vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
     parsed_html_hook.parsed_html,
     shortened_plan_text,
@@ -171,7 +170,7 @@ export const Popup: React.FC = () => {
       open_in_new_tab: is_middle_click,
       window_height: window_dimensions_hook.dimensions!.height,
       window_width: window_dimensions_hook.dimensions!.width,
-      image: captured_image_hook.image!,
+      image: vision_mode_hook.image!,
     }
     browser.runtime.sendMessage(message)
     window.close()
@@ -248,17 +247,18 @@ export const Popup: React.FC = () => {
           parsed_html_hook.parsed_html !== null ||
           current_url_hook.is_youtube_video ||
           text_selection_hook.selected_text ||
-          is_in_vision_mode
+          vision_mode_hook.is_vision_mode
         ) &&
-        attach_text_checkbox_hook.is_checked
+        (attach_text_checkbox_hook.is_checked ||
+          vision_mode_hook.is_vision_mode)
       }
       header_slot={
-        is_in_vision_mode ? (
+        vision_mode_hook.is_vision_mode ? (
           <Ui_extension_popup_templates_Popup_HeaderVision
-            key={captured_image_hook.original_image}
-            back_button_on_click={captured_image_hook.remove}
-            image={captured_image_hook.original_image!}
-            on_resize={captured_image_hook.set_image}
+            key={vision_mode_hook.original_image}
+            back_button_on_click={vision_mode_hook.exit_vision_mode}
+            image={vision_mode_hook.original_image!}
+            on_resize={vision_mode_hook.set_image}
             translations={{
               title: 'Vision',
               restore: 'Restore',
@@ -266,14 +266,26 @@ export const Popup: React.FC = () => {
           />
         ) : (
           <Ui_extension_popup_templates_Popup_Header
+            vision_mode_on_click={
+              !current_url_hook.is_new_tab_page
+                ? vision_mode_hook.enter_vision_mode
+                : undefined
+            }
             settings_on_click={() => {
               browser.runtime.openOptionsPage()
               // Firefox requires closing manually
-              if (browser.browserAction) {
-                window.close()
-              }
+              if (browser.browserAction) window.close()
             }}
-            shortcut="Alt+S"
+            logo_on_click={async () => {
+              const [current_tab] = await browser.tabs.query({
+                active: true,
+                currentWindow: true,
+              })
+              browser.tabs.update(current_tab.id, {
+                url: 'https://taaabs.com/',
+              })
+              window.close()
+            }}
             translations={{
               trigger_popup_shortcut: 'Trigger popup shortcut',
             }}
@@ -282,7 +294,7 @@ export const Popup: React.FC = () => {
       }
     >
       {!current_url_hook.url.startsWith('https://taaabs.com') &&
-        !is_in_vision_mode && (
+        !vision_mode_hook.is_vision_mode && (
           <Ui_extension_popup_templates_Popup_main_Actions>
             <UiButton
               href={'https://taaabs.com/library'}
@@ -308,7 +320,7 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
-      {is_in_vision_mode ? (
+      {vision_mode_hook.is_vision_mode ? (
         <>
           <Ui_extension_popup_templates_Popup_main_RecentPrompts
             recent_prompts={[
@@ -373,7 +385,7 @@ export const Popup: React.FC = () => {
         )
       )}
 
-      {is_in_vision_mode ? (
+      {vision_mode_hook.is_vision_mode ? (
         <Ui_extension_popup_templates_Popup_main_PromptField
           value={prompt_field_value}
           on_change={(value) => {
@@ -394,7 +406,7 @@ export const Popup: React.FC = () => {
               prompt: prompt_field_value,
               window_height: window_dimensions_hook.dimensions!.height,
               window_width: window_dimensions_hook.dimensions!.width,
-              image: captured_image_hook.image!,
+              image: vision_mode_hook.image!,
             }
             browser.runtime.sendMessage(message)
             window.close()
@@ -438,11 +450,11 @@ export const Popup: React.FC = () => {
               assistants[selected_assistant_hook.selected_assistant_name]
                 .display_name
             }`,
-            checkbox: 'Send with image',
+            checkbox: 'Send image',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
             text_not_found: <></>,
-            footer_privacy_info: 'Prompts never leave your browser',
+            footer_privacy_info: 'Data processed 100% locally',
           }}
         />
       ) : (
@@ -563,7 +575,7 @@ export const Popup: React.FC = () => {
               text_selection_hook.selected_text ||
               (parsed_html_hook.parsed_html === null &&
                 !current_url_hook.is_youtube_video)
-                ? 'Include text selection'
+                ? 'Send text selection'
                 : get_attach_text_checkbox_label(current_url_hook.url),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
@@ -580,7 +592,7 @@ export const Popup: React.FC = () => {
             text_not_found: current_url_hook.is_youtube_video
               ? '⚠ Transcript not found'
               : '⚠ Text not found',
-            footer_privacy_info: 'Prompts never leave your browser',
+            footer_privacy_info: 'Data processed 100% locally',
           }}
         />
       )}
@@ -590,3 +602,49 @@ export const Popup: React.FC = () => {
 
 const root = createRoot(document.getElementById('root') as HTMLDivElement)
 root.render(<Popup />)
+
+const get_attach_text_checkbox_label = (url: string) => {
+  const conversation = 'Send this chat'
+  const label_map = {
+    'https://www.youtube.com/watch': 'Send with transcript',
+    'https://m.youtube.com/watch': 'Send with transcript',
+    'https://x.com': 'Send this tweet',
+    'https://twitter.com': 'Send this tweet',
+    'https://www.reddit.com/r/': 'Send this post',
+    'https://gemini.google.com/app/': conversation,
+    'https://chatgpt.com/c/': conversation,
+    'https://huggingface.co/chat/conversation/': conversation,
+    'https://claude.ai/chat/': conversation,
+    'https://chat.mistral.ai/chat/': conversation,
+    'https://coral.cohere.com/c/': conversation,
+    'https://aistudio.google.com/app/prompts/': conversation,
+    'https://mail.google.com/mail/': 'Send this e-mail',
+  }
+
+  let label = 'Send this page' // Default label
+
+  for (const prefix in label_map) {
+    if (url.startsWith(prefix)) {
+      label = (label_map as any)[prefix]
+      break
+    }
+  }
+  return label
+}
+
+const calculate_shortening_percentage = (
+  full_text?: string,
+  shortened_text?: string,
+): number | undefined => {
+  if (!full_text || !shortened_text) {
+    return
+  }
+
+  const full_length = full_text.length
+  const shortened_length = shortened_text.length
+
+  const difference = full_length - shortened_length
+  const percentage = (difference / full_length) * 100
+
+  return Math.floor(percentage)
+}

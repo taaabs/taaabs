@@ -22,6 +22,12 @@
       fill: var(--accent-color);
       width: var(--icon-dimension-18px);
       height: var(--icon-dimension-18px);
+      @include transition-150ms(fill);
+    }
+    @include hover {
+      > svg {
+        fill: var(--blue800);
+      }
     }
   }
 }

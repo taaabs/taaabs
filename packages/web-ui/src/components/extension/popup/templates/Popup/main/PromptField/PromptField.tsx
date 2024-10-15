@@ -139,7 +139,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           <span>{props.translations.footer_privacy_info}</span>
           {' · '}
           <a href="https://github.com/taaabs/taaabs" target="_blank">
-            GitHub↗
+            Star on GitHub↗
           </a>
         </div>
       </div>

@@ -18,7 +18,8 @@ export const Primary = () => {
         header_slot={
           <Header
             settings_on_click={() => {}}
-            shortcut="Alt+S"
+            vision_mode_on_click={() => {}}
+            logo_on_click={() => {}}
             translations={{
               trigger_popup_shortcut: 'Trigger popup shortcut',
             }}
@@ -61,6 +62,7 @@ export const Primary = () => {
           on_change={() => {}}
           is_attach_text_switch_checked={true}
           on_include_content_click={() => {}}
+          is_attach_text_switch_visible={true}
           prompts_history={['a', 'b']}
           assistant_selector_slot={
             <AssistantSelector
@@ -81,12 +83,12 @@ export const Primary = () => {
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
-            checkbox: 'Include page',
+            checkbox: 'Ask this page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
             text_not_found: '',
             active_assistant: 'Active assistant',
-            footer_privacy_info: 'Prompts never leave your browser',
+            footer_privacy_info: 'Data processed 100% locally',
           }}
         />
       </Popup>
