@@ -4,7 +4,7 @@
   "name": "Taaabs - Zero-knowledge bookmarks & ChatGPT",
   "short_name": "taaabs",
   "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Open-source browser integration with ChatGPT.",
-  "version": "0.3.15",
+  "version": "0.3.16",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {
