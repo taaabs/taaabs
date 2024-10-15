@@ -6,6 +6,7 @@ export const use_current_url = () => {
   const [url, set_url] = useState<string>('')
   const [is_new_tab_page, set_is_new_tab_page] = useState(false)
   const [is_youtube_video, set_is_youtube_video] = useState(false)
+  const [is_taaabs, set_is_taaabs] = useState(false)
 
   useEffect(() => {
     browser.tabs
@@ -26,8 +27,9 @@ export const use_current_url = () => {
           cleaned_url.startsWith('https://www.youtube.com/watch') ||
             cleaned_url.startsWith('https://m.youtube.com/watch'),
         )
+        set_is_taaabs(cleaned_url.startsWith('https://taaabs.com'))
       })
   }, [])
 
-  return { url, is_new_tab_page, is_youtube_video }
+  return { url, is_new_tab_page, is_youtube_video, is_taaabs }
 }

@@ -9,21 +9,22 @@ export namespace PromptField {
     value: string
     on_submit: () => void
     on_change: (value: string) => void
-    is_attach_text_checkbox_disabled: boolean
-    is_attach_text_checkbox_checked: boolean
+    is_attach_text_switch_disabled: boolean
+    is_attach_text_switch_checked: boolean
+    is_attach_text_switch_visible: boolean
     on_include_content_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
     is_plain_text_too_long: boolean
-    transcript_not_found: boolean
+    text_not_found: boolean
     translations: {
       new_prompt: string
       placeholder: string
       checkbox: string
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
-      transcript_not_found: React.ReactNode
+      text_not_found: React.ReactNode
       footer_privacy_info: string
       active_assistant: string
     }
@@ -36,7 +37,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     useState<number>(-1)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_attach_text_checkbox_checked || !props.is_history_enabled)
+    if (!props.is_attach_text_switch_checked || !props.is_history_enabled)
       return
 
     if (is_focused) {
@@ -74,25 +75,28 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   return (
     <div className={styles.container}>
       {props.is_plain_text_too_long && (
-        <div className={styles.info}>
+        <div className={`${styles.alert} ${styles['alert--warn']}`}>
           {props.translations.plain_text_too_long}
         </div>
       )}
-      {props.transcript_not_found && (
-        <div className={styles.info}>
-          {props.translations.transcript_not_found}
+      {props.text_not_found && (
+        <div className={`${styles.alert} ${styles['alert--error']}`}>
+          {props.translations.text_not_found}
         </div>
       )}
 
       <div className={styles.header}>
         <span>{props.translations.new_prompt}</span>
+
         <div className={styles.header__switch}>
-          <Switch
-            label={props.translations.checkbox}
-            is_checked={props.is_attach_text_checkbox_checked}
-            on_change={props.on_include_content_click}
-            is_disabled={props.is_attach_text_checkbox_disabled}
-          />
+          {props.is_attach_text_switch_visible && (
+            <Switch
+              label={props.translations.checkbox}
+              is_checked={props.is_attach_text_switch_checked}
+              on_change={props.on_include_content_click}
+              is_disabled={props.is_attach_text_switch_disabled}
+            />
+          )}
         </div>
       </div>
 
@@ -108,7 +112,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           props.translations.placeholder +
           (is_focused &&
           props.is_history_enabled &&
-          props.is_attach_text_checkbox_checked
+          props.is_attach_text_switch_checked
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }
@@ -134,7 +138,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         <div className={styles['footer__bottom-line']}>
           <span>{props.translations.footer_privacy_info}</span>
           {' · '}
-          <a href="https://github.com/taaabs/taaabs/issues" target="_blank">
+          <a href="https://github.com/taaabs/taaabs" target="_blank">
             GitHub↗
           </a>
         </div>

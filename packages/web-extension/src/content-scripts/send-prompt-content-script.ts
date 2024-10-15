@@ -177,7 +177,7 @@ const send_prompt = async (params: {
       input_element.dispatchEvent(new Event('change', { bubbles: true }))
 
       const form = input_element.closest('form')
-      if (form && params.assistant_name != 'copilot') {
+      if (form) {
         setTimeout(() => {
           form.requestSubmit()
         }, 0)
@@ -270,12 +270,7 @@ namespace AssistantBugMitigation {
             }, 100)
           })
         }
-        const chat_message_sent_by_user = document.querySelector(
-          '#latest-context-divider + ._18fe68b',
-        )
-        if (chat_message_sent_by_user) {
-          ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
-        }
+        ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true)
@@ -283,34 +278,40 @@ namespace AssistantBugMitigation {
         })
         resolve(null)
       })
+    } else if (params.assistant_name == 'copilot') {
+      while (!document.querySelector('button[title="Thumbs up message"]')) {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 100)
+        })
+      }
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
+      })
     }
   }
 
   export const get_input_element = (assistant_name: AssistantName) => {
-    if (assistant_name == 'copilot') {
-      return (document as any)
-        .querySelector('cib-serp')
-        .shadowRoot.querySelector('cib-action-bar')
-        .shadowRoot.querySelector('cib-text-input').shadowRoot.activeElement
-    } else {
-      let active_element = document.activeElement as HTMLElement
+    let active_element = document.activeElement as HTMLElement
 
-      const chatbot_selectors: Partial<Record<AssistantName, string>> = {
-        huggingchat:
-          '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
-        deepseek: '#chat-input',
-        claude: 'div[contenteditable=true] > p',
-        mistral: 'textarea[placeholder="Ask anything!"]',
-        you: 'textarea[name="query"]',
-      }
-
-      const selector = chatbot_selectors[assistant_name]
-      if (selector) {
-        active_element = document.querySelector(selector) as HTMLElement
-      }
-
-      return active_element
+    const chatbot_selectors: Partial<Record<AssistantName, string>> = {
+      huggingchat:
+        '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
+      deepseek: '#chat-input',
+      claude: 'div[contenteditable=true] > p',
+      mistral: 'textarea[placeholder="Ask anything!"]',
+      you: 'textarea[name="query"]',
     }
+
+    const selector = chatbot_selectors[assistant_name]
+    if (selector) {
+      active_element = document.querySelector(selector) as HTMLElement
+    }
+
+    return active_element
   }
 
   export const scroll_to_response = (params: {

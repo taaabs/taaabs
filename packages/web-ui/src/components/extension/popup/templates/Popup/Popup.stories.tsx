@@ -59,7 +59,7 @@ export const Primary = () => {
           value=""
           on_submit={() => {}}
           on_change={() => {}}
-          is_attach_text_checkbox_checked={true}
+          is_attach_text_switch_checked={true}
           on_include_content_click={() => {}}
           prompts_history={['a', 'b']}
           assistant_selector_slot={
@@ -76,15 +76,15 @@ export const Primary = () => {
           }
           is_history_enabled={false}
           is_plain_text_too_long={false}
-          transcript_not_found={false}
-          is_attach_text_checkbox_disabled={false}
+          text_not_found={false}
+          is_attach_text_switch_disabled={false}
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
             checkbox: 'Include page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
-            transcript_not_found: '',
+            text_not_found: '',
             active_assistant: 'Active assistant',
             footer_privacy_info: 'Prompts never leave your browser',
           }}

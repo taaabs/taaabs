@@ -399,8 +399,9 @@ export const Popup: React.FC = () => {
             browser.runtime.sendMessage(message)
             window.close()
           }}
-          is_attach_text_checkbox_disabled={true}
-          is_attach_text_checkbox_checked={true}
+          is_attach_text_switch_disabled={true}
+          is_attach_text_switch_checked={true}
+          is_attach_text_switch_visible={true}
           on_include_content_click={() => {}}
           prompts_history={[
             ...prompts_vision_history_hook.prompts_history.filter(
@@ -429,7 +430,7 @@ export const Popup: React.FC = () => {
             />
           }
           is_plain_text_too_long={false}
-          transcript_not_found={false}
+          text_not_found={false}
           translations={{
             new_prompt: 'New chat',
             active_assistant: 'Active assistant',
@@ -440,7 +441,7 @@ export const Popup: React.FC = () => {
             checkbox: 'Send with image',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
-            transcript_not_found: <></>,
+            text_not_found: <></>,
             footer_privacy_info: 'Prompts never leave your browser',
           }}
         />
@@ -486,13 +487,23 @@ export const Popup: React.FC = () => {
             browser.runtime.sendMessage(message)
             window.close()
           }}
-          is_attach_text_checkbox_disabled={
-            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
+          is_attach_text_switch_disabled={
+            parsed_html_hook.parsed_html === undefined &&
+            !text_selection_hook.selected_text
           }
-          is_attach_text_checkbox_checked={
-            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
+          is_attach_text_switch_checked={
+            parsed_html_hook.parsed_html === null &&
+            !current_url_hook.is_youtube_video &&
+            !text_selection_hook.selected_text
               ? false
               : attach_text_checkbox_hook.is_checked
+          }
+          is_attach_text_switch_visible={
+            !current_url_hook.is_new_tab_page &&
+            (!!parsed_html_hook.parsed_html ||
+              current_url_hook.is_youtube_video ||
+              parsed_html_hook.parsed_html === undefined ||
+              !!text_selection_hook.selected_text)
           }
           on_include_content_click={() => {
             attach_text_checkbox_hook.set_is_checked(
@@ -525,17 +536,21 @@ export const Popup: React.FC = () => {
             />
           }
           is_plain_text_too_long={
-            ((!!parsed_html_hook.parsed_html ||
-              !!text_selection_hook.selected_text) &&
+            (attach_text_checkbox_hook.is_checked &&
+              (!!parsed_html_hook.parsed_html ||
+                !!text_selection_hook.selected_text) &&
               parsed_html_hook.parsed_html?.plain_text &&
               shortened_plan_text &&
               parsed_html_hook.parsed_html?.plain_text.length >
                 shortened_plan_text?.length) ||
             false
           }
-          transcript_not_found={
-            current_url_hook.is_youtube_video &&
-            parsed_html_hook.parsed_html === null
+          text_not_found={
+            !current_url_hook.is_new_tab_page &&
+            parsed_html_hook.parsed_html === null &&
+            attach_text_checkbox_hook.is_checked &&
+            !current_url_hook.is_taaabs &&
+            !text_selection_hook.selected_text
           }
           translations={{
             new_prompt: 'New chat',
@@ -548,27 +563,23 @@ export const Popup: React.FC = () => {
               text_selection_hook.selected_text ||
               (parsed_html_hook.parsed_html === null &&
                 !current_url_hook.is_youtube_video)
-                ? 'Send with selection'
+                ? 'Include text selection'
                 : get_attach_text_checkbox_label(current_url_hook.url),
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: (
               <>
-                <strong>
-                  {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is
-                  too long for this assistant
-                </strong>
-                <br />
-                <i>
-                  ...shortening by{' '}
-                  {calculate_shortening_percentage(
-                    parsed_html_hook.parsed_html?.plain_text,
-                    shortened_plan_text,
-                  )}
-                  %
-                </i>
+                ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'}{' '}
+                will be shortened by{' '}
+                {calculate_shortening_percentage(
+                  parsed_html_hook.parsed_html?.plain_text,
+                  shortened_plan_text,
+                )}
+                %
               </>
             ),
-            transcript_not_found: <strong>Transcript not found</strong>,
+            text_not_found: current_url_hook.is_youtube_video
+              ? '⚠ Transcript not found'
+              : '⚠ Text not found',
             footer_privacy_info: 'Prompts never leave your browser',
           }}
         />

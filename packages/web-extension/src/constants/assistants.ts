@@ -39,8 +39,8 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     url: 'https://www.perplexity.ai/',
   },
   copilot: {
-    display_name: 'Bing Copilot',
-    url: 'https://www.bing.com/chat',
+    display_name: 'Copilot',
+    url: 'https://copilot.microsoft.com/',
   },
   claude: {
     display_name: 'Claude',
