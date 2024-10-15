@@ -15,7 +15,12 @@ export const Primary = () => {
   return (
     <div style={{ width: '360px', margin: '50px', border: '1px solid black' }}>
       <Popup
-        header_slot={<Header settings_on_click={() => {}} />}
+        header_slot={
+          <Header
+            settings_on_click={() => {}}
+            shortcut="Alt+S"
+          />
+        }
         should_set_height={true}
       >
         <Actions>
@@ -78,8 +83,7 @@ export const Primary = () => {
             plain_text_too_long: '',
             transcript_not_found: '',
             active_assistant: 'Active assistant',
-            footer_privacy_info:
-              'Prompts never leave your browser',
+            footer_privacy_info: 'Prompts never leave your browser',
           }}
         />
       </Popup>

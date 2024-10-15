@@ -73,7 +73,7 @@
   }
 }
 @mixin desktop {
-  @media (pointer: fine) {
+  @media (hover: hover) and (pointer: fine) {
     @content;
   }
 }

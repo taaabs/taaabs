@@ -1,6 +1,8 @@
 declare const styles: {
+  readonly "actions": string;
+  readonly "actions__settings": string;
+  readonly "actions__shortcut": string;
   readonly "container": string;
-  readonly "settings": string;
 };
 export = styles;
 

@@ -22,8 +22,6 @@ module.exports = (_, argv) => {
       patterns: [
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
-        { from: 'src/views/newtab/newtab.html', to: 'newtab.html' },
-        { from: 'src/views/newtab/load-newtab.js', to: 'load-newtab.js' },
         { from: 'src/views/options/options.html', to: 'options.html' },
         { from: 'src/views/popup/popup.html', to: 'popup.html' },
       ],
@@ -40,9 +38,7 @@ module.exports = (_, argv) => {
   return {
     entry: {
       background: './src/background/main.ts',
-      // 'detect-theme': './src/views/newtab/detect-theme.ts',
       options: './src/views/options/options.ts',
-      // newtab: './src/views/newtab/newtab.tsx',
       popup: './src/views/popup/popup.tsx',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',

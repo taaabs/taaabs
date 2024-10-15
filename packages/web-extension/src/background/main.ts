@@ -12,20 +12,6 @@ const action = browser.browserAction || browser.action
 action.setBadgeBackgroundColor({ color: '#0DCA3B' })
 action.setBadgeTextColor({ color: 'white' })
 
-action.onClicked.addListener(async (tab) => {
-  if (
-    tab.url?.startsWith('chrome://') ||
-    tab.url?.startsWith('moz-extension://') ||
-    tab.url == 'about:newtab'
-  ) {
-    await browser.tabs.update(tab.id!, { url: 'https://taaabs.com/library' })
-  } else {
-    await browser.tabs
-      .sendMessage(tab.id!, { action: 'inject-popup' })
-      .catch(() => {})
-  }
-})
-
 message_listeners()
 
 /**

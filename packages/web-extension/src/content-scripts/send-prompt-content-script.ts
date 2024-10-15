@@ -2,11 +2,7 @@ import { AssistantName } from '@/constants/assistants'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
-const is_open_webui = document
-  .getElementsByTagName('html')[0]
-  .outerHTML.includes(
-    '<link rel="search" type="application/opensearchdescription+xml" title="Open WebUI" href="/opensearch.xml">',
-  )
+const is_open_webui = document.title.includes('Open WebUI')
 
 browser.runtime.onMessage.addListener(async (message, _, __) => {
   if (is_message(message) && message.action == 'send-prompt') {

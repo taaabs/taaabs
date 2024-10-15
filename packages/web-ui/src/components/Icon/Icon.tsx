@@ -4,6 +4,7 @@ import Add from '../../assets/icons/add.svg'
 import Archive from '../../assets/icons/archive.svg'
 import BookmarkFilled from '../../assets/icons/bookmark-filled.svg'
 import Bookmark from '../../assets/icons/bookmark.svg'
+import Bulb from '../../assets/icons/bulb.svg'
 import ChatBubbleCorner from '../../assets/icons/chat-bubble-corner.svg'
 import Chat from '../../assets/icons/chat.svg'
 import ChatFilled from '../../assets/icons/chat-filled.svg'
@@ -66,6 +67,7 @@ export namespace Icon {
     | 'ARCHIVE'
     | 'BOOKMARK_FILLED'
     | 'BOOKMARK'
+    | 'BULB'
     | 'CHAT_BUBBLE_CORNER'
     | 'CHAT'
     | 'CHAT_FILLED'
@@ -146,6 +148,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'BOOKMARK':
       icon = <Bookmark />
+      break
+    case 'BULB':
+      icon = <Bulb />
       break
     case 'CHAT_BUBBLE_CORNER':
       icon = <ChatBubbleCorner />

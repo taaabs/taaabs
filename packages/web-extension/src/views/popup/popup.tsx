@@ -273,6 +273,7 @@ export const Popup: React.FC = () => {
                 window.close()
               }
             }}
+            shortcut="Alt+S"
           />
         )
       }

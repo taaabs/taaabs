@@ -28,6 +28,9 @@ if (firefox_manifest.background && firefox_manifest.background.service_worker) {
 firefox_manifest.browser_action = firefox_manifest.action
 delete firefox_manifest.action
 
+// Remove commands (unsupported in Firefox)
+delete firefox_manifest.commands
+
 // Adjust permissions
 // Remove 'background' permission if present
 firefox_manifest.permissions = firefox_manifest.permissions.filter(

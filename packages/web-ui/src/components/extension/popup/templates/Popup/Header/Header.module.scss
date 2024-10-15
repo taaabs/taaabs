@@ -14,27 +14,50 @@
     fill: var(--accent-color);
   }
 }
-.settings {
-  position: absolute;
-  width: var(--button-dimension-34px);
-  height: var(--button-dimension-34px);
+.actions {
   display: flex;
   align-items: center;
-  justify-content: center;
-  top: 10px;
-  right: 10px;
-  border-radius: 50%;
-  border: none;
-  background: none;
-  @include transition-150ms(background-color);
-  @include hover {
-    background-color: var(--neutral100);
-    @include dark {
-      background-color: var(--dark100);
+  gap: var(--padding-4px);
+  position: absolute;
+  right: var(--padding-10px);
+  top: var(--padding-10px);
+  &__shortcut {
+    background-color: var(--blue100);
+    gap: 4px;
+    height: 23px;
+    align-items: center;
+    border-radius: var(--border-radius-8px);
+    padding: 0 4px;
+    color: var(--blue500);
+    font-size: var(--font-size-13px);
+    display: none;
+    @include desktop {
+      display: flex;
+    }
+    > svg {
+      fill: var(--blue500);
+      height: 14px;
     }
   }
-  > svg {
-    width: var(--icon-dimension-18px);
-    fill: var(--black);
+  &__settings {
+    width: var(--button-dimension-34px);
+    height: var(--button-dimension-34px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    background: none;
+    @include transition-150ms(background-color);
+    @include hover {
+      background-color: var(--neutral100);
+      @include dark {
+        background-color: var(--dark100);
+      }
+    }
+    > svg {
+      width: var(--icon-dimension-18px);
+      fill: var(--black);
+    }
   }
 }
