@@ -274,6 +274,9 @@ export const Popup: React.FC = () => {
               }
             }}
             shortcut="Alt+S"
+            translations={{
+              trigger_popup_shortcut: 'Trigger popup shortcut',
+            }}
           />
         )
       }

@@ -19,6 +19,9 @@ export const Primary = () => {
           <Header
             settings_on_click={() => {}}
             shortcut="Alt+S"
+            translations={{
+              trigger_popup_shortcut: 'Trigger popup shortcut',
+            }}
           />
         }
         should_set_height={true}
@@ -78,7 +81,7 @@ export const Primary = () => {
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
-            checkbox: 'Send with this page',
+            checkbox: 'Include page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
             transcript_not_found: '',

@@ -27,12 +27,15 @@
     height: 23px;
     align-items: center;
     border-radius: var(--border-radius-8px);
-    padding: 0 4px;
+    padding: 0 6px 0 5px;
     color: var(--blue500);
     font-size: var(--font-size-13px);
     display: none;
     @include desktop {
       display: flex;
+    }
+    > span {
+      font-weight: var(--font-weight-inter-medium);
     }
     > svg {
       fill: var(--blue500);
