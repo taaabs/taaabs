@@ -112,7 +112,7 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
         let og_image = undefined
         if (og_image_url) {
           try {
-            og_image = await get_base64_of_image_url(og_image_url, 624, 328)
+            og_image = await get_base64_of_image_url(og_image_url, 1200, 630)
           } catch {}
         }
 

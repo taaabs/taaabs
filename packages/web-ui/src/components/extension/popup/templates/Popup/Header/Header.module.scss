@@ -62,12 +62,10 @@
     }
     &__key {
       font-weight: var(--font-weight-inter-semi-bold);
-      background-color: var(--blue200);
-      color: var(--blue600);
       border-radius: 4px;
       padding: 1px 4px;
-      border: 1px solid var(--blue300);
-      box-shadow: var(--box-shadow-blue);
+      border:var(--border-primary);
+      box-shadow: var(--box-shadow);
     }
     &__plus {
       font-weight: var(--font-weight-inter-medium);

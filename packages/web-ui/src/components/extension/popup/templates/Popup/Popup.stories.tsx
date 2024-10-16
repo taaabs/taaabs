@@ -60,9 +60,9 @@ export const Primary = () => {
           value=""
           on_submit={() => {}}
           on_change={() => {}}
-          is_attach_text_switch_checked={true}
-          on_include_content_click={() => {}}
-          is_attach_text_switch_visible={true}
+          is_switch_checked={true}
+          on_switch_click={() => {}}
+          is_switch_visible={true}
           prompts_history={['a', 'b']}
           assistant_selector_slot={
             <AssistantSelector
@@ -79,7 +79,7 @@ export const Primary = () => {
           is_history_enabled={false}
           is_plain_text_too_long={false}
           text_not_found={false}
-          is_attach_text_switch_disabled={false}
+          is_switch_disabled={false}
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import browser from 'webextension-polyfill'
 
-export const use_attach_text_checkbox = () => {
+export const use_attach_text_switch = () => {
   const [is_checked, set_is_checked] = useState<boolean>(true)
 
   useEffect(() => {

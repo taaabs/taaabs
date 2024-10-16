@@ -1,6 +1,6 @@
 import { Icon } from '@web-ui/components/Icon'
 import styles from './HeaderVision.module.scss'
-import React, { useState, useRef, useCallback, memo } from 'react'
+import React, { useState, useRef, memo, useEffect } from 'react'
 import cn from 'classnames'
 
 export namespace HeaderVision {
@@ -42,19 +42,6 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       set_is_selecting(true)
       set_start_x(e.nativeEvent.offsetX)
       set_start_y(e.nativeEvent.offsetY)
-    }
-
-    const handle_mouse_move = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (!is_selecting) return
-
-      const current_x = e.nativeEvent.offsetX
-      const current_y = e.nativeEvent.offsetY
-      const x = Math.min(start_x, current_x)
-      const y = Math.min(start_y, current_y)
-      const width = Math.abs(current_x - start_x)
-      const height = Math.abs(current_y - start_y)
-
-      set_preview_rect({ x, y, width, height })
     }
 
     const handle_mouse_up = async () => {
@@ -161,6 +148,22 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       set_image(props.image)
     }
 
+    useEffect(() => {
+      const handle_mouse_move = (e: MouseEvent) => {
+        if (!is_selecting) return
+        const container_rect = container_ref.current!.getBoundingClientRect()
+        const current_x = e.clientX - container_rect.left
+        const current_y = e.clientY - container_rect.top
+        const x = Math.min(start_x, current_x)
+        const y = Math.min(start_y, current_y)
+        const width = Math.abs(current_x - start_x)
+        const height = Math.abs(current_y - start_y)
+        set_preview_rect({ x, y, width, height })
+      }
+      window.addEventListener('mousemove', handle_mouse_move)
+      return () => window.removeEventListener('mousemove', handle_mouse_move)
+    }, [is_selecting])
+
     return (
       <div className={styles.container}>
         <div
@@ -188,7 +191,6 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           onMouseEnter={handle_mouse_enter}
           onMouseLeave={handle_mouse_leave}
           onMouseDown={handle_mouse_down}
-          onMouseMove={handle_mouse_move}
           onMouseUp={handle_mouse_up}
           ref={container_ref}
         >

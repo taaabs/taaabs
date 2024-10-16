@@ -9,10 +9,10 @@ export namespace PromptField {
     value: string
     on_submit: () => void
     on_change: (value: string) => void
-    is_attach_text_switch_disabled: boolean
-    is_attach_text_switch_checked: boolean
-    is_attach_text_switch_visible: boolean
-    on_include_content_click: () => void
+    is_switch_disabled: boolean
+    is_switch_checked: boolean
+    is_switch_visible: boolean
+    on_switch_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
     assistant_selector_slot: React.ReactNode
@@ -37,7 +37,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     useState<number>(-1)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_attach_text_switch_checked || !props.is_history_enabled)
+    if (!props.is_switch_checked || !props.is_history_enabled)
       return
 
     if (is_focused) {
@@ -89,12 +89,12 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         <span>{props.translations.new_prompt}</span>
 
         <div className={styles.header__switch}>
-          {props.is_attach_text_switch_visible && (
+          {props.is_switch_visible && (
             <Switch
               label={props.translations.checkbox}
-              is_checked={props.is_attach_text_switch_checked}
-              on_change={props.on_include_content_click}
-              is_disabled={props.is_attach_text_switch_disabled}
+              is_checked={props.is_switch_checked}
+              on_change={props.on_switch_click}
+              is_disabled={props.is_switch_disabled}
             />
           )}
         </div>
@@ -112,7 +112,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           props.translations.placeholder +
           (is_focused &&
           props.is_history_enabled &&
-          props.is_attach_text_switch_checked
+          props.is_switch_checked
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }

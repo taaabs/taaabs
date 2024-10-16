@@ -92,7 +92,7 @@ export const assistants_vision: AssistantName[] = [
   'chatgpt',
   'claude',
   'mistral',
-  // 'perplexity',
   'huggingchat',
+  'copilot',
   'custom',
 ]

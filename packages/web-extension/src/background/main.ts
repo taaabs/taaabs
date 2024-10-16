@@ -112,6 +112,5 @@ browser.runtime.onInstalled.addListener(async (details) => {
     browser.storage.local.set({
       custom_assistant_url: 'http://localhost:8080/',
     })
-    browser.runtime.openOptionsPage()
   }
 })

@@ -1,12 +1,12 @@
 declare const styles: {
-  readonly "container": string;
+  readonly "area": string;
   readonly "back": string;
-  readonly "title": string;
-  readonly "restore": string;
-  readonly "restore--active": string;
+  readonly "container": string;
   readonly "image": string;
   readonly "image--selecting": string;
-  readonly "area": string;
+  readonly "restore": string;
+  readonly "restore--active": string;
+  readonly "title": string;
 };
 export = styles;
 
