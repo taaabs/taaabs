@@ -36,7 +36,6 @@ import { use_window_dimensions } from './hooks/use-window-dimensions'
 import { use_current_url } from './hooks/use-current-url'
 
 import '@web-ui/styles/style.scss'
-import { use_save_vision_prompt_switch } from './hooks/use-save-vision-prompt-switch'
 
 export const Popup: React.FC = () => {
   const current_url_hook = use_current_url()
@@ -56,7 +55,6 @@ export const Popup: React.FC = () => {
   const selected_assistant_vision_hook = use_selected_assistant_vision()
   const { custom_assistant_url } = use_custom_assistant_url()
   const attach_text_switch_hook = use_attach_text_switch()
-  const save_vision_prompt_switch_hook = use_save_vision_prompt_switch()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
   const text_selection_hook = use_text_selection()
@@ -179,38 +177,14 @@ export const Popup: React.FC = () => {
   }
 
   if (
-    (parsed_html_hook.parsed_html === undefined &&
-      !current_url_hook.is_youtube_video &&
-      !current_url_hook.is_new_tab_page) ||
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
     selected_assistant_hook.selected_assistant_name === undefined ||
     selected_assistant_vision_hook.selected_assistant_name === undefined ||
-    attach_text_switch_hook.is_checked === undefined ||
-    (!window_dimensions_hook.dimensions && !current_url_hook.is_new_tab_page)
+    attach_text_switch_hook.is_checked === undefined
   ) {
-    return (
-      <Ui_extension_popup_templates_Popup
-        should_set_height={false}
-        header_slot={
-          <Ui_extension_popup_templates_Popup_Header
-            settings_on_click={() => {}}
-            logo_on_click={() => {}}
-            vision_mode_on_click={
-              !current_url_hook.is_new_tab_page
-                ? vision_mode_hook.enter_vision_mode
-                : undefined
-            }
-            translations={{
-              trigger_popup_shortcut: '',
-            }}
-          />
-        }
-      >
-        <></>
-      </Ui_extension_popup_templates_Popup>
-    )
+    return <></>
   }
 
   const saved_items = [
@@ -264,15 +238,9 @@ export const Popup: React.FC = () => {
       should_set_height={
         // Cases when showing recent prompts which adjust its height dynamically
         !current_url_hook.is_new_tab_page &&
-        !!(
-          parsed_html_hook.parsed_html !== null ||
-          current_url_hook.is_youtube_video ||
-          text_selection_hook.selected_text
-        ) &&
         ((attach_text_switch_hook.is_checked &&
           !vision_mode_hook.is_vision_mode) ||
-          (save_vision_prompt_switch_hook.is_checked &&
-            vision_mode_hook.is_vision_mode))
+          vision_mode_hook.is_vision_mode)
       }
       header_slot={
         vision_mode_hook.is_vision_mode ? (
@@ -342,39 +310,35 @@ export const Popup: React.FC = () => {
           </Ui_extension_popup_templates_Popup_main_Actions>
         )}
 
-      {vision_mode_hook.is_vision_mode &&
-        save_vision_prompt_switch_hook.is_checked && (
-          <>
-            <Ui_extension_popup_templates_Popup_main_RecentPrompts
-              recent_prompts={[
-                ...prompts_vision_history_hook.prompts_history,
-              ].reverse()}
-              filter_phrase={
-                !prompts_vision_history_hook.prompts_history.includes(
-                  prompt_field_value,
-                )
-                  ? prompt_field_value
-                  : ''
-              }
-              default_prompts={default_vision_prompts}
-              on_recent_prompt_click={handle_quick_prompt_vision_click}
-              on_recent_prompt_middle_click={(prompt) => {
-                handle_quick_prompt_vision_click(prompt, true)
-              }}
-              is_disabled={false}
-              translations={{
-                heading: 'Recent prompts',
-              }}
-            />
+      {vision_mode_hook.is_vision_mode && (
+        <>
+          <Ui_extension_popup_templates_Popup_main_RecentPrompts
+            recent_prompts={[
+              ...prompts_vision_history_hook.prompts_history,
+            ].reverse()}
+            filter_phrase={
+              !prompts_vision_history_hook.prompts_history.includes(
+                prompt_field_value,
+              )
+                ? prompt_field_value
+                : ''
+            }
+            default_prompts={default_vision_prompts}
+            on_recent_prompt_click={handle_quick_prompt_vision_click}
+            on_recent_prompt_middle_click={(prompt) => {
+              handle_quick_prompt_vision_click(prompt, true)
+            }}
+            is_disabled={false}
+            translations={{
+              heading: 'Recent prompts',
+            }}
+          />
 
-            <Ui_extension_popup_templates_Popup_main_Separator />
-          </>
-        )}
+          <Ui_extension_popup_templates_Popup_main_Separator />
+        </>
+      )}
 
       {!vision_mode_hook.is_vision_mode &&
-        (parsed_html_hook.parsed_html !== null ||
-          current_url_hook.is_youtube_video ||
-          text_selection_hook.selected_text) &&
         !current_url_hook.is_new_tab_page &&
         attach_text_switch_hook.is_checked && (
           <>
@@ -418,11 +382,9 @@ export const Popup: React.FC = () => {
           on_submit={() => {
             if (!prompt_field_value) return
 
-            if (save_vision_prompt_switch_hook.is_checked) {
-              prompts_vision_history_hook.update_stored_prompts_history(
-                prompt_field_value,
-              )
-            }
+            prompts_vision_history_hook.update_stored_prompts_history(
+              prompt_field_value,
+            )
 
             const message: SendPrompt_Message = {
               action: 'send-prompt',
@@ -439,19 +401,15 @@ export const Popup: React.FC = () => {
             window.close()
           }}
           is_switch_disabled={false}
-          is_switch_checked={save_vision_prompt_switch_hook.is_checked}
-          is_switch_visible={true}
-          on_switch_click={() => {
-            save_vision_prompt_switch_hook.set_is_checked(
-              !save_vision_prompt_switch_hook.is_checked,
-            )
-          }}
+          is_switch_checked={false}
+          is_switch_visible={false}
+          on_switch_click={() => {}}
           prompts_history={[
             ...prompts_vision_history_hook.prompts_history.filter(
               (prompt) => !default_vision_prompts.includes(prompt),
             ),
           ].reverse()}
-          is_history_enabled={save_vision_prompt_switch_hook.is_checked}
+          is_history_enabled={true}
           assistant_selector_slot={
             <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
               selected_assistant_name={
@@ -481,11 +439,11 @@ export const Popup: React.FC = () => {
               assistants[selected_assistant_vision_hook.selected_assistant_name]
                 .display_name
             }`,
-            checkbox: 'Save prompt',
+            switch: '',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
             text_not_found: <></>,
-            footer_privacy_info: 'Data processed 100% locally',
+            footer_privacy_info: 'AI features are 100% local',
           }}
         />
       ) : (
@@ -531,23 +489,15 @@ export const Popup: React.FC = () => {
             window.close()
           }}
           is_switch_disabled={
-            parsed_html_hook.parsed_html === undefined &&
-            !text_selection_hook.selected_text
+            !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
           }
           is_switch_checked={
             parsed_html_hook.parsed_html === null &&
-            !current_url_hook.is_youtube_video &&
             !text_selection_hook.selected_text
               ? false
               : attach_text_switch_hook.is_checked
           }
-          is_switch_visible={
-            !current_url_hook.is_new_tab_page &&
-            (!!parsed_html_hook.parsed_html ||
-              current_url_hook.is_youtube_video ||
-              parsed_html_hook.parsed_html === undefined ||
-              !!text_selection_hook.selected_text)
-          }
+          is_switch_visible={!current_url_hook.is_new_tab_page}
           on_switch_click={() => {
             attach_text_switch_hook.set_is_checked(
               !attach_text_switch_hook.is_checked,
@@ -592,7 +542,6 @@ export const Popup: React.FC = () => {
             !current_url_hook.is_new_tab_page &&
             parsed_html_hook.parsed_html === null &&
             attach_text_switch_hook.is_checked &&
-            !current_url_hook.is_taaabs &&
             !text_selection_hook.selected_text
           }
           translations={{
@@ -602,7 +551,7 @@ export const Popup: React.FC = () => {
               assistants[selected_assistant_hook.selected_assistant_name]
                 .display_name
             }`,
-            checkbox:
+            switch:
               text_selection_hook.selected_text ||
               (parsed_html_hook.parsed_html === null &&
                 !current_url_hook.is_youtube_video)
@@ -623,7 +572,7 @@ export const Popup: React.FC = () => {
             text_not_found: current_url_hook.is_youtube_video
               ? '⚠ Transcript not found'
               : '⚠ Text not found',
-            footer_privacy_info: 'Data processed 100% locally',
+            footer_privacy_info: 'AI features are 100% local',
           }}
         />
       )}

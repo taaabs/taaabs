@@ -21,7 +21,7 @@ export namespace PromptField {
     translations: {
       new_prompt: string
       placeholder: string
-      checkbox: string
+      switch: string
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
       text_not_found: React.ReactNode
@@ -91,7 +91,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         <div className={styles.header__switch}>
           {props.is_switch_visible && (
             <Switch
-              label={props.translations.checkbox}
+              label={props.translations.switch}
               is_checked={props.is_switch_checked}
               on_change={props.on_switch_click}
               is_disabled={props.is_switch_disabled}

@@ -83,12 +83,12 @@ export const Primary = () => {
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
-            checkbox: 'Ask this page',
+            switch: 'Send page',
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
             text_not_found: '',
             active_assistant: 'Active assistant',
-            footer_privacy_info: 'Data processed 100% locally',
+            footer_privacy_info: 'Data is processed 100% locally',
           }}
         />
       </Popup>

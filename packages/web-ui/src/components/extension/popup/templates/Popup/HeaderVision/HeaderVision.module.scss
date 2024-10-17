@@ -44,7 +44,7 @@
   height: var(--button-dimension-34px);
   pointer-events: none;
   > svg {
-    fill: var(--border-color-secondary);
+    fill: var(--neutral300);
     height: var(--icon-dimension-20px);
     width: var(--icon-dimension-20px);
     @include transition-150ms;

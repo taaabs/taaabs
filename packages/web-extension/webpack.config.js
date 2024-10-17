@@ -105,7 +105,7 @@ module.exports = (_, argv) => {
       port: 9000,
     },
     optimization: {
-      // minimize: false,
+      minimize: false,
     },
     // cache: {
     //   type: 'filesystem',
