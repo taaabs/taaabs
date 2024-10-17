@@ -55,7 +55,7 @@ We take your privacy seriously. Taaabs is built with a strong focus on user priv
 - **No Ads:** The extension is completely ad-free.
 - **End-to-End Encryption:** Links saved to your personal library on taaabs.com are end-to-end encrypted with AES-CBC 256-bit, encryption key is derived with Argon2id. This mirrors [bitwarden's approach](https://bitwarden.com/help/what-encryption-is-used/).
 
-For more detailed information, please review our complete [Privacy Policy](./packages/web-extension/privacy.md).
+For more detailed information, please review the extension's [Privacy Policy](./packages/web-extension/PRIVACY.md).
 
 ## License
 
