@@ -1,4 +1,4 @@
-## Privacy policy for Taaabs browser extension
+# Privacy policy for Taaabs browser extension
 
 Effective Date: 17 Oct 2024
 
