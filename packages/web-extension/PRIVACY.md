@@ -20,19 +20,19 @@ The extension does not collect information of any kind.
 - **AI communication:** The Extension facilitates communication with your chosen AI assistant via browser's built-in channels.
 - **Links:** Plain URLs are never sent to Taaabs.
 
-## 4. How the extension uses your auth data and encryption key
+## 4. Auth data
 
-The Taaabs extension uses your auth data in the following ways:
+If you decide to sign in, the extension uses your auth data in the following ways:
 
 - **Facilitating encrypted link saving:** If you sign in, your access token and encryption key are stored **locally** in your browser. This is essential for encrypting your links before they are saved to your personal library on taaabs.com. **This information never leaves your browser and is never transmitted to our servers.**
 
 - **Checking if a link is already saved:** To provide the functionality of checking if the current URL is already saved in your library, the extension generates a cryptographically secure hash (SHA256) of the URL (combined with encryption key) sends this hash to taaabs.com. **This allows the server to check for a match without ever receiving the actual URL.**
 
-- **Storing encrypted links:** When you save a link, it's encrypted locally using your encryption key and then sent to taaabs.com for storage. We only store the encrypted version of your links; **we cannot access the decrypted content**. **Our servers are located in the EU.**
+- **Storing encrypted links:** When you save a link, it's encrypted locally using your encryption key and only then sent to taaabs.com for storage. We only store the encrypted version of your links, **we cannot access their readable form**. **Our servers are located in the EU.**
 
 ## 5. How we share your information
 
-_(Applies to signed in user.)_ Your personal information (such as your email address) is not shared with any third parties, unless legally required to do so. We are committed to protecting your privacy.
+_(Applies to signed in user.)_ Your personal information (such as your email address) is not shared with any third parties, unless legally required to do so. We are committed to protecting your privacy and faciliate encryption at rest.
 
 ## 6. Data security
 
