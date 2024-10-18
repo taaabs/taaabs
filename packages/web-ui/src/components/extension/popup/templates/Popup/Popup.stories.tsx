@@ -87,8 +87,7 @@ export const Primary = () => {
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: '',
             text_not_found: '',
-            active_assistant: 'Active assistant',
-            footer_privacy_info: 'Data is processed 100% locally',
+            active_assistant: 'Connected with',
           }}
         />
       </Popup>

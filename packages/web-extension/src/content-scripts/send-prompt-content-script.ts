@@ -2,6 +2,8 @@ import { AssistantName } from '@/constants/assistants'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
+// When testing each supported assistant, make sure to test both, desktop and mobile screens.
+
 const is_open_webui = document.title.includes('Open WebUI')
 
 browser.runtime.onMessage.addListener(async (message, _, __) => {
@@ -143,7 +145,16 @@ const send_prompt = async (params: {
 
       const form = input_element.closest('form')
 
-      if (params.assistant_name == 'claude') {
+      if (params.assistant_name == 'gemini') {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 0)
+        })
+        ;(
+          document.querySelector('mat-icon[fonticon="send"]') as HTMLElement
+        ).click()
+      } else if (params.assistant_name == 'claude') {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true)
@@ -151,7 +162,7 @@ const send_prompt = async (params: {
         })
         ;(
           document.querySelector(
-            'button[aria-label="Send Message"]',
+            'fieldset > div:first-child button',
           ) as HTMLElement
         ).click()
       } else if (form) {
@@ -190,7 +201,7 @@ const send_prompt = async (params: {
       } else if (params.assistant_name == 'aistudio') {
         setTimeout(() => {
           ;(
-            document.querySelector('button[aria-label=Run]') as HTMLElement
+            document.querySelector('run-button > button') as HTMLElement
           )?.click()
         }, 0)
       } else {
@@ -279,7 +290,7 @@ namespace AssistantBugMitigation {
         resolve(null)
       })
     } else if (params.assistant_name == 'copilot') {
-      while (!document.querySelector('button[title="Thumbs up message"]')) {
+      while (!document.querySelector('div[data-content="ai-message"]')) {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true)
@@ -302,8 +313,9 @@ namespace AssistantBugMitigation {
         '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
       deepseek: '#chat-input',
       claude: 'div[contenteditable=true] > p',
-      mistral: 'textarea[placeholder="Ask anything!"]',
+      mistral: 'textarea',
       you: 'textarea[name="query"]',
+      gemini: 'div[role="textbox"]', // Needed in mobile browser
     }
 
     const selector = chatbot_selectors[assistant_name]

@@ -434,8 +434,8 @@ export const Popup: React.FC = () => {
           text_not_found={false}
           translations={{
             new_prompt: 'New chat',
-            active_assistant: 'Active vision assistant',
-            placeholder: `Message ${
+            active_assistant: 'Connected with',
+            placeholder: `Ask ${
               assistants[selected_assistant_vision_hook.selected_assistant_name]
                 .display_name
             }`,
@@ -443,7 +443,6 @@ export const Popup: React.FC = () => {
             active_input_placeholder_suffix: '(⇅ for history)',
             plain_text_too_long: <></>,
             text_not_found: <></>,
-            footer_privacy_info: 'AI features are 100% local',
           }}
         />
       ) : (
@@ -546,8 +545,8 @@ export const Popup: React.FC = () => {
           }
           translations={{
             new_prompt: 'New chat',
-            active_assistant: 'Active assistant',
-            placeholder: `Message ${
+            active_assistant: 'Connected with',
+            placeholder: `Ask ${
               assistants[selected_assistant_hook.selected_assistant_name]
                 .display_name
             }`,
@@ -572,7 +571,6 @@ export const Popup: React.FC = () => {
             text_not_found: current_url_hook.is_youtube_video
               ? '⚠ Transcript not found'
               : '⚠ Text not found',
-            footer_privacy_info: 'AI features are 100% local',
           }}
         />
       )}

@@ -25,7 +25,6 @@ export namespace PromptField {
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
       text_not_found: React.ReactNode
-      footer_privacy_info: string
       active_assistant: string
     }
   }
@@ -37,8 +36,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     useState<number>(-1)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_switch_checked || !props.is_history_enabled)
-      return
+    if (!props.is_switch_checked || !props.is_history_enabled) return
 
     if (is_focused) {
       if (e.key == 'ArrowUp') {
@@ -110,9 +108,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         on_enter_pressed={props.on_submit}
         placeholder={
           props.translations.placeholder +
-          (is_focused &&
-          props.is_history_enabled &&
-          props.is_switch_checked
+          (is_focused && props.is_history_enabled && props.is_switch_checked
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }
@@ -132,14 +128,26 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
       <div className={styles.footer}>
         <div className={styles['footer__top-line']}>
-          <span>{props.translations.active_assistant}:</span>
+          <span>{props.translations.active_assistant}</span>
           {props.assistant_selector_slot}
         </div>
         <div className={styles['footer__bottom-line']}>
-          <span>{props.translations.footer_privacy_info}</span>
-          {' · '}
+          <a
+            href="https://github.com/taaabs/taaabs/blob/master/packages/web-extension/PRIVACY.md"
+            target="_blank"
+          >
+            Zero-knowledge
+          </a>{' '}
+          <span>·</span>{' '}
           <a href="https://github.com/taaabs/taaabs" target="_blank">
-            Star on GitHub↗
+            Open-source
+          </a>{' '}
+          <span>·</span>{' '}
+          <a
+            href="https://github.com/taaabs/taaabs/discussions"
+            target="_blank"
+          >
+            Send feedback
           </a>
         </div>
       </div>

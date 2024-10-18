@@ -30,7 +30,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     const image_ref = useRef<HTMLImageElement>(null)
     const container_ref = useRef<HTMLDivElement>(null)
 
-    // Fix for Firefox to prevent image box selection highligh during resizing
+    // Fix for Firefox to prevent image box selection highlight during resizing
     const handle_mouse_enter = () => {
       document.body.style.userSelect = 'none'
     }
@@ -44,7 +44,18 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       set_start_y(e.nativeEvent.offsetY)
     }
 
-    const handle_mouse_up = async () => {
+    const handle_touch_start = (e: React.TouchEvent<HTMLDivElement>) => {
+      e.preventDefault()
+      set_is_selecting(true)
+      set_start_x(
+        e.touches[0].clientX - e.currentTarget.getBoundingClientRect().left,
+      )
+      set_start_y(
+        e.touches[0].clientY - e.currentTarget.getBoundingClientRect().top,
+      )
+    }
+
+    const handle_interaction_end = async () => {
       set_is_selecting(false)
 
       if (
@@ -149,19 +160,41 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     useEffect(() => {
-      const handle_mouse_move = (e: MouseEvent) => {
-        if (!is_selecting) return
-        const container_rect = container_ref.current!.getBoundingClientRect()
-        const current_x = e.clientX - container_rect.left
-        const current_y = e.clientY - container_rect.top
+      const handle_move = (e: MouseEvent | TouchEvent) => {
+        if (!is_selecting || !container_ref.current) return
+
+        const container_rect = container_ref.current.getBoundingClientRect()
+        const current_x =
+          (e instanceof TouchEvent ? e.touches[0].clientX : e.clientX) -
+          container_rect.left
+        const current_y =
+          (e instanceof TouchEvent ? e.touches[0].clientY : e.clientY) -
+          container_rect.top
+
         const x = Math.min(start_x, current_x)
         const y = Math.min(start_y, current_y)
         const width = Math.abs(current_x - start_x)
         const height = Math.abs(current_y - start_y)
+
         set_preview_rect({ x, y, width, height })
       }
-      window.addEventListener('mousemove', handle_mouse_move)
-      return () => window.removeEventListener('mousemove', handle_mouse_move)
+
+      const handle_touch_move = (e: TouchEvent) => {
+        e.preventDefault() // Prevent page scrolling during touch selection
+        handle_move(e)
+      }
+
+      if (is_selecting) {
+        window.addEventListener('mousemove', handle_move)
+        window.addEventListener('touchmove', handle_touch_move, {
+          passive: false,
+        })
+      }
+
+      return () => {
+        window.removeEventListener('mousemove', handle_move)
+        window.removeEventListener('touchmove', handle_touch_move)
+      }
     }, [is_selecting])
 
     return (
@@ -188,10 +221,12 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           className={cn(styles.image, {
             [styles['image--selecting']]: is_selecting,
           })}
+          onTouchStart={handle_touch_start}
+          onTouchEnd={handle_interaction_end}
           onMouseEnter={handle_mouse_enter}
           onMouseLeave={handle_mouse_leave}
           onMouseDown={handle_mouse_down}
-          onMouseUp={handle_mouse_up}
+          onMouseUp={handle_interaction_end}
           ref={container_ref}
         >
           <img src={image} ref={image_ref} draggable={false} />
