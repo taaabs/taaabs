@@ -59,8 +59,9 @@
     font-size: var(--font-size-13px);
     color: var(--text-color-dimmed);
     > a {
+      @include text-decoration-underlinie-thin;
       @include hover {
-        @include text-decoration-underlinie-thin;
+        color: var(--accent-color);
       }
     }
   }
