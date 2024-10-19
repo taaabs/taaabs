@@ -10,20 +10,18 @@ export const Header: React.FC = () => {
     <Ui_extension_popup_templates_Popup_HeaderVision
       key={vision_mode_hook.original_image}
       back_button_on_click={vision_mode_hook.exit_vision_mode}
-      image={vision_mode_hook.original_image!}
+      image={vision_mode_hook.original_image}
       on_resize={vision_mode_hook.set_image}
       translations={{
         title: 'Vision',
         restore: 'Restore',
+        loading: 'Loading...',
       }}
     />
   ) : (
     <Ui_extension_popup_templates_Popup_Header
-      vision_mode_on_click={
-        !current_url_hook.is_new_tab_page
-          ? vision_mode_hook.enter_vision_mode
-          : undefined
-      }
+      vision_mode_on_click={vision_mode_hook.enter_vision_mode}
+      is_vision_mode_available={!current_url_hook.is_new_tab_page}
       settings_on_click={() => {
         browser.runtime.openOptionsPage()
         // Firefox requires closing manually

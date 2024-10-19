@@ -19,6 +19,7 @@ export const Primary = () => {
           <Header
             settings_on_click={() => {}}
             vision_mode_on_click={() => {}}
+            is_vision_mode_available={true}
             logo_on_click={() => {}}
             translations={{
               trigger_popup_shortcut: 'Trigger popup shortcut',
@@ -53,6 +54,7 @@ export const Primary = () => {
           ]}
           translations={{
             heading: 'Recent prompts',
+            searching_heading: 'Searching in recents...',
           }}
         />
         <Separator />

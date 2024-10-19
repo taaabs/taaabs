@@ -2,14 +2,16 @@ import { Icon } from '@web-ui/components/Icon'
 import styles from './HeaderVision.module.scss'
 import React, { useState, useRef, memo, useEffect } from 'react'
 import cn from 'classnames'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace HeaderVision {
   export type Props = {
     back_button_on_click: () => void
-    image: string
+    image?: string
     translations: {
       title: string
       restore: string
+      loading: string
     }
     on_resize: (resized_image: string) => void
   }
@@ -155,6 +157,7 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     const handle_restore_original = () => {
+      if (!props.image) return
       props.on_resize(props.image)
       set_image(props.image)
     }
@@ -204,6 +207,10 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       }
     }, [is_selecting])
 
+    useUpdateEffect(() => {
+      set_image(props.image)
+    }, [props.image])
+
     return (
       <div className={styles.container}>
         <div
@@ -236,7 +243,11 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           onMouseUp={handle_interaction_end}
           ref={container_ref}
         >
-          <img src={image} ref={image_ref} draggable={false} />
+          {image ? (
+            <img src={image} ref={image_ref} draggable={false} />
+          ) : (
+            <div className={styles.image__loading}>{props.translations.loading}</div>
+          )}
           {is_selecting && (
             <div
               style={{
