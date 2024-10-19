@@ -60,7 +60,9 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     const handle_interaction_end = async () => {
       set_is_selecting(false)
 
-      if (
+      if (preview_rect.width == 0 && preview_rect.height == 0) {
+        handle_restore_original()
+      } else if (
         preview_rect.width > 0 &&
         preview_rect.height > 0 &&
         image_ref.current &&
@@ -246,7 +248,9 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
           {image ? (
             <img src={image} ref={image_ref} draggable={false} />
           ) : (
-            <div className={styles.image__loading}>{props.translations.loading}</div>
+            <div className={styles.image__loading}>
+              {props.translations.loading}
+            </div>
           )}
           {is_selecting && (
             <div
