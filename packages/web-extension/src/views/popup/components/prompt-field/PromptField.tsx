@@ -1,12 +1,6 @@
 import browser from 'webextension-polyfill'
-import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
-import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
 import { AssistantSelector as Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField/AssistantSelector'
-import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
-import { useEffect, useState } from 'react'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import {
   AssistantName,
   assistants,
@@ -33,24 +27,17 @@ export const PromptField: React.FC<{
   set_prompt_field_value,
 }) => {
   const {
-    auth_state_hook,
-    saved_check_hook,
     prompts_history_hook,
     prompts_vision_history_hook,
     parsed_html_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
-    custom_assistant_url_hook,
     attach_text_switch_hook,
     text_selection_hook,
     vision_mode_hook,
     window_dimensions_hook,
     current_url_hook,
   } = usePopup()
-
-  const handle_submit = () => {
-    // Implement the logic here
-  }
 
   return vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField

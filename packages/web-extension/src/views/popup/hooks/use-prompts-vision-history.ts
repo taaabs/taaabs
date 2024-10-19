@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { default_vision_prompts } from '../data/default-prompts'
 import browser from 'webextension-polyfill'
+import { default_vision_prompts } from '../data/default-prompts'
 
 export const use_prompts_vision_history = () => {
   const [prompts_history, set_prompts_history] = useState<string[]>(
