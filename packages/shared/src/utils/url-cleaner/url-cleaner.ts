@@ -34,8 +34,18 @@ export const url_cleaner = (url: string): string => {
       if (video_id) {
         return `https://www.youtube.com/watch?v=${video_id}`
       }
-    } else if (parsed_url.hostname == 'twitter.com') {
+    } else if (
+      parsed_url.hostname == 'twitter.com' ||
+      parsed_url.hostname == 'x.com'
+    ) {
+      // Clear all parameters for Twitter/X URLs
+      parsed_url.search = ''
+      // Standardize to x.com
       parsed_url.hostname = 'x.com'
+      // Remove any trailing slash if present, except for root domain
+      if (parsed_url.pathname.endsWith('/') && parsed_url.pathname.length > 1) {
+        parsed_url.pathname = parsed_url.pathname.slice(0, -1)
+      }
     }
 
     return parsed_url.toString()

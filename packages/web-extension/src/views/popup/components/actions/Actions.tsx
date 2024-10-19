@@ -21,13 +21,6 @@ export const Actions: React.FC = () => {
     set_is_saved: saved_check_hook.set_is_saved,
   })
 
-  if (
-    !auth_state_hook.is_authenticated ||
-    current_url_hook.url.startsWith('https://taaabs.com')
-  ) {
-    return null
-  }
-
   const saved_items = [
     <UiButton
       key="edit"
@@ -80,7 +73,7 @@ export const Actions: React.FC = () => {
   return (
     <Ui_extension_popup_templates_Popup_main_Actions>
       <UiButton
-        href={'https://taaabs.com/library'}
+        href='https://taaabs.com/library'
         rel="noreferrer noopener"
         is_outlined={true}
         on_click={async (e) => {

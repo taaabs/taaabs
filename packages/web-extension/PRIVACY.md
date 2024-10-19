@@ -32,7 +32,7 @@ If you decide to sign in, the extension uses your auth data in the following way
 
 ## 5. How we share your information
 
-_(Applies to signed in user.)_ Your personal information (such as your email address) is not shared with any third parties, unless legally required to do so. We are committed to protecting your privacy and faciliate encryption at rest.
+_(Applies to signed in users of taaabs.com service.)_ Your personal information (such as email address) is not shared with any third parties, unless legally required to do so. We are committed to protecting your privacy and faciliate encryption at rest.
 
 ## 6. Data security
 

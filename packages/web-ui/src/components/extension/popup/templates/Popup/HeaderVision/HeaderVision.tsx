@@ -160,16 +160,12 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
     }
 
     useEffect(() => {
-      const handle_move = (e: MouseEvent | TouchEvent) => {
+      const handle_mouse_move = (e: MouseEvent) => {
         if (!is_selecting || !container_ref.current) return
 
         const container_rect = container_ref.current.getBoundingClientRect()
-        const current_x =
-          (e instanceof TouchEvent ? e.touches[0].clientX : e.clientX) -
-          container_rect.left
-        const current_y =
-          (e instanceof TouchEvent ? e.touches[0].clientY : e.clientY) -
-          container_rect.top
+        const current_x = e.clientX - container_rect.left
+        const current_y = e.clientY - container_rect.top
 
         const x = Math.min(start_x, current_x)
         const y = Math.min(start_y, current_y)
@@ -180,19 +176,30 @@ export const HeaderVision: React.FC<HeaderVision.Props> = memo(
       }
 
       const handle_touch_move = (e: TouchEvent) => {
-        e.preventDefault() // Prevent page scrolling during touch selection
-        handle_move(e)
+        if (!is_selecting || !container_ref.current) return
+        e.preventDefault() // Prevent scrolling
+
+        const container_rect = container_ref.current.getBoundingClientRect()
+        const current_x = e.touches[0].clientX - container_rect.left
+        const current_y = e.touches[0].clientY - container_rect.top
+
+        const x = Math.min(start_x, current_x)
+        const y = Math.min(start_y, current_y)
+        const width = Math.abs(current_x - start_x)
+        const height = Math.abs(current_y - start_y)
+
+        set_preview_rect({ x, y, width, height })
       }
 
       if (is_selecting) {
-        window.addEventListener('mousemove', handle_move)
+        window.addEventListener('mousemove', handle_mouse_move)
         window.addEventListener('touchmove', handle_touch_move, {
           passive: false,
         })
       }
 
       return () => {
-        window.removeEventListener('mousemove', handle_move)
+        window.removeEventListener('mousemove', handle_mouse_move)
         window.removeEventListener('touchmove', handle_touch_move)
       }
     }, [is_selecting])
