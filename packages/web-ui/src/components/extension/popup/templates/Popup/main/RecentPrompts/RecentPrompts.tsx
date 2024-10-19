@@ -15,6 +15,7 @@ export namespace RecentPrompts {
     filter_phrase: string
     translations: {
       heading: string
+      searching_heading: string
     }
   }
 }
@@ -76,7 +77,9 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
           })}
         >
           <div className={styles.prompts__heading}>
-            {props.translations.heading}
+            {props.filter_phrase && filtered_prompts.length > 0
+              ? props.translations.searching_heading
+              : props.translations.heading}
           </div>
           {prompts_to_display.map((prompt, i) => {
             const original_prompt =

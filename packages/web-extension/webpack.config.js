@@ -23,7 +23,7 @@ module.exports = (_, argv) => {
         { from: 'src/manifest.json', to: 'manifest.json' },
         { from: 'src/icons', to: 'icons' },
         { from: 'src/views/options/options.html', to: 'options.html' },
-        { from: 'src/views/popup/popup.html', to: 'popup.html' },
+        { from: 'src/views/popup/index.html', to: 'popup.html' },
       ],
     }),
     ...(!is_production
@@ -39,7 +39,7 @@ module.exports = (_, argv) => {
     entry: {
       background: './src/background/main.ts',
       options: './src/views/options/options.ts',
-      popup: './src/views/popup/popup.tsx',
+      popup: './src/views/popup/App.tsx',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
       'send-prompt-content-script':
