@@ -132,15 +132,12 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           {props.assistant_selector_slot}
         </div>
         <div className={styles['footer__bottom-line']}>
-          <a
-            href="https://github.com/taaabs/taaabs/blob/master/packages/web-extension/PRIVACY.md"
-            target="_blank"
-          >
-            Zero-knowledge
+          <a href="https://github.com/taaabs/taaabs" target="_blank">
+            Star on GitHub
           </a>{' '}
           <span>·</span>{' '}
-          <a href="https://github.com/taaabs/taaabs" target="_blank">
-            Open-source
+          <a href="https://buymeacoffee.com/robertpiosik" target="_blank">
+            Buy me a coffee
           </a>{' '}
           <span>·</span>{' '}
           <a
