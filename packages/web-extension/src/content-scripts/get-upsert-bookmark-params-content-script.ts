@@ -105,7 +105,7 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
           const ctx = canvas.getContext('2d')!
           ctx.drawImage(img, 0, 0, width, height)
 
-          return canvas.toDataURL('image/webp', 0.7)
+          return canvas.toDataURL('image/webp')
         }
 
         const og_image_url = await get_og_image_url()

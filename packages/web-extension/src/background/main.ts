@@ -114,3 +114,23 @@ browser.runtime.onInstalled.addListener(async (details) => {
     })
   }
 })
+
+// Keep alive in Chromium
+if (!browser.browserAction) {
+  const keep_alive_alarm_name = 'keep-alive-alarm'
+  const create_keep_alive_alarm = async () => {
+    try {
+      chrome.alarms.create(keep_alive_alarm_name, {
+        when: Date.now() + 1000 * 60,
+      }) // 1 minute interval
+    } catch (error) {
+      console.error('Error creating KeepAlive alarm:', error)
+    }
+  }
+
+  chrome.runtime.onStartup.addListener(create_keep_alive_alarm)
+  chrome.runtime.onInstalled.addListener(create_keep_alive_alarm)
+  chrome.alarms.onAlarm.addListener(() => {
+    create_keep_alive_alarm()
+  })
+}
