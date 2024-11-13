@@ -56,10 +56,10 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '1000 zakładek',
+            '10 000 zakładek',
             'Nielimitowane tagi',
-            'Kopie w trybie czytania',
-            'Wyszukiwanie pełnotekstowe',
+            'Błyskawiczne wyszukiwanie',
+            'Absolutny brak śledzenia',
           ],
           button_label: 'Rozpocznij za darmo',
         },

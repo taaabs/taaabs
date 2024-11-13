@@ -5,23 +5,23 @@ const path = require('path')
 // https://stackoverflow.com/a/69166434/3998651
 // Nextjs 14 needs this change to the above answer: https://stackoverflow.com/a/76852889/3998651
 // Modified with the help of llama 3 to use sha256 instead of deprecated in node's crypto md5: https://hf.co/chat/r/PiwZzFC
-const hashOnlyIdent = (context, _, exportName) => {
+const hash_only_ident = (context, _, export_name) => {
   const hash = crypto.createHash('sha256')
   hash.update(
     Buffer.from(
       `filePath:${path
         .relative(context.rootContext, context.resourcePath)
-        .replace(/\\+/g, '/')}#className:${exportName}`,
+        .replace(/\\+/g, '/')}#className:${export_name}`,
     ),
   )
   return hash
     .digest('base64')
     .replace(/[^a-zA-Z0-9-_]/g, '_')
     .replace(/^(-?\d|--)/, '_$1')
-    .slice(0, 7)
+    .slice(0, 5)
 }
 
-const nextConfig = {
+const next_config = {
   transpilePackages: [
     '@taaabs/web-ui',
     '@taaabs/repositories',
@@ -48,7 +48,7 @@ const nextConfig = {
             moduleLoader.options !== undefined &&
             moduleLoader.options.modules !== undefined
           )
-            moduleLoader.options.modules.getLocalIdent = hashOnlyIdent
+            moduleLoader.options.modules.getLocalIdent = hash_only_ident
         })
       })
     }
@@ -74,4 +74,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = next_config

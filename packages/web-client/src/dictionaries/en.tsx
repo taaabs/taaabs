@@ -50,10 +50,10 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '1000 bookmarks',
+            '10 000 bookmarks',
             'Unlimited tags',
-            'Full-text search',
-            'Permanent reader',
+            'Flash search',
+            'Zero tracking',
           ],
           button_label: 'Start for free',
         },
@@ -63,7 +63,7 @@ const dictionary: Dictionary = {
           bullets_heading: 'Level-up with:',
           bullets: [
             'Unlimited bookmarks',
-            // 'Highlights',
+            'Highlights (coming soon)',
             'Secondary links',
             'Premium support',
             'Shorter username',

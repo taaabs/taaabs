@@ -225,7 +225,6 @@ const send_prompt = async (params: {
 namespace AssistantBugMitigation {
   export const on_load = async (params: { assistant_name: AssistantName }) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
-    // Deepseek automatically restores previous conversation, we need to clear it.
     if (params.assistant_name == 'aistudio') {
       await new Promise(async (resolve) => {
         while (!document.querySelector('ms-zero-state')) {
@@ -272,23 +271,6 @@ namespace AssistantBugMitigation {
         }
         resolve(null)
       })
-    } else if (params.assistant_name == 'deepseek') {
-      await new Promise(async (resolve) => {
-        while (!document.querySelector('#latest-context-divider')) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
-        ;(document.querySelector('.ba62c862._64447e7') as HTMLElement).click()
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 0)
-        })
-        resolve(null)
-      })
     } else if (params.assistant_name == 'copilot') {
       while (!document.querySelector('div[data-content="ai-message"]')) {
         await new Promise((resolve) => {
@@ -311,7 +293,6 @@ namespace AssistantBugMitigation {
     const chatbot_selectors: Partial<Record<AssistantName, string>> = {
       huggingchat:
         '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
-      deepseek: '#chat-input',
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
       you: 'textarea[name="query"]',
