@@ -59,7 +59,7 @@ export const dictionary: Dictionary = {
             '10 000 zakładek',
             'Nielimitowane tagi',
             'Błyskawiczne wyszukiwanie',
-            'Absolutny brak śledzenia',
+            'Szyfrowanie end-to-end',
           ],
           button_label: 'Rozpocznij za darmo',
         },

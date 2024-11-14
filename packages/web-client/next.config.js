@@ -4,7 +4,6 @@ const path = require('path')
 
 // https://stackoverflow.com/a/69166434/3998651
 // Nextjs 14 needs this change to the above answer: https://stackoverflow.com/a/76852889/3998651
-// Modified with the help of llama 3 to use sha256 instead of deprecated in node's crypto md5: https://hf.co/chat/r/PiwZzFC
 const hash_only_ident = (context, _, export_name) => {
   const hash = crypto.createHash('sha256')
   hash.update(

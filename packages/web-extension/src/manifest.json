@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
   "author": "Robert Piosik",
-  "name": "Taaabs - Zero-knowledge bookmarks & ChatGPT",
+  "name": "Taaabs - Zero-knowledge bookmarks & AI",
   "short_name": "taaabs",
-  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with ChatGPT.",
-  "version": "0.3.24",
+  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with AI.",
+  "version": "0.3.25",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {

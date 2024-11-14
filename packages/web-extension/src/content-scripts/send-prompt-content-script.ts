@@ -272,17 +272,10 @@ namespace AssistantBugMitigation {
         resolve(null)
       })
     } else if (params.assistant_name == 'copilot') {
-      while (!document.querySelector('div[data-content="ai-message"]')) {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 100)
-        })
-      }
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 1000)
+        }, 2000)
       })
     }
   }
