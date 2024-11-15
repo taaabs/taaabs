@@ -13,13 +13,9 @@ import { use_prompts_vision_history } from '../../hooks/use-prompts-vision-histo
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
-  assistant_url:string
-  shortened_plan_text?:string
-}> = ({
-  prompt_field_value,
-  assistant_url,
-  shortened_plan_text
-}) => {
+  assistant_url: string
+  shortened_plan_text?: string
+}> = ({ prompt_field_value, assistant_url, shortened_plan_text }) => {
   const {
     parsed_html_hook,
     attach_text_switch_hook,
@@ -28,7 +24,7 @@ export const RecentPrompts: React.FC<{
     current_url_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
-    window_dimensions_hook
+    window_dimensions_hook,
   } = usePopup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
@@ -142,8 +138,7 @@ export const RecentPrompts: React.FC<{
       )}
 
       {!vision_mode_hook.is_vision_mode &&
-        !current_url_hook.is_new_tab_page &&
-        attach_text_switch_hook.is_checked && (
+        !current_url_hook.is_new_tab_page && (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[

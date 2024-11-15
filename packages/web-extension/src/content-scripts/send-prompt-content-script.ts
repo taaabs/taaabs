@@ -199,6 +199,16 @@ const send_prompt = async (params: {
           ) as HTMLElement
         )?.click()
       } else if (params.assistant_name == 'aistudio') {
+        await new Promise(async (resolve) => {
+          while (document.querySelector('run-button > button[aria-disabled="true"]')) {
+            await new Promise((resolve) => {
+              setTimeout(() => {
+                resolve(true)
+              }, 100)
+            })
+          }
+          resolve(null)
+        })
         setTimeout(() => {
           ;(
             document.querySelector('run-button > button') as HTMLElement
@@ -225,23 +235,7 @@ const send_prompt = async (params: {
 namespace AssistantBugMitigation {
   export const on_load = async (params: { assistant_name: AssistantName }) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
-    if (params.assistant_name == 'aistudio') {
-      await new Promise(async (resolve) => {
-        while (!document.querySelector('ms-zero-state')) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
-        resolve(null)
-      })
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 100)
-      })
-    } else if (params.assistant_name == 'mistral') {
+    if (params.assistant_name == 'mistral') {
       await new Promise(async (resolve) => {
         while (
           document.querySelector(
@@ -260,7 +254,7 @@ namespace AssistantBugMitigation {
       await new Promise(async (resolve) => {
         while (
           !document.querySelector(
-            '.md\\:grid-cols-2.md\\:auto-rows-fr.gap-sm.grid-cols-1.grid',
+            '.dark\\:selection\\:text-superDark.dark\\:selection\\:bg-superDuper\\/10.selection\\:text-textMain.selection\\:bg-super\\/50.dark\\:text-textMainDark.text-textMain.font-medium.text-sm.font-sans.default.line-clamp-2'
           )
         ) {
           await new Promise((resolve) => {

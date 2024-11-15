@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { HtmlParser } from '@shared/utils/html-parser'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
@@ -8,7 +8,7 @@ export const use_parsed_html = () => {
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
 
-  useEffect(() => {
+  const get_parsed_html = () => {
     browser.tabs
       .query({
         active: true,
@@ -26,7 +26,7 @@ export const use_parsed_html = () => {
         set_parsed_html(message.parsed_html)
       }
     })
-  }, [])
+  }
 
-  return { parsed_html }
+  return { parsed_html, get_parsed_html }
 }

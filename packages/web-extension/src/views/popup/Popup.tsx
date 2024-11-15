@@ -1,5 +1,5 @@
 import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
-import {  useState } from 'react'
+import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { assistants } from '@/constants/assistants'
@@ -8,6 +8,7 @@ import { Actions } from './components/actions/Actions'
 import { Header } from './components/header/Header'
 import { PromptField } from './components/prompt-field/PromptField'
 import { RecentPrompts } from './components/recent-prompts/RecentPrompts'
+import { use_text_selection } from './hooks/use-text-selection'
 
 export const Popup: React.FC = () => {
   const {
@@ -20,6 +21,7 @@ export const Popup: React.FC = () => {
     attach_text_switch_hook,
     vision_mode_hook,
     current_url_hook,
+    text_selection_hook,
   } = usePopup()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
@@ -43,6 +45,12 @@ export const Popup: React.FC = () => {
       assistant_url = custom_assistant_url_hook.custom_assistant_url
     }
   }
+
+  useUpdateEffect(() => {
+    if (!text_selection_hook.selected_text) {
+      parsed_html_hook.get_parsed_html()
+    }
+  }, [text_selection_hook.selected_text])
 
   // Shorten plain text whenever selected assistant is changed
   useUpdateEffect(() => {
@@ -76,11 +84,8 @@ export const Popup: React.FC = () => {
   return (
     <Ui_extension_popup_templates_Popup
       should_set_height={
-        // Cases when showing recent prompts which adjust its height dynamically
-        !current_url_hook.is_new_tab_page &&
-        ((attach_text_switch_hook.is_checked &&
-          !vision_mode_hook.is_vision_mode) ||
-          vision_mode_hook.is_vision_mode)
+        // Case when not showing recent prompts which adjust its height dynamically
+        !current_url_hook.is_new_tab_page
       }
       header_slot={<Header />}
     >

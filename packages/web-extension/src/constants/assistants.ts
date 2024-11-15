@@ -1,16 +1,16 @@
 export type AssistantName =
   | 'chatgpt'
   | 'gemini'
-  | 'aistudio'
-  | 'perplexity'
   | 'copilot'
   | 'claude'
+  | 'aistudio'
   // | 'grok'
   // | 'meta'
   | 'mistral'
   | 'cohere'
   | 'huggingchat'
   | 'deepseek'
+  | 'perplexity'
   | 'phind'
   | 'poe'
   | 'you'
@@ -30,14 +30,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Gemini',
     url: 'https://gemini.google.com/app',
   },
-  aistudio: {
-    display_name: 'AI Studio',
-    url: 'https://aistudio.google.com/app/prompts/new_chat',
-  },
-  perplexity: {
-    display_name: 'Perplexity',
-    url: 'https://www.perplexity.ai/',
-  },
   copilot: {
     display_name: 'Copilot',
     url: 'https://copilot.microsoft.com/',
@@ -45,6 +37,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   claude: {
     display_name: 'Claude',
     url: 'https://claude.ai/new',
+  },
+  aistudio: {
+    display_name: 'AI Studio',
+    url: 'https://aistudio.google.com/app/prompts/new_chat',
   },
   // grok: {
   //   display_name: 'Grok',
@@ -61,6 +57,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   cohere: {
     display_name: 'Cohere',
     url: 'https://coral.cohere.com/',
+  },
+  perplexity: {
+    display_name: 'Perplexity',
+    url: 'https://www.perplexity.ai/',
   },
   huggingchat: {
     display_name: 'HuggingChat',

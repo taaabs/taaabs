@@ -199,9 +199,7 @@ export const PromptField: React.FC<{
       }
       text_not_found={
         !current_url_hook.is_new_tab_page &&
-        parsed_html_hook.parsed_html === null &&
-        attach_text_switch_hook.is_checked &&
-        !text_selection_hook.selected_text
+        parsed_html_hook.parsed_html === null
       }
       translations={{
         new_prompt: 'New chat',
@@ -210,12 +208,9 @@ export const PromptField: React.FC<{
           assistants[selected_assistant_hook.selected_assistant_name!]
             .display_name
         }`,
-        switch:
-          text_selection_hook.selected_text ||
-          (parsed_html_hook.parsed_html === null &&
-            !current_url_hook.is_youtube_video)
-            ? 'Send text selection'
-            : get_attach_text_checkbox_label(current_url_hook.url),
+        switch: text_selection_hook.selected_text
+          ? 'Send text selection'
+          : get_attach_text_checkbox_label(current_url_hook.url),
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: (
           <>
@@ -230,7 +225,7 @@ export const PromptField: React.FC<{
         ),
         text_not_found: current_url_hook.is_youtube_video
           ? '⚠ Transcript not found'
-          : '⚠ Text not found',
+          : '⚠ Unable to read this page',
       }}
     />
   )

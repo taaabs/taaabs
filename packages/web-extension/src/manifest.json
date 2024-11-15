@@ -4,7 +4,7 @@
   "name": "Taaabs - Zero-knowledge bookmarks & AI",
   "short_name": "taaabs",
   "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with AI.",
-  "version": "0.3.25",
+  "version": "0.3.26",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {
