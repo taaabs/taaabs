@@ -213,13 +213,16 @@ export const PromptField: React.FC<{
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: (
           <>
-            ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} will
-            be shortened by{' '}
+            ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
             {calculate_shortening_percentage(
               parsed_html_hook.parsed_html?.plain_text,
               shortened_plan_text,
             )}
-            %
+            % over the limit in{' '}
+            {
+              assistants[selected_assistant_hook.selected_assistant_name!]
+                .display_name
+            }
           </>
         ),
         text_not_found: current_url_hook.is_youtube_video
