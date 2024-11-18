@@ -37,6 +37,7 @@ import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -86,6 +87,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const date_view_options_hook = use_date_view_options()
   const points_hook = use_points()
   const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
+  const popstate_context = useContext(PopstateCountContext)
   // START - UI synchronization
   const [is_tag_hierarchy_ready, set_is_tag_hierarchy_ready] = useState(false) // Tag hierarchy is ready as soon as collapsed state is restored
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
@@ -125,6 +127,18 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       if (is_fetching_first_bookmarks) {
         window.scrollTo(0, 0)
       }
+      tag_view_options_hook.set_selected_tags_commited(
+        tag_view_options_hook.selected_tags,
+      )
+      filter_view_options_hook.set_current_filter_commited(
+        filter_view_options_hook.current_filter,
+      )
+      sort_by_view_options_hook.set_current_sort_by_commited(
+        sort_by_view_options_hook.current_sort_by,
+      )
+      popstate_context.set_popstate_count_commited(
+        popstate_context.popstate_count,
+      )
       // Restore scroll position on initial load
       if (!library_updated_at_timestamp) {
         const scroll_y = sessionStorage.getItem(
@@ -432,39 +446,30 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             )}
           </>
         }
-        on_page_bottom_reached={
-          async () => {
-            if (!bookmarks_hook.bookmarks?.length) {
-              console.debug(
-                'Returning early because fetching or no bookmarks.',
-              )
-              return
-            }
-
-            if (
-              !search_hook.search_string &&
-              bookmarks_hook.has_more_bookmarks
-            ) {
-              console.debug(
-                'Calling get_bookmarks (no search, more bookmarks)',
-              )
-              bookmarks_hook.get_bookmarks({ should_get_next_page: true })
-            } else if (
-              search_hook.search_string &&
-              search_hook.count &&
-              bookmarks_hook.bookmarks &&
-              bookmarks_hook.bookmarks.length &&
-              bookmarks_hook.bookmarks.length < search_hook.count
-            ) {
-              bookmarks_hook.get_bookmarks_by_ids({
-                all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
-                  parseInt(hit.document.id),
-                ),
-                should_get_next_page: true,
-              })
-            }
+        on_page_bottom_reached={async () => {
+          if (!bookmarks_hook.bookmarks?.length) {
+            console.debug('Returning early because fetching or no bookmarks.')
+            return
           }
-        }
+
+          if (!search_hook.search_string && bookmarks_hook.has_more_bookmarks) {
+            console.debug('Calling get_bookmarks (no search, more bookmarks)')
+            bookmarks_hook.get_bookmarks({ should_get_next_page: true })
+          } else if (
+            search_hook.search_string &&
+            search_hook.count &&
+            bookmarks_hook.bookmarks &&
+            bookmarks_hook.bookmarks.length &&
+            bookmarks_hook.bookmarks.length < search_hook.count
+          ) {
+            bookmarks_hook.get_bookmarks_by_ids({
+              all_not_paginated_ids: search_hook.result!.hits.map((hit) =>
+                parseInt(hit.document.id),
+              ),
+              should_get_next_page: true,
+            })
+          }
+        }}
         clear_selected_tags={
           !is_fetching_first_bookmarks &&
           !search_hook.result &&

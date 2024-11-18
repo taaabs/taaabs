@@ -1,6 +1,6 @@
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { Order } from '@shared/types/modules/bookmarks/order'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import dynamic from 'next/dynamic'
 import { CustomRangeSkeleton as Ui_app_library_CustomRangeSkeleton } from '@web-ui/components/app/library/CustomRangeSkeleton'
 import { LibraryAside as Ui_app_templates_LibraryAside } from '@web-ui/components/app/templates/LibraryAside'
@@ -36,6 +36,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     counts_hook,
     sort_by_view_options_hook,
     order_view_options_hook,
+    filter_view_options_hook,
 
     username,
     is_fetching_first_bookmarks,
@@ -44,7 +45,8 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     on_tag_rename_click,
   } = useContext(LibraryContext)
   const is_hydrated = use_is_hydrated()
-  const { popstate_count } = useContext(PopstateCountContext)
+  const { popstate_count_commited } = useContext(PopstateCountContext)
+  const [custom_range_cleared_at, set_custom_range_cleared_at] = useState(0)
 
   return (
     <Ui_app_templates_LibraryAside
@@ -54,7 +56,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
         is_hydrated ? (
           <>
             <Ui_common_SegmentedButton
-              key={`1-${popstate_count}`}
+              key={`1-${popstate_count_commited}`}
               is_not_interactive={is_not_interactive}
               items={[
                 {
@@ -88,7 +90,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             />
             {!username ? (
               <Ui_common_SegmentedButton
-                key={`2-${popstate_count}`}
+                key={`2-${popstate_count_commited}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
                   sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
@@ -131,7 +133,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
               />
             ) : (
               <Ui_common_SegmentedButton
-                key={`2-${popstate_count}`}
+                key={`2-${popstate_count_commited}`}
                 is_not_interactive={is_not_interactive}
                 is_disabled={
                   sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
@@ -164,7 +166,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
               />
             )}
             <Ui_common_SegmentedButton
-              key={`3-${popstate_count}`}
+              key={`3-${popstate_count_commited}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
                 sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
@@ -202,18 +204,23 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             }}
           >
             <CustomRange
+              key={`${popstate_count_commited}${custom_range_cleared_at}`}
               locale={props.dictionary.locale}
-              library_updated_at_timestamp={library_updated_at_timestamp}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
                 date_view_options_hook.set_gte_lte_search_params
               }
-              clear_date_range={
-                date_view_options_hook.clear_gte_lte_search_params
-              }
+              clear_custom_range={() => {
+                date_view_options_hook.clear_gte_lte_search_params()
+                set_custom_range_cleared_at(Date.now())
+              }}
               current_gte={date_view_options_hook.current_gte}
               current_lte={date_view_options_hook.current_lte}
-              selected_tags={tag_view_options_hook.selected_tags}
+              selected_tags={tag_view_options_hook.selected_tags_commited}
+              current_sort_by={
+                sort_by_view_options_hook.current_sort_by_commited
+              }
+              current_filter={filter_view_options_hook.current_filter_commited}
               is_range_selector_disabled={
                 sort_by_view_options_hook.current_sort_by ==
                   SortBy.UPDATED_AT ||
@@ -250,7 +257,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
           {library_updated_at_timestamp ? (
             <>
               <Ui_app_library_SelectedTags
-                key={`selected-tags-${library_updated_at_timestamp}-${popstate_count}`}
+                key={`selected-tags-${library_updated_at_timestamp}-${popstate_count_commited}`}
                 selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
@@ -283,7 +290,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                 }}
               />
               <Ui_app_library_Tags
-                key={`tags-${library_updated_at_timestamp}-${popstate_count}`}
+                key={`tags-${library_updated_at_timestamp}-${popstate_count_commited}`}
                 library_url={username ? `/${username}` : '/library'}
                 tags={
                   counts_hook.tags

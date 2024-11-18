@@ -18,6 +18,9 @@ export const use_tag_view_options = () => {
           .map((t) => parseInt(t))
       : [],
   )
+  const [selected_tags_commited, set_selected_tags_commited] = useState<
+    number[]
+  >([])
   const [dragged_tag, set_dragged_tag] = useState<{
     id: number
     name: string
@@ -149,10 +152,12 @@ export const use_tag_view_options = () => {
 
   return {
     selected_tags,
+    selected_tags_commited,
     add_tag_to_search_params,
     remove_tags_from_search_params,
     clear_selected_tags,
     set_many_tags_to_search_params,
+    set_selected_tags_commited,
     dragged_tag,
     set_dragged_tag,
   }

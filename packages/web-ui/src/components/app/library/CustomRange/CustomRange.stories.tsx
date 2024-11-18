@@ -66,7 +66,7 @@ export const Primary = () => (
           },
         ]}
         on_yyyymm_change={() => {}}
-        clear_date_range={() => {}}
+        clear_custom_range={() => {}}
         locale="en"
         translations={{
           custom_range: 'Custom range',
@@ -134,7 +134,7 @@ export const Primary = () => (
           },
         ]}
         on_yyyymm_change={() => {}}
-        clear_date_range={() => {}}
+        clear_custom_range={() => {}}
         current_gte={202303}
         current_lte={202305}
         locale="en"
@@ -204,7 +204,7 @@ export const Primary = () => (
           },
         ]}
         on_yyyymm_change={() => {}}
-        clear_date_range={() => {}}
+        clear_custom_range={() => {}}
         current_gte={202303}
         current_lte={202305}
         locale="en"

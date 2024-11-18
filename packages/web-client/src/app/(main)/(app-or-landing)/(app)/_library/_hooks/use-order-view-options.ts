@@ -1,15 +1,17 @@
 import { update_search_params } from '@/utils/update-query-params'
 import { Order } from '@shared/types/modules/bookmarks/order'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 export const use_order_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
+  const popstate_count_context = useContext(PopstateCountContext)
   const [current_order, set_current_order] = useState<Order>(
     Object.values(Order)[
       parseInt(
@@ -34,6 +36,9 @@ export const use_order_view_options = () => {
                 .toString(),
           )
         ],
+      )
+      popstate_count_context.set_popstate_count_commited(
+        popstate_count_context.popstate_count,
       )
     }
   }, [search_params])

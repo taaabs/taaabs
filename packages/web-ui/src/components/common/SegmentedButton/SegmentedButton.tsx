@@ -13,7 +13,9 @@ namespace SegmentedButton {
   }
 }
 
-// Component can handle 2 or 3 items
+/**
+ * Component is designed to handle 2 or 3 items
+ */
 export const SegmentedButton: React.FC<SegmentedButton.Props> = memo(
   (props) => {
     const container = useRef<HTMLDivElement>(null)

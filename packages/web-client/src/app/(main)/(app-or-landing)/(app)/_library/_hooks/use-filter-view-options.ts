@@ -17,6 +17,8 @@ export const use_filter_view_options = () => {
       )
     ],
   )
+  const [current_filter_commited, set_current_filter_commited] =
+    useState<Filter>(current_filter)
 
   useUpdateEffect(() => {
     const query_filter = search_params.get(search_params_keys.filter)
@@ -112,6 +114,8 @@ export const use_filter_view_options = () => {
 
   return {
     current_filter,
+    current_filter_commited,
+    set_current_filter_commited,
     set_filter_query_param,
     clear_selected_stars,
     clear_unsorted,
