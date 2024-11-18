@@ -35,7 +35,7 @@
   @include at992 {
     transform: translateX(calc(8px * -1));
     width: calc(100% + (8px * 2));
-    gap: 6px;
+    gap: 4px;
     height: var(--search-desktop-height);
   }
   @include at1200 {
@@ -133,6 +133,10 @@
     }
     @include transition-150ms(color);
     @include at992 {
+      font-size: var(--font-size-16px);
+      left: calc(var(--padding-8px) + var(--button-dimension-34px) + 4px);
+    }
+    @include at1200 {
       font-size: var(--font-size-17px);
       left: calc(var(--padding-8px) + var(--button-dimension-34px) + 13px);
     }
