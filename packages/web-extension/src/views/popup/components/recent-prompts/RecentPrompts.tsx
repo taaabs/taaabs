@@ -145,6 +145,7 @@ export const RecentPrompts: React.FC<{
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
+                attach_text_switch_hook.is_checked &&
                 (parsed_html_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
