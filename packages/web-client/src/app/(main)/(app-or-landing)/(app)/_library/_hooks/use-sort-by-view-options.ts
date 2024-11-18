@@ -1,15 +1,17 @@
 import { update_search_params } from '@/utils/update-query-params'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
 import { BookmarksFetchingDefaults } from '@shared/types/modules/bookmarks/bookmarks-fetching-defaults'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useParams, useSearchParams } from 'next/navigation'
 import { clear_library_session_storage } from '@/utils/clear_library_session_storage'
 import { search_params_keys } from '@/constants/search-params-keys'
+import { PopstateCountContext } from '@/providers/PopstateCountProvider'
 
 export const use_sort_by_view_options = () => {
   const search_params = useSearchParams()
   const params = useParams()
+  const popstate_count_context = useContext(PopstateCountContext)
   const [current_sort_by, set_current_sort_by] = useState<SortBy>(
     Object.values(SortBy)[
       parseInt(
@@ -20,10 +22,11 @@ export const use_sort_by_view_options = () => {
       )
     ],
   )
+  const [current_sort_by_commited, set_current_sort_by_commited] =
+    useState<SortBy>(current_sort_by)
 
   useUpdateEffect(() => {
     const query_sort_by = search_params.get(search_params_keys.sort_by)
-
     if (
       query_sort_by != Object.values(SortBy).indexOf(current_sort_by).toString()
     ) {
@@ -36,6 +39,9 @@ export const use_sort_by_view_options = () => {
                 .toString(),
           )
         ],
+      )
+      popstate_count_context.set_popstate_count_commited(
+        popstate_count_context.popstate_count,
       )
     }
   }, [search_params])
@@ -73,6 +79,8 @@ export const use_sort_by_view_options = () => {
 
   return {
     current_sort_by,
+    current_sort_by_commited,
+    set_current_sort_by_commited,
     set_sort_by_query_param,
   }
 }

@@ -18,13 +18,14 @@ type Counts = {
 // Don't suffix properties at it won't work with dynamically loaded component
 export namespace CustomRange {
   export type Props = {
-    library_updated_at_timestamp?: number
     counts?: Counts
     current_gte?: number
     current_lte?: number
     on_yyyymm_change: ({ gte, lte }: { gte: number; lte: number }) => void
-    clear_date_range: () => void
-    selected_tags?: number[]
+    clear_custom_range: () => void
+    selected_tags: number[]
+    current_filter?: any
+    current_sort_by?: any
     is_range_selector_disabled?: boolean
     locale: 'en' | 'pl'
     translations: {
@@ -498,12 +499,10 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
           )}
         </div>
 
-        {props.current_gte && props.current_lte && (
+        {start_index !== undefined && end_index !== undefined && (
           <button
             className={styles['custom-range__clear']}
-            onClick={() => {
-              props.clear_date_range()
-            }}
+            onClick={props.clear_custom_range}
           >
             <UiIcon variant="ADD" />
           </button>
@@ -628,7 +627,10 @@ export const CustomRange: React.FC<CustomRange.Props> = memo(
       </div>
     )
   },
-  (o, n) => o.library_updated_at_timestamp == n.library_updated_at_timestamp,
+  (o, n) =>
+    o.selected_tags.length == n.selected_tags.length &&
+    o.current_filter == n.current_filter &&
+    o.current_sort_by == n.current_sort_by,
 )
 
 function yyyymm_to_display(yyyymm: number, locale: string) {

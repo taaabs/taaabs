@@ -70,5 +70,5 @@
   position: absolute;
   height: var(--button-dimension-34px);
   left: 0;
-  @include transition-150ms;
+  transition: all 80ms linear;
 }

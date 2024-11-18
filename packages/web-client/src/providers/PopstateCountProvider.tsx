@@ -4,6 +4,8 @@ import { ReactNode, createContext, useEffect, useState } from 'react'
 
 type PopstateCountContext = {
   popstate_count: number
+  popstate_count_commited: number
+  set_popstate_count_commited: (popstate_count: number) => void
 }
 
 export const PopstateCountContext = createContext<PopstateCountContext>(
@@ -14,6 +16,7 @@ export const PopstateCountProvider: React.FC<{ children: ReactNode }> = (
   props,
 ) => {
   const [popstate_count, set_popstate_count] = useState(0)
+  const [popstate_count_commited, set_popstate_count_commited] = useState(0)
 
   useEffect(() => {
     const handle_popstate = () => {
@@ -27,6 +30,8 @@ export const PopstateCountProvider: React.FC<{ children: ReactNode }> = (
     <PopstateCountContext.Provider
       value={{
         popstate_count,
+        popstate_count_commited,
+        set_popstate_count_commited,
       }}
     >
       {props.children}
