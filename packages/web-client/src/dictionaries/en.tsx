@@ -50,7 +50,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '10 000 bookmarks',
+            '5000 bookmarks',
             'Unlimited tags',
             'Flash search',
             'End-to-end encryption',
