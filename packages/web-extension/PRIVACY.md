@@ -40,7 +40,7 @@ Taaabs is committed to transparency. **The source code for the browser extension
 
 ## 7. Your choices
 
-- **Sign in:** You can choose whether or not to sign in. Signing in enables the saving of encrypted bookmarks to your personal library.
+- **Sign in:** You can choose whether or not to sign in to use the extension. Signing in enables the saving of encrypted bookmarks to your personal library.
 - **Data deletion:** You can delete your locally stored access token and encryption key at any time by signing out of in extension's Settings page. You can also delete your taaabs.com account through the web interface at any time.
 
 ## 8. Children's privacy
