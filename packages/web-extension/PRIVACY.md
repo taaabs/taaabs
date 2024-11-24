@@ -30,13 +30,13 @@ If you decide to sign in, the extension uses your locally stored access token an
 
 ## 5. How we share your information
 
-_(Applies to signed in users of taaabs.com service.)_ Your personal information (email address) is not shared with any third parties, unless legally required to do so.
+_(Applies to signed in users.)_ Your personal information (email address) is not shared with any third parties, unless legally required to do so.
 
 ## 6. Data security
 
-_(Applies to signed in users of taaabs.com service.)_ We take data security very seriously. Your private bookmarks are **end-to-end encrypted** using **AES-CBC 256-bit encryption and Argon2id key derivation**, following battle-tested implementation in Bitwarden™ Password Manager. This ensures that **only you can decrypt and access your saved links**. While we use robust encryption, please remember that the security of your data also depends on the security of your own browser and system. We cannot control vulnerabilities or compromises of your browser or operating system.
+_(Applies to signed in users.)_ We take data security very seriously. Your private bookmarks are **end-to-end encrypted** using **AES-CBC 256-bit encryption and Argon2id key derivation**, following battle-tested implementation in Bitwarden™ Password Manager. This ensures that **only you can decrypt and access your saved links**. While we use robust encryption, please remember that the security of your data also depends on the security of your own browser and system. We cannot control vulnerabilities or compromises of your browser or operating system.
 
-Taaabs is committed to transparency. **The source code for the Taaabs browser extension is publicly available** under the [AGPLv3](https://github.com/taaabs/taaabs/blob/master/packages/web-extension/LICENSE) license at [GitHub](https://github.com/taaabs/taaabs/tree/master/packages/web-extension). We encourage community review and contributions.
+Taaabs is committed to transparency. **The source code for the browser extension is open-source**, published under the [AGPLv3](https://github.com/taaabs/taaabs/blob/master/packages/web-extension/LICENSE) license at [GitHub](https://github.com/taaabs/taaabs/tree/master/packages/web-extension). We encourage community review and contributions. We also share source code of all the other web and mobile apps supporting your Taaabs experience.
 
 ## 7. Your choices
 
