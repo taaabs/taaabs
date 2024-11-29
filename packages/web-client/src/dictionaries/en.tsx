@@ -17,7 +17,7 @@ const dictionary: Dictionary = {
           second_line: 'of your web research',
         },
         subheading:
-          'Privately clip any page to your personal library. Assist browsing with ChatGPT.',
+          'Save bookmarks to your personal library. Chat about them with AI. Find like-minded.',
         claim_username: 'Claim username',
         username: 'username',
         ticks: [
@@ -28,7 +28,7 @@ const dictionary: Dictionary = {
             <strong>Source code</strong> on GitHub
           </>,
           <>
-            <strong>Free tier</strong> with pro features
+            <strong>Generous</strong> free tier
           </>,
         ],
         incentive: '30 seconds or less',

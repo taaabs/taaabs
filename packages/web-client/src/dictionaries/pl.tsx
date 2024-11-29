@@ -17,7 +17,7 @@ export const dictionary: Dictionary = {
           second_line: 'z surfowania Internetu',
         },
         subheading:
-          'Prywatnie zapisuj strony WWW. Wspieraj przeglądanie najlepszymi asystentami AI.',
+          'Stwórz bibliotekę zakładek. Czatuj o nich z AI. Znajdź podobnych ludzi.',
         claim_username: 'Przejmij nick',
         username: 'nick',
         ticks: [
@@ -25,10 +25,10 @@ export const dictionary: Dictionary = {
             <strong>Szyfrowanie end-to-end</strong> prywatnych zakładek
           </>,
           <>
-            <strong>Publiczny kod źródłowy</strong> klientów
+            <strong>Publiczny kod źródłowy</strong> apek
           </>,
           <>
-            <strong>Darmowy plan</strong> z "Pro" funkcjami
+            <strong>Hojny</strong> darmowy plan
           </>,
         ],
         incentive: '30 sekund lub mniej',
