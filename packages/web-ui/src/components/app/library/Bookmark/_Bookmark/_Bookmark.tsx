@@ -1,12 +1,14 @@
 import styles from './_Bookmark.module.scss'
 import cn from 'classnames'
 import { BlurhashCanvas } from 'react-blurhash'
-import { memo, useRef, useState } from 'react'
+import { memo, useState } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pl'
+import utc from 'dayjs/plugin/utc'
 import { ReactSortable } from 'react-sortablejs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import updateLocale from 'dayjs/plugin/updateLocale'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
@@ -24,6 +26,8 @@ import { use_cover_hover_zoom } from './hooks/use-cover-hover-zoom'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
+dayjs.extend(localizedFormat)
+dayjs.extend(utc)
 
 dayjs.updateLocale('en', {
   relativeTime: {
@@ -131,7 +135,7 @@ export namespace _Bookmark {
     dragged_tag?: {
       id: number
       name: string
-      yields: number
+      yields?: number
     }
     on_mouse_up?: () => void
     has_cover?: boolean
@@ -307,7 +311,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               <span
                 className={styles.container__inner__card__tags__tag__yields}
               >
-                {props.dragged_tag.yields + 1}
+                {props.dragged_tag.yields && props.dragged_tag.yields + 1}
               </span>
             </button>,
           ]
@@ -594,14 +598,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       </div>
     )
 
-    const relative_time = dayjs(props.date, { locale: props.locale }).fromNow()
+    const relative_time = dayjs.utc(props.date).fromNow()
 
     const bookmark_date =
       relative_time != ''
         ? relative_time
-        : dayjs(props.date, { locale: props.locale }).format(
-            props.locale == 'en' ? 'MMMM DD, YYYY' : 'D MMMM YYYY',
-          )
+        : dayjs.utc(props.date).locale(props.locale).format('LL')
 
     const title = props.title
       ? props.highlights
@@ -650,7 +652,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   id: 0,
                   is_public: true,
                   name: props.dragged_tag.name,
-                  yields: props.dragged_tag.yields + 1,
+                  yields:
+                    props.dragged_tag.yields && props.dragged_tag.yields + 1,
                 },
               ])
             }

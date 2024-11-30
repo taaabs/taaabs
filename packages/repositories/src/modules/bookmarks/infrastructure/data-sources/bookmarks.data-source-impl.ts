@@ -35,18 +35,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_archived: params.is_archived,
       sort_by: params.sort_by,
       order: params.order,
-      epoch_gte: params.yyyymm_gte
-        ? new Date(
-            parseInt(params.yyyymm_gte.toString().substring(0, 4)),
-            parseInt(params.yyyymm_gte.toString().substring(4, 6)) - 1,
-          ).getTime() / 1000
-        : undefined,
-      epoch_lte: params.yyyymm_lte
-        ? new Date(
-            parseInt(params.yyyymm_lte.toString().substring(0, 4)),
-            parseInt(params.yyyymm_lte.toString().substring(4, 6)),
-          ).getTime() / 1000
-        : undefined,
+      gte: params.yyyymm_gte,
+      lte: params.yyyymm_lte,
     }
 
     return this._ky
@@ -66,18 +56,8 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       is_archived: params.is_archived,
       sort_by: params.sort_by,
       order: params.order,
-      epoch_gte: params.yyyymm_gte
-        ? new Date(
-            parseInt(params.yyyymm_gte.toString().substring(0, 4)),
-            parseInt(params.yyyymm_gte.toString().substring(4, 6)) - 1,
-          ).getTime() / 1000
-        : undefined,
-      epoch_lte: params.yyyymm_lte
-        ? new Date(
-            parseInt(params.yyyymm_lte.toString().substring(0, 4)),
-            parseInt(params.yyyymm_lte.toString().substring(4, 6)),
-          ).getTime() / 1000
-        : undefined,
+      gte: params.yyyymm_gte,
+      lte: params.yyyymm_lte,
     }
 
     return this._ky

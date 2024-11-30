@@ -10,10 +10,10 @@ export namespace Bookmarks_Dto {
     public tags?: string
 
     @Type()
-    public epoch_gte?: number
+    public gte?: number
 
     @Type()
-    public epoch_lte?: number
+    public lte?: number
 
     public sort_by?: SortBy
 

@@ -14,7 +14,7 @@ namespace _Bookmark {
 }
 
 /**
- * Private bookmarks requires non-standard download of cover images involving decryption of base64 encoded data.
+ * Private bookmarks require non-standard download of cover images involving decryption of base64 encoded data.
  * This component also preloads links data.
  */
 export const _Bookmark: React.FC<_Bookmark.Props> = (props) => {
