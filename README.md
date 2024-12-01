@@ -20,22 +20,20 @@ Perfect for students, professionals, and curious minds.
 
 ## Browser extension
 
-Our extension is completely free and open-source. The same technology used to process pages for your personal library helps getting plain text of anything you consume straight (100% locally) to an AI assistant of your choice, ChatGPT, Gemini, Claude, you name it!
+Our extension is completely free and open-source. The built-in AI assistant parses generic articles and various popular sites:
 
-Supported sites:
-
-- generic articles,
 - youtube videos with transcripts,
 - reddit posts,
 - gmail emails,
 - x posts,
 - telegram posts,
 - github issues and discussions,
-- conversations on popular chatbots, and more!
+- conversations AI chatbots, and more!
 
-Extension supports text selections and screenshots in a Vision mode.
+The extension's AI integration supports virtually any site via its Vision Mode.
 
 Add Taaabs to your browser and unlock the joy of your web research!
+
 - [Chrome Web Store](https://chromewebstore.google.com/detail/taaabs-zero-knowledge-boo/mfpmbjjgeklnhjmpahigldafhcdoaona)
 - [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/taaabs/)
 
@@ -49,9 +47,9 @@ Please visit [discussions](https://github.com/taaabs/taaabs/discussions) tab.
 
 ## Privacy
 
-We take your privacy seriously. Taaabs is built with a strong focus on user privacy and security. We adhere to the following core principles:
+We take your privacy seriously. Taaabs is built around user privacy and security. We adhere to the following core principles:
 
-- **No Tracking:** We do not track your browsing history or any online activity.
+- **No Tracking:** The extension does not track your browsing activity.
 - **No Ads:** The extension is completely ad-free.
 - **End-to-End Encryption:** Links saved to your personal library on taaabs.com are end-to-end encrypted with AES-CBC 256-bit, encryption key is derived with Argon2id. This mirrors [bitwarden's approach](https://bitwarden.com/help/what-encryption-is-used/).
 
@@ -63,4 +61,4 @@ Taaabs is committed to transparency. The source code for the Taaabs browser exte
 
 ## Acknowledgements
 
-Special thanks to all the authors of [Orama](https://github.com/askorama/orama), search engine enabling robust on the client searches.
+Special thanks to all the authors of [Orama](https://github.com/askorama/orama), a speedy client-side search engine.
