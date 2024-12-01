@@ -95,9 +95,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             open_snapshot: link.open_snapshot || undefined,
             is_pinned: link.is_pinned || undefined,
             pin_order: link.pin_order || undefined,
-            favicon: link.favicon_aes
-              ? await AES.decrypt(link.favicon_aes, encryption_key)
-              : undefined,
             reader_data: link.reader_data_aes
               ? new TextDecoder().decode(
                   pako.inflate(

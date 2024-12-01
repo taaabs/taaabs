@@ -56,7 +56,7 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '5000 zakładek',
+            '10 000 zakładek',
             'Nielimitowane tagi',
             'Błyskawiczne wyszukiwanie',
             'Szyfrowanie end-to-end',

@@ -166,9 +166,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             pin_title: link.pin_title,
             open_snapshot: link.open_snapshot,
             reader_data: link.reader_data,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, encryption_key)
-              : undefined,
           })
         } else {
           links.push({
@@ -184,9 +181,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               ? await AES.encrypt(link.pin_title, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, encryption_key)
-              : undefined,
             reader_data_aes: link.reader_data
               ? await AES.encrypt(
                   btoa(String.fromCharCode(...pako.deflate(link.reader_data))),

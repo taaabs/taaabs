@@ -16,7 +16,6 @@ export type Bookmark_Entity = {
     is_pinned?: boolean
     pin_title?: string
     open_snapshot?: boolean
-    favicon?: string
     is_parsed?: boolean
   }[]
   is_unsorted?: boolean

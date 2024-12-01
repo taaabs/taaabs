@@ -14,7 +14,6 @@ type Link = {
   pin_title?: string
   pin_title_aes?: string
   open_snapshot?: boolean
-  favicon_aes?: string
   reader_data?: string
   reader_data_aes?: string
 }
