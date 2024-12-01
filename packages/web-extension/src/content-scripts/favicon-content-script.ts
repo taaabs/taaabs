@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import localforage from 'localforage'
+import localForage from 'localforage'
 
 // listen to message on window object requesting favicon for a specific domain
 window.addEventListener('message', async (event) => {
@@ -9,7 +9,7 @@ window.addEventListener('message', async (event) => {
     event.data.action == 'get-favicon'
   ) {
     const domain = event.data.domain
-    localforage.getItem(`Favicon ${domain}`).then((favicon) => {
+    localForage.getItem(`Favicon ${domain}`).then((favicon) => {
       if (favicon == null) {
         browser.runtime
           .sendMessage({ action: 'get-favicon', domain })
@@ -27,12 +27,12 @@ window.addEventListener('message', async (event) => {
               const reader = new FileReader()
               reader.onloadend = function () {
                 const favicon = reader.result
-                localforage.setItem(`Favicon ${domain}`, favicon)
+                localForage.setItem(`favicon:${domain}`, favicon)
                 window.postMessage({ action: 'favicon', domain, favicon }, '*')
               }
               reader.readAsDataURL(blob)
             } else {
-              localforage.setItem(`Favicon ${domain}`, '')
+              localForage.setItem(`favicon:${domain}`, '')
             }
           })
       } else {
