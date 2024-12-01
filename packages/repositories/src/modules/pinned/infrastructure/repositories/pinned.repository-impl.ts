@@ -35,9 +35,6 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         is_parsed: item.is_parsed,
         tags: item.tags,
         open_snapshot: item.open_snapshot,
-        favicon: item.favicon_aes
-          ? await AES.decrypt(item.favicon_aes, encryption_key)
-          : undefined,
       })
     }
 
@@ -102,9 +99,6 @@ export class Pinned_RepositoryImpl implements Pinned_Repository {
         is_archived: item.is_archived,
         tags: item.tags,
         open_snapshot: item.open_snapshot,
-        favicon: item.favicon_aes
-          ? await AES.decrypt(item.favicon_aes, encryption_key)
-          : undefined,
         is_parsed: item.is_parsed,
         is_public: item.is_public,
       })

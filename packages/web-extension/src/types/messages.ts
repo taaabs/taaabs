@@ -54,6 +54,15 @@ export type CapturedImage_Message = {
   action: 'captured-image'
   captured_image: string
 }
+export type SetFavicon_Message = {
+  action: 'set-favicon'
+  domain: string
+  favicon: string
+}
+export type GetFavicon_Message = {
+  action: 'get-favicon'
+  domain: string
+}
 
 export type Message =
   | GetParsedHtml_Message
@@ -72,6 +81,8 @@ export type Message =
   | CapturedImage_Message
   | GetSelectedText_Message
   | SelectedText_Message
+  | SetFavicon_Message
+  | GetFavicon_Message
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type GetAuthDataResponse = any // TODO: Replace 'any' with the actual type

@@ -76,9 +76,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
             reader_data: link.reader_data,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, encryption_key)
-              : undefined,
           })
         } else {
           const domain = get_domain_from_url(link.url)
@@ -93,9 +90,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             open_snapshot: link.open_snapshot,
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
-            favicon_aes: link.favicon
-              ? await AES.encrypt(link.favicon, encryption_key)
-              : undefined,
             reader_data_aes: link.reader_data
               ? await AES.encrypt(
                   btoa(String.fromCharCode(...pako.deflate(link.reader_data))),

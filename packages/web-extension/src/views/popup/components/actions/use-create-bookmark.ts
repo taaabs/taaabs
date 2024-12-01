@@ -95,12 +95,6 @@ export const use_create_bookmark = (params: {
                     pin_title: link.pin_title,
                     open_snapshot: link.open_snapshot,
                     reader_data: link.reader_data,
-                    favicon_aes: link.favicon
-                      ? await AES.encrypt(
-                          link.favicon,
-                          new Uint8Array(auth_data.encryption_key),
-                        )
-                      : undefined,
                   })
                 } else {
                   links.push({
@@ -125,12 +119,6 @@ export const use_create_bookmark = (params: {
                         )
                       : undefined,
                     open_snapshot: link.open_snapshot,
-                    favicon_aes: link.favicon
-                      ? await AES.encrypt(
-                          link.favicon,
-                          new Uint8Array(auth_data.encryption_key),
-                        )
-                      : undefined,
                     reader_data_aes: link.reader_data
                       ? await AES.encrypt(
                           btoa(

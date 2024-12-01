@@ -23,6 +23,7 @@ import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
 import { use_cover_hover_zoom } from './hooks/use-cover-hover-zoom'
+import { use_favicons } from './hooks/use-favicons'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -111,7 +112,6 @@ export namespace _Bookmark {
       is_pinned?: boolean
       open_snapshot?: boolean
       is_public?: boolean
-      favicon?: string
       is_parsed?: boolean
     }[]
     on_link_click: (url: string) => void
@@ -191,6 +191,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       </Ui_Dropdown>,
     )
     const cover_hover_zoom_hook = use_cover_hover_zoom()
+    const { favicons } = use_favicons(props)
 
     useUpdateEffect(() => {
       if (!props.on_give_point_click) return
@@ -984,7 +985,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       >
                         {link.is_public ? (
                           <img
-                            alt={'Favicon'}
                             width={16}
                             height={16}
                             src={`${props.favicon_host}/${get_domain_from_url(
@@ -992,12 +992,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             )}`}
                             loading="lazy"
                           />
-                        ) : link.favicon ? (
+                        ) : favicons[get_domain_from_url(link.url)] ? (
                           <img
-                            alt={'Favicon'}
                             width={16}
                             height={16}
-                            src={`data:image/webp;base64,${link.favicon}`}
+                            src={favicons[get_domain_from_url(link.url)]}
                           />
                         ) : (
                           <UiIcon variant="GLOBE" />

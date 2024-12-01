@@ -954,7 +954,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           site_path: link.site_path,
           is_pinned: link.is_pinned,
           is_public: link.is_public,
-          favicon: link.favicon,
           open_snapshot: link.open_snapshot,
           is_parsed: link.is_parsed,
           menu_slot: !username ? (
@@ -1017,7 +1016,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                       is_pinned: link.url == l.url ? is_pinned : l.is_pinned,
                       pin_title: l.pin_title,
                       open_snapshot: l.open_snapshot,
-                      favicon: link.favicon,
                     })),
                   }
                   await dispatch(
@@ -1058,7 +1056,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                       pin_title: l.pin_title,
                       open_snapshot:
                         link.url == l.url ? open_snapshot : l.open_snapshot,
-                      favicon: link.favicon,
                     })),
                   }
                   await dispatch(

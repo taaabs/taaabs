@@ -14,7 +14,6 @@ export namespace Pinned_Dto {
     is_parsed?: boolean
     tags?: number[]
     open_snapshot?: boolean
-    favicon_aes?: string
   }
   export type Response = Item[]
 }
