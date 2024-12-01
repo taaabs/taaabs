@@ -3,8 +3,8 @@
   "author": "Robert Piosik",
   "name": "Taaabs - Zero-knowledge research assistant",
   "short_name": "taaabs",
-  "description": "Unlock the joy of your web research. Privately clip any page to your personal library. Assist browsing with any AI.",
-  "version": "0.3.27",
+  "description": "Unlock the joy of your web research. Save bookmarks to your personal library. Assist browsing with AI.",
+  "version": "0.3.28",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {
@@ -33,13 +33,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://taaabs.com/*"],
-      "js": ["get-auth-data-content-script.js"]
+      "matches": ["https://taaabs.com/*", "http://localhost/*"],
+      "js": ["get-auth-data-content-script.js", "favicon-content-script.js"]
     },
     {
       "matches": ["<all_urls>"],
       "js": [
-        "favicon-content-script.js",
         "send-prompt-content-script.js",
         "get-parsed-html-content-script.js",
         "get-upsert-bookmark-params-content-script.js",
