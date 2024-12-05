@@ -17,7 +17,7 @@ export const dictionary: Dictionary = {
           second_line: 'z surfowania Internetu',
         },
         subheading:
-          'Stwórz bibliotekę zakładek. Czatuj o nich z AI. Znajdź podobnych ludzi.',
+          'Stwórz bibliotekę zakładek. Czatuj z AI. Znajdź podobnych sobie ludzi.',
         claim_username: 'Przejmij nick',
         username: 'nick',
         ticks: [

@@ -17,7 +17,7 @@ const dictionary: Dictionary = {
           second_line: 'of your web research',
         },
         subheading:
-          'Save bookmarks to your personal library. Ask about them AI. Follow like-minded.',
+          'Save bookmarks to your personal library. Chat with AI. Follow like-minded.',
         claim_username: 'Claim username',
         username: 'username',
         ticks: [
