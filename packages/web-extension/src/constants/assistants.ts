@@ -11,9 +11,6 @@ export type AssistantName =
   | 'huggingchat'
   | 'deepseek'
   | 'perplexity'
-  | 'phind'
-  | 'poe'
-  | 'you'
   | 'custom'
 
 export interface AssistantDetails {
@@ -69,18 +66,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   deepseek: {
     display_name: 'DeepSeek',
     url: 'https://chat.deepseek.com/',
-  },
-  phind: {
-    display_name: 'Phind',
-    url: 'https://www.phind.com/agent',
-  },
-  poe: {
-    display_name: 'Poe',
-    url: 'https://poe.com/',
-  },
-  you: {
-    display_name: 'You',
-    url: 'https://you.com/',
   },
   custom: {
     display_name: 'Custom',

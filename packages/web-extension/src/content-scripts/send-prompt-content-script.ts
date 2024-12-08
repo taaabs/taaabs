@@ -282,7 +282,6 @@ namespace AssistantBugMitigation {
         '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
-      you: 'textarea[name="query"]',
       gemini: 'div[role="textbox"]', // Needed in mobile browser
     }
 
@@ -308,10 +307,6 @@ namespace AssistantBugMitigation {
       scroll_container_selector =
         '[class^="react-scroll-to-bottom--"].h-full > div'
       response_container_selector = 'div[data-message-author-role="assistant"]'
-    } else if (params.assistant_name == 'poe') {
-      scroll_container_selector =
-        '[class^="ChatMessagesScrollWrapper_scrollableContainerWrapper"]'
-      response_container_selector = '[class^="Message_leftSideMessageBubble"]'
     } else if (params.assistant_name == 'perplexity') {
       scroll_container_selector = 'html'
       response_container_selector =
