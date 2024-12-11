@@ -4,13 +4,10 @@ export type AssistantName =
   | 'copilot'
   | 'claude'
   | 'aistudio'
-  // | 'grok'
-  // | 'meta'
   | 'mistral'
   | 'cohere'
   | 'huggingchat'
   | 'deepseek'
-  | 'perplexity'
   | 'custom'
 
 export interface AssistantDetails {
@@ -39,14 +36,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'AI Studio',
     url: 'https://aistudio.google.com/app/prompts/new_chat',
   },
-  // grok: {
-  //   display_name: 'Grok',
-  //   url: 'https://x.com/i/grok',
-  // },
-  // meta: {
-  //   display_name: 'Meta AI',
-  //   url: 'https://www.meta.ai/',
-  // },
   mistral: {
     display_name: 'Mistral',
     url: 'https://chat.mistral.ai/chat',
@@ -54,10 +43,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   cohere: {
     display_name: 'Cohere',
     url: 'https://coral.cohere.com/',
-  },
-  perplexity: {
-    display_name: 'Perplexity',
-    url: 'https://www.perplexity.ai/',
   },
   huggingchat: {
     display_name: 'HuggingChat',
@@ -74,7 +59,7 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
 }
 
 export const assistants_vision: AssistantName[] = [
-  'chatgpt',
+  // 'chatgpt',
   'claude',
   'mistral',
   'huggingchat',

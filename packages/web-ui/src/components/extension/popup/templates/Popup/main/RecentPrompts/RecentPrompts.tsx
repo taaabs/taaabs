@@ -70,7 +70,7 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
 
   return (
     <div className={styles.container} ref={container_ref}>
-      <SimpleBar style={{ height: container_height }}>
+      <SimpleBar style={{ height: container_height }} autoHide={false}>
         <div
           className={cn(styles.prompts, {
             [styles['prompts--disabled']]: props.is_disabled,

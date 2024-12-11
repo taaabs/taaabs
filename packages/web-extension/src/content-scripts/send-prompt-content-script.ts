@@ -198,9 +198,22 @@ const send_prompt = async (params: {
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
+      } else if (params.assistant_name == 'mistral') {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 0)
+        })
+        ;(
+          document.querySelector(
+            'button[aria-label="Send question"]',
+          ) as HTMLElement
+        ).click()
       } else if (params.assistant_name == 'aistudio') {
         await new Promise(async (resolve) => {
-          while (document.querySelector('run-button > button[aria-disabled="true"]')) {
+          while (
+            document.querySelector('run-button > button[aria-disabled="true"]')
+          ) {
             await new Promise((resolve) => {
               setTimeout(() => {
                 resolve(true)
@@ -240,21 +253,6 @@ namespace AssistantBugMitigation {
         while (
           document.querySelector(
             'template[data-dgst="BAILOUT_TO_CLIENT_SIDE_RENDERING"]',
-          )
-        ) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
-        resolve(null)
-      })
-    } else if (params.assistant_name == 'perplexity') {
-      await new Promise(async (resolve) => {
-        while (
-          !document.querySelector(
-            '.dark\\:selection\\:text-superDark.dark\\:selection\\:bg-superDuper\\/10.selection\\:text-textMain.selection\\:bg-super\\/50.dark\\:text-textMainDark.text-textMain.font-medium.text-sm.font-sans.default.line-clamp-2'
           )
         ) {
           await new Promise((resolve) => {
@@ -307,10 +305,6 @@ namespace AssistantBugMitigation {
       scroll_container_selector =
         '[class^="react-scroll-to-bottom--"].h-full > div'
       response_container_selector = 'div[data-message-author-role="assistant"]'
-    } else if (params.assistant_name == 'perplexity') {
-      scroll_container_selector = 'html'
-      response_container_selector =
-        'div.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50:nth-of-type(2) > .dark\\:bg-backgroundDark.bg-background.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.justify-between.items-center.flex'
     }
 
     const try_scrolling = () => {
