@@ -34,6 +34,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   const [is_focused, set_is_focused] = useState<boolean>(false)
   const [prompts_history_index, set_prompts_history_index] =
     useState<number>(-1)
+  const [input_focus_trigger, set_input_focus_trigger] = useState(0)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (!props.is_switch_checked || !props.is_history_enabled) return
@@ -91,7 +92,10 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
             <Switch
               label={props.translations.switch}
               is_checked={props.is_switch_checked}
-              on_change={props.on_switch_click}
+              on_change={() => {
+                props.on_switch_click()
+                set_input_focus_trigger(input_focus_trigger + 1)
+              }}
               is_disabled={props.is_switch_disabled}
             />
           )}
@@ -99,6 +103,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       </div>
 
       <Input
+        key={input_focus_trigger}
         value={props.value}
         on_change={handle_change}
         min_lines={2}

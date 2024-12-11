@@ -20,12 +20,7 @@ export const PromptField: React.FC<{
   shortened_plan_text?: string
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
-}> = ({
-  assistant_url,
-  shortened_plan_text,
-  prompt_field_value,
-  set_prompt_field_value,
-}) => {
+}> = (props) => {
   const {
     prompts_history_hook,
     prompts_vision_history_hook,
@@ -41,15 +36,13 @@ export const PromptField: React.FC<{
 
   return vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
-      value={prompt_field_value}
-      on_change={(value) => {
-        set_prompt_field_value(value)
-      }}
+      value={props.prompt_field_value}
+      on_change={props.set_prompt_field_value}
       on_submit={() => {
-        if (!prompt_field_value) return
+        if (!props.prompt_field_value) return
 
         prompts_vision_history_hook.update_stored_prompts_history(
-          prompt_field_value,
+          props.prompt_field_value,
         )
 
         const message: SendPrompt_Message = {
@@ -57,8 +50,8 @@ export const PromptField: React.FC<{
           is_touch_screen: 'ontouchstart' in window,
           assistant_name:
             selected_assistant_vision_hook.selected_assistant_name!,
-          assistant_url,
-          prompt: prompt_field_value,
+          assistant_url: props.assistant_url,
+          prompt: props.prompt_field_value,
           window_height: window_dimensions_hook.dimensions!.height,
           window_width: window_dimensions_hook.dimensions!.width,
           image: vision_mode_hook.image!,
@@ -111,13 +104,13 @@ export const PromptField: React.FC<{
     />
   ) : (
     <Ui_extension_popup_templates_Popup_main_PromptField
-      value={prompt_field_value}
+      value={props.prompt_field_value}
       on_change={(value) => {
-        set_prompt_field_value(value)
+        props.set_prompt_field_value(value)
       }}
       on_submit={() => {
         if (
-          !prompt_field_value &&
+          !props.prompt_field_value &&
           !(
             attach_text_switch_hook.is_checked &&
             text_selection_hook.selected_text
@@ -129,18 +122,21 @@ export const PromptField: React.FC<{
           attach_text_switch_hook.is_checked &&
           (parsed_html_hook.parsed_html || text_selection_hook.selected_text)
         ) {
-          prompts_history_hook.update_stored_prompts_history(prompt_field_value)
+          prompts_history_hook.update_stored_prompts_history(
+            props.prompt_field_value,
+          )
         }
 
         const message: SendPrompt_Message = {
           action: 'send-prompt',
           is_touch_screen: 'ontouchstart' in window,
           assistant_name: selected_assistant_hook.selected_assistant_name!,
-          assistant_url,
-          prompt: prompt_field_value,
+          assistant_url: props.assistant_url,
+          prompt: props.prompt_field_value,
           plain_text:
             (attach_text_switch_hook.is_checked &&
-              (text_selection_hook.selected_text || shortened_plan_text)) ||
+              (text_selection_hook.selected_text ||
+                props.shortened_plan_text)) ||
             '',
           window_height: window_dimensions_hook.dimensions?.height,
           window_width: window_dimensions_hook.dimensions?.width,
@@ -191,9 +187,9 @@ export const PromptField: React.FC<{
         ((!!parsed_html_hook.parsed_html ||
           !!text_selection_hook.selected_text) &&
           parsed_html_hook.parsed_html?.plain_text &&
-          shortened_plan_text &&
+          props.shortened_plan_text &&
           parsed_html_hook.parsed_html?.plain_text.length >
-            shortened_plan_text?.length) ||
+            props.shortened_plan_text?.length) ||
         false
       }
       text_not_found={
@@ -216,7 +212,7 @@ export const PromptField: React.FC<{
             ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
             {calculate_shortening_percentage(
               parsed_html_hook.parsed_html?.plain_text,
-              shortened_plan_text,
+              props.shortened_plan_text,
             )}
             % over the limit in{' '}
             {

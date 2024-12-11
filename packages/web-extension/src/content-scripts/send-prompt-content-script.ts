@@ -22,7 +22,7 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
     // Send prompt
     const prompt = message.plain_text
-      ? `<instruction>\n${message.prompt}\n</instruction>\n\n<text>\n${message.plain_text}\n</text>`
+      ? `<instruction>\n${message.prompt}\n</instruction>\n<text>\n${message.plain_text}\n</text>`
       : message.prompt
     send_prompt({ prompt, assistant_name })
 
@@ -209,6 +209,17 @@ const send_prompt = async (params: {
             'button[aria-label="Send question"]',
           ) as HTMLElement
         ).click()
+      } else if (params.assistant_name == 'grok') {
+        await new Promise((resolve) => {
+          setTimeout(() => {
+            resolve(true)
+          }, 0)
+        })
+        ;(
+          document.querySelector(
+            'button[aria-label="Grok something"]',
+          ) as HTMLElement
+        ).click()
       } else if (params.assistant_name == 'aistudio') {
         await new Promise(async (resolve) => {
           while (
@@ -263,6 +274,21 @@ namespace AssistantBugMitigation {
         }
         resolve(null)
       })
+    } else if (params.assistant_name == 'perplexity') {
+      await new Promise(async (resolve) => {
+        while (
+          !document.querySelector(
+            '.dark\\:selection\\:text-superDark.dark\\:selection\\:bg-superDuper\\/10.selection\\:text-textMain.selection\\:bg-super\\/50.dark\\:text-textMainDark.text-textMain.font-medium.text-sm.font-sans.default.line-clamp-2',
+          )
+        ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
     } else if (params.assistant_name == 'copilot') {
       await new Promise((resolve) => {
         setTimeout(() => {
@@ -280,7 +306,8 @@ namespace AssistantBugMitigation {
         '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
-      gemini: 'div[role="textbox"]', // Needed in mobile browser
+      gemini: 'div[role="textbox"]', // Needed in mobile viewport
+      grok: 'textarea' // Needed in mobile viewport
     }
 
     const selector = chatbot_selectors[assistant_name]
@@ -305,6 +332,10 @@ namespace AssistantBugMitigation {
       scroll_container_selector =
         '[class^="react-scroll-to-bottom--"].h-full > div'
       response_container_selector = 'div[data-message-author-role="assistant"]'
+    } else if (params.assistant_name == 'perplexity') {
+      scroll_container_selector = 'html'
+      response_container_selector =
+        'div.bg-transparent.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50:nth-of-type(2) > .dark\\:bg-backgroundDark.bg-background.dark\\:border-borderMainDark\\/50.dark\\:ring-borderMainDark\\/50.dark\\:divide-borderMainDark\\/50.divide-borderMain\\/50.ring-borderMain\\/50.border-borderMain\\/50.justify-between.items-center.flex'
     }
 
     const try_scrolling = () => {
