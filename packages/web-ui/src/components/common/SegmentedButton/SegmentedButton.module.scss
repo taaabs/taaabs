@@ -11,7 +11,7 @@
   position: relative;
   @include transition-150ms(outline-color);
   @include hover {
-    outline-color: var(--border-color-hover);
+    outline-color: var(--border-color-primary);
   }
   &--disabled {
     opacity: var(--dimmed-opacity);
@@ -38,7 +38,6 @@
     @include dark {
       background-color: var(--dark200);
     }
-    @include transition-250ms(opacity);
     opacity: 0;
   }
   &--show-separator-after::after {
@@ -70,5 +69,5 @@
   position: absolute;
   height: var(--button-dimension-34px);
   left: 0;
-  transition: all 100ms linear;
+  transition: opacity 100ms linear;
 }
