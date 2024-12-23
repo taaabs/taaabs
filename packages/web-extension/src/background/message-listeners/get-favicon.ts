@@ -2,17 +2,15 @@ import { is_message } from '@/utils/is-message'
 import browser from 'webextension-polyfill'
 
 export const get_favicon = () => {
-  browser.runtime.onMessage.addListener(async (request): Promise<any> => {
+  browser.runtime.onMessage.addListener((request, _, sendResponse): any => {
     if (is_message(request) && request.action == 'get-favicon') {
       const domain = request.domain
-      try {
-        const favicon = await download_favicon(domain) // Returns blob, that needs to be converted to image in a content script
-        return { favicon }
-      } catch (error) {
-        console.error(`Error downloading favicon for ${domain}:`, error)
-        return false
-      }
+      download_favicon(domain).then((favicon) => {
+        sendResponse({ favicon })
+      })
+      return true
     }
+    return false
   })
 }
 
@@ -61,8 +59,5 @@ const download_favicon = async (domain: string) => {
       reader.onerror = reject
       reader.readAsDataURL(blob)
     })
-  } catch (error) {
-    console.error(`Error fetching favicon:`, error)
-    return null
-  }
+  } catch {}
 }

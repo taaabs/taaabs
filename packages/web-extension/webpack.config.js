@@ -42,8 +42,10 @@ module.exports = (_, argv) => {
       popup: './src/views/popup/App.tsx',
       'get-auth-data-content-script':
         './src/content-scripts/get-auth-data-content-script.ts',
-      'favicon-content-script':
-        './src/content-scripts/favicon-content-script.ts',
+      'get-favicon-content-script':
+        './src/content-scripts/get-favicon-content-script.ts',
+      'get-cover-content-script':
+        './src/content-scripts/get-cover-content-script.ts',
       'send-prompt-content-script':
         './src/content-scripts/send-prompt-content-script.ts',
       'get-parsed-html-content-script':

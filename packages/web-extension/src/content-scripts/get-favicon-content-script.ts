@@ -9,21 +9,20 @@ window.addEventListener('message', async (event) => {
     event.data.action == 'get-favicon'
   ) {
     const domain = event.data.domain
-    localForage.getItem(`Favicon ${domain}`).then((favicon) => {
+    localForage.getItem(`favicon:${domain}`).then((favicon) => {
       if (favicon == null) {
         browser.runtime
           .sendMessage({ action: 'get-favicon', domain })
           .then((response: any) => {
-            console.log(response)
-            if (response) {
-              // Convert the received data to base64 encoded avif
-              const binary = atob(response.favicon.split(',')[1])
+            const favicon = response.favicon
+            if (favicon) {
+              const binary = atob(favicon.split(',')[1])
               const array = []
               for (let i = 0; i < binary.length; i++) {
                 array.push(binary.charCodeAt(i))
               }
               const uint8Array = new Uint8Array(array)
-              const blob = new Blob([uint8Array], { type: 'image/avif' })
+              const blob = new Blob([uint8Array], { type: 'image/webp' })
               const reader = new FileReader()
               reader.onloadend = function () {
                 const favicon = reader.result
@@ -36,7 +35,7 @@ window.addEventListener('message', async (event) => {
             }
           })
       } else {
-        window.postMessage({ action: 'favicon', favicon, domain }, '*')
+        window.postMessage({ action: 'favicon', domain, favicon }, '*')
       }
     })
   }

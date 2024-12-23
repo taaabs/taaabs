@@ -22,8 +22,8 @@ import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
-import { use_cover_hover_zoom } from './hooks/use-cover-hover-zoom'
 import { use_favicons } from './hooks/use-favicons'
+import { use_cover } from './hooks/use-cover'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -140,7 +140,6 @@ export namespace _Bookmark {
     on_mouse_up?: () => void
     has_cover?: boolean
     cover_hash?: string
-    cover?: string // Base64 encoded webp of a private bookmark
     blurhash?: string
     translations: {
       rename: string
@@ -190,8 +189,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         />
       </Ui_Dropdown>,
     )
-    const cover_hover_zoom_hook = use_cover_hover_zoom()
     const { favicons } = use_favicons(props)
+    const { cover } = use_cover(props)
 
     useUpdateEffect(() => {
       if (!props.on_give_point_click) return
@@ -669,7 +668,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             className={cn(styles.container__inner__card, {
               [styles['container__inner__card--corners-fix']]:
                 (!props.links.length && !props.note) || props.is_compact,
-              [styles['container__inner__card--no-cover']]: !props.has_cover,
             })}
             onContextMenu={(e) => {
               if ('ontouchstart' in window) {
@@ -679,13 +677,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            {props.has_cover && (
+            {(props.has_cover || cover) && (
               <div className={styles.container__inner__card__cover}>
                 <div
                   className={styles.container__inner__card__cover__image}
-                  ref={cover_hover_zoom_hook.container_ref}
-                  onMouseLeave={cover_hover_zoom_hook.handle_mouse_leave}
-                  onMouseMove={cover_hover_zoom_hook.handle_cover_mouse_move}
                   onClick={
                     primary_url
                       ? () => {
@@ -697,25 +692,17 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   style={{ cursor: primary_url ? 'pointer' : undefined }}
                 >
                   {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
-                  {props.cover ? (
+                  {cover ? (
                     <>
                       <img
                         className={
                           styles.container__inner__card__cover__image__fill
                         }
-                        src={`data:image/webp;base64,${props.cover}`}
+                        src={cover}
                       />
                       <img
-                        ref={cover_hover_zoom_hook.image_ref}
-                        className={cn(
-                          styles.container__inner__card__cover__image__top,
-                          {
-                            [styles[
-                              'container__inner__card__cover__image__top--hovering'
-                            ]]: cover_hover_zoom_hook.is_enabled,
-                          },
-                        )}
-                        src={`data:image/webp;base64,${props.cover}`}
+                        className={styles.container__inner__card__cover__image__top}
+                        src={cover}
                       />
                     </>
                   ) : props.cover_hash ? (
@@ -728,15 +715,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
                       <img
-                        ref={cover_hover_zoom_hook.image_ref}
-                        className={cn(
-                          styles.container__inner__card__cover__image__top,
-                          {
-                            [styles[
-                              'container__inner__card__cover__image__top--hovering'
-                            ]]: cover_hover_zoom_hook.is_enabled,
-                          },
-                        )}
+                        className={styles.container__inner__card__cover__image__top}
                         loading="lazy"
                         src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
                       />
@@ -1178,7 +1157,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     o.updated_at == n.updated_at &&
     o.search_queried_at_timestamp == n.search_queried_at_timestamp &&
     o.is_search_result == n.is_search_result &&
-    o.cover == n.cover &&
     o.points == n.points &&
     o.points_given == n.points_given &&
     o.is_compact == n.is_compact &&

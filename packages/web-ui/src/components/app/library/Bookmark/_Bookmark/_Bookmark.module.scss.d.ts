@@ -7,12 +7,10 @@ declare const styles: {
   readonly "container__inner": string;
   readonly "container__inner__card": string;
   readonly "container__inner__card--corners-fix": string;
-  readonly "container__inner__card--no-cover": string;
   readonly "container__inner__card__cover": string;
   readonly "container__inner__card__cover__image": string;
   readonly "container__inner__card__cover__image__fill": string;
   readonly "container__inner__card__cover__image__top": string;
-  readonly "container__inner__card__cover__image__top--hovering": string;
   readonly "container__inner__card__date": string;
   readonly "container__inner__card__date__text": string;
   readonly "container__inner__card__tags": string;

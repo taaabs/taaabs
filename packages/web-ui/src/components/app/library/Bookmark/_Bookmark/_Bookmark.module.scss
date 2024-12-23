@@ -52,11 +52,6 @@
           border-bottom-right-radius: 11px;
         }
       }
-      &--no-cover {
-        @include at992 {
-          padding-left: var(--padding-14px);
-        }
-      }
       &__cover {
         grid-area: cover;
         position: relative;
@@ -87,9 +82,6 @@
           &__top {
             position: relative;
             object-fit: contain;
-            &--hovering {
-              transform: scale(2) translateX(var(--x)) translateY(var(--y));
-            }
           }
           &__fill {
             position: absolute;

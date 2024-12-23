@@ -31,10 +31,6 @@ export type Bookmark = {
   is_unsorted?: boolean
   tags: Tag[]
   links: Link[]
-  cover?: string
-  cover_aes?: string
-  blurhash?: string
-  blurhash_aes?: string
 }
 
 export type TagHierarchy = {

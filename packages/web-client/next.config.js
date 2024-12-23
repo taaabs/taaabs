@@ -69,7 +69,6 @@ const next_config = {
   },
   experimental: {
     typedRoutes: true,
-    windowHistorySupport: true,
   },
 }
 

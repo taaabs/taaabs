@@ -14,9 +14,7 @@ export const use_favicons = (props: _Bookmark.Props) => {
         const domain = get_domain_from_url(link.url)
         window.postMessage({ action: 'get-favicon', domain }, '*')
       })
-  }, [])
 
-  useEffect(() => {
     const message_handler = (event: MessageEvent) => {
       if (
         event.source === window &&
@@ -38,7 +36,7 @@ export const use_favicons = (props: _Bookmark.Props) => {
     window.addEventListener('message', message_handler)
 
     return () => window.removeEventListener('message', message_handler)
-  }, [favicons])
+  }, [])
 
   return {
     favicons,

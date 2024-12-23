@@ -63,6 +63,15 @@ export type GetFavicon_Message = {
   action: 'get-favicon'
   domain: string
 }
+export type SetCover_Message = {
+  action: 'set-cover'
+  url: string
+  cover: string
+}
+export type GetCover_Message = {
+  action: 'get-cover'
+  url: string
+}
 
 export type Message =
   | GetParsedHtml_Message
@@ -83,6 +92,8 @@ export type Message =
   | SelectedText_Message
   | SetFavicon_Message
   | GetFavicon_Message
+  | SetCover_Message
+  | GetCover_Message
 
 export type CheckUrlSavedResponse = { is_saved: boolean }
 export type GetAuthDataResponse = any // TODO: Replace 'any' with the actual type

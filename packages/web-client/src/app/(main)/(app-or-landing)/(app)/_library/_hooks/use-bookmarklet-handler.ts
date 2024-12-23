@@ -15,7 +15,6 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { encode } from 'blurhash'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
-import { get_cover_with_blurhash } from '@shared/utils/get-cover-with-blurhash/get-cover-with-blurhash'
 
 export const use_bookmarklet_handler = (props: {
   dictionary: Dictionary
@@ -107,17 +106,6 @@ export const use_bookmarklet_handler = (props: {
           clipboard_data = JSON.parse(clipboard_value)
         } catch {}
 
-        let cover: string | undefined = undefined
-        let blurhash: string | undefined = undefined
-
-        if (clipboard_data?.og_image) {
-          const cover_with_blurhash = await get_cover_with_blurhash(
-            clipboard_data.og_image,
-          )
-          cover = cover_with_blurhash.cover.split(',')[1]
-          blurhash = cover_with_blurhash.blurhash
-        }
-
         // Some websites do not update title during SPA navigation
         let title = bookmark_url_hash_data.title
 
@@ -206,8 +194,6 @@ export const use_bookmarklet_handler = (props: {
               }
             }) || [],
           tags: [],
-          cover,
-          blurhash,
         }
         const created_bookmark = await dispatch(
           bookmarks_actions.upsert_bookmark({
