@@ -192,40 +192,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       }
     }
 
-    let cover = params.cover
-
-    if (!params.cover) {
-      if (params.cover_hash) {
-        try {
-          const image_blob = await this._ky
-            .get(`v1/covers/${params.cover_hash}`)
-            .blob()
-
-          cover = await new Promise((resolve, reject) => {
-            const reader = new FileReader()
-            reader.onloadend = () => {
-              if (reader.result && typeof reader.result === 'string') {
-                resolve(reader.result.split(',')[1])
-              } else {
-                reject(new Error('Failed to read image data'))
-              }
-            }
-            reader.onerror = reject
-            reader.readAsDataURL(image_blob)
-          })
-        } catch (error) {
-          console.error('Error fetching image:', error)
-          throw error
-        }
-      } else if (params.has_cover_aes) {
-        const cover_encrypted = await this.get_cover({
-          bookmark_id: params.bookmark_id!,
-          bookmark_updated_at: '',
-        })
-        cover = await AES.decrypt(cover_encrypted, encryption_key)
-      }
-    }
-
     const title =
       params.title == ''
         ? null
@@ -259,15 +225,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
           : params.is_unsorted,
       tags: params.tags ? tags : undefined,
       links: links.length ? links : undefined,
-      cover: params.is_public ? cover : undefined,
-      cover_aes:
-        !params.is_public && cover
-          ? await AES.encrypt(cover, encryption_key)
-          : undefined,
-      blurhash_aes:
-        !params.is_public && params.blurhash
-          ? await AES.encrypt(params.blurhash, encryption_key)
-          : undefined,
     }
 
     if (params.bookmark_id) {

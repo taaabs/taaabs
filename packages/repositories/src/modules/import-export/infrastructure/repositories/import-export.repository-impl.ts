@@ -133,16 +133,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
         is_unsorted: bookmark.is_unsorted, // It's important to store 'false' if is there, meaning bookmark is sorted
         is_archived: bookmark.is_archived,
         stars: bookmark.stars || undefined,
-        cover: bookmark.cover
-          ? bookmark.cover
-          : bookmark.cover_aes
-          ? await AES.decrypt(bookmark.cover_aes, encryption_key)
-          : undefined,
-        blurhash: bookmark.blurhash
-          ? bookmark.blurhash
-          : bookmark.blurhash_aes
-          ? await AES.decrypt(bookmark.blurhash_aes, encryption_key)
-          : undefined,
         tags,
         links,
       })

@@ -25,7 +25,7 @@ import { use_library_dispatch } from '@/stores/library'
 import { useSearchParams } from 'next/navigation'
 import { ModalContext } from '@/providers/ModalProvider'
 import { LocalDb } from '@/providers/LocalDbProvider'
-import { _Bookmark } from './_bookmarks/_Bookmark'
+import { Bookmark as Ui_app_library_Bookmark } from '@web-ui/components/app/library/Bookmark'
 import { edit_tags_modal_setter } from '@/modals/edit-tags/edit-tags-modal-setter'
 import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
 import { AuthContext } from '@/providers/AuthProvider'
@@ -732,7 +732,7 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
     }
 
     return (
-      <_Bookmark
+      <Ui_app_library_Bookmark
         key={`${bookmark.id}${i}${library_updated_at_timestamp}${popstate_rerender_trigger_hook.value}`}
         created_at={new Date(bookmark.created_at)}
         locale={props.dictionary.locale}
@@ -750,10 +750,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
         is_public={bookmark.is_public}
         points_given={points_hook.points_given[bookmark.id]}
         points={bookmark.points}
-        has_cover={!!(bookmark.has_cover_aes || bookmark.cover_hash)}
-        has_cover_aes={bookmark.has_cover_aes}
-        cover_hash={bookmark.cover_hash}
-        blurhash={bookmark.blurhash}
         on_get_points_given_click={
           auth_context.auth_data
             ? () => {
