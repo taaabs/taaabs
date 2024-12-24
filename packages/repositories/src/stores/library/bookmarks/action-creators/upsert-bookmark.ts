@@ -15,7 +15,6 @@ import { GetTagHierarchies_Params } from '@repositories/modules/tag-hierarchies/
 
 export const upsert_bookmark = (params: {
   bookmark: UpsertBookmark_Params
-  should_refetch_links_reader_data?: boolean
   last_authorized_counts_params?: Counts_Params.Authorized
   get_tag_hierarchies_request_params?: GetTagHierarchies_Params.Authorized
   ky: KyInstance

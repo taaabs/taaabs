@@ -13,7 +13,6 @@ import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { HtmlParser } from '@shared/utils/html-parser'
 import { encode } from 'blurhash'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { AuthContext } from '@/providers/AuthProvider'
@@ -56,8 +55,6 @@ export namespace UpsertBookmarkModal {
 
 type ClipboardData = {
   html: string
-  favicon?: string
-  og_image?: string
 }
 
 export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
@@ -116,73 +113,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   )
 
   const on_submit: SubmitHandler<FormValues> = async (form_data) => {
-    let og_image: string | undefined = undefined
-    let og_image_blurhash: string | undefined = undefined
-
-    if (clipboard_data?.og_image) {
-      const img = new Image()
-      img.src = clipboard_data.og_image
-
-      await new Promise((resolve) => {
-        img.onload = resolve
-      })
-
-      const original_width = img.width
-      const original_height = img.height
-
-      // Calculate new dimensions
-      const max_width = cover_max_width
-      let new_width = original_width
-      let new_height = original_height
-
-      if (original_width > max_width) {
-        new_width = max_width
-        new_height = Math.round((original_height / original_width) * max_width)
-      }
-
-      // Create canvas for full-size image
-      const full_size_canvas = document.createElement('canvas')
-      full_size_canvas.width = new_width
-      full_size_canvas.height = new_height
-      const full_size_ctx = full_size_canvas.getContext('2d')
-      if (!full_size_ctx)
-        throw new Error('Could not get 2D context from full-size canvas.')
-
-      full_size_ctx.drawImage(img, 0, 0, new_width, new_height)
-      og_image = full_size_canvas.toDataURL('image/webp')
-
-      // Create smaller canvas for Blurhash calculation
-      const blurhash_width = 50
-      const blurhash_height = Math.round(
-        (new_height / new_width) * blurhash_width,
-      )
-
-      const blurhashCanvas = document.createElement('canvas')
-      blurhashCanvas.width = blurhash_width
-      blurhashCanvas.height = blurhash_height
-      const blurhash_ctx = blurhashCanvas.getContext('2d')
-      if (!blurhash_ctx)
-        throw new Error('Could not get 2D context from Blurhash canvas.')
-
-      // Use built-in scaling of drawImage for better quality
-      blurhash_ctx.drawImage(img, 0, 0, blurhash_width, blurhash_height)
-
-      // Calculate Blurhash using the resized image
-      const image_data = blurhash_ctx.getImageData(
-        0,
-        0,
-        blurhash_width,
-        blurhash_height,
-      ).data
-      og_image_blurhash = encode(
-        image_data,
-        blurhash_width,
-        blurhash_height,
-        4,
-        3,
-      )
-    }
-
     let bookmark: UpsertBookmark_Params
 
     if (!props.bookmark || is_bookmark_public != props.bookmark?.is_public) {
@@ -203,22 +133,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             const current_link = props.bookmark?.links.find(
               (l) => l.url == link.url,
             )
-            const favicon = clipboard_data?.favicon
-              ? clipboard_data.favicon.replace('data:image/webp;base64,', '')
-              : undefined
-            const reader_data =
-              props.bookmark_autofill?.links &&
-              props.bookmark_autofill.links.length &&
-              props.bookmark_autofill.links[0].url == link.url
-                ? clipboard_data
-                  ? (
-                      await HtmlParser.parse({
-                        url: link.url,
-                        html: clipboard_data.html,
-                      })
-                    )?.reader_data
-                  : undefined
-                : undefined
 
             return {
               url: link.url,
@@ -227,8 +141,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               is_pinned: current_link?.is_pinned,
               pin_title: current_link?.pin_title,
               open_snapshot: link.open_snapshot,
-              favicon: favicon || current_link?.favicon,
-              reader_data,
             }
           }),
         ),
@@ -236,10 +148,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           name: tag.name,
           is_public: (is_bookmark_public ? tag.is_public : false) || false, // TODO: make is public optional
         })),
-        cover: og_image?.split(',')[1],
-        cover_hash: props.bookmark?.cover_hash,
-        has_cover_aes: props.bookmark?.has_cover_aes,
-        blurhash: og_image_blurhash || props.bookmark?.blurhash,
       }
     } else {
       const title =
@@ -278,7 +186,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               is_pinned: current_link?.is_pinned,
               pin_title: current_link?.pin_title,
               open_snapshot: link.open_snapshot,
-              favicon: current_link?.favicon,
             }
           }),
         ),

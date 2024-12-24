@@ -60,7 +60,6 @@ browser.runtime.onMessage.addListener((message: any, _, __): any => {
           links: [
             {
               url: url_cleaner(url.href),
-              reader_data: message.reader_data,
             },
           ],
         }

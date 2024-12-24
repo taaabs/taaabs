@@ -15,6 +15,5 @@ export type UpsertBookmark_Params = {
     is_pinned?: boolean
     pin_title?: string
     open_snapshot?: boolean
-    reader_data?: string
   }[]
 }

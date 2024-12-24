@@ -8,7 +8,7 @@ declare const styles: {
   readonly "item__actions__open": string;
   readonly "item__actions__public-saves": string;
   readonly "item__link": string;
-  readonly "item__link__reader": string;
+  readonly "item__link__player": string;
   readonly "item__link__site": string;
   readonly "item__link__site--highlighted": string;
   readonly "item__link__url": string;

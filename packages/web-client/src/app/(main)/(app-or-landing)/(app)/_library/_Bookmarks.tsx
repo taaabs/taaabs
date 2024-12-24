@@ -174,25 +174,9 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
                 return
               }
               dispatch(bookmarks_actions.set_is_upserting(true))
-              let should_refetch_links_reader_data = false
-              if (bookmark.is_public != modified_bookmark.is_public) {
-                should_refetch_links_reader_data = true
-              }
-              if (
-                !should_refetch_links_reader_data &&
-                modified_bookmark.links
-              ) {
-                modified_bookmark.links.forEach((link) => {
-                  const old_link = bookmark.links.find((l) => l.url == link.url)
-                  if (old_link && old_link.is_public != link.is_public) {
-                    should_refetch_links_reader_data = true
-                  }
-                })
-              }
               const updated_bookmark = await dispatch(
                 bookmarks_actions.upsert_bookmark({
                   bookmark: modified_bookmark,
-                  should_refetch_links_reader_data,
                   last_authorized_counts_params:
                     JSON.parse(
                       sessionStorage.getItem(

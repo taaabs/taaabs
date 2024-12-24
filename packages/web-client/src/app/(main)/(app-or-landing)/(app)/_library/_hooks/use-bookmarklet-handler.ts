@@ -10,9 +10,7 @@ import { Bookmarks_DataSourceImpl } from '@repositories/modules/bookmarks/infras
 import { Bookmarks_RepositoryImpl } from '@repositories/modules/bookmarks/infrastructure/repositories/bookmarks.repository-impl'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { use_is_hydrated } from '@shared/hooks'
-import { HtmlParser } from '@shared/utils/html-parser'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { encode } from 'blurhash'
 import { useContext } from 'react'
 import { toast } from 'react-toastify'
 
@@ -52,24 +50,9 @@ export const use_bookmarklet_handler = (props: {
             })
             if (updated_bookmark) {
               should_refetch_data = true
-              let should_refetch_links_reader_data = false
-              if (found_bookmark.is_public != updated_bookmark.is_public) {
-                should_refetch_links_reader_data = true
-              }
-              if (!should_refetch_links_reader_data) {
-                updated_bookmark.links.forEach((link) => {
-                  const old_link = found_bookmark.links.find(
-                    (l) => l.url == link.url,
-                  )
-                  if (old_link && old_link.is_public != link.is_public) {
-                    should_refetch_links_reader_data = true
-                  }
-                })
-              }
               await dispatch(
                 bookmarks_actions.upsert_bookmark({
                   bookmark: updated_bookmark,
-                  should_refetch_links_reader_data,
                   last_authorized_counts_params:
                     JSON.parse(
                       sessionStorage.getItem(
@@ -98,8 +81,6 @@ export const use_bookmarklet_handler = (props: {
         })
         let clipboard_data: {
           html: string
-          favicon?: string
-          og_image?: string
         } | null = null
         try {
           const clipboard_value = await navigator.clipboard.readText()
@@ -171,26 +152,10 @@ export const use_bookmarklet_handler = (props: {
           note,
           links:
             bookmark_url_hash_data.links?.map((link) => {
-              const favicon = clipboard_data?.favicon
-                ? clipboard_data.favicon.split(',')[1]
-                : undefined
-              const reader_data =
-                bookmark_url_hash_data?.links &&
-                bookmark_url_hash_data.links.length &&
-                bookmark_url_hash_data.links[0].url == link.url
-                  ? clipboard_data
-                    ? HtmlParser.parse({
-                        url: link.url,
-                        html: clipboard_data.html,
-                      })?.reader_data
-                    : undefined
-                  : undefined
               return {
                 is_public: false,
                 url: link.url,
                 site_path: link.site_path,
-                favicon,
-                reader_data,
               }
             }) || [],
           tags: [],
@@ -217,24 +182,9 @@ export const use_bookmarklet_handler = (props: {
           dictionary: props.dictionary,
         })
         if (updated_bookmark) {
-          let should_refetch_links_reader_data = false
-          if (created_bookmark.is_public != updated_bookmark.is_public) {
-            should_refetch_links_reader_data = true
-          }
-          if (!should_refetch_links_reader_data) {
-            updated_bookmark.links.forEach((link) => {
-              const old_link = created_bookmark.links.find(
-                (l) => l.url == link.url,
-              )
-              if (old_link && old_link.is_public != link.is_public) {
-                should_refetch_links_reader_data = true
-              }
-            })
-          }
           await dispatch(
             bookmarks_actions.upsert_bookmark({
               bookmark: updated_bookmark,
-              should_refetch_links_reader_data,
               last_authorized_counts_params:
                 JSON.parse(
                   sessionStorage.getItem(
