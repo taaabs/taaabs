@@ -136,9 +136,6 @@ export namespace _Bookmark {
       yields?: number
     }
     on_mouse_up?: () => void
-    has_cover?: boolean
-    cover_hash?: string
-    blurhash?: string
     translations: {
       rename: string
       delete: string
@@ -675,7 +672,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            {(props.has_cover || cover) && (
+            {cover && (
               <div className={styles.container__inner__card__cover}>
                 <div
                   className={styles.container__inner__card__cover__image}
@@ -689,38 +686,16 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   }
                   style={{ cursor: primary_url ? 'pointer' : undefined }}
                 >
-                  {props.blurhash && <BlurhashCanvas hash={props.blurhash} />}
-                  {cover ? (
-                    <>
-                      <img
-                        className={
-                          styles.container__inner__card__cover__image__fill
-                        }
-                        src={cover}
-                      />
-                      <img
-                        className={styles.container__inner__card__cover__image__top}
-                        src={cover}
-                      />
-                    </>
-                  ) : props.cover_hash ? (
-                    <>
-                      <img
-                        className={
-                          styles.container__inner__card__cover__image__fill
-                        }
-                        loading="lazy"
-                        src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
-                      />
-                      <img
-                        className={styles.container__inner__card__cover__image__top}
-                        loading="lazy"
-                        src={`${process.env.NEXT_PUBLIC_API_URL}/v1/covers/${props.cover_hash}`}
-                      />
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                  <img
+                    className={
+                      styles.container__inner__card__cover__image__fill
+                    }
+                    src={cover}
+                  />
+                  <img
+                    className={styles.container__inner__card__cover__image__top}
+                    src={cover}
+                  />
                 </div>
               </div>
             )}
