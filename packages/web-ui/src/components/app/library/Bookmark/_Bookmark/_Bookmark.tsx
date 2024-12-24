@@ -12,7 +12,7 @@ import localizedFormat from 'dayjs/plugin/localizedFormat'
 import OutsideClickHandler from 'react-outside-click-handler'
 import useToggle from 'beautiful-react-hooks/useToggle'
 import { get_site_variants_for_search } from '@shared/utils/get-site-variants-for-search/get-site-variants-for-search'
-import { Icon as UiIcon } from '@web-ui/components/Icon'
+import { Icon, Icon as UiIcon } from '@web-ui/components/Icon'
 import { useContextMenu } from 'use-context-menu'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import confetti from 'canvas-confetti'
@@ -185,7 +185,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       </Ui_Dropdown>,
     )
     const { favicons } = use_favicons(props)
-    const { cover } = use_cover(props)
+    const { cover, is_fetching: is_fetching_cover } = use_cover(props)
 
     useUpdateEffect(() => {
       if (!props.on_give_point_click) return
@@ -672,7 +672,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               }
             }}
           >
-            {cover && (
+            {cover ? (
               <div className={styles.container__inner__card__cover}>
                 <div
                   className={styles.container__inner__card__cover__image}
@@ -696,6 +696,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     className={styles.container__inner__card__cover__image__top}
                     src={cover}
                   />
+                </div>
+              </div>
+            ) : (
+              <div className={styles.container__inner__card__cover}>
+                <div className={styles.container__inner__card__cover__image}>
+                  {is_fetching_cover ? (
+                    <div
+                      className={
+                        styles.container__inner__card__cover__image__loader
+                      }
+                    />
+                  ) : (
+                    <Icon variant="BOOKMARK_FILLED" />
+                  )}
                 </div>
               </div>
             )}

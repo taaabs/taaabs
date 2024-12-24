@@ -31,6 +31,7 @@ window.addEventListener('message', async (event) => {
               reader.readAsDataURL(blob)
             } else {
               localForage.setItem(`cover:${url}`, '')
+              window.postMessage({ action: 'cover', url }, '*')
             }
           })
       } else {

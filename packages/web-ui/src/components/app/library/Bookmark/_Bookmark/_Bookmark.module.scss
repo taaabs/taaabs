@@ -66,18 +66,15 @@
           position: relative;
           border-radius: var(--border-radius-7px);
           overflow: hidden;
+          background-color: var(--neutral100);
+          @include dark {
+            background-color: var(--dark200);
+          }
           width: 111px;
           height: 58px;
           @include at992 {
             width: 156px;
             height: 82px;
-          }
-          > * {
-            width: 100%;
-            height: 100%;
-          }
-          > canvas {
-            position: absolute;
           }
           &__top {
             position: relative;
@@ -93,13 +90,34 @@
             filter: blur(3px);
           }
           > svg {
-            fill: var(--neutral200);
+            fill: var(--neutral300);
             @include dark {
-              fill: var(--dark500);
+              fill: var(--dark400);
             }
             width: 18px;
             @include at992 {
               width: 20px;
+            }
+          }
+          &__loader {
+            width: 36px;
+            height: 36px;
+            border: 4px solid var(--neutral200);
+            @include dark {
+              border: 4px solid var(--dark400);
+            }
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            @keyframes rotation {
+              0% {
+                transform: rotate(0deg);
+              }
+              100% {
+                transform: rotate(360deg);
+              }
             }
           }
         }

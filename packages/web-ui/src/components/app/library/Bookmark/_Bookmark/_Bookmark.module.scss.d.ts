@@ -10,6 +10,7 @@ declare const styles: {
   readonly "container__inner__card__cover": string;
   readonly "container__inner__card__cover__image": string;
   readonly "container__inner__card__cover__image__fill": string;
+  readonly "container__inner__card__cover__image__loader": string;
   readonly "container__inner__card__cover__image__top": string;
   readonly "container__inner__card__date": string;
   readonly "container__inner__card__date__text": string;
@@ -63,6 +64,7 @@ declare const styles: {
   readonly "container__inner__links__item__link__url--via-wayback": string;
   readonly "container__inner__links__item__pinned": string;
   readonly "container__inner__note": string;
+  readonly "rotation": string;
   readonly "slot": string;
   readonly "slot--visible": string;
   readonly "sortable-fallback": string;
