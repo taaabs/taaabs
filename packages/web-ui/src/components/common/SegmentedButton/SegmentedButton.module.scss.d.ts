@@ -4,7 +4,6 @@ declare const styles: {
   readonly "button--show-separator-after": string;
   readonly "container": string;
   readonly "container--disabled": string;
-  readonly "selection": string;
 };
 export = styles;
 

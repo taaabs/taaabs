@@ -3,7 +3,7 @@ import { _Bookmark } from '../_Bookmark'
 
 export const use_cover = (props: _Bookmark.Props) => {
   const [cover, set_cover] = useState<string>()
-  const [is_fetching, set_is_fetching] = useState<boolean>(false)
+  const [is_fetching, set_is_fetching] = useState<boolean>()
   const timeout_ref = useRef<ReturnType<typeof setTimeout>>()
 
   const url = props.links[0]?.url
@@ -13,7 +13,7 @@ export const use_cover = (props: _Bookmark.Props) => {
       window.postMessage({ action: 'get-cover', url }, '*')
       timeout_ref.current = setTimeout(() => {
         set_is_fetching(true)
-      }, 500)
+      }, 100)
     }
 
     const message_handler = (event: MessageEvent) => {

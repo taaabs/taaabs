@@ -707,8 +707,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         styles.container__inner__card__cover__image__loader
                       }
                     />
-                  ) : (
+                  ) : is_fetching_cover === false ? (
                     <Icon variant="BOOKMARK_FILLED" />
+                  ) : (
+                    <></>
                   )}
                 </div>
               </div>

@@ -19,26 +19,29 @@
   }
 }
 .button {
-  flex: auto;
+  position: relative;
+  flex-grow: 1;
   height: var(--button-dimension-34px);
   color: transparent;
   font-weight: var(--font-weight-inter-medium);
-  position: relative;
-  color: transparent;
+  @include hover {
+    &::before {
+      color: var(--text-color-normal);
+    }
+  }
   &::after {
     position: absolute;
-    z-index: -1;
     content: '';
     height: 20px;
     width: 1px;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+    opacity: 0;
     background-color: var(--neutral150);
     @include dark {
       background-color: var(--dark200);
     }
-    opacity: 0;
   }
   &--show-separator-after::after {
     opacity: 1;
@@ -53,21 +56,15 @@
     color: var(--text-color-variant);
   }
   &--selected {
+    background-color: var(--white);
+    @include dark {
+      background-color: var(--dark200);
+    }
+    box-shadow: var(--box-shadow-strong);
     color: var(--text-color-normal);
+    border-radius: var(--border-radius-10px);
     &::before {
-      color: transparent;
+      color: transparent !important;
     }
   }
-}
-.selection {
-  background-color: var(--white);
-  @include dark {
-    background-color: var(--dark200);
-  }
-  border-radius: var(--border-radius-10px);
-  box-shadow: var(--box-shadow-strong);
-  position: absolute;
-  height: var(--button-dimension-34px);
-  left: 0;
-  transition: opacity 100ms linear;
 }
