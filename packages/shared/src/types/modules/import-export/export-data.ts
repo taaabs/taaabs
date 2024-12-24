@@ -14,8 +14,6 @@ type Link = {
   pin_title?: string
   pin_title_aes?: string
   open_snapshot?: boolean
-  reader_data?: string
-  reader_data_aes?: string
 }
 
 export type Bookmark = {

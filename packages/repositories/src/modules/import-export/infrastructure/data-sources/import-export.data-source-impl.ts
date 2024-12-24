@@ -9,7 +9,6 @@ import { system_values } from '@shared/constants/system-values'
 import { AES } from '@repositories/utils/aes'
 import { SHA256 } from '@repositories/utils/sha256'
 import { KyInstance } from 'ky'
-import pako from 'pako'
 import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
 import { RequestNewBackup_Dto } from '@shared/types/modules/import-export/request-new-backup.dto'
 
@@ -75,7 +74,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             open_snapshot: link.open_snapshot,
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
-            reader_data: link.reader_data,
           })
         } else {
           const domain = get_domain_from_url(link.url)
@@ -90,12 +88,6 @@ export class ImportExport_DataSourceImpl implements ImportExport_DataSource {
             open_snapshot: link.open_snapshot,
             is_pinned: link.is_pinned,
             pin_order: link.pin_order,
-            reader_data_aes: link.reader_data
-              ? await AES.encrypt(
-                  btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
-                  encryption_key,
-                )
-              : undefined,
           })
         }
       }

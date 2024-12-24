@@ -12,9 +12,7 @@ import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { AES } from '@repositories/utils/aes'
 import { SHA256 } from '@repositories/utils/sha256'
 import { KyInstance } from 'ky'
-import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
 import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
-import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindByUrlHash_Dto } from '@shared/types/modules/bookmarks/find-by-url-hash.dto'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
@@ -89,40 +87,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
       .json()
   }
 
-  public async get_links_data_authorized(
-    params: GetLinksData_Params.Authorized,
-  ): Promise<LinksData_Dto.Response.Authorized> {
-    const search_params = new URLSearchParams()
-    if (params.bookmark_updated_at) {
-      search_params.set(
-        'v',
-        `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
-      )
-    }
-    return await this._ky
-      .get(`v1/bookmarks/${params.bookmark_id}/links-data`, {
-        searchParams: search_params,
-      })
-      .json()
-  }
-
-  public async get_links_data_public(
-    params: GetLinksData_Params.Public,
-  ): Promise<LinksData_Dto.Response.Public> {
-    const search_params = new URLSearchParams()
-    if (params.bookmark_updated_at) {
-      search_params.set(
-        'v',
-        `${Math.floor(new Date(params.bookmark_updated_at).getTime() / 1000)}`,
-      )
-    }
-    return await this._ky
-      .get(`v1/bookmarks/${params.username}/${params.bookmark_id}/links-data`, {
-        searchParams: search_params,
-      })
-      .json()
-  }
-
   public async upsert_bookmark(
     params: UpsertBookmark_Params,
     encryption_key: Uint8Array,
@@ -165,7 +129,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
             is_pinned: link.is_pinned,
             pin_title: link.pin_title,
             open_snapshot: link.open_snapshot,
-            reader_data: link.reader_data,
           })
         } else {
           links.push({
@@ -181,12 +144,6 @@ export class Bookmarks_DataSourceImpl implements Bookmarks_DataSource {
               ? await AES.encrypt(link.pin_title, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot,
-            reader_data_aes: link.reader_data
-              ? await AES.encrypt(
-                  btoa(String.fromCharCode(...pako.deflate(link.reader_data))),
-                  encryption_key,
-                )
-              : undefined,
           })
         }
       }

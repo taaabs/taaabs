@@ -8,7 +8,6 @@ export type PinnedLink_Entity = {
   stars?: number
   is_unsorted?: boolean
   is_archived?: boolean
-  is_parsed?: boolean
   tags?: number[]
   open_snapshot?: boolean
   favicon?: string

@@ -112,10 +112,8 @@ export namespace _Bookmark {
       is_pinned?: boolean
       open_snapshot?: boolean
       is_public?: boolean
-      is_parsed?: boolean
     }[]
     on_link_click: (url: string) => void
-    on_reading_mode_click: (url: string) => void
     on_video_player_click: (url: string) => void
     on_link_middle_click: () => void
     on_new_tab_click: (url: string) => void
@@ -981,24 +979,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                           <UiIcon variant="GLOBE" />
                         )}
                       </button>
-                      {link.is_parsed &&
-                        // Don't show transcripts
-                        !link.url.startsWith(
-                          'https://www.youtube.com/watch',
-                        ) && (
-                          <button
-                            className={
-                              styles[
-                                'container__inner__links__item__link__in-app'
-                              ]
-                            }
-                            onClick={() => {
-                              props.on_reading_mode_click(link.url)
-                            }}
-                          >
-                            <UiIcon variant="RESIZE" />
-                          </button>
-                        )}
                       {is_video_url(link.url) && (
                         <button
                           className={

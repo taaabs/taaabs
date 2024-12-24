@@ -20,7 +20,6 @@ export namespace PinnedBookmarks {
     saves?: number
     open_snapshot?: boolean
     favicon?: string
-    is_parsed?: boolean
     is_archived?: boolean
     stars?: number
     is_unsorted?: boolean
@@ -29,12 +28,10 @@ export namespace PinnedBookmarks {
     items: Item[]
     on_change: (items: Item[]) => void
     favicon_host: string
-    on_reading_mode_click: (item: Item) => void
     on_video_player_click: (item: Item) => void
     on_link_click: (item: Item) => void
     on_link_middle_click: (item: Item) => void
     on_new_tab_click: (item: Item) => void
-    on_is_visible: (item: Item) => void
     on_unpin_click?: (item: Item) => void
     is_draggable: boolean
     selected_tags: number[]
@@ -159,13 +156,9 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           on_new_tab_click={() => {
             props.on_new_tab_click(item)
           }}
-          on_reading_mode_click={() => {
-            props.on_reading_mode_click(item)
-          }}
           on_video_player_click={() => {
             props.on_video_player_click(item)
           }}
-          on_is_visible={() => props.on_is_visible(item)}
           on_menu_toggled={(is_open: boolean) => {
             set_is_sortable_disabled(is_open)
           }}
@@ -173,7 +166,6 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
           url={item.url}
           created_at={item.created_at}
           favicon={item.favicon}
-          is_parsed={item.is_parsed}
           open_snapshot={item.open_snapshot}
           saves={item.saves}
           site_path={item.site_path}

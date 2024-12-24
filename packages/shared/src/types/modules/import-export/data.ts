@@ -20,7 +20,6 @@ const public_link_schema = z.object({
   open_snapshot: z.boolean().optional(),
   is_pinned: z.boolean().optional(),
   pin_order: z.number().int().optional(),
-  reader_data: z.string().max(1000000).optional(),
 })
 const private_link_schema = z.object({
   is_public: z.literal(false),
@@ -30,7 +29,6 @@ const private_link_schema = z.object({
   open_snapshot: z.boolean().optional(),
   is_pinned: z.boolean().optional(),
   pin_order: z.number().int().optional(),
-  reader_data_aes: z.string().max(1000000).optional(),
 })
 export const bookmark_schema = z.object({
   id: z.string().uuid().optional(),

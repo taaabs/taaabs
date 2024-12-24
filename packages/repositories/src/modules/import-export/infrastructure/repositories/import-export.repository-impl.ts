@@ -6,7 +6,6 @@ import { SendImportData_Params } from '../../domain/types/send-import-data.param
 import { ImportExport_DataSource } from '../data-sources/import-export.data-source'
 import { AES } from '@repositories/utils/aes'
 import { Backup_Ro } from '../../domain/types/backup.ro'
-import pako from 'pako'
 import { RequestNewBackup_Params } from '../../domain/types/request-new-backup.params'
 import { ExportData } from '@shared/types/modules/import-export/export-data'
 
@@ -80,7 +79,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             open_snapshot: link.open_snapshot || undefined,
             is_pinned: link.is_pinned || undefined,
             pin_order: link.pin_order || undefined,
-            reader_data: link.reader_data || undefined,
           })
         } else if (link.url_aes && link.site_aes) {
           const site = await AES.decrypt(link.site_aes, encryption_key)
@@ -95,21 +93,6 @@ export class ImportExport_RepositoryImpl implements ImportExport_Repository {
             open_snapshot: link.open_snapshot || undefined,
             is_pinned: link.is_pinned || undefined,
             pin_order: link.pin_order || undefined,
-            reader_data: link.reader_data_aes
-              ? new TextDecoder().decode(
-                  pako.inflate(
-                    Uint8Array.from(
-                      atob(
-                        await AES.decrypt(
-                          link.reader_data_aes,
-                          encryption_key,
-                        ),
-                      ),
-                      (c) => c.charCodeAt(0),
-                    ),
-                  ),
-                )
-              : undefined,
           })
         } else {
           throw new Error('Url_aes and site_aes should be there.')

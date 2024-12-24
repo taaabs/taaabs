@@ -4,8 +4,6 @@ import cn from 'classnames'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { useRef, useState } from 'react'
 import OutsideClickHandler from 'react-outside-click-handler'
-import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { url_to_wayback } from '@web-ui/utils/url-to-wayback'
 
 export namespace _Item {
@@ -13,13 +11,11 @@ export namespace _Item {
     url: string
     menu_slot: React.ReactNode
     favicon_host: string
-    on_reading_mode_click: () => void
     on_video_player_click: () => void
     should_dim_visited_links: boolean
     on_link_click: () => void
     on_link_middle_click: () => void
     on_new_tab_click: () => void
-    on_is_visible: () => void
     on_menu_toggled: (is_open: boolean) => void
     created_at: Date
     is_public?: boolean
@@ -28,19 +24,13 @@ export namespace _Item {
     saves?: number
     open_snapshot?: boolean
     favicon?: string
-    is_parsed?: boolean
     stars?: number
   }
 }
 
 export const _Item: React.FC<_Item.Props> = (props) => {
   const ref = useRef<HTMLDivElement>(null)
-  const is_visible = useViewportSpy(ref)
   const [is_menu_opened, set_is_menu_opened] = useState<boolean>()
-
-  useUpdateEffect(() => {
-    is_visible && props.on_is_visible()
-  }, [is_visible])
 
   const url = props.open_snapshot
     ? url_to_wayback({ date: props.created_at, url: props.url })
@@ -69,16 +59,6 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             <UiIcon variant="GLOBE" />
           )}
         </button>
-        {props.is_parsed && (
-          <button
-            className={styles.item__link__reader}
-            onClick={() => {
-              props.on_reading_mode_click()
-            }}
-          >
-            <UiIcon variant="RESIZE" />
-          </button>
-        )}
         {is_video_url(props.url) && (
           <button
             className={styles.item__link__reader}

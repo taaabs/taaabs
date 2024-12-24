@@ -16,8 +16,6 @@ import { CheckboxItem as Ui_Dropdown_CheckboxItem } from '@web-ui/components/Dro
 import { Separator as Ui_Dropdown_Separator } from '@web-ui/components/Dropdown/Separator'
 import { Stars as Ui_Dropdown_Stars } from '@web-ui/components/Dropdown/Stars'
 import { delete_bookmark_modal_setter } from '@/modals/delete-bookmark/delete-bookmark-modal-setter'
-import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
-import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 import { useContext } from 'react'
 import { LibraryContext } from './Library'
 import { Dictionary } from '@/dictionaries/dictionary'
@@ -484,45 +482,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       toast.success(props.dictionary.app.library.bookmark_updated)
     }
 
-    const handle_reading_mode_click = async (url: string) => {
-      const data_source = new Bookmarks_DataSourceImpl(auth_context.ky_instance)
-      const repository = new Bookmarks_RepositoryImpl(data_source)
-      let links_data: GetLinksData_Ro | undefined = undefined
-      if (username) {
-        links_data = await repository.get_links_data_public({
-          bookmark_id: bookmark.id,
-          bookmark_updated_at: new Date(bookmark.updated_at),
-          username,
-        })
-      } else {
-        links_data = await repository.get_links_data_authorized(
-          {
-            bookmark_id: bookmark.id,
-            bookmark_updated_at: new Date(bookmark.updated_at),
-          },
-          auth_context.auth_data!.encryption_key,
-        )
-      }
-      const link_data = links_data.find((link) => link.url == url)
-      if (link_data && link_data.reader_data) {
-        reader_modal_setter({
-          reader_data: link_data.reader_data,
-          dictionary: props.dictionary,
-          modal_context,
-        })
-      }
-      if (!username) {
-        const data_source = new Bookmarks_DataSourceImpl(
-          auth_context.ky_instance,
-        )
-        const repository = new Bookmarks_RepositoryImpl(data_source)
-        repository.record_visit({
-          bookmark_id: bookmark.id,
-          visited_at: new Date().toISOString(),
-        })
-      }
-    }
-
     const handle_bookmark_click = () => {
       if (bookmarks_hook.density == 'compact') {
         if (bookmark.is_compact || bookmark.is_compact === undefined) {
@@ -822,7 +781,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           )
         }}
         on_link_click={handle_link_click}
-        on_reading_mode_click={handle_reading_mode_click}
         on_video_player_click={(url) => {
           video_embed_setter({
             url,
@@ -951,7 +909,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           is_pinned: link.is_pinned,
           is_public: link.is_public,
           open_snapshot: link.open_snapshot,
-          is_parsed: link.is_parsed,
           menu_slot: !username ? (
             <Ui_Dropdown>
               {link.open_snapshot ? (

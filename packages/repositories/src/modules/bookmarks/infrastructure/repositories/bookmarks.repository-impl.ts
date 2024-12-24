@@ -10,9 +10,6 @@ import { GetBookmarksByIds_Params } from '../../domain/types/get-bookmarks-by-id
 import { Bookmark_Entity } from '../../domain/entities/bookmark.entity'
 import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { AES } from '@repositories/utils/aes'
-import { GetLinksData_Params } from '../../domain/types/get-links-data.params'
-import { GetLinksData_Ro } from '../../domain/types/get-links-data.ro'
-import pako from 'pako'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { FindByUrlHash_Ro } from '../../domain/types/find-by-url-hash.ro'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
@@ -61,7 +58,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
           ? await AES.decrypt(link.pin_title_aes!, encryption_key)
           : undefined,
         open_snapshot: link.open_snapshot,
-        is_parsed: link.is_parsed,
       })
     }
 
@@ -145,7 +141,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
             is_public: true,
             is_pinned: link.is_pinned,
             open_snapshot: link.open_snapshot,
-            is_parsed: link.is_parsed,
           })
         }
 
@@ -227,67 +222,10 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               site_path: link.site_path,
               is_public: true,
               open_snapshot: link.open_snapshot,
-              is_parsed: link.is_parsed,
             })),
           }))
         : undefined,
     }
-  }
-
-  public async get_links_data_authorized(
-    params: GetLinksData_Params.Authorized,
-    encryption_key: Uint8Array,
-  ): Promise<GetLinksData_Ro> {
-    const links_data =
-      await this._bookmarks_data_source.get_links_data_authorized(params)
-
-    const results: GetLinksData_Ro = []
-
-    for (const link_data of links_data) {
-      results.push({
-        url: link_data.url
-          ? link_data.url
-          : await AES.decrypt(link_data.url_aes!, encryption_key),
-        reader_data: link_data.reader_data
-          ? link_data.reader_data
-          : link_data.reader_data_aes
-          ? new TextDecoder().decode(
-              pako.inflate(
-                Uint8Array.from(
-                  atob(
-                    await AES.decrypt(
-                      link_data.reader_data_aes,
-                      encryption_key,
-                    ),
-                  ),
-                  (c) => c.charCodeAt(0),
-                ),
-              ),
-            )
-          : undefined,
-      })
-    }
-
-    return results
-  }
-
-  public async get_links_data_public(
-    params: GetLinksData_Params.Public,
-  ): Promise<GetLinksData_Ro> {
-    const links_data = await this._bookmarks_data_source.get_links_data_public(
-      params,
-    )
-
-    const results: GetLinksData_Ro = []
-
-    for (const link_data of links_data) {
-      results.push({
-        url: link_data.url,
-        reader_data: link_data.reader_data,
-      })
-    }
-
-    return results
   }
 
   public async upsert_bookmark(
@@ -351,7 +289,6 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
               ? await AES.decrypt(link.pin_title_aes, encryption_key)
               : undefined,
             open_snapshot: link.open_snapshot,
-            is_parsed: link.is_parsed,
           }
         }),
       ),

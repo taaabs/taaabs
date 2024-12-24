@@ -8,7 +8,6 @@ import { get_domain_from_url } from '@shared/utils/get-domain-from-url'
 import { HtmlParser } from '@shared/utils/html-parser'
 import { useEffect, useState } from 'react'
 import browser from 'webextension-polyfill'
-import pako from 'pako'
 import { system_values } from '@shared/constants/system-values'
 import { get_ky_instance } from '@/background/api/get-ky-instance'
 
@@ -94,7 +93,6 @@ export const use_create_bookmark = (params: {
                     is_pinned: link.is_pinned,
                     pin_title: link.pin_title,
                     open_snapshot: link.open_snapshot,
-                    reader_data: link.reader_data,
                   })
                 } else {
                   links.push({
@@ -119,22 +117,10 @@ export const use_create_bookmark = (params: {
                         )
                       : undefined,
                     open_snapshot: link.open_snapshot,
-                    reader_data_aes: link.reader_data
-                      ? await AES.encrypt(
-                          btoa(
-                            String.fromCharCode(
-                              ...pako.deflate(link.reader_data),
-                            ),
-                          ),
-                          new Uint8Array(auth_data.encryption_key),
-                        )
-                      : undefined,
                   })
                 }
               }
             }
-
-            let cover = upsert_bookmark_params.cover
 
             const title = upsert_bookmark_params.title?.substring(
               0,
@@ -175,22 +161,6 @@ export const use_create_bookmark = (params: {
                   : upsert_bookmark_params.is_unsorted,
               tags,
               links,
-              cover: upsert_bookmark_params.is_public ? cover : undefined,
-              cover_aes:
-                !upsert_bookmark_params.is_public && cover
-                  ? await AES.encrypt(
-                      cover,
-                      new Uint8Array(auth_data.encryption_key),
-                    )
-                  : undefined,
-              blurhash_aes:
-                !upsert_bookmark_params.is_public &&
-                upsert_bookmark_params.blurhash
-                  ? await AES.encrypt(
-                      upsert_bookmark_params.blurhash,
-                      new Uint8Array(auth_data.encryption_key),
-                    )
-                  : undefined,
             }
 
             const ky_instance = get_ky_instance()

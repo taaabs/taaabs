@@ -1,9 +1,7 @@
 import { Bookmarks_RepositoryImpl } from './bookmarks.repository-impl'
 import { AES } from '@repositories/utils/aes'
-import pako from 'pako'
 import { Bookmarks_DataSource } from '../data-sources/bookmarks.data-source'
 import { Bookmarks_Dto } from '@shared/types/modules/bookmarks/bookmarks.dto'
-import { LinksData_Dto } from '@shared/types/modules/bookmarks/links-data.dto'
 import { GetCover_Params } from '../../domain/types/get-cover.params'
 import { RecordVisit_Params } from '../../domain/types/record-visit.params'
 import { FindByUrlHash_Params } from '../../domain/types/find-by-url-hash.params'
@@ -24,8 +22,6 @@ describe('Bookmarks_RepositoryImpl', () => {
       get_bookmarks_on_public_user: jest.fn(),
       get_bookmarks_by_ids_authorized: jest.fn(),
       get_bookmarks_by_ids_public: jest.fn(),
-      get_links_data_authorized: jest.fn(),
-      get_links_data_public: jest.fn(),
       upsert_bookmark: jest.fn(),
       delete_bookmark: jest.fn(),
       get_cover: jest.fn(),
@@ -168,54 +164,6 @@ describe('Bookmarks_RepositoryImpl', () => {
       expect(result.bookmarks?.[0].tags[0].name).toBe('public tag')
       expect(result.bookmarks?.[0].links[0].url).toBe('public url')
       expect(result.bookmarks?.[0].links[0].site_path).toBe('public site')
-    })
-  })
-
-  describe('[get_links_data_authorized]', () => {
-    it('should call data source and return correct result', async () => {
-      const params = { urls: ['https://example.com'] } as any
-      const dto_mock = [
-        {
-          url_aes: 'encrypted url',
-          reader_data_aes: 'encrypted reader data',
-        },
-      ] as LinksData_Dto.Response.Authorized
-
-      data_source_mock.get_links_data_authorized.mockResolvedValue(dto_mock)
-      jest.spyOn(AES, 'decrypt').mockResolvedValue('decrypted')
-      jest
-        .spyOn(pako, 'inflate')
-        .mockReturnValue(new Uint8Array([104, 101, 108, 108, 111]))
-
-      const result = await sut.get_links_data_authorized(params, encryption_key)
-
-      expect(data_source_mock.get_links_data_authorized).toHaveBeenCalledWith(
-        params,
-      )
-      expect(result[0].url).toBe('decrypted')
-      expect(result[0].reader_data).toBe('hello')
-    })
-  })
-
-  describe('[get_links_data_public]', () => {
-    it('should call data source and return correct result', async () => {
-      const params = { urls: ['https://example.com'] } as any
-      const dto_mock: LinksData_Dto.Response.Public = [
-        {
-          url: 'public url',
-          reader_data: 'public reader data',
-        },
-      ]
-
-      data_source_mock.get_links_data_public.mockResolvedValue(dto_mock)
-
-      const result = await sut.get_links_data_public(params)
-
-      expect(data_source_mock.get_links_data_public).toHaveBeenCalledWith(
-        params,
-      )
-      expect(result[0].url).toBe('public url')
-      expect(result[0].reader_data).toBe('public reader data')
     })
   })
 

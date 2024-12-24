@@ -12,8 +12,6 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { reader_modal_setter } from '@/modals/reader-modal/reader-modal-setter'
-import { GetLinksData_Ro } from '@repositories/modules/bookmarks/domain/types/get-links-data.ro'
 import { PinnedBookmarks as Ui_app_library_PinnedBookmarks } from '@web-ui/components/app/library/PinnedBookmarks'
 import { LibraryContext } from './Library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
@@ -97,7 +95,6 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
           title: item.title,
           is_unsorted: item.is_unsorted,
           is_archived: item.is_archived,
-          is_parsed: item.is_parsed,
           is_public: item.is_public,
           stars: item.stars,
           tags: item.tags,
@@ -175,46 +172,6 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
           : item.url
         window.open(url, '_blank')
       }}
-      on_reading_mode_click={async (item) => {
-        const data_source = new Bookmarks_DataSourceImpl(
-          auth_context.ky_instance,
-        )
-        const repository = new Bookmarks_RepositoryImpl(data_source)
-        let links_data: GetLinksData_Ro | undefined = undefined
-        if (!username) {
-          links_data = await repository.get_links_data_authorized(
-            {
-              bookmark_id: item.bookmark_id,
-              bookmark_updated_at: item.updated_at,
-            },
-            auth_context.auth_data!.encryption_key,
-          )
-        } else {
-          links_data = await repository.get_links_data_public({
-            bookmark_id: item.bookmark_id,
-            bookmark_updated_at: item.updated_at,
-            username,
-          })
-        }
-        const link_data = links_data.find((link) => link.url == item.url)
-        if (link_data && link_data.reader_data) {
-          reader_modal_setter({
-            reader_data: link_data.reader_data,
-            dictionary: props.dictionary,
-            modal_context,
-          })
-        }
-        if (!username) {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          repository.record_visit({
-            bookmark_id: item.bookmark_id,
-            visited_at: new Date().toISOString(),
-          })
-        }
-      }}
       on_video_player_click={(item) => {
         video_embed_setter({
           url: item.url,
@@ -230,29 +187,6 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
             bookmark_id: item.bookmark_id,
             visited_at: new Date().toISOString(),
           })
-        }
-      }}
-      on_is_visible={(item) => {
-        if (item.is_parsed) {
-          const data_source = new Bookmarks_DataSourceImpl(
-            auth_context.ky_instance,
-          )
-          const repository = new Bookmarks_RepositoryImpl(data_source)
-          if (!username) {
-            repository.get_links_data_authorized(
-              {
-                bookmark_id: item.bookmark_id,
-                bookmark_updated_at: item.updated_at,
-              },
-              auth_context.auth_data!.encryption_key,
-            )
-          } else {
-            repository.get_links_data_public({
-              bookmark_id: item.bookmark_id,
-              bookmark_updated_at: item.updated_at,
-              username,
-            })
-          }
         }
       }}
       selected_tags={tag_view_options_hook.selected_tags}

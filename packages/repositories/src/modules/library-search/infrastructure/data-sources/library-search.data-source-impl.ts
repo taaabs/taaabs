@@ -40,39 +40,4 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
       })
       .json()
   }
-
-  public async get_bookmarks_for_full_text_on_authorized_user(
-    params: GetBookmarks_Params.Authorized,
-  ): Promise<LibrarySearchBookmarks_Dto.Response.Authorized> {
-    const search_params: LibrarySearchBookmarks_Dto.SearchParams = {
-      is_archived: params.is_archived ? true : undefined,
-      after: params.after,
-      include_points: params.include_points,
-      include_visited_at: params.include_visited_at,
-    }
-
-    return this._ky
-      .get(`v1/library-search/bookmarks-for-full-text`, {
-        searchParams: JSON.parse(JSON.stringify(search_params)),
-        timeout: false,
-      })
-      .json()
-  }
-
-  public async get_bookmarks_for_full_text_on_public_user(
-    params: GetBookmarks_Params.Public,
-  ): Promise<LibrarySearchBookmarks_Dto.Response.Public> {
-    const search_params: LibrarySearchBookmarks_Dto.SearchParams = {
-      is_archived: params.is_archived ? true : undefined,
-      after: params.after,
-      include_points: params.include_points,
-    }
-
-    return this._ky
-      .get(`v1/library-search/bookmarks-for-full-text/${params.username}`, {
-        searchParams: JSON.parse(JSON.stringify(search_params)),
-        timeout: false,
-      })
-      .json()
-  }
 }
