@@ -12,6 +12,7 @@ export const TagsSkeleton = () => {
   ]
   return (
     <div className={styles.container}>
+      <div className={styles.search} />
       {widths.map((width, i) => (
         <Skeleton width={width} key={i} />
       ))}

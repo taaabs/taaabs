@@ -45,10 +45,20 @@ export const Tags: React.FC<Tags.Props> = memo(
       </Ui_Dropdown>,
     )
 
-    const first_chars_processed: string[] = []
+    const [search_query, set_search_query] = useState<string>()
 
+    // Filter tags based on whether the search query matches the beginning of any word in the tag name
+    const filteredTags = props.tags.filter((tag) => {
+      if (!search_query) return true
+
+      const words = tag.name.toLowerCase().split(/\s+/)
+      return words.some((word) => word.startsWith(search_query.toLowerCase()))
+    })
+
+    const first_chars_processed: string[] = []
     const new_tags_grouped: Tags.Tag[][] = []
-    props.tags.map((tag) => {
+
+    filteredTags.map((tag) => {
       const current_tag_first_char = tag.name.toLowerCase().substring(0, 1)
       const idx = first_chars_processed.findIndex(
         (first_char) => first_char == current_tag_first_char,
@@ -61,6 +71,13 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     return (
       <div className={styles.container}>
+        <input
+          type="text"
+          placeholder="Search tags..."
+          value={search_query}
+          onChange={(e) => set_search_query(e.target.value)}
+          className={styles.search}
+        />
         {contextMenu}
         {new_tags_grouped
           .sort((a, b) => {

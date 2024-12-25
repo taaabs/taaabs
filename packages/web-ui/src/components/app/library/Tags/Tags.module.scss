@@ -6,6 +6,18 @@
   flex-direction: column;
   row-gap: var(--padding-16px);
 }
+.search {
+  width: 100%;
+  border-bottom: 1px solid var(--border-color-primary);
+  height: 26px;
+  font-size: var(--font-size-14px);
+  @include dark {
+    border-color: var(--dark300);
+    &::placeholder {
+      color: var(--text-color-dimmed);
+    }
+  }
+}
 .group {
   display: flex;
   flex-wrap: wrap;

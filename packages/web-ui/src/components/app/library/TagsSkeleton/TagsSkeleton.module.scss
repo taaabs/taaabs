@@ -12,3 +12,12 @@
     border-radius: var(--border-radius-999px);
   }
 }
+.search {
+  width: 100%;
+  height: 26px;
+  margin-bottom: 11px;
+  border-bottom: 1px solid var(--border-color-primary);
+  @include dark {
+    border-color: var(--dark200);
+  }
+}

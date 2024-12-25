@@ -8,14 +8,16 @@
   z-index: 4;
   inset: 0;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0;
   align-items: center;
+  @include dark {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
   &--visible {
     pointer-events: all;
     opacity: 1;
-    backdrop-filter: var(--backdrop-filter);
-    transition-property: opacity, backdrop-filter;
+    transition-property: opacity;
     transition-timing-function: var(--transition-timing-function);
     transition-duration: var(--transition-duration-150ms);
   }
