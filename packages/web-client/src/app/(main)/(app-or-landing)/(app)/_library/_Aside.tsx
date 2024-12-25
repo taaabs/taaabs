@@ -7,9 +7,7 @@ import { LibraryAside as Ui_app_templates_LibraryAside } from '@web-ui/component
 import { SelectedTags as Ui_app_library_SelectedTags } from '@web-ui/components/app/library/SelectedTags'
 import { Tags as Ui_app_library_Tags } from '@web-ui/components/app/library/Tags'
 import { TagsSkeleton as Ui_app_library_TagsSkeleton } from '@web-ui/components/app/library/TagsSkeleton'
-import { SegmentedButtonsSkeleton as Ui_app_library_SegmentedButtonsSkeleton } from '@web-ui/components/app/library/SegmentedButtonsSkeleton'
 import { SegmentedButton as Ui_common_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
-import { use_is_hydrated } from '@shared/hooks'
 
 import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
@@ -44,7 +42,6 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     is_not_interactive,
     on_tag_rename_click,
   } = useContext(LibraryContext)
-  const is_hydrated = use_is_hydrated()
   const { popstate_count_commited } = useContext(PopstateCountContext)
   const [custom_range_cleared_at, set_custom_range_cleared_at] = useState(0)
 
@@ -53,148 +50,143 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
       support_label={props.dictionary.app.library.send_feedback}
       support_href="https://github.com/taaabs/taaabs/discussions"
       slot_segmented_buttons={
-        is_hydrated ? (
-          <>
+        <>
+          <Ui_common_SegmentedButton
+            key={`1-${popstate_count_commited}`}
+            is_not_interactive={is_not_interactive}
+            items={[
+              {
+                label: props.dictionary.app.library.sort_by_options.date,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by !=
+                  SortBy.POPULARITY,
+              },
+              {
+                label:
+                  props.dictionary.app.library.sort_by_options.the_huggiest,
+                is_selected:
+                  sort_by_view_options_hook.current_sort_by ==
+                  SortBy.POPULARITY,
+              },
+            ]}
+            on_item_click={(option_idx) => {
+              if (
+                option_idx == 0 &&
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+              ) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.CREATED_AT,
+                )
+              } else if (option_idx == 1) {
+                sort_by_view_options_hook.set_sort_by_query_param(
+                  SortBy.POPULARITY,
+                )
+              }
+            }}
+          />
+          {!username ? (
             <Ui_common_SegmentedButton
-              key={`1-${popstate_count_commited}`}
-              is_not_interactive={is_not_interactive}
-              items={[
-                {
-                  label: props.dictionary.app.library.sort_by_options.date,
-                  is_selected:
-                    sort_by_view_options_hook.current_sort_by !=
-                    SortBy.POPULARITY,
-                },
-                {
-                  label:
-                    props.dictionary.app.library.sort_by_options.the_huggiest,
-                  is_selected:
-                    sort_by_view_options_hook.current_sort_by ==
-                    SortBy.POPULARITY,
-                },
-              ]}
-              on_item_click={(option_idx) => {
-                if (
-                  option_idx == 0 &&
-                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
-                ) {
-                  sort_by_view_options_hook.set_sort_by_query_param(
-                    SortBy.CREATED_AT,
-                  )
-                } else if (option_idx == 1) {
-                  sort_by_view_options_hook.set_sort_by_query_param(
-                    SortBy.POPULARITY,
-                  )
-                }
-              }}
-            />
-            {!username ? (
-              <Ui_common_SegmentedButton
-                key={`2-${popstate_count_commited}`}
-                is_not_interactive={is_not_interactive}
-                is_disabled={
-                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
-                }
-                items={[
-                  {
-                    label: props.dictionary.app.library.sort_by_options.added,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.CREATED_AT,
-                  },
-                  {
-                    label: props.dictionary.app.library.sort_by_options.updated,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.UPDATED_AT,
-                  },
-                  {
-                    label: props.dictionary.app.library.sort_by_options.visited,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.VISITED_AT,
-                  },
-                ]}
-                on_item_click={(option_idx) => {
-                  if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.CREATED_AT,
-                    )
-                  } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.UPDATED_AT,
-                    )
-                  } else if (option_idx == 2) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.VISITED_AT,
-                    )
-                  }
-                }}
-              />
-            ) : (
-              <Ui_common_SegmentedButton
-                key={`2-${popstate_count_commited}`}
-                is_not_interactive={is_not_interactive}
-                is_disabled={
-                  sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
-                }
-                items={[
-                  {
-                    label: props.dictionary.app.library.sort_by_options.added,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.CREATED_AT,
-                  },
-                  {
-                    label: props.dictionary.app.library.sort_by_options.updated,
-                    is_selected:
-                      sort_by_view_options_hook.current_sort_by ==
-                      SortBy.UPDATED_AT,
-                  },
-                ]}
-                on_item_click={(option_idx) => {
-                  if (option_idx == 0) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.CREATED_AT,
-                    )
-                  } else if (option_idx == 1) {
-                    sort_by_view_options_hook.set_sort_by_query_param(
-                      SortBy.UPDATED_AT,
-                    )
-                  }
-                }}
-              />
-            )}
-            <Ui_common_SegmentedButton
-              key={`3-${popstate_count_commited}`}
+              key={`2-${popstate_count_commited}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
                 sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
               }
               items={[
                 {
-                  label: props.dictionary.app.library.order_options.newest,
+                  label: props.dictionary.app.library.sort_by_options.added,
                   is_selected:
-                    order_view_options_hook.current_order == Order.DESC,
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.CREATED_AT,
                 },
                 {
-                  label: props.dictionary.app.library.order_options.oldest,
+                  label: props.dictionary.app.library.sort_by_options.updated,
                   is_selected:
-                    order_view_options_hook.current_order == Order.ASC,
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.UPDATED_AT,
+                },
+                {
+                  label: props.dictionary.app.library.sort_by_options.visited,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.VISITED_AT,
                 },
               ]}
               on_item_click={(option_idx) => {
                 if (option_idx == 0) {
-                  order_view_options_hook.set_order_query_param(Order.DESC)
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.CREATED_AT,
+                  )
                 } else if (option_idx == 1) {
-                  order_view_options_hook.set_order_query_param(Order.ASC)
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.UPDATED_AT,
+                  )
+                } else if (option_idx == 2) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.VISITED_AT,
+                  )
                 }
               }}
             />
-          </>
-        ) : (
-          <Ui_app_library_SegmentedButtonsSkeleton />
-        )
+          ) : (
+            <Ui_common_SegmentedButton
+              key={`2-${popstate_count_commited}`}
+              is_not_interactive={is_not_interactive}
+              is_disabled={
+                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+              }
+              items={[
+                {
+                  label: props.dictionary.app.library.sort_by_options.added,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.CREATED_AT,
+                },
+                {
+                  label: props.dictionary.app.library.sort_by_options.updated,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by ==
+                    SortBy.UPDATED_AT,
+                },
+              ]}
+              on_item_click={(option_idx) => {
+                if (option_idx == 0) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.CREATED_AT,
+                  )
+                } else if (option_idx == 1) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.UPDATED_AT,
+                  )
+                }
+              }}
+            />
+          )}
+          <Ui_common_SegmentedButton
+            key={`3-${popstate_count_commited}`}
+            is_not_interactive={is_not_interactive}
+            is_disabled={
+              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+            }
+            items={[
+              {
+                label: props.dictionary.app.library.order_options.newest,
+                is_selected:
+                  order_view_options_hook.current_order == Order.DESC,
+              },
+              {
+                label: props.dictionary.app.library.order_options.oldest,
+                is_selected: order_view_options_hook.current_order == Order.ASC,
+              },
+            ]}
+            on_item_click={(option_idx) => {
+              if (option_idx == 0) {
+                order_view_options_hook.set_order_query_param(Order.DESC)
+              } else if (option_idx == 1) {
+                order_view_options_hook.set_order_query_param(Order.ASC)
+              }
+            }}
+          />
+        </>
       }
       slot_custom_range={
         library_updated_at_timestamp ? (
