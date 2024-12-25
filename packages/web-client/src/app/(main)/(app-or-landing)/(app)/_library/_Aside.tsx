@@ -196,7 +196,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             }}
           >
             <CustomRange
-              key={`${popstate_count_commited}${custom_range_cleared_at}`}
+              key={`${popstate_count_commited}${custom_range_cleared_at}${counts_hook.fetched_at_timestamp_commited}`}
               locale={props.dictionary.locale}
               counts={counts_hook.months || undefined}
               on_yyyymm_change={
@@ -249,7 +249,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
           {library_updated_at_timestamp ? (
             <>
               <Ui_app_library_SelectedTags
-                key={`selected-tags-${library_updated_at_timestamp}-${popstate_count_commited}`}
+                key={`selected-tags-${library_updated_at_timestamp}`}
                 selected_tags={tag_view_options_hook.selected_tags
                   .filter((id) =>
                     !counts_hook.tags ? false : counts_hook.tags[id],
@@ -282,7 +282,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                 }}
               />
               <Ui_app_library_Tags
-                key={`tags-${library_updated_at_timestamp}-${popstate_count_commited}`}
+                key={`tags-${library_updated_at_timestamp}`}
                 library_url={username ? `/${username}` : '/library'}
                 tags={
                   counts_hook.tags

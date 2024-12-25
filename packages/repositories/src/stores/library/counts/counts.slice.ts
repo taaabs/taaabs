@@ -12,6 +12,7 @@ export type Tags = Record<string, { name: string; yields: number }>
 
 export type CountsState = {
   is_fetching?: boolean
+  fetched_at_timestamp?: number
   should_refetch?: boolean
   counts_data?: Counts_Ro
   months?: Months
@@ -28,6 +29,12 @@ export const counts_slice = createSlice({
   reducers: {
     set_is_fetching(state, action: PayloadAction<boolean>) {
       state.is_fetching = action.payload
+    },
+    set_fetched_at_timestamp(
+      state,
+      action: PayloadAction<CountsState['fetched_at_timestamp']>,
+    ) {
+      state.fetched_at_timestamp = action.payload
     },
     set_should_refetch(
       state,

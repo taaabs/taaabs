@@ -139,6 +139,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       popstate_context.set_popstate_count_commited(
         popstate_context.popstate_count,
       )
+      counts_hook.set_fetched_at_timestamp_commited(
+        counts_hook.fetched_at_timestamp,
+      )
       // Restore scroll position on initial load
       if (!library_updated_at_timestamp) {
         const scroll_y = sessionStorage.getItem(
@@ -149,9 +152,9 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           }),
         )
         if (scroll_y) {
-          setTimeout(() => {
+          requestAnimationFrame(() => {
             window.scrollTo(0, parseInt(scroll_y))
-          }, 0)
+          })
         }
       }
       set_is_fetching_first_bookmarks(false)

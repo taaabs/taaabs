@@ -19,8 +19,14 @@ export const use_counts = () => {
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
   const dispatch = use_library_dispatch()
-  const { counts_data, months, tags, is_fetching, should_refetch } =
-    use_library_selector((state) => state.counts)
+  const {
+    counts_data,
+    months,
+    tags,
+    is_fetching,
+    fetched_at_timestamp,
+    should_refetch,
+  } = use_library_selector((state) => state.counts)
   const { bookmarks } = use_library_selector((state) => state.bookmarks)
   const [last_query_tags, set_last_query_tags] = useState<string>()
   const [last_query_filter, set_last_query_filter] = useState<string>()
@@ -29,6 +35,9 @@ export const use_counts = () => {
   const [selected_tags, set_selected_tags] = useState<number[]>([])
   const [last_query_yyyymm_gte, set_last_query_yyyymm_gte] = useState<string>()
   const [last_query_yyyymm_lte, set_last_query_yyyymm_lte] = useState<string>()
+  // fetched at timestamp commited
+  const [fetched_at_timestamp_commited, set_fetched_at_timestamp_commited] =
+    useState<number>()
 
   const get_counts = () => {
     if (!username) {
@@ -226,6 +235,9 @@ export const use_counts = () => {
     get_counts,
     months,
     is_fetching,
+    fetched_at_timestamp,
+    fetched_at_timestamp_commited,
+    set_fetched_at_timestamp_commited,
     tags,
     selected_tags,
     should_refetch,
