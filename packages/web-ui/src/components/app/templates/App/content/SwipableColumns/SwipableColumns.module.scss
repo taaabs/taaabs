@@ -54,7 +54,6 @@
   position: relative;
   @include at992 {
     width: var(--_aside-width);
-    @include transition-250ms(width);
   }
   &--hidden {
     @include to992 {

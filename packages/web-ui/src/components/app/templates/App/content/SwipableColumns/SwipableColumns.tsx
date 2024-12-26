@@ -68,6 +68,25 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     set_slidable_width(get_slidable_width())
   }, [])
 
+  useEffect(() => {
+    const IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY = 'is-sidebar-collapsed'
+    if (is_sidebar_collapsed === undefined) {
+      const stored_value = sessionStorage.getItem(
+        IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY,
+      )
+      if (stored_value == 'true') {
+        set_is_sidebar_collapsed(true)
+      } else {
+        set_is_sidebar_collapsed(false)
+      }
+    }
+    if (is_sidebar_collapsed) {
+      sessionStorage.setItem(IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY, 'true')
+    } else {
+      sessionStorage.removeItem(IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY)
+    }
+  }, [is_sidebar_collapsed])
+
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
       // Check if user is not dragging over "custom range" handlers or ReactSortable item in a draggable state
