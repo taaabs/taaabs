@@ -48,6 +48,11 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     const [search_query, set_search_query] = useState<string>()
 
+    // Function to clear the search query
+    const clear_search_query = () => {
+      set_search_query('')
+    }
+
     // Filter tags based on whether the search query matches anywhere in the tag name
     const filtered_tags = props.tags.filter((tag) => {
       if (!search_query) return true
@@ -97,6 +102,14 @@ export const Tags: React.FC<Tags.Props> = memo(
               value={search_query}
               onChange={(e) => set_search_query(e.target.value)}
             />
+            {search_query && (
+              <button
+                className={styles.search__clear}
+                onClick={clear_search_query}
+              >
+                <UiIcon variant="ADD" />
+              </button>
+            )}
           </div>
         )}
         {contextMenu}
