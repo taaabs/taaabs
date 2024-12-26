@@ -1,6 +1,5 @@
 import styles from './_Bookmark.module.scss'
 import cn from 'classnames'
-import { BlurhashCanvas } from 'react-blurhash'
 import { memo, useState } from 'react'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pl'
@@ -184,7 +183,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         />
       </Ui_Dropdown>,
     )
-    const { favicons } = use_favicons(props)
+    const { favicons, is_fetching: is_fetching_favicons } = use_favicons(props)
     const { cover, is_fetching: is_fetching_cover } = use_cover(props)
 
     useUpdateEffect(() => {
@@ -960,6 +959,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             )}`}
                             loading="lazy"
                           />
+                        ) : is_fetching_favicons ? (
+                          <></>
                         ) : favicons[get_domain_from_url(link.url)] ? (
                           <img
                             width={16}
