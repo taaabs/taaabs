@@ -322,8 +322,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
             className={cn(styles.main__inner, {
               [styles['main__inner--dimmed']]:
                 (is_right_side_open || is_left_side_open) && !is_dragging,
-              [styles['main__inner--collapsed-sidebar-hovered']]:
-                is_sidebar_collapsed && are_tag_hierarchies_hovered,
             })}
             style={{
               pointerEvents:

@@ -7,7 +7,6 @@ declare const styles: {
   readonly "dimmed": string;
   readonly "main": string;
   readonly "main__inner": string;
-  readonly "main__inner--collapsed-sidebar-hovered": string;
   readonly "main__inner--dimmed": string;
   readonly "main__inner__info": string;
   readonly "main__inner__sticky": string;

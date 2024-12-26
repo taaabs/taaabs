@@ -79,7 +79,7 @@
       width: var(--_aside-width) !important;
       top: var(--header-desktop-height);
       padding-top: 16px;
-
+      padding-right: 6px;
       @include transition-250ms(opacity);
       &::after {
         pointer-events: none;
@@ -88,7 +88,7 @@
         background-image: linear-gradient(
           to right,
           transparent,
-          var(--background) 80px
+          var(--background) 60px
         );
         content: '';
         position: absolute;
@@ -98,17 +98,14 @@
         top: 0;
       }
     }
-    @include at992 {
-      padding-right: 6px;
-    }
     @include at1200 {
       padding-top: 16px;
       padding-right: 22px;
     }
     &--collapsed {
-      > div {
+      > div:nth-child(2) {
         @include at992 {
-          opacity: 0.2;
+          opacity: 0.4;
           @include transition-250ms(opacity);
         }
       }
@@ -117,13 +114,18 @@
         &::after {
           opacity: 1;
           pointer-events: all;
-          cursor: pointer;
+          margin-top: calc(
+            var(--padding-16px) + var(--search-desktop-height) +
+              var(--padding-16px)
+          );
         }
       }
     }
     &--collapsed-hovered {
-      > div {
-        opacity: 1;
+      > div:nth-child(2) {
+        @include at992 {
+          opacity: 0.6;
+        }
       }
     }
     &__desktop-actions {
@@ -216,13 +218,9 @@
       @include transition-150ms(opacity);
     }
     @include at992 {
+      background-color: var(--background);
       @include transition-250ms(transform);
       transform-origin: right;
-    }
-    &--collapsed-sidebar-hovered {
-      @include at992 {
-        transform: scaleX(0.98);
-      }
     }
     &--dimmed {
       @include to992 {
