@@ -1,6 +1,6 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { createContext, useContext, useRef, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from './_hooks/use-filter-view-options'
 import { use_tag_view_options } from './_hooks/use-tag-view-options'
@@ -37,7 +37,7 @@ import { use_points } from './_hooks/use-points'
 import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { use_popstate_count } from '@/providers/PopstateCountProvider'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -67,9 +67,8 @@ export const LibraryContext = createContext({} as LibraryContext)
 const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   props,
 ) => {
-  const search_params = useSearchParams()
   const auth_context = useContext(AuthContext)
-  use_scroll_restore()
+  const { initial_scroll_y } = use_scroll_restore()
   const is_hydrated = use_is_hydrated()
   use_session_storage_cleanup()
   const dispatch = use_library_dispatch()
@@ -87,7 +86,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const date_view_options_hook = use_date_view_options()
   const points_hook = use_points()
   const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
-  const popstate_context = useContext(PopstateCountContext)
+  const popstate_context = use_popstate_count()
   // START - UI synchronization
   const [is_tag_hierarchy_ready, set_is_tag_hierarchy_ready] = useState(false) // Tag hierarchy is ready as soon as collapsed state is restored
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
@@ -142,24 +141,15 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       counts_hook.set_fetched_at_timestamp_commited(
         counts_hook.fetched_at_timestamp,
       )
-      // Restore scroll position on initial load
+      // Initial scroll position restoration
       if (
+        initial_scroll_y &&
         !library_updated_at_timestamp &&
-        !window.location.hash.startsWith('#fresh') &&
-        !window.location.hash.startsWith('#url')
+        !window.location.hash.startsWith('#fresh')
       ) {
-        const scroll_y = sessionStorage.getItem(
-          browser_storage.session_storage.library.scroll_y({
-            search_params: search_params.toString(),
-            username,
-            hash: window.location.hash,
-          }),
-        )
-        if (scroll_y) {
-          requestAnimationFrame(() => {
-            window.scrollTo(0, parseInt(scroll_y))
-          })
-        }
+        requestAnimationFrame(() => {
+          window.scrollTo(0, initial_scroll_y)
+        })
       }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())

@@ -8,11 +8,10 @@ import { SelectedTags as Ui_app_library_SelectedTags } from '@web-ui/components/
 import { Tags as Ui_app_library_Tags } from '@web-ui/components/app/library/Tags'
 import { TagsSkeleton as Ui_app_library_TagsSkeleton } from '@web-ui/components/app/library/TagsSkeleton'
 import { SegmentedButton as Ui_common_SegmentedButton } from '@web-ui/components/common/SegmentedButton'
-
 import { LocalDb } from '@/providers/LocalDbProvider'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { LibraryContext } from './Library'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { use_popstate_count } from '@/providers/PopstateCountProvider'
 
 const CustomRange = dynamic(() => import('./_aside/dynamic-custom-range'), {
   ssr: false,
@@ -42,7 +41,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
     is_not_interactive,
     on_tag_rename_click,
   } = useContext(LibraryContext)
-  const { popstate_count_commited } = useContext(PopstateCountContext)
+  const { popstate_count_commited } = use_popstate_count()
   const [custom_range_cleared_at, set_custom_range_cleared_at] = useState(0)
 
   return (

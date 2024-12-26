@@ -1,10 +1,10 @@
-import { useContext, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useSearchParams } from 'next/navigation'
-import { PopstateCountContext } from '@/providers/PopstateCountProvider'
+import { use_popstate_count } from '@/providers/PopstateCountProvider'
 
 export const use_popstate_rerender_trigger = () => {
-  const { popstate_count } = useContext(PopstateCountContext)
+  const { popstate_count } = use_popstate_count()
   const search_params = useSearchParams()
   const is_rerender_trigger_update_enabled = useRef(false)
   const [value, set_value] = useState<number>()

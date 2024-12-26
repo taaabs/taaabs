@@ -1,6 +1,12 @@
 'use client'
 
-import { ReactNode, createContext, useEffect, useState } from 'react'
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 type PopstateCountContext = {
   popstate_count: number
@@ -11,6 +17,8 @@ type PopstateCountContext = {
 export const PopstateCountContext = createContext<PopstateCountContext>(
   {} as PopstateCountContext,
 )
+
+export const use_popstate_count = () => useContext(PopstateCountContext)
 
 export const PopstateCountProvider: React.FC<{ children: ReactNode }> = (
   props,
