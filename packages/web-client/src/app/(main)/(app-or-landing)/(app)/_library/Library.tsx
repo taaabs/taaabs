@@ -142,11 +142,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         counts_hook.fetched_at_timestamp,
       )
       // Initial scroll position restoration
-      if (
-        initial_scroll_y &&
-        !library_updated_at_timestamp &&
-        !window.location.hash.startsWith('#fresh')
-      ) {
+      if (initial_scroll_y && !library_updated_at_timestamp) {
         requestAnimationFrame(() => {
           window.scrollTo(0, initial_scroll_y)
         })
