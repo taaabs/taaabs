@@ -13,7 +13,6 @@ import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui
 import { UpsertBookmark_Params } from '@repositories/modules/bookmarks/domain/types/upsert-bookmark.params'
 import { is_url_valid } from '@shared/utils/is-url-valid/is-url-valid'
 import { Dictionary } from '@/dictionaries/dictionary'
-import { encode } from 'blurhash'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { AuthContext } from '@/providers/AuthProvider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
@@ -22,8 +21,6 @@ import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as Ui_app_library_TagsInput } from '@web-ui/components/app/library/TagsInput'
 import { Checkbox as Ui_Checkbox } from '@web-ui/components/Checkbox'
 import equal from 'fast-deep-equal'
-
-const cover_max_width = 1200
 
 type FormValues = {
   title?: string
@@ -53,10 +50,6 @@ export namespace UpsertBookmarkModal {
   }
 }
 
-type ClipboardData = {
-  html: string
-}
-
 export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   props,
 ) => {
@@ -72,7 +65,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     props.bookmark?.is_public,
   )
   const [clipboard_url, set_clipboard_url] = useState<string>()
-  const [clipboard_data, set_clipboard_data] = useState<ClipboardData>()
   const [is_fetching_my_tags, set_is_fetching_my_tags] = useState<boolean>()
   const [my_tags, set_my_tags] = useState<Tags_Ro>()
 
@@ -208,66 +200,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
     navigator.clipboard
       .readText()
       .then((value) => {
-        if (props.bookmark_autofill) {
-          const clipboard_data: ClipboardData = JSON.parse(value)
-          set_clipboard_data(clipboard_data)
-          // Temporary solution for getting accurate title from various sources.
-          // ChatGPT provides default title after reload.
-          // Claude never provides default title.
-          if (
-            props.bookmark_autofill.links?.[0].url.startsWith(
-              'https://chatgpt.com/',
-            )
-          ) {
-            const temp_el = document.createElement('div')
-            temp_el.innerHTML = clipboard_data.html
-            const title = temp_el.querySelector<HTMLElement>(
-              '.bg-token-sidebar-surface-secondary.active\\:opacity-90.rounded-lg.relative.group > .p-2.gap-2.items-center.flex',
-            )?.innerText
-            if (title) {
-              setValue('title', title)
-            }
-          } else if (
-            props.bookmark_autofill.links?.[0].url.startsWith(
-              'https://claude.ai/chat/',
-            )
-          ) {
-            const temp_el = document.createElement('div')
-            temp_el.innerHTML = clipboard_data.html
-            const title = temp_el.querySelector<HTMLElement>(
-              '.tracking-tight.font-normal.font-tiempos.truncate',
-            )?.innerText
-            if (title) {
-              setValue('title', title)
-            }
-          } else if (
-            props.bookmark_autofill.links?.[0].url.startsWith(
-              'https://coral.cohere.com/c/',
-            )
-          ) {
-            const temp_el = document.createElement('div')
-            temp_el.innerHTML = clipboard_data.html
-            const title = temp_el.querySelector<HTMLElement>(
-              '.truncate.font-body.text-p-lg',
-            )?.innerText
-            if (title) {
-              setValue('title', title)
-            }
-          } else if (
-            props.bookmark_autofill.links?.[0].url.startsWith(
-              'https://gemini.google.com/app/',
-            )
-          ) {
-            const temp_el = document.createElement('div')
-            temp_el.innerHTML = clipboard_data.html
-            const title = temp_el.querySelector<HTMLElement>(
-              '.selected.ng-star-inserted.conversation.mat-mdc-tooltip-trigger > .gmat-body-1.conversation-title',
-            )?.innerText
-            if (title) {
-              setValue('title', title)
-            }
-          }
-        } else if (is_url_valid(value)) {
+        if (is_url_valid(value)) {
           set_clipboard_url(value)
         }
       })

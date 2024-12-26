@@ -55,6 +55,22 @@ export const Tags: React.FC<Tags.Props> = memo(
       return words.some((word) => word.startsWith(search_query.toLowerCase()))
     })
 
+    // Function to highlight matching text
+    const highlight_matching_text = (text: string, query: string) => {
+      if (!query) return text
+
+      const regex = new RegExp(`(${query})`, 'gi')
+      return text
+        .split(regex)
+        .map((part, index) =>
+          part.toLowerCase() === query.toLowerCase() ? (
+            <mark key={index}>{part}</mark>
+          ) : (
+            part
+          ),
+        )
+    }
+
     const first_chars_processed: string[] = []
     const new_tags_grouped: Tags.Tag[][] = []
 
@@ -136,7 +152,9 @@ export const Tags: React.FC<Tags.Props> = memo(
                         }
                       }}
                     >
-                      <span>{tag.name}</span>
+                      <span>
+                        {highlight_matching_text(tag.name, search_query || '')}
+                      </span>
                       <span> {tag.yields}</span>
                     </a>
                   )
