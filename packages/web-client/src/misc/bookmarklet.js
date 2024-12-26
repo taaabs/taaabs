@@ -1,8 +1,3 @@
-const fill_clipboard = async (doc) => {
-  const html = doc.getElementsByTagName('html')[0].outerHTML;
-  navigator.clipboard.writeText(JSON.stringify({ html }));
-};
-
 const check_iframe_support = async () => {
   const title = document.title;
   const og_title_element = document.querySelector('meta[property="og:title"]');
@@ -39,18 +34,15 @@ const check_iframe_support = async () => {
   }
 };
 
-check_iframe_support().then(async (supports_iframe) => {
-  navigator.clipboard.writeText('');
-
+check_iframe_support().then((supports_iframe) => {
   if (supports_iframe) {
     const iframe = document.createElement('iframe');
     iframe.src = location.href;
     iframe.style.visibility = 'hidden';
     document.body.appendChild(iframe);
 
-    iframe.addEventListener('load', async () => {
+    iframe.addEventListener('load', () => {
       const doc = iframe.contentWindow.document;
-      await fill_clipboard(doc);
       const target_url =
         'https://taaabs.com/library#url=' +
         encodeURIComponent(document.location.href) +
@@ -64,7 +56,6 @@ check_iframe_support().then(async (supports_iframe) => {
       window.location.assign(target_url);
     });
   } else {
-    await fill_clipboard(document);
     const target_url =
       'https://taaabs.com/library#url=' +
       encodeURIComponent(document.location.href) +
