@@ -235,14 +235,18 @@ export const use_bookmarks = () => {
 
   useUpdateEffect(() => {
     try {
-      // In two cases fresh results should be downloaded - we get #fresh or #url.
-      // We pass #fresh when user navigates to the library from the extension.
-      // We pass #url=URL when "edit" is invoked on a popup.
-      // It avoids stale results if library was previously opened on a given tab.
+      // In two cases fresh results should be loaded - URL has #fresh or #url.
+      // #fresh is passed when user navigates to the library from the extension.
+      // We prevent stale results if library was previously opened on a given tab.
+      // #url=URL is passed by bookmarklet or extension.
       if (
         window.location.hash.startsWith('#fresh') ||
         window.location.hash.startsWith('#url')
       ) {
+        // Note: url is cleared in use_bookmarklet_handler
+        if (window.location.hash == '#fresh') {
+          window.location.hash = ''
+        }
         throw new Error('Should load fresh results.')
       }
 
