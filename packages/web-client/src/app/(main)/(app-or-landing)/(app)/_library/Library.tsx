@@ -143,7 +143,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         counts_hook.fetched_at_timestamp,
       )
       // Restore scroll position on initial load
-      if (!library_updated_at_timestamp) {
+      if (
+        !library_updated_at_timestamp &&
+        !window.location.hash.startsWith('#fresh') &&
+        !window.location.hash.startsWith('#url')
+      ) {
         const scroll_y = sessionStorage.getItem(
           browser_storage.session_storage.library.scroll_y({
             search_params: search_params.toString(),
