@@ -79,11 +79,9 @@
       top: var(--header-desktop-height);
       padding-top: 16px;
       padding-right: 6px;
-      @include transition-250ms(opacity);
       &::after {
         pointer-events: none;
         opacity: 0;
-        @include transition-250ms;
         background-image: linear-gradient(
           to right,
           transparent,
@@ -105,7 +103,7 @@
       > div:nth-child(2) {
         @include at992 {
           opacity: 0.4;
-          @include transition-250ms(opacity);
+          @include transition-150ms(opacity);
         }
       }
       @include at992 {

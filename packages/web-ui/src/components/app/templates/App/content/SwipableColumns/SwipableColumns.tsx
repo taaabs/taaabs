@@ -68,22 +68,21 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     set_slidable_width(get_slidable_width())
   }, [])
 
+  // Store and persist sidebar collapsed state
   useEffect(() => {
-    const IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY = 'is-sidebar-collapsed'
+    const SIDEBAR_COLLAPSED_SESSION_KEY = 'sidebar-collapsed'
     if (is_sidebar_collapsed === undefined) {
-      const stored_value = sessionStorage.getItem(
-        IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY,
-      )
-      if (stored_value == 'true') {
+      const stored_value = sessionStorage.getItem(SIDEBAR_COLLAPSED_SESSION_KEY)
+      if (stored_value == '') {
         set_is_sidebar_collapsed(true)
       } else {
         set_is_sidebar_collapsed(false)
       }
     }
     if (is_sidebar_collapsed) {
-      sessionStorage.setItem(IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY, 'true')
+      sessionStorage.setItem(SIDEBAR_COLLAPSED_SESSION_KEY, '')
     } else {
-      sessionStorage.removeItem(IS_SIDEBAR_COLLAPSED_SESSION_STORAGE_KEY)
+      sessionStorage.removeItem(SIDEBAR_COLLAPSED_SESSION_KEY)
     }
   }, [is_sidebar_collapsed])
 

@@ -91,7 +91,7 @@ export const PromptField: React.FC<{
       text_not_found={false}
       translations={{
         new_prompt: 'New chat',
-        active_assistant: 'Chat will continue in',
+        active_assistant: 'Selected chatbot:',
         placeholder: `Ask ${
           assistants[selected_assistant_vision_hook.selected_assistant_name!]
             .display_name
@@ -198,7 +198,7 @@ export const PromptField: React.FC<{
       }
       translations={{
         new_prompt: 'New chat',
-        active_assistant: 'Chat will continue in',
+        active_assistant: 'Selected chatbot:',
         placeholder: `Ask ${
           assistants[selected_assistant_hook.selected_assistant_name!]
             .display_name
