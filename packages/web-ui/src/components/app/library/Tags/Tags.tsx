@@ -3,6 +3,7 @@ import styles from './Tags.module.scss'
 import { useContextMenu } from 'use-context-menu'
 import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
+import { Icon as UiIcon } from '@web-ui/components/Icon' // Import the Icon component
 
 export namespace Tags {
   export type Tag = {
@@ -47,12 +48,12 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     const [search_query, set_search_query] = useState<string>()
 
-    // Filter tags based on whether the search query matches the beginning of any word in the tag name
+    // Filter tags based on whether the search query matches anywhere in the tag name
     const filtered_tags = props.tags.filter((tag) => {
       if (!search_query) return true
 
-      const words = tag.name.toLowerCase().split(/\s+/)
-      return words.some((word) => word.startsWith(search_query.toLowerCase()))
+      // Check if the search query exists anywhere in the tag name
+      return tag.name.toLowerCase().includes(search_query.toLowerCase())
     })
 
     // Function to highlight matching text
@@ -88,13 +89,15 @@ export const Tags: React.FC<Tags.Props> = memo(
     return (
       <div className={styles.container}>
         {filtered_tags.length > 0 && (
-          <input
-            type="text"
-            placeholder="Search tags..."
-            value={search_query}
-            onChange={(e) => set_search_query(e.target.value)}
-            className={styles.search}
-          />
+          <div className={styles.search}>
+            <UiIcon variant="SEARCH" />
+            <input
+              type="text"
+              placeholder="Search tags..."
+              value={search_query}
+              onChange={(e) => set_search_query(e.target.value)}
+            />
+          </div>
         )}
         {contextMenu}
         {new_tags_grouped
