@@ -32,8 +32,6 @@ export namespace Search {
     results_count?: number
     is_slash_shortcut_disabled: boolean
     on_click_get_help: () => void
-    is_full_text?: boolean
-    toggle_full_text: () => void
     sort_by: SortBy
     translations: {
       placeholder: {
@@ -88,7 +86,7 @@ export const Search: React.FC<Search.Props> = memo(
     }, [props.is_focused])
 
     const handle_keyboard = (event: KeyboardEvent) => {
-      if (props.is_loading || props.is_full_text) return
+      if (props.is_loading) return
 
       if (event.code == 'Escape' && props.is_focused) {
         input.current?.blur()
@@ -159,7 +157,6 @@ export const Search: React.FC<Search.Props> = memo(
       props.is_focused,
       props.is_slash_shortcut_disabled,
       props.is_loading,
-      props.is_full_text,
     ])
 
     useUpdateEffect(() => {
@@ -204,8 +201,6 @@ export const Search: React.FC<Search.Props> = memo(
                     }`
                   : selected_hint_index != -1
                   ? undefined
-                  : props.is_full_text
-                  ? props.translations.placeholder.full_text
                   : props.translations.placeholder.default}
               </div>
             )}
@@ -273,8 +268,7 @@ export const Search: React.FC<Search.Props> = memo(
                         return <span key={i}>{str}</span>
                       }
                     })}
-                  {!props.is_full_text &&
-                    (props.search_string || selected_hint_index != -1) &&
+                  {(props.search_string || selected_hint_index != -1) &&
                     props.hints &&
                     is_focusedfix && (
                       <>
@@ -384,77 +378,63 @@ export const Search: React.FC<Search.Props> = memo(
               [styles['hints--hidden']]: !(props.hints && is_focusedfix),
             })}
           >
-            {/* <button
-              className={styles.hints__mode}
-              onClick={() => {
-                props.toggle_full_text()
-                input.current?.focus()
-              }}
-            >
-              <span>Full-text search:</span>
-              <span>{props.is_full_text ? 'enabled' : 'disabled'}</span>
-            </button> */}
-
-            {!props.is_full_text &&
-              props.hints &&
-              props.hints.length > 0 &&
-              is_focusedfix && (
-                <div className={styles.hints__list}>
-                  {props.hints.map((hint, i) => (
-                    <button
-                      key={
-                        props.search_string +
-                        (hint.completion ? hint.completion : '') +
-                        hint.type
-                      }
-                      className={cn(styles.hints__list__item, {
-                        [styles['hints__list__item--selected']]:
-                          selected_hint_index == i,
+            {props.hints && props.hints.length > 0 && is_focusedfix && (
+              <div className={styles.hints__list}>
+                {props.hints.map((hint, i) => (
+                  <button
+                    key={
+                      props.search_string +
+                      (hint.completion ? hint.completion : '') +
+                      hint.type
+                    }
+                    className={cn(styles.hints__list__item, {
+                      [styles['hints__list__item--selected']]:
+                        selected_hint_index == i,
+                    })}
+                    onClick={() => {
+                      props.on_click_hint(i)
+                      set_is_focusedfix(false)
+                      props.on_blur()
+                    }}
+                  >
+                    <div className={styles.hints__list__item__icon}>
+                      {hint.type == 'new' && <UiIcon variant="SEARCH" />}
+                      {hint.type == 'recent' && <UiIcon variant="RECENT" />}
+                    </div>
+                    <div
+                      className={cn(styles.hints__list__item__content, {
+                        [styles['hints__list__item__content--recent']]:
+                          hint.type == 'recent',
                       })}
-                      onClick={() => {
-                        props.on_click_hint(i)
-                        set_is_focusedfix(false)
-                        props.on_blur()
-                      }}
                     >
-                      <div className={styles.hints__list__item__icon}>
-                        {hint.type == 'new' && <UiIcon variant="SEARCH" />}
-                        {hint.type == 'recent' && <UiIcon variant="RECENT" />}
-                      </div>
-                      <div
-                        className={cn(styles.hints__list__item__content, {
-                          [styles['hints__list__item__content--recent']]:
-                            hint.type == 'recent',
-                        })}
-                      >
-                        <span>{hint.search_string}</span>
-                        <span>{hint.completion}</span>
-                        {selected_hint_index == i && (
-                          <div
-                            className={
-                              styles['hints__list__item__content__keycap']
-                            }
-                          >
-                            enter
-                          </div>
-                        )}
-                      </div>
-                      {hint.type == 'recent' && (
+                      <span>{hint.search_string}</span>
+                      <span>{hint.completion}</span>
+                      {selected_hint_index == i && (
                         <div
-                          className={styles.hints__list__item__remove}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            props.on_click_recent_hint_remove(i)
-                          }}
-                          role="button"
+                          className={
+                            styles['hints__list__item__content__keycap']
+                          }
                         >
-                          Remove
+                          enter
                         </div>
                       )}
-                    </button>
-                  ))}
-                </div>
-              )}
+                    </div>
+                    {hint.type == 'recent' && (
+                      <div
+                        className={styles.hints__list__item__remove}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          props.on_click_recent_hint_remove(i)
+                        }}
+                        role="button"
+                      >
+                        Remove
+                      </div>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
             <div className={styles.hints__footer}>
               <span>{props.translations.footer_tip}</span>
               <button onClick={props.on_click_get_help}>
@@ -469,7 +449,6 @@ export const Search: React.FC<Search.Props> = memo(
   (o, n) =>
     o.is_loading == n.is_loading &&
     o.is_focused == n.is_focused &&
-    o.is_full_text == n.is_full_text &&
     o.search_string == n.search_string &&
     o.loading_progress_percentage == n.loading_progress_percentage &&
     o.results_count == n.results_count &&

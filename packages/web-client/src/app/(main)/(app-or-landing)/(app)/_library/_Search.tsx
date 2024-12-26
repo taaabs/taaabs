@@ -33,10 +33,6 @@ export const _Search: React.FC<_Search.Props> = (props) => {
   return (
     <Ui_app_library_Search
       search_string={search_hook.search_string}
-      is_full_text={search_hook.is_full_text}
-      toggle_full_text={() =>
-        search_hook.set_is_full_text(!search_hook.is_full_text)
-      }
       is_loading={props.local_db.is_initializing || false}
       loading_progress_percentage={props.local_db.indexed_bookmarks_percentage}
       hints={
@@ -120,17 +116,12 @@ export const _Search: React.FC<_Search.Props> = (props) => {
           props.local_db.is_initializing ||
           !search_hook.search_string.trim() ||
           search_hook.count == 0
-        )
+        ) {
           return
-        if (search_hook.is_full_text) {
-          await search_hook.get_result_full_text({
-            search_string: search_hook.search_string,
-          })
-        } else {
-          await search_hook.get_result({
-            search_string: search_hook.search_string,
-          })
         }
+        await search_hook.get_result({
+          search_string: search_hook.search_string,
+        })
       }}
       on_blur={() => {
         search_hook.clear_hints()

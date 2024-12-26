@@ -4,6 +4,7 @@ declare const styles: {
   readonly "group": string;
   readonly "search": string;
   readonly "search__clear": string;
+  readonly "search__focused": string;
   readonly "tag": string;
 };
 export = styles;

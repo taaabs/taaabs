@@ -3,7 +3,8 @@ import styles from './Tags.module.scss'
 import { useContextMenu } from 'use-context-menu'
 import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
 import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
-import { Icon as UiIcon } from '@web-ui/components/Icon' // Import the Icon component
+import { Icon as UiIcon } from '@web-ui/components/Icon'
+import cn from 'classnames'
 
 export namespace Tags {
   export type Tag = {
@@ -33,6 +34,9 @@ export const Tags: React.FC<Tags.Props> = memo(
   function Tags(props) {
     const [context_menu_of_tag_id, set_context_menu_of_tag_id] =
       useState<number>()
+    const [search_query, set_search_query] = useState<string>()
+    const [is_search_focused, set_is_search_focused] = useState<boolean>(false)
+
     const { contextMenu, onContextMenu } = useContextMenu(
       <Ui_Dropdown>
         <Ui_Dropdown_StandardItem
@@ -46,22 +50,15 @@ export const Tags: React.FC<Tags.Props> = memo(
       </Ui_Dropdown>,
     )
 
-    const [search_query, set_search_query] = useState<string>()
-
-    // Function to clear the search query
     const clear_search_query = () => {
       set_search_query('')
     }
 
-    // Filter tags based on whether the search query matches anywhere in the tag name
     const filtered_tags = props.tags.filter((tag) => {
       if (!search_query) return true
-
-      // Check if the search query exists anywhere in the tag name
       return tag.name.toLowerCase().includes(search_query.toLowerCase())
     })
 
-    // Function to highlight matching text
     const highlight_matching_text = (text: string, query: string) => {
       if (!query) return text
 
@@ -94,13 +91,18 @@ export const Tags: React.FC<Tags.Props> = memo(
     return (
       <div className={styles.container}>
         {filtered_tags.length > 0 && (
-          <div className={styles.search}>
+          <div className={cn(styles.search, {
+              [styles.search__focused]: is_search_focused,
+            })}>
             <UiIcon variant="SEARCH" />
             <input
               type="text"
               placeholder="Search tags..."
               value={search_query}
               onChange={(e) => set_search_query(e.target.value)}
+              onFocus={() => set_is_search_focused(true)}
+              onBlur={() => set_is_search_focused(false)}
+              className={is_search_focused ? 'focused' : ''}
             />
             {search_query && (
               <button

@@ -30,7 +30,6 @@ export const use_search = (local_db: LocalDb) => {
   const auth_context = useContext(AuthContext)
   const search_params = useSearchParams()
   const { username }: { username?: string } = useParams()
-  const [is_full_text, set_is_full_text] = useState<boolean>()
   const [is_search_focused, set_is_search_focused] = useState(false)
   const [current_filter, set_current_filter] = useState<Filter>()
   const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
@@ -172,7 +171,7 @@ export const use_search = (local_db: LocalDb) => {
     search_string: string
     refresh_highlights_only?: boolean
   }) => {
-    if(!params.search_string.trim()) return
+    if (!params.search_string.trim()) return
     const result = await query_db({ search_string: params.search_string })
 
     set_incoming_highlights(
@@ -258,128 +257,12 @@ export const use_search = (local_db: LocalDb) => {
     }
   }
 
-  const query_db_full_text = async (params: {
-    search_string: string
-  }): Promise<Results<Result>> => {
-    if (
-      (!is_archived_filter && !local_db.db) ||
-      (is_archived_filter && !local_db.archived_db)
-    )
-      throw new Error('DB should be there.')
-
-    const gte = search_params.get(search_params_keys.greater_than_equal)
-    const lte = search_params.get(search_params_keys.less_than_equal)
-
-    // 'lorem site:abc.com site:abc.com ipsum site:abc.com'
-    // ["abccom", "abccom", "abccom"]
-    const sites_variants = get_sites_variants_from_search_string(
-      params.search_string,
-    )
-
-    const term = params.search_string
-      .replace(/(?=site:)(.*?)($|\s)/g, '')
-      .trim()
-
-    const result: Results<Result> = await search(
-      !is_archived_filter ? local_db.db! : local_db.archived_db!,
-      {
-        limit: system_values.max_library_search_results,
-        term,
-        // properties: ['plain_text'],
-        where: {
-          ...(selected_tag_ids.length
-            ? {
-                tag_ids: { containsAll: selected_tag_ids },
-              }
-            : {}),
-          ...(current_filter == Filter.UNSORTED ||
-          current_filter == Filter.STARRED_UNSORTED ||
-          current_filter == Filter.ARCHIVED_UNSORTED ||
-          current_filter == Filter.ARCHIVED_STARRED_UNSORTED
-            ? {
-                is_unsorted: true,
-              }
-            : {}),
-          stars: {
-            gte:
-              current_filter == Filter.STARRED ||
-              current_filter == Filter.STARRED_UNSORTED ||
-              current_filter == Filter.ARCHIVED_STARRED ||
-              current_filter == Filter.ARCHIVED_STARRED_UNSORTED
-                ? 1
-                : 0,
-          },
-          ...(gte && lte
-            ? {
-                created_at: {
-                  between: [
-                    new Date(
-                      parseInt(gte.toString().substring(0, 4)),
-                      parseInt(gte.toString().substring(4, 6)) - 1,
-                    ).getTime() / 1000,
-                    new Date(
-                      parseInt(lte.toString().substring(0, 4)),
-                      parseInt(lte.toString().substring(4, 6)),
-                    ).getTime() /
-                      1000 -
-                      1,
-                  ],
-                },
-              }
-            : {}),
-          ...(sites_variants?.length ? { sites_variants } : {}),
-        },
-        threshold: 0,
-      },
-    )
-
-    return result
-  }
-
-  const get_result_full_text = async (params: { search_string: string }) => {
-    const result = await query_db_full_text({
-      search_string: params.search_string,
-    })
-
-    set_count(result.count)
-    if (result.count) {
-      set_result(result)
-      set_queried_at_timestamp(Date.now())
-      set_search_fragment({
-        search_string: params.search_string,
-      })
-      sessionStorage.setItem(
-        browser_storage.session_storage.library.search_string({
-          username,
-          search_params: search_params.toString(),
-          hash: `#q=${encodeURIComponent(params.search_string)}`,
-        }),
-        params.search_string,
-      )
-      sessionStorage.setItem(
-        browser_storage.session_storage.library.search_results_count({
-          username,
-          search_params: search_params.toString(),
-          hash: `#q=${encodeURIComponent(params.search_string)}`,
-        }),
-        result.count.toString(),
-      )
-    }
-  }
-
   const get_hints = async () => {
     if (
       (!is_archived_filter && !local_db.db) ||
       (is_archived_filter && !local_db.archived_db)
     )
       return
-
-    if (is_full_text) {
-      // TODO: Create special hints for full text
-      // Calling set_hings triggers hints dropdown
-      set_hints([])
-      return
-    }
 
     const gte = search_params.get(search_params_keys.greater_than_equal)
     const lte = search_params.get(search_params_keys.less_than_equal)
@@ -759,7 +642,7 @@ export const use_search = (local_db: LocalDb) => {
   }
 
   useUpdateEffect(() => {
-    if (!is_search_focused || is_full_text) return
+    if (!is_search_focused) return
     set_result(undefined)
     get_hints()
     if (!search_string) {
@@ -859,27 +742,25 @@ export const use_search = (local_db: LocalDb) => {
       set_search_string(search_string)
     }
 
-    if (!is_full_text) {
-      const highlights = sessionStorage.getItem(
-        browser_storage.session_storage.library.highlights({
-          username,
-          search_params: search_params_stringified,
-          hash: window.location.hash,
-        }),
-      )
-      if (highlights) {
-        set_highlights(JSON.parse(highlights))
-      }
-      const highlights_sites_variants = sessionStorage.getItem(
-        browser_storage.session_storage.library.highlights_sites_variants({
-          username,
-          search_params: search_params_stringified,
-          hash: window.location.hash,
-        }),
-      )
-      if (highlights_sites_variants) {
-        set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
-      }
+    const highlights = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights({
+        username,
+        search_params: search_params_stringified,
+        hash: window.location.hash,
+      }),
+    )
+    if (highlights) {
+      set_highlights(JSON.parse(highlights))
+    }
+    const highlights_sites_variants = sessionStorage.getItem(
+      browser_storage.session_storage.library.highlights_sites_variants({
+        username,
+        search_params: search_params_stringified,
+        hash: window.location.hash,
+      }),
+    )
+    if (highlights_sites_variants) {
+      set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
     }
 
     const count = sessionStorage.getItem(
@@ -947,7 +828,6 @@ export const use_search = (local_db: LocalDb) => {
     clear_hints,
     get_hints,
     get_result,
-    get_result_full_text,
     result,
     set_current_filter,
     set_selected_tags,
@@ -965,8 +845,6 @@ export const use_search = (local_db: LocalDb) => {
     set_highlights_sites_variants,
     hints_set_at_timestamp,
     queried_at_timestamp,
-    is_full_text,
-    set_is_full_text,
   }
 }
 
