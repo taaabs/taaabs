@@ -143,9 +143,18 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       )
       // Initial scroll position restoration
       if (initial_scroll_y && !library_updated_at_timestamp) {
-        requestAnimationFrame(() => {
-          window.scrollTo(0, initial_scroll_y)
-        })
+        if (window.location.hash != '#fresh') {
+          requestAnimationFrame(() => {
+            window.scrollTo(0, initial_scroll_y)
+          })
+        }
+      }
+      if (window.location.hash == '#fresh') {
+        window.history.replaceState(
+          {},
+          '',
+          window.location.pathname + window.location.search,
+        )
       }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())

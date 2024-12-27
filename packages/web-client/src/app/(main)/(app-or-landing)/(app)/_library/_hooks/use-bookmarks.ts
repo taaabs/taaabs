@@ -239,14 +239,7 @@ export const use_bookmarks = () => {
       // #fresh is passed when user navigates to the library from the extension.
       // We prevent stale results if library was previously opened on a given tab.
       // #url=URL is passed by bookmarklet or extension.
-      if (
-        window.location.hash.startsWith('#fresh') ||
-        window.location.hash.startsWith('#url')
-      ) {
-        // Note: url is cleared in use_bookmarklet_handler
-        if (window.location.hash == '#fresh') {
-          window.location.hash = ''
-        }
+      if (window.location.hash.startsWith('#fresh')) {
         throw new Error('Should load fresh results.')
       }
 
