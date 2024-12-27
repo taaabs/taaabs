@@ -48,7 +48,7 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
     dispatch(
       bookmarks_actions.set_incoming_bookmarks(
         bookmarks_hook.incoming_bookmarks?.map((bookmark) => {
-          if (bookmark.id === item.bookmark_id) {
+          if (bookmark.id == item.bookmark_id) {
             return {
               ...bookmark,
               links: bookmark.links.map((link) => ({

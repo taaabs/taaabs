@@ -56,7 +56,7 @@ declare const styles: {
   readonly "container__inner__links__item__actions__open": string;
   readonly "container__inner__links__item__actions__public-saves": string;
   readonly "container__inner__links__item__link": string;
-  readonly "container__inner__links__item__link__in-app": string;
+  readonly "container__inner__links__item__link__player": string;
   readonly "container__inner__links__item__link__site": string;
   readonly "container__inner__links__item__link__site--highlighted": string;
   readonly "container__inner__links__item__link__url": string;

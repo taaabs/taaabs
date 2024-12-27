@@ -982,14 +982,14 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         <button
                           className={
                             styles[
-                              'container__inner__links__item__link__in-app'
+                              'container__inner__links__item__link__player'
                             ]
                           }
                           onClick={() => {
                             props.on_video_player_click(link.url)
                           }}
                         >
-                          <UiIcon variant="RESIZE" />
+                          <UiIcon variant="PLAY" />
                         </button>
                       )}
                       <a

@@ -100,7 +100,7 @@
           fill: var(--blue500);
         }
         @include transition-150ms(fill);
-        width: 14px;
+        width: 10px;
       }
       @include hover {
         background-color: var(--blue200);

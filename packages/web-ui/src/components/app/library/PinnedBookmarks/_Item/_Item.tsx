@@ -64,7 +64,7 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             className={styles.item__link__player}
             onClick={props.on_video_player_click}
           >
-            <UiIcon variant="RESIZE" />
+            <UiIcon variant="PLAY" />
           </button>
         )}
         <a

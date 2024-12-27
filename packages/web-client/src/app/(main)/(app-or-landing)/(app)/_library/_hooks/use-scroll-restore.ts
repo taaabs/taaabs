@@ -46,6 +46,7 @@ export const use_scroll_restore = () => {
 
   useEffect(() => {
     const handle_popstate = () => {
+      const search_params = new URLSearchParams(window.location.search)
       const scroll_y = sessionStorage.getItem(
         browser_storage.session_storage.library.scroll_y({
           search_params: search_params.toString(),

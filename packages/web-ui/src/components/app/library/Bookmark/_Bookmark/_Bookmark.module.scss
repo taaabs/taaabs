@@ -610,7 +610,7 @@
               box-shadow: 0 0 10px 3px var(--highlight);
             }
           }
-          &__in-app {
+          &__player {
             display: flex;
             flex-shrink: 0;
             align-items: center;
@@ -629,7 +629,7 @@
                 fill: var(--blue500);
               }
               @include transition-150ms(fill);
-              width: 14px;
+              width: 10px;
             }
             @include hover {
               background-color: var(--blue200);
