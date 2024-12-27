@@ -37,6 +37,10 @@ firefox_manifest.permissions = firefox_manifest.permissions.filter(
   (perm) => perm != 'background',
 )
 
+// Add '<all_urls>' permission so that the extension can request favicons and cover
+// and not worry about CORS
+firefox_manifest.permissions.push('<all_urls>')
+
 // Adjust content_scripts matches
 if (firefox_manifest.content_scripts) {
   firefox_manifest.content_scripts.forEach((script) => {

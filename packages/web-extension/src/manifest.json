@@ -4,7 +4,7 @@
   "name": "Taaabs - Zero-knowledge research assistant",
   "short_name": "taaabs",
   "description": "Unlock the joy of your web research. Save bookmarks to your personal library. Assist browsing with AI.",
-  "version": "0.3.30",
+  "version": "0.3.31",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {
