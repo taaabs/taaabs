@@ -25,10 +25,7 @@ const dictionary: Dictionary = {
             <strong>End-to-end encryption</strong> of private bookmarks
           </>,
           <>
-            <strong>Source code</strong> on GitHub
-          </>,
-          <>
-            <strong>Generous</strong> free tier
+            <strong>Unlimited</strong> bookmarks and tags
           </>,
         ],
         incentive: '30 seconds or less',
@@ -50,7 +47,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            '10 000 bookmarks',
+            'Unlimited bookmarks',
             'Unlimited tags',
             'Flash search',
             'End-to-end encryption',
@@ -62,9 +59,9 @@ const dictionary: Dictionary = {
           description: 'Get the most out of Taaabs',
           bullets_heading: 'Level-up with:',
           bullets: [
-            'Unlimited bookmarks',
-            'Highlights (coming soon)',
-            'Secondary links',
+            'Highlights',
+            'Related links',
+            'Zero ads',
             'Shorter username',
           ],
           button_label: 'Subscribe now',

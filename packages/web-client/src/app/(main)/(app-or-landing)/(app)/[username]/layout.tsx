@@ -24,7 +24,7 @@ const Layout: React.FC<{
             : undefined
         }
       />
-      <FollowUnfollowProvider>{props.children}</FollowUnfollowProvider>
+      <FollowUnfollowProvider>{props.children as any}</FollowUnfollowProvider>
     </LocalDbProvider>
   )
 }

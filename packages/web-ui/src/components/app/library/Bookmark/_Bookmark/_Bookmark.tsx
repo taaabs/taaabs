@@ -700,16 +700,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             ) : (
               <div className={styles.container__inner__card__cover}>
                 <div className={styles.container__inner__card__cover__image}>
-                  {is_fetching_cover ? (
-                    <div
-                      className={
-                        styles.container__inner__card__cover__image__loader
-                      }
-                    />
-                  ) : is_fetching_cover === false ? (
-                    <Icon variant="BOOKMARK_FILLED" />
+                  {props.links && props.links.length > 0 ? (
+                    is_fetching_cover ? (
+                      <div
+                        className={
+                          styles.container__inner__card__cover__image__loader
+                        }
+                      />
+                    ) : is_fetching_cover === false ? (
+                      <Icon variant="BOOKMARK_FILLED" />
+                    ) : (
+                      <></>
+                    )
                   ) : (
-                    <></>
+                    <Icon variant="NOTE" />
                   )}
                 </div>
               </div>
@@ -783,7 +787,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       set_recently_visited_link_idx(0)
                       props.on_link_click(primary_url)
                     }}
-                    onAuxClick={props.on_link_middle_click}
+                    onAuxClick={(e) => {
+                      if (e.button != 1) return
+                      props.on_link_middle_click()
+                    }}
                   >
                     {title}
                   </a>
@@ -1006,7 +1013,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                           set_recently_visited_link_idx(i)
                           props.on_link_click(url)
                         }}
-                        onAuxClick={props.on_link_middle_click}
+                        onAuxClick={(e) => {
+                          if (e.button != 1) return
+                          props.on_link_middle_click()
+                        }}
                       >
                         <span>
                           {props.highlights

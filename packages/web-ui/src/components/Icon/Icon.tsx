@@ -59,6 +59,7 @@ import NotificationsFilled from '../../assets/icons/notifications-filled.svg'
 import Notifications from '../../assets/icons/notifications.svg'
 import UserFilled from '../../assets/icons/user-filled.svg'
 import User from '../../assets/icons/user.svg'
+import Note from '../../assets/icons/note.svg'
 
 export namespace Icon {
   export type Variant =
@@ -123,6 +124,7 @@ export namespace Icon {
     | 'NOTIFICATIONS'
     | 'USER_FILLED'
     | 'USER'
+    | 'NOTE'
 
   export type Props = {
     variant: Variant
@@ -315,6 +317,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'USER_FILLED':
       icon = <UserFilled />
+      break
+    case 'NOTE':
+      icon = <Note />
       break
   }
 

@@ -10,20 +10,6 @@ export const browser_storage = {
           'authorized-library.search.archived-cached-at-timestamp',
       },
     },
-    public_library: {
-      search: {
-        version: (params: { username: string }) =>
-          `public-library.search.${params.username}.version`,
-        index: (params: { username: string }) =>
-          `public-library.search.${params.username}.index`,
-        cached_at_timestamp: (params: { username: string }) =>
-          `public-library.search.${params.username}.cached-at-timestamp`,
-        archived_index: (params: { username: string }) =>
-          `public-library.search.${params.username}.archived-index`,
-        archived_cached_at_timestamp: (params: { username: string }) =>
-          `public-library.search.${params.username}archived-cached-at-timestamp`,
-      },
-    },
   },
   // ATTETION: If ever considering renaming keys,
   // remember to take care about "Delete" bookmark
@@ -68,14 +54,6 @@ export const browser_storage = {
         }${params.hash}`,
       pinned: (params: { username?: string }) =>
         `library.pinned.${params.username || ''}`,
-      search_string: (params: {
-        username?: string
-        search_params: string
-        hash: string
-      }) =>
-        `library.search_string.${params.username || ''}?${
-          params.search_params || ''
-        }${params.hash}`,
       highlights: (params: {
         username?: string
         search_params: string

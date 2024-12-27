@@ -12,6 +12,7 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { search_params_keys } from '@/constants/search-params-keys'
 import { LocalDb, schema } from '@/providers/LocalDbProvider'
 import { AuthContext } from '@/providers/AuthProvider'
+import { use_popstate_rerender_trigger } from './use-popstate-rerender-trigger'
 
 type Hint = {
   type: 'new' | 'recent'
@@ -35,10 +36,11 @@ export const use_search = (local_db: LocalDb) => {
   const [selected_tag_ids, set_selected_tag_ids] = useState<number[]>([])
   const [selected_tags, set_selected_tags] = useState<string[]>([])
   const [search_string, set_search_string] = useState('')
+  const [search_string_commited, set_search_string_commited] = useState('')
   const [hints, set_hints] = useState<Hint[]>()
   const [result, set_result] = useState<Results<Result>>()
-  const [incoming_highlights, set_incoming_highlights] = useState<Highlights>()
   const [highlights, set_highlights] = useState<Highlights>()
+  const [highlights_commited, set_highlights_commited] = useState<Highlights>()
   const [
     incoming_highlights_sites_variants,
     set_incoming_highlights_sites_variants,
@@ -174,7 +176,7 @@ export const use_search = (local_db: LocalDb) => {
     if (!params.search_string.trim()) return
     const result = await query_db({ search_string: params.search_string })
 
-    set_incoming_highlights(
+    set_highlights(
       result.hits.reduce((a, v) => {
         const positions = Object.values((v as any).positions.card)
           .flat()
@@ -208,7 +210,7 @@ export const use_search = (local_db: LocalDb) => {
       clear_library_session_storage({
         username,
         search_params: search_params.toString(),
-        hash: `#q=${encodeURIComponent(search_string)}`,
+        hash: `#q=${encodeURIComponent(params.search_string)}`,
       })
       set_count(result.count)
       if (result.count) {
@@ -218,18 +220,10 @@ export const use_search = (local_db: LocalDb) => {
           search_string: params.search_string,
         })
         sessionStorage.setItem(
-          browser_storage.session_storage.library.search_string({
-            username,
-            search_params: search_params.toString(),
-            hash: `#q=${encodeURIComponent(search_string)}`,
-          }),
-          params.search_string,
-        )
-        sessionStorage.setItem(
           browser_storage.session_storage.library.search_results_count({
             username,
             search_params: search_params.toString(),
-            hash: `#q=${encodeURIComponent(search_string)}`,
+            hash: `#q=${encodeURIComponent(params.search_string)}`,
           }),
           result.count.toString(),
         )
@@ -683,21 +677,21 @@ export const use_search = (local_db: LocalDb) => {
     set_count(undefined)
     set_result(undefined)
     set_hints(undefined)
-    set_incoming_highlights(undefined)
+    set_highlights(undefined)
     set_incoming_highlights_sites_variants(undefined)
   }
 
   useUpdateEffect(() => {
-    if (!highlights) return
+    if (!highlights_commited) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights({
         username,
         search_params: search_params.toString(),
         hash: `#q=${encodeURIComponent(search_string)}`,
       }),
-      JSON.stringify(highlights),
+      JSON.stringify(highlights_commited),
     )
-  }, [highlights])
+  }, [highlights_commited])
 
   useUpdateEffect(() => {
     if (!highlights_sites_variants) return
@@ -728,18 +722,18 @@ export const use_search = (local_db: LocalDb) => {
 
     const is_query_in_hash = window.location.hash.startsWith('#q=')
 
-    if (!is_query_in_hash) reset()
+    if (!is_query_in_hash) {
+      reset()
+      return
+    }
 
-    const search_string = sessionStorage.getItem(
-      browser_storage.session_storage.library.search_string({
-        username,
-        search_params: search_params_stringified,
-        hash: window.location.hash,
-      }),
+    const search_string = decodeURIComponent(
+      window.location.hash.replace('#q=', ''),
     )
 
     if (search_string) {
       set_search_string(search_string)
+      set_search_string_commited(search_string)
     }
 
     const highlights = sessionStorage.getItem(
@@ -749,9 +743,11 @@ export const use_search = (local_db: LocalDb) => {
         hash: window.location.hash,
       }),
     )
+
     if (highlights) {
       set_highlights(JSON.parse(highlights))
     }
+
     const highlights_sites_variants = sessionStorage.getItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
@@ -760,7 +756,9 @@ export const use_search = (local_db: LocalDb) => {
       }),
     )
     if (highlights_sites_variants) {
-      set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
+      set_incoming_highlights_sites_variants(
+        JSON.parse(highlights_sites_variants),
+      )
     }
 
     const count = sessionStorage.getItem(
@@ -801,13 +799,12 @@ export const use_search = (local_db: LocalDb) => {
           get_hints()
           set_is_search_focused(true)
         })
-    } else if (window.location.hash.startsWith('#q=')) {
-      /**
-       * START - handle case when hash is #q=gila
-       */
-      local_db.init({
-        is_archived: is_archived_filter,
-      })
+      // Remove hash from url
+      window.history.replaceState(
+        {},
+        '',
+        window.location.pathname + window.location.search,
+      )
     }
   }, [auth_context.auth_data])
 
@@ -815,14 +812,12 @@ export const use_search = (local_db: LocalDb) => {
     const db = is_archived_filter ? local_db.archived_db : local_db.db
     if (db) get_result({ search_string })
   }, [local_db.db, local_db.archived_db])
-  /**
-   * END - handle case when hash is #q=gila
-   */
 
   return {
     is_search_focused,
     set_is_search_focused,
     search_string,
+    search_string_commited,
     set_search_string,
     hints,
     clear_hints,
@@ -835,9 +830,9 @@ export const use_search = (local_db: LocalDb) => {
     reset,
     count,
     set_count,
-    incoming_highlights,
     highlights,
-    set_highlights,
+    highlights_commited,
+    set_highlights_commited,
     remove_recent_hint,
     current_filter,
     incoming_highlights_sites_variants,

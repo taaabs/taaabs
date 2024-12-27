@@ -103,36 +103,6 @@ export const LocalDbProvider: React.FC<{
           : browser_storage.local_forage.authorized_library.search
               .archived_cached_at_timestamp,
       )
-    } else {
-      // await localforage.removeItem(
-      //   !params.is_archived_
-      //     ? browser_storage.local_forage.public_library.search.index({
-      //         username: username as string,
-      //       })
-      //     : browser_storage.local_forage.public_library.search.archived_index({
-      //         username: username as string,
-      //       }),
-      // )
-      // await localforage.removeItem(
-      //   !params.is_archived_
-      //     ? browser_storage.local_forage.public_library.search.bookmarks({
-      //         username: username as string,
-      //       })
-      //     : browser_storage.local_forage.public_library.search.archived_bookmarks(
-      //         { username: username as string },
-      //       ),
-      // )
-      // await localforage.removeItem(
-      //   !params.is_archived_
-      //     ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-      //         {
-      //           username: username as string,
-      //         },
-      //       )
-      //     : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-      //         { username: username as string },
-      //       ),
-      // )
     }
     if (!params.is_archived) {
       set_db(undefined)
@@ -151,35 +121,21 @@ export const LocalDbProvider: React.FC<{
   }> => {
     set_is_initializing(true)
 
-    const version: number | undefined =
-      (await localforage.getItem<number>(
-        !username
-          ? browser_storage.local_forage.authorized_library.search.version
-          : browser_storage.local_forage.public_library.search.version({
-              username: username as string,
-            }),
-      )) || undefined
+    const version: number | undefined = !username
+      ? (await localforage.getItem<number>(
+          browser_storage.local_forage.authorized_library.search.version,
+        )) || undefined
+      : undefined
 
-    const cached_at: number | undefined =
-      (await localforage.getItem<number>(
-        !username
-          ? !params.is_archived
+    const cached_at: number | undefined = !username
+      ? (await localforage.getItem<number>(
+          !params.is_archived
             ? browser_storage.local_forage.authorized_library.search
                 .cached_at_timestamp
             : browser_storage.local_forage.authorized_library.search
-                .archived_cached_at_timestamp
-          : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            )
-          : browser_storage.local_forage.public_library.search.archived_cached_at_timestamp(
-              {
-                username: username as string,
-              },
-            ),
-      )) || undefined
+                .archived_cached_at_timestamp,
+        )) || undefined
+      : undefined
 
     const data_source = new LibrarySearch_DataSourceImpl(
       auth_context.ky_instance,
@@ -222,6 +178,7 @@ export const LocalDbProvider: React.FC<{
 
     if (
       !params.force_reinitialization &&
+      version == incoming_version &&
       ((!params.is_archived && db) || (params.is_archived && archived_db))
     ) {
       // DB is initialized, should be updated
@@ -287,20 +244,14 @@ export const LocalDbProvider: React.FC<{
         },
       })
 
-      const cached_index = await localforage.getItem<string>(
-        !username
-          ? !params.is_archived
-            ? browser_storage.local_forage.authorized_library.search.index
-            : browser_storage.local_forage.authorized_library.search
-                .archived_index
-          : !params.is_archived
-          ? browser_storage.local_forage.public_library.search.index({
-              username: username as string,
-            })
-          : browser_storage.local_forage.public_library.search.archived_index({
-              username: username as string,
-            }),
-      )
+      const cached_index: string | undefined = !username
+        ? (await localforage.getItem<string>(
+            !params.is_archived
+              ? browser_storage.local_forage.authorized_library.search.index
+              : browser_storage.local_forage.authorized_library.search
+                  .archived_index,
+          )) || undefined
+        : undefined
 
       if (cached_index) {
         // Update cached index

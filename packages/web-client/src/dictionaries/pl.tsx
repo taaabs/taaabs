@@ -13,8 +13,8 @@ export const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'Przywróć radość',
-          second_line: 'z surfowania Internetu',
+          first_line: 'Pełna swoboda',
+          second_line: 'odkrywania Internetu',
         },
         subheading:
           'Stwórz bibliotekę zakładek. Czatuj z AI. Znajdź podobnych sobie ludzi.',
@@ -25,10 +25,7 @@ export const dictionary: Dictionary = {
             <strong>Szyfrowanie end-to-end</strong> prywatnych zakładek
           </>,
           <>
-            <strong>Publiczny kod źródłowy</strong> apek
-          </>,
-          <>
-            <strong>Hojny</strong> darmowy plan
+            <strong>Nielimitowane</strong> zakładki i tagi
           </>,
         ],
         incentive: '30 sekund lub mniej',
@@ -56,7 +53,7 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            '10 000 zakładek',
+            'Nielimitowane zakładki',
             'Nielimitowane tagi',
             'Błyskawiczne wyszukiwanie',
             'Szyfrowanie end-to-end',
@@ -68,9 +65,9 @@ export const dictionary: Dictionary = {
           description: 'Wykorzystaj pełnię możliwości jakie daje Taaabs',
           bullets_heading: 'Wszystko co w darmowym, plus:',
           bullets: [
-            'Nielimitowane zakładki',
             'Oznaczanie fragmentów',
             'Powiązane odnośniki',
+            'Brak reklam',
             'Przejmij krótszy nick',
           ],
           button_label: 'Subskrybuj',

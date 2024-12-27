@@ -55,7 +55,6 @@ export const use_scroll_restore = () => {
       )
       if (scroll_y) {
         requestAnimationFrame(() => {
-          console.log(scroll_y)
           window.scrollTo(0, parseInt(scroll_y))
         })
       }

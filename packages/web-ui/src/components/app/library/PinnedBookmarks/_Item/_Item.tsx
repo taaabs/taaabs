@@ -84,7 +84,10 @@ export const _Item: React.FC<_Item.Props> = (props) => {
             e.preventDefault()
             props.on_link_click()
           }}
-          onAuxClick={props.on_link_middle_click}
+          onAuxClick={(e) => {
+            if (e.button != 1) return
+            props.on_link_middle_click()
+          }}
         >
           {props.stars && props.stars >= 1 && (
             <div className={styles.item__link__url__stars}>

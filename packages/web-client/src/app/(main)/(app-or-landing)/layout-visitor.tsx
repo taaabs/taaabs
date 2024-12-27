@@ -4,7 +4,7 @@ import { Landing as Ui_landing_templates_Landing } from '@web-ui/components/land
 import { DesktopNavigation } from './_components/DesktopNavigation'
 import { DesktopActions as Ui_landing_templates_Landing_DesktopActions } from '@web-ui/components/landing/templates/Landing/DesktopActions'
 import { LogoForHeader as UiLogoForHeader } from '@web-ui/components/LogoForHeader'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/HeaderDesktop'
@@ -19,7 +19,6 @@ const LayoutVisitor: React.FC<{
   dictionary: Dictionary
 }> = (props) => {
   const pathname = usePathname()
-  const router = useRouter()
 
   return landing_pathnames.includes(pathname) ? (
     <Ui_landing_templates_Landing

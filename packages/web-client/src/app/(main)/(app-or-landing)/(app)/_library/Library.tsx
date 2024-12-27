@@ -12,7 +12,7 @@ import { use_bookmarks } from './_hooks/use-bookmarks'
 import { use_counts } from './_hooks/use-counts'
 import { use_session_storage_cleanup } from './_hooks/use-session-storage-cleanup'
 import { browser_storage } from '@/constants/browser-storage'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { SwipableColumns as Ui_app_templates_App_content_SwipableColumns } from '@web-ui/components/app/templates/App/content/SwipableColumns'
 import { DraggedCursorTag as Ui_app_library_DraggedCursorTag } from '@web-ui/components/app/library/DraggedCursorTag'
 import { BookmarksSkeleton as Ui_app_library_BookmarksSkeleton } from '@web-ui/components/app/library/BookmarksSkeleton'
@@ -86,7 +86,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const date_view_options_hook = use_date_view_options()
   const points_hook = use_points()
   const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
-  const popstate_context = use_popstate_count()
+  const popstate_count_hook = use_popstate_count()
   // START - UI synchronization
   const [is_tag_hierarchy_ready, set_is_tag_hierarchy_ready] = useState(false) // Tag hierarchy is ready as soon as collapsed state is restored
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
@@ -135,8 +135,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       sort_by_view_options_hook.set_current_sort_by_commited(
         sort_by_view_options_hook.current_sort_by,
       )
-      popstate_context.set_popstate_count_commited(
-        popstate_context.popstate_count,
+      popstate_count_hook.set_popstate_count_commited(
+        popstate_count_hook.popstate_count,
       )
       counts_hook.set_fetched_at_timestamp_commited(
         counts_hook.fetched_at_timestamp,
@@ -159,12 +159,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
       if (search_hook.result) {
-        search_hook.set_highlights(search_hook.incoming_highlights)
+        search_hook.set_highlights_commited(search_hook.highlights)
         search_hook.set_highlights_sites_variants(
           search_hook.incoming_highlights_sites_variants,
         )
-      } else if (search_hook.highlights && !search_hook.result) {
-        search_hook.set_highlights(undefined)
+      } else if (search_hook.highlights_commited && !search_hook.result) {
+        search_hook.set_highlights_commited(undefined)
         search_hook.set_highlights_sites_variants(undefined)
       }
     }
@@ -179,6 +179,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     pinned_hook.is_fetching,
     pinned_hook.is_updating,
     pinned_hook.should_refetch,
+    search_hook.search_string_commited,
   ])
 
   const on_tag_rename_click = async (params: { id: number; name: string }) => {

@@ -42,7 +42,4 @@
     }
   }
   @include transition-150ms;
-  @include hover {
-    background-color: var(--green700);
-  }
 }

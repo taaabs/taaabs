@@ -62,329 +62,324 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
   const popstate_rerender_trigger_hook = use_popstate_rerender_trigger()
 
   return bookmarks_hook.bookmarks?.map((bookmark, i) => {
-    const render_menu = () => {
-      return !username ? (
-        <Ui_Dropdown>
-          <Ui_Dropdown_Stars
-            no_selected={bookmark.stars}
-            on_click={async (no_stars) => {
-              dispatch(bookmarks_actions.set_is_upserting(true))
-              const modified_bookmark: UpsertBookmark_Params = {
-                bookmark_id: bookmark.id,
-                stars: bookmark.stars == no_stars ? 0 : no_stars,
-              }
-              await dispatch(
-                bookmarks_actions.upsert_bookmark({
-                  bookmark: modified_bookmark,
-                  last_authorized_counts_params:
-                    JSON.parse(
-                      sessionStorage.getItem(
-                        browser_storage.session_storage.library
-                          .last_authorized_counts_params,
-                      ) || 'null',
-                    ) || undefined,
-                  get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    }),
-                  ky: auth_context.ky_instance,
-                  encryption_key: auth_context.auth_data!.encryption_key,
+    const menu = !username ? (
+      <Ui_Dropdown>
+        <Ui_Dropdown_Stars
+          no_selected={bookmark.stars}
+          on_click={async (no_stars) => {
+            dispatch(bookmarks_actions.set_is_upserting(true))
+            const modified_bookmark: UpsertBookmark_Params = {
+              bookmark_id: bookmark.id,
+              stars: bookmark.stars == no_stars ? 0 : no_stars,
+            }
+            await dispatch(
+              bookmarks_actions.upsert_bookmark({
+                bookmark: modified_bookmark,
+                last_authorized_counts_params:
+                  JSON.parse(
+                    sessionStorage.getItem(
+                      browser_storage.session_storage.library
+                        .last_authorized_counts_params,
+                    ) || 'null',
+                  ) || undefined,
+                get_tag_hierarchies_request_params:
+                  tag_hierarchies_hook.get_authorized_request_params({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  }),
+                ky: auth_context.ky_instance,
+                encryption_key: auth_context.auth_data!.encryption_key,
+              }),
+            )
+            if (
+              search_hook.count &&
+              (filter_view_options_hook.current_filter == Filter.STARRED ||
+                filter_view_options_hook.current_filter ==
+                  Filter.STARRED_UNSORTED ||
+                filter_view_options_hook.current_filter ==
+                  Filter.ARCHIVED_STARRED ||
+                filter_view_options_hook.current_filter ==
+                  Filter.ARCHIVED_STARRED_UNSORTED) &&
+              bookmark.stars == 1
+            ) {
+              search_hook.set_count(search_hook.count - 1)
+            }
+            dispatch(bookmarks_actions.set_is_upserting(false))
+            toast.success(props.dictionary.app.library.bookmark_updated)
+          }}
+        />
+        <Ui_Dropdown_CheckboxItem
+          is_checked={
+            bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
+          }
+          label={props.dictionary.app.library.bookmark.unsorted}
+          on_click={async () => {
+            dispatch(bookmarks_actions.set_is_upserting(true))
+            const modified_bookmark: UpsertBookmark_Params = {
+              bookmark_id: bookmark.id,
+              is_unsorted: !(bookmark.is_unsorted === undefined
+                ? true
+                : bookmark.is_unsorted),
+            }
+            await dispatch(
+              bookmarks_actions.upsert_bookmark({
+                bookmark: modified_bookmark,
+                last_authorized_counts_params:
+                  JSON.parse(
+                    sessionStorage.getItem(
+                      browser_storage.session_storage.library
+                        .last_authorized_counts_params,
+                    ) || 'null',
+                  ) || undefined,
+                get_tag_hierarchies_request_params:
+                  tag_hierarchies_hook.get_authorized_request_params({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  }),
+                ky: auth_context.ky_instance,
+                encryption_key: auth_context.auth_data!.encryption_key,
+              }),
+            )
+            if (
+              search_hook.count &&
+              (filter_view_options_hook.current_filter == Filter.UNSORTED ||
+                filter_view_options_hook.current_filter ==
+                  Filter.STARRED_UNSORTED ||
+                filter_view_options_hook.current_filter ==
+                  Filter.ARCHIVED_STARRED_UNSORTED) &&
+              bookmark.is_unsorted
+            ) {
+              search_hook.set_count(search_hook.count! - 1)
+            }
+            dispatch(bookmarks_actions.set_is_upserting(false))
+            toast.success(props.dictionary.app.library.bookmark_updated)
+          }}
+        />
+        <Ui_Dropdown_Separator />
+        <Ui_Dropdown_StandardItem
+          icon_variant="EDIT"
+          label={props.dictionary.app.library.bookmark.edit}
+          on_click={async () => {
+            const modified_bookmark = await upsert_bookmark_modal_setter({
+              modal_context,
+              bookmark,
+              is_archived: is_archived_filter,
+              dictionary: props.dictionary,
+            })
+            if (!modified_bookmark) {
+              modal_context.close()
+              return
+            }
+            dispatch(bookmarks_actions.set_is_upserting(true))
+            const updated_bookmark = await dispatch(
+              bookmarks_actions.upsert_bookmark({
+                bookmark: modified_bookmark,
+                last_authorized_counts_params:
+                  JSON.parse(
+                    sessionStorage.getItem(
+                      browser_storage.session_storage.library
+                        .last_authorized_counts_params,
+                    ) || 'null',
+                  ) || undefined,
+                get_tag_hierarchies_request_params:
+                  tag_hierarchies_hook.get_authorized_request_params({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  }),
+                ky: auth_context.ky_instance,
+                encryption_key: auth_context.auth_data!.encryption_key,
+              }),
+            )
+            const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
+            // Filter out bookmark
+            if (
+              !tag_view_options_hook.selected_tags.every((t) =>
+                updated_tag_ids.includes(t),
+              ) ||
+              (updated_bookmark.is_unsorted == false &&
+                (filter_view_options_hook.current_filter ==
+                  Filter.STARRED_UNSORTED ||
+                  filter_view_options_hook.current_filter == Filter.UNSORTED ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.ARCHIVED_UNSORTED ||
+                  filter_view_options_hook.current_filter ==
+                    Filter.ARCHIVED_STARRED_UNSORTED))
+            ) {
+              dispatch(
+                bookmarks_actions.filter_out_bookmark({
+                  bookmark_id: updated_bookmark.id,
                 }),
               )
-              if (
-                search_hook.count &&
-                (filter_view_options_hook.current_filter == Filter.STARRED ||
-                  filter_view_options_hook.current_filter ==
-                    Filter.STARRED_UNSORTED ||
-                  filter_view_options_hook.current_filter ==
-                    Filter.ARCHIVED_STARRED ||
-                  filter_view_options_hook.current_filter ==
-                    Filter.ARCHIVED_STARRED_UNSORTED) &&
-                bookmark.stars == 1
-              ) {
+              if (search_hook.count) {
                 search_hook.set_count(search_hook.count - 1)
               }
-              dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(props.dictionary.app.library.bookmark_updated)
-            }}
-          />
-          <Ui_Dropdown_CheckboxItem
-            is_checked={
-              bookmark.is_unsorted === undefined ? true : bookmark.is_unsorted
             }
-            label={props.dictionary.app.library.bookmark.unsorted}
-            on_click={async () => {
-              dispatch(bookmarks_actions.set_is_upserting(true))
-              const modified_bookmark: UpsertBookmark_Params = {
-                bookmark_id: bookmark.id,
-                is_unsorted: !(bookmark.is_unsorted === undefined
-                  ? true
-                  : bookmark.is_unsorted),
-              }
-              await dispatch(
-                bookmarks_actions.upsert_bookmark({
-                  bookmark: modified_bookmark,
-                  last_authorized_counts_params:
-                    JSON.parse(
-                      sessionStorage.getItem(
-                        browser_storage.session_storage.library
-                          .last_authorized_counts_params,
-                      ) || 'null',
-                    ) || undefined,
-                  get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    }),
-                  ky: auth_context.ky_instance,
-                  encryption_key: auth_context.auth_data!.encryption_key,
-                }),
-              )
-              if (
-                search_hook.count &&
-                (filter_view_options_hook.current_filter == Filter.UNSORTED ||
-                  filter_view_options_hook.current_filter ==
-                    Filter.STARRED_UNSORTED ||
-                  filter_view_options_hook.current_filter ==
-                    Filter.ARCHIVED_STARRED_UNSORTED) &&
-                bookmark.is_unsorted
-              ) {
-                search_hook.set_count(search_hook.count! - 1)
-              }
-              dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(props.dictionary.app.library.bookmark_updated)
-            }}
-          />
-          <Ui_Dropdown_Separator />
-          <Ui_Dropdown_StandardItem
-            icon_variant="EDIT"
-            label={props.dictionary.app.library.bookmark.edit}
-            on_click={async () => {
-              const modified_bookmark = await upsert_bookmark_modal_setter({
-                modal_context,
-                bookmark,
-                is_archived: is_archived_filter,
-                dictionary: props.dictionary,
+            // Unselect removed tags when there is no more bookmarks with them
+            const tags_to_remove_from_search_params =
+              tag_view_options_hook.selected_tags.filter((t) => {
+                const yields = Object.entries(counts_hook.tags!).find(
+                  (tag) => parseInt(tag[0]) == t,
+                )![1].yields
+                return !updated_tag_ids.includes(t) && yields == 1
               })
-              if (!modified_bookmark) {
-                modal_context.close()
-                return
-              }
-              dispatch(bookmarks_actions.set_is_upserting(true))
-              const updated_bookmark = await dispatch(
-                bookmarks_actions.upsert_bookmark({
-                  bookmark: modified_bookmark,
-                  last_authorized_counts_params:
-                    JSON.parse(
-                      sessionStorage.getItem(
-                        browser_storage.session_storage.library
-                          .last_authorized_counts_params,
-                      ) || 'null',
-                    ) || undefined,
-                  get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    }),
-                  ky: auth_context.ky_instance,
-                  encryption_key: auth_context.auth_data!.encryption_key,
-                }),
+            if (tags_to_remove_from_search_params.length) {
+              dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(true))
+              tag_view_options_hook.remove_tags_from_search_params(
+                tags_to_remove_from_search_params,
               )
-              const updated_tag_ids = updated_bookmark.tags.map((t) => t.id)
-              // Filter out bookmark
-              if (
-                !tag_view_options_hook.selected_tags.every((t) =>
-                  updated_tag_ids.includes(t),
-                ) ||
-                (updated_bookmark.is_unsorted == false &&
-                  (filter_view_options_hook.current_filter ==
-                    Filter.STARRED_UNSORTED ||
-                    filter_view_options_hook.current_filter ==
-                      Filter.UNSORTED ||
-                    filter_view_options_hook.current_filter ==
-                      Filter.ARCHIVED_UNSORTED ||
-                    filter_view_options_hook.current_filter ==
-                      Filter.ARCHIVED_STARRED_UNSORTED))
-              ) {
-                dispatch(
-                  bookmarks_actions.filter_out_bookmark({
-                    bookmark_id: updated_bookmark.id,
-                  }),
-                )
-                if (search_hook.count) {
-                  search_hook.set_count(search_hook.count - 1)
-                }
-              }
-              // Unselect removed tags when there is no more bookmarks with them
-              const tags_to_remove_from_search_params =
-                tag_view_options_hook.selected_tags.filter((t) => {
-                  const yields = Object.entries(counts_hook.tags!).find(
-                    (tag) => parseInt(tag[0]) == t,
-                  )![1].yields
-                  return !updated_tag_ids.includes(t) && yields == 1
-                })
-              if (tags_to_remove_from_search_params.length) {
-                dispatch(
-                  bookmarks_actions.set_is_fetching_first_bookmarks(true),
-                )
-                tag_view_options_hook.remove_tags_from_search_params(
-                  tags_to_remove_from_search_params,
-                )
-              }
-              // Update highlights
-              if (search_hook.result?.hits.length) {
-                if (updated_bookmark.id != modified_bookmark.bookmark_id) {
-                  await props.local_db.delete_bookmark({
-                    db: (is_archived_filter
-                      ? props.local_db.archived_db
-                      : props.local_db.db)!,
-                    bookmark_id: modified_bookmark.bookmark_id!,
-                  })
-                }
-                await props.local_db.upsert_bookmark({
+            }
+            // Update highlights
+            if (search_hook.result?.hits.length) {
+              if (updated_bookmark.id != modified_bookmark.bookmark_id) {
+                await props.local_db.delete_bookmark({
                   db: (is_archived_filter
                     ? props.local_db.archived_db
                     : props.local_db.db)!,
-                  bookmark: {
-                    id: updated_bookmark.id!,
-                    is_archived: is_archived_filter,
-                    is_unsorted: updated_bookmark.is_unsorted,
-                    title: updated_bookmark.title,
-                    note: updated_bookmark.note,
-                    tags: updated_bookmark.tags.map((tag) => ({
-                      name: tag.name,
-                      id: tag.id,
-                    })),
-                    links: updated_bookmark.links.map((link) => ({
-                      url: link.url,
-                      site_path: link.site_path,
-                    })),
-                    created_at: updated_bookmark.created_at,
-                    visited_at: bookmark.visited_at,
-                    updated_at: updated_bookmark.updated_at,
-                    stars: updated_bookmark.stars,
-                    tag_ids: updated_bookmark.tags.map((tag) => tag.id),
-                  },
-                })
-                await search_hook.get_result({
-                  search_string: search_hook.search_string,
-                  refresh_highlights_only: true,
+                  bookmark_id: modified_bookmark.bookmark_id!,
                 })
               }
-              dispatch(bookmarks_actions.set_is_upserting(false))
-              modal_context.close()
-              toast.success(props.dictionary.app.library.bookmark_updated)
-            }}
-          />
-          <Ui_Dropdown_StandardItem
-            icon_variant="ARCHIVE"
-            label={
-              is_archived_filter
-                ? props.dictionary.app.library.bookmark.restore
-                : props.dictionary.app.library.bookmark.archive
-            }
-            on_click={async () => {
-              dispatch(bookmarks_actions.set_is_upserting(true))
-              const modified_bookmark: UpsertBookmark_Params = {
-                bookmark_id: bookmark.id,
-                is_archived: !is_archived_filter,
-              }
-              await dispatch(
-                bookmarks_actions.upsert_bookmark({
-                  bookmark: modified_bookmark,
-                  last_authorized_counts_params:
-                    JSON.parse(
-                      sessionStorage.getItem(
-                        browser_storage.session_storage.library
-                          .last_authorized_counts_params,
-                      ) || 'null',
-                    ) || undefined,
-                  get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    }),
-                  ky: auth_context.ky_instance,
-                  encryption_key: auth_context.auth_data!.encryption_key,
-                }),
-              )
-              if (search_hook.count) {
-                search_hook.set_count(search_hook.count - 1)
-              }
-              dispatch(bookmarks_actions.set_is_upserting(false))
-              toast.success(
-                is_archived_filter
-                  ? props.dictionary.app.library.bookmark_restored
-                  : props.dictionary.app.library.bookmark_archived,
-              )
-              if (
-                bookmarks_hook.bookmarks &&
-                bookmarks_hook.bookmarks.length == 1 &&
-                bookmarks_hook.showing_bookmarks_fetched_by_ids
-              ) {
-                search_hook.reset()
-              }
-            }}
-          />
-          <Ui_Dropdown_StandardItem
-            icon_variant="DELETE"
-            is_danger={true}
-            label={props.dictionary.app.library.bookmark.delete}
-            on_click={async () => {
-              const is_deletion_confirmed = await delete_bookmark_modal_setter({
-                dictionary: props.dictionary,
-                modal_context,
-                title: bookmark.title,
+              await props.local_db.upsert_bookmark({
+                db: (is_archived_filter
+                  ? props.local_db.archived_db
+                  : props.local_db.db)!,
+                bookmark: {
+                  id: updated_bookmark.id!,
+                  is_archived: is_archived_filter,
+                  is_unsorted: updated_bookmark.is_unsorted,
+                  title: updated_bookmark.title,
+                  note: updated_bookmark.note,
+                  tags: updated_bookmark.tags.map((tag) => ({
+                    name: tag.name,
+                    id: tag.id,
+                  })),
+                  links: updated_bookmark.links.map((link) => ({
+                    url: link.url,
+                    site_path: link.site_path,
+                  })),
+                  created_at: updated_bookmark.created_at,
+                  visited_at: bookmark.visited_at,
+                  updated_at: updated_bookmark.updated_at,
+                  stars: updated_bookmark.stars,
+                  tag_ids: updated_bookmark.tags.map((tag) => tag.id),
+                },
               })
-              if (!is_deletion_confirmed) {
-                modal_context.close()
-                return
-              }
-              dispatch(bookmarks_actions.set_is_upserting(true))
-              await dispatch(
-                bookmarks_actions.delete_bookmark({
-                  last_authorized_counts_params:
-                    JSON.parse(
-                      sessionStorage.getItem(
-                        browser_storage.session_storage.library
-                          .last_authorized_counts_params,
-                      ) || 'null',
-                    ) || undefined,
-                  get_tag_hierarchies_request_params:
-                    tag_hierarchies_hook.get_authorized_request_params({
-                      filter: filter_view_options_hook.current_filter,
-                      gte: date_view_options_hook.current_gte,
-                      lte: date_view_options_hook.current_lte,
-                    }),
-                  bookmark_id: bookmark.id,
-                  ky: auth_context.ky_instance,
-                  encryption_key: auth_context.auth_data!.encryption_key,
-                }),
-              )
-              if (search_hook.count) {
-                search_hook.set_count(search_hook.count - 1)
-              }
-              dispatch(bookmarks_actions.set_is_upserting(false))
+              await search_hook.get_result({
+                search_string: search_hook.search_string,
+                refresh_highlights_only: true,
+              })
+            }
+            dispatch(bookmarks_actions.set_is_upserting(false))
+            modal_context.close()
+            toast.success(props.dictionary.app.library.bookmark_updated)
+          }}
+        />
+        <Ui_Dropdown_StandardItem
+          icon_variant="ARCHIVE"
+          label={
+            is_archived_filter
+              ? props.dictionary.app.library.bookmark.restore
+              : props.dictionary.app.library.bookmark.archive
+          }
+          on_click={async () => {
+            dispatch(bookmarks_actions.set_is_upserting(true))
+            const modified_bookmark: UpsertBookmark_Params = {
+              bookmark_id: bookmark.id,
+              is_archived: !is_archived_filter,
+            }
+            await dispatch(
+              bookmarks_actions.upsert_bookmark({
+                bookmark: modified_bookmark,
+                last_authorized_counts_params:
+                  JSON.parse(
+                    sessionStorage.getItem(
+                      browser_storage.session_storage.library
+                        .last_authorized_counts_params,
+                    ) || 'null',
+                  ) || undefined,
+                get_tag_hierarchies_request_params:
+                  tag_hierarchies_hook.get_authorized_request_params({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  }),
+                ky: auth_context.ky_instance,
+                encryption_key: auth_context.auth_data!.encryption_key,
+              }),
+            )
+            if (search_hook.count) {
+              search_hook.set_count(search_hook.count - 1)
+            }
+            dispatch(bookmarks_actions.set_is_upserting(false))
+            toast.success(
+              is_archived_filter
+                ? props.dictionary.app.library.bookmark_restored
+                : props.dictionary.app.library.bookmark_archived,
+            )
+            if (
+              bookmarks_hook.bookmarks &&
+              bookmarks_hook.bookmarks.length == 1 &&
+              bookmarks_hook.showing_bookmarks_fetched_by_ids
+            ) {
+              search_hook.reset()
+            }
+          }}
+        />
+        <Ui_Dropdown_StandardItem
+          icon_variant="DELETE"
+          is_danger={true}
+          label={props.dictionary.app.library.bookmark.delete}
+          on_click={async () => {
+            const is_deletion_confirmed = await delete_bookmark_modal_setter({
+              dictionary: props.dictionary,
+              modal_context,
+              title: bookmark.title,
+            })
+            if (!is_deletion_confirmed) {
               modal_context.close()
-              toast.success(props.dictionary.app.library.bookmark_deleted)
-            }}
-          />
-        </Ui_Dropdown>
-      ) : auth_context.auth_data ? (
-        <Ui_Dropdown>
-          <Ui_Dropdown_StandardItem
-            icon_variant="COPY"
-            label={'Copy to mine'}
-            on_click={async () => {}}
-          />
-        </Ui_Dropdown>
-      ) : undefined
-    }
+              return
+            }
+            dispatch(bookmarks_actions.set_is_upserting(true))
+            await dispatch(
+              bookmarks_actions.delete_bookmark({
+                last_authorized_counts_params:
+                  JSON.parse(
+                    sessionStorage.getItem(
+                      browser_storage.session_storage.library
+                        .last_authorized_counts_params,
+                    ) || 'null',
+                  ) || undefined,
+                get_tag_hierarchies_request_params:
+                  tag_hierarchies_hook.get_authorized_request_params({
+                    filter: filter_view_options_hook.current_filter,
+                    gte: date_view_options_hook.current_gte,
+                    lte: date_view_options_hook.current_lte,
+                  }),
+                bookmark_id: bookmark.id,
+                ky: auth_context.ky_instance,
+                encryption_key: auth_context.auth_data!.encryption_key,
+              }),
+            )
+            if (search_hook.count) {
+              search_hook.set_count(search_hook.count - 1)
+            }
+            dispatch(bookmarks_actions.set_is_upserting(false))
+            modal_context.close()
+            toast.success(props.dictionary.app.library.bookmark_deleted)
+          }}
+        />
+      </Ui_Dropdown>
+    ) : auth_context.auth_data ? (
+      <Ui_Dropdown>
+        <Ui_Dropdown_StandardItem
+          icon_variant="COPY"
+          label={'Copy to mine'}
+          on_click={async () => {}}
+        />
+      </Ui_Dropdown>
+    ) : undefined
 
     const handle_modify_tags_click = async () => {
       const updated_tags = await edit_tags_modal_setter({
@@ -676,7 +671,11 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
 
     return (
       <Ui_app_library_Bookmark
-        key={`${bookmark.id}${i}${library_updated_at_timestamp}${popstate_rerender_trigger_hook.value}`}
+        key={`${bookmark.id}${i}${library_updated_at_timestamp}${
+          popstate_rerender_trigger_hook.value
+            ? popstate_rerender_trigger_hook.value
+            : ''
+        }`}
         created_at={new Date(bookmark.created_at)}
         locale={props.dictionary.locale}
         search_queried_at_timestamp={search_hook.queried_at_timestamp}
@@ -1045,8 +1044,8 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
             </Ui_Dropdown>
           ),
         }))}
-        menu_slot={render_menu()}
-        highlights={search_hook.highlights?.[bookmark.id.toString()]}
+        menu_slot={menu}
+        highlights={search_hook.highlights_commited?.[bookmark.id.toString()]}
         highlights_site_variants={search_hook.highlights_sites_variants}
         orama_db_id={
           is_archived_filter
