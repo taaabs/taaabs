@@ -194,10 +194,7 @@ export const dictionary: Dictionary = {
       rename: 'Zmień nazwę',
       delete: 'Usuń',
       search: {
-        placeholder: {
-          default: 'Szukaj w tytułach, notkach, tagach i linkach...',
-          full_text: 'Szukaj w treści witryn...',
-        },
+        placeholder: 'Szukaj zakładek...',
         footer_tip: 'Tagi, filtry i zakres miesięcy wpływają na wyniki.',
         get_help: 'Jak używać wyszukiarki?',
         type: 'Użyj',

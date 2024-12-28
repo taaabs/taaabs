@@ -137,10 +137,7 @@ export type Dictionary = {
       rename: string
       delete: string
       search: {
-        placeholder: {
-          default: string
-          full_text: string
-        }
+        placeholder: string
         footer_tip: string
         get_help: string
         type: string

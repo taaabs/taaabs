@@ -189,10 +189,7 @@ const dictionary: Dictionary = {
       delete: 'Delete',
       rename: 'Rename',
       search: {
-        placeholder: {
-          default: 'Search in titles, notes, tags and links...',
-          full_text: 'Search in entire websites...',
-        },
+        placeholder: 'Search bookmarks...',
         footer_tip: 'Tags, filters and custom range affect results.',
         get_help: 'Search syntax tips',
         type: 'Type',
