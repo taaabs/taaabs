@@ -514,7 +514,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             ? props.dictionary.app.library.end_of_resutls
             : undefined
         }
-        user_info={
+        public_user_info={
           username
             ? {
                 username,

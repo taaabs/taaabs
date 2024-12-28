@@ -97,6 +97,8 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
 
   const swipeable_handlers = useSwipeable({
     onSwipeStart: ({ dir, event }) => {
+      if (props.is_showing_search_results) return
+
       // Check if user is not dragging over "custom range" handlers or ReactSortable item in a draggable state
       if (
         window.innerWidth >= 992 ||
@@ -127,6 +129,8 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
         'opacity var(--transition-duration-250ms) var(--transition-timing-function)'
     },
     onSwiping: ({ deltaX, dir, event }) => {
+      if (props.is_showing_search_results) return
+
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
@@ -164,6 +168,8 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
       }
     },
     onSwiped: ({ dir, velocity, event }) => {
+      if (props.is_showing_search_results) return
+
       if (
         window.innerWidth >= 992 ||
         (event.target as any)?.nodeName == 'rect' ||
