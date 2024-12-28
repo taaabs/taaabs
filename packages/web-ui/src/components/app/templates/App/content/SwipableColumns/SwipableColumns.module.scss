@@ -16,7 +16,7 @@
   justify-content: center;
   z-index: 2;
   width: 100%;
-  bottom: var(--bottom-navigation-bar-height);
+  bottom: 0;
   pointer-events: none;
   @include at992 {
     bottom: 24px;
@@ -24,7 +24,7 @@
   > div {
     pointer-events: all;
     @include to992 {
-      padding: 8px 0;
+      padding: 12px 0;
     }
   }
 }
@@ -54,12 +54,6 @@
   position: relative;
   @include at992 {
     width: var(--_aside-width);
-  }
-  &--hidden {
-    @include to992 {
-      visibility: hidden;
-      pointer-events: none;
-    }
   }
   &--collapsed {
     width: var(--_collapsed_aside_width);
@@ -217,7 +211,6 @@
     height: 100%;
     @include to992 {
       padding-top: var(--header-mobile-height);
-      padding-bottom: var(--bottom-navigation-bar-height);
       @include transition-150ms(opacity);
     }
     @include at992 {
@@ -230,27 +223,45 @@
         opacity: var(--dimmed-opacity);
       }
     }
+    &__mobile-use-info {
+      @include at992 {
+        display: none;
+      }
+    }
     &__sticky {
       position: sticky;
+      display: flex;
+      align-items: center;
+      gap: var(--padding-8px);
       z-index: 2;
-      top: var(--header-mobile-height);
+      top: calc(var(--header-mobile-height) + var(--padding-8px));
+      @include to992 {
+        padding: 0 13px 0 var(--padding-8px);
+        margin: var(--padding-8px) 0;
+      }
       @include at992 {
-        top: calc(var(--header-desktop-height) + 16px);
+        top: calc(var(--header-desktop-height) + var(--padding-16px));
+        margin: var(--padding-16px) 0;
       }
-      @include transition-150ms(transform);
-      @include at992 {
-        transform: none !important;
+      > div:first-child {
+        flex: 1;
       }
-      &--scrolled {
-        transform: translateY(calc(var(--app-bar-height) * -1));
-      }
-      &__mobile-title-bar {
+      &__toggler {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--button-dimension-34px);
+        height: var(--button-dimension-34px);
+        border-radius: 50%;
+        background-color: var(--accent-color);
+        box-shadow: var(--box-shadow-blue-strong);
         @include at992 {
           display: none;
         }
-      }
-      &__search {
-        font-size: inherit;
+        > svg {
+          width: var(--icon-dimension-20px);
+          fill: var(--white);
+        }
       }
     }
     &__info {
@@ -285,7 +296,6 @@
     bottom: 0;
     right: 0;
     padding-top: var(--header-mobile-height);
-    padding-bottom: var(--bottom-navigation-bar-height);
     padding-left: 1px;
   }
   @include at992 {

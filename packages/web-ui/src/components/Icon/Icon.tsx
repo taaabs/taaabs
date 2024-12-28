@@ -32,6 +32,7 @@ import HuggingFaceNoHands from '../../assets/icons/hugging-face-no-hands.svg'
 import LessThan from '../../assets/icons/less-than.svg'
 import Link from '../../assets/icons/link.svg'
 import Logo from '../../assets/icons/logo.svg'
+import Menu from '../../assets/icons/menu.svg'
 import MobileTitleBarLeft from '../../assets/icons/mobile-title-bar-left.svg'
 import MobileTitleBarRight from '../../assets/icons/mobile-title-bar-right.svg'
 import More from '../../assets/icons/more.svg'
@@ -98,6 +99,7 @@ export namespace Icon {
     | 'LESS_THAN'
     | 'LINK'
     | 'LOGO'
+    | 'MENU'
     | 'MOBILE_TITLE_BAR_LEFT'
     | 'MOBILE_TITLE_BAR_RIGHT'
     | 'MORE'
@@ -238,6 +240,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'LOGO':
       icon = <Logo />
+      break
+    case 'MENU':
+      icon = <Menu />
       break
     case 'MOBILE_TITLE_BAR_LEFT':
       icon = <MobileTitleBarLeft />

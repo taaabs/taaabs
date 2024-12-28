@@ -38,6 +38,8 @@ import { use_search } from './_hooks/use-search'
 import { FollowUnfollowContext } from '../[username]/follow-unfollow-provider'
 import { use_bookmarklet_handler } from './_hooks/use-bookmarklet-handler'
 import { use_popstate_count } from '@/providers/PopstateCountProvider'
+import { use_menu_trigger_count } from '../../_providers/MenuTriggerProvider'
+import { use_public_user_avatar } from '@/providers/PublicUserAvatarProvider'
 
 export type LibraryContext = {
   bookmarks_hook: ReturnType<typeof use_bookmarks>
@@ -87,6 +89,8 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
   const points_hook = use_points()
   const follow_unfollow_context = useContext(FollowUnfollowContext) // Only available in public library
   const popstate_count_hook = use_popstate_count()
+  const menu_trigger_count_hook = use_menu_trigger_count()
+  const public_user_avatar_hook = use_public_user_avatar()
   // START - UI synchronization
   const [is_tag_hierarchy_ready, set_is_tag_hierarchy_ready] = useState(false) // Tag hierarchy is ready as soon as collapsed state is restored
   const [library_updated_at_timestamp, set_library_updated_at_timestamp] =
@@ -418,6 +422,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             local_db={props.local_db}
           />
         }
+        left_column_opening_count={menu_trigger_count_hook.count}
         slot_column_right={
           <_Aside dictionary={props.dictionary} local_db={props.local_db} />
         }
@@ -507,6 +512,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
             : !bookmarks_hook.has_more_bookmarks ||
               bookmarks_hook.bookmarks?.length == search_hook.count
             ? props.dictionary.app.library.end_of_resutls
+            : undefined
+        }
+        user_info={
+          username
+            ? {
+                username,
+                avatar: public_user_avatar_hook.avatar,
+              }
             : undefined
         }
         translations={{

@@ -1,7 +1,6 @@
 'use client'
-
-import { PublicUserAvatarContext } from '@/providers/PublicUserAvatarProvider'
-import { useContext, useEffect } from 'react'
+import { use_public_user_avatar } from '@/providers/PublicUserAvatarProvider'
+import { useEffect } from 'react'
 
 type Props = {
   avatar?: {
@@ -11,18 +10,18 @@ type Props = {
 }
 
 export const AvatarContextSetter: React.FC<Props> = (props) => {
-  const publicUserAvatar = useContext(PublicUserAvatarContext)
+  const public_user_avatar = use_public_user_avatar()
 
   useEffect(() => {
     if (props.avatar) {
-      publicUserAvatar?.setAvatar({
+      public_user_avatar?.set_avatar({
         url: props.avatar.url,
         blurhash: props.avatar.blurhash,
       })
     }
 
     return () => {
-      publicUserAvatar?.setAvatar(null)
+      public_user_avatar?.set_avatar(null)
     }
   }, [])
 

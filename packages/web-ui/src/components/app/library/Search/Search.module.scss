@@ -1,18 +1,7 @@
 // @type
 @use '../../../../styles/foundation' as *;
 
-.container {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  width: 100%;
-  position: relative;
-  margin: 8px 0;
-  @include at992 {
-    margin: 16px 0;
-  }
-}
-.box {
+.search {
   display: flex;
   align-items: center;
   background-color: rgba(239, 246, 255, 0.8);
@@ -26,16 +15,13 @@
   backdrop-filter: var(--backdrop-filter);
   z-index: 2;
   border-radius: var(--border-radius-999px);
-  gap: 8px;
+  gap: var(--padding-6px);
   height: var(--search-mobile-height);
   @include transition-150ms;
-  @include to992 {
-    margin: 0 8px;
-  }
   @include at992 {
     transform: translateX(calc(8px * -1));
     width: calc(100% + (8px * 2));
-    gap: 4px;
+    gap: var(--padding-4px);
     height: var(--search-desktop-height);
   }
   @include at1200 {
@@ -125,13 +111,16 @@
     position: absolute;
     font-weight: var(--font-weight-inter-medium);
     left: calc(
-      var(--padding-6px) + var(--button-dimension-28px) + var(--padding-8px)
+      var(--padding-4px) + var(--button-dimension-28px) + var(--padding-8px)
     );
     color: var(--blue500);
     @include dark {
       color: var(--text-color-variant);
     }
     @include transition-150ms(color);
+    @include to992 {
+      font-family: var(--font-family-inter-tight);
+    }
     @include at992 {
       font-size: var(--font-size-16px);
       left: calc(var(--padding-8px) + var(--button-dimension-34px) + 4px);
@@ -339,8 +328,7 @@
 .hints {
   position: absolute;
   z-index: 1;
-  width: 100%;
-  top: calc(var(--button-dimension-40px) + 4px);
+  top: calc(var(--search-mobile-height) + 4px);
   overflow: hidden;
   border-radius: var(--border-radius-12px);
   border: var(--border-primary);
@@ -350,11 +338,12 @@
   @include transition-150ms;
   transform: translateY(0);
   @include to992 {
-    width: calc(100% - (20px));
-    margin-left: 50%;
+    width: calc(100% - var(--padding-16px));
+    left: 50%;
     transform: translateY(0) translateX(-50%);
   }
   @include at992 {
+    width: 100%;
     top: calc(var(--button-dimension-52px) + 4px);
   }
   &--hidden {

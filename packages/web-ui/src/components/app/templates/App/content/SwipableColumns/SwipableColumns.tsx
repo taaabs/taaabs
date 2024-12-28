@@ -3,16 +3,16 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import useViewportSpy from 'beautiful-react-hooks/useViewportSpy'
 import cn from 'classnames'
 import { useEffect, useRef, useState } from 'react'
-import { _MobileTitleBar as Subcomponent_MobileTitleBar } from './_MobileTitleBar'
+import { _MobilePublicUserInfo } from './_MobilePublicUserInfo'
 import styles from './SwipableColumns.module.scss'
 import { useSwipeable } from 'react-swipeable'
-import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 import { Button } from '@web-ui/components/Button'
-import OutsideClickHandler from 'react-outside-click-handler'
+import { Icon } from '@web-ui/components/Icon'
 
 export namespace SwipableColumns {
   export type Props = {
     slot_column_left: React.ReactNode
+    left_column_opening_count: number
     slot_column_right: React.ReactNode
     slot_toolbar: React.ReactNode
     slot_search: React.ReactNode
@@ -26,6 +26,13 @@ export namespace SwipableColumns {
     welcome_text?: string
     on_follow_click?: () => void
     is_following?: boolean
+    public_user_info?: {
+      username: string
+      avatar?: {
+        url: string
+        blurhash: string
+      }
+    }
     translations: {
       mobile_title_bar: string
       collapse_alt: string
@@ -48,7 +55,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   const initial_swipe_direction = useRef<'Left' | 'Right' | undefined>(
     undefined,
   )
-  const is_scrolled = use_is_scrolled()
   const [is_sidebar_collapsed, set_is_sidebar_collapsed] = useState<boolean>()
   const [are_tag_hierarchies_hovered, set_is_sidebar_hovered] =
     useState<boolean>()
@@ -247,6 +253,10 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     }
   }, [is_end_of_bookmarks_visible])
 
+  useUpdateEffect(() => {
+    toggle_left_side()
+  }, [props.left_column_opening_count])
+
   return (
     <div className={styles.container} {...swipeable_handlers}>
       {/* id on toolbar used by modal scrollbar padding setting */}
@@ -259,10 +269,10 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
         <aside
           className={cn(styles.sidebar, {
             [styles['sidebar--hidden']]:
-              (is_right_side_open || is_right_side_moving) &&
-              !is_left_side_moving,
+              props.is_showing_search_results ||
+              ((is_right_side_open || is_right_side_moving) &&
+                !is_left_side_moving),
             [styles['sidebar--collapsed']]: is_sidebar_collapsed,
-            [styles['sidebar--hidden']]: props.is_showing_search_results,
           })}
           ref={sidebar}
           style={{
@@ -351,29 +361,22 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 is_left_side_open || is_right_side_open ? 'none' : undefined,
             }}
           >
-            <div
-              className={cn(styles.main__inner__sticky, {
-                [styles['main__inner__sticky--scrolled']]: is_scrolled,
-              })}
-            >
-              <div className={styles['main__inner__sticky__mobile-title-bar']}>
-                <Subcomponent_MobileTitleBar
-                  swipe_left_on_click={
-                    !is_left_side_open ? toggle_left_side : undefined
-                  }
-                  swipe_right_on_click={
-                    !is_right_side_open ? toggle_right_side : undefined
-                  }
-                  text={
-                    props.translations.mobile_title_bar
-                      ? props.translations.mobile_title_bar
-                      : undefined
-                  }
+            {props.public_user_info && (
+              <div className={styles['main__inner__mobile-use-info']}>
+                <_MobilePublicUserInfo
+                  username={props.public_user_info.username}
+                  avatar={props.public_user_info.avatar}
                 />
               </div>
-              <div className={styles.main__inner__sticky__search}>
-                {props.slot_search}
-              </div>
+            )}
+            <div className={styles.main__inner__sticky}>
+              {props.slot_search}
+              <button
+                className={styles.main__inner__sticky__toggler}
+                onClick={toggle_right_side}
+              >
+                <Icon variant="MOBILE_TITLE_BAR_RIGHT" />
+              </button>
             </div>
 
             <div

@@ -1,0 +1,30 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--padding-16px);
+  gap: var(--padding-8px);
+  border-bottom: var(--border-primary);
+  background: var(--header-background);
+}
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--neutral100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  > svg {
+    width: var(--icon-dimension-22px);
+  }
+}
+.username {
+  font-family: var(--font-family-plus-jakarta-sans);
+  font-weight: var(--font-weight-plus-jakarta-sans-semi-bold);
+  font-size: var(--font-size-19px);
+}

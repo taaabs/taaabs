@@ -4,9 +4,7 @@
 .simplebar {
   position: relative;
   overflow: auto;
-  height: calc(
-    100svh - var(--header-mobile-height) - var(--bottom-navigation-bar-height)
-  );
+  height: calc(100svh - var(--header-mobile-height));
   @include at992 {
     height: calc(
       100svh - var(--header-desktop-height) - var(--padding-16px) -

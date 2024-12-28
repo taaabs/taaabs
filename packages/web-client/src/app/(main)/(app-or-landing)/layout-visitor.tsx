@@ -9,7 +9,6 @@ import { Dictionary } from '@/dictionaries/dictionary'
 import { PublicUserAvatarProvider } from '@/providers/PublicUserAvatarProvider'
 import { HeaderDesktop } from './_components/HeaderDesktop'
 import { HeaderMobile } from './_components/HeaderMobile'
-import { BottomNavigationBar } from './_components/BottomNavigationBar'
 import { App as Ui_app_templates_App } from '@web-ui/components/app/templates/App'
 
 const landing_pathnames = ['/', '/pricing', '/help', '/updates']
@@ -42,9 +41,6 @@ const LayoutVisitor: React.FC<{
       <Ui_app_templates_App
         slot_header_desktop={<HeaderDesktop dictionary={props.dictionary} />}
         slot_header_mobile={<HeaderMobile />}
-        slot_bottom_navigation_bar={
-          <BottomNavigationBar dictionary={props.dictionary} />
-        }
       >
         {props.children}
       </Ui_app_templates_App>

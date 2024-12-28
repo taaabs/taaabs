@@ -26,7 +26,7 @@
   flex-direction: column;
 }
 .feedback {
-  height: calc(var(--app-bar-height) - 1px);
+  height: var(--search-mobile-height);
   display: flex;
   justify-content: center;
   align-items: center;

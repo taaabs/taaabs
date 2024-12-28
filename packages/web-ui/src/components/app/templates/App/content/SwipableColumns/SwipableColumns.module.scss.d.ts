@@ -9,10 +9,9 @@ declare const styles: {
   readonly "main__inner": string;
   readonly "main__inner--dimmed": string;
   readonly "main__inner__info": string;
+  readonly "main__inner__mobile-use-info": string;
   readonly "main__inner__sticky": string;
-  readonly "main__inner__sticky--scrolled": string;
-  readonly "main__inner__sticky__mobile-title-bar": string;
-  readonly "main__inner__sticky__search": string;
+  readonly "main__inner__sticky__toggler": string;
   readonly "sidebar": string;
   readonly "sidebar--collapsed": string;
   readonly "sidebar--hidden": string;
