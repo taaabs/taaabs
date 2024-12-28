@@ -232,6 +232,11 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     set_is_left_side_moving(true)
 
     if (!is_left_side_open) {
+      // Close the right side if it's open
+      if (is_right_side_open) {
+        set_is_right_side_open(false)
+        main.current!.style.transform = ''
+      }
       set_is_left_side_open(true)
       main.current!.style.transform = `translateX(${slidable_width}px)`
     } else {
