@@ -12,7 +12,6 @@ import { clear_library_session_storage } from '@/utils/clear_library_session_sto
 import { search_params_keys } from '@/constants/search-params-keys'
 import { LocalDb, schema } from '@/providers/LocalDbProvider'
 import { AuthContext } from '@/providers/AuthProvider'
-import { use_popstate_rerender_trigger } from './use-popstate-rerender-trigger'
 
 type Hint = {
   type: 'new' | 'recent'

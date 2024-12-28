@@ -8,6 +8,7 @@ import styles from './SwipableColumns.module.scss'
 import { useSwipeable } from 'react-swipeable'
 import { use_is_scrolled } from '@web-ui/hooks/use-is-scrolled'
 import { Button } from '@web-ui/components/Button'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 export namespace SwipableColumns {
   export type Props = {
@@ -17,6 +18,7 @@ export namespace SwipableColumns {
     slot_search: React.ReactNode
     slot_main: React.ReactNode
     are_bookmarks_dimmed: boolean
+    is_showing_search_results: boolean
     on_page_bottom_reached?: () => void
     clear_selected_tags?: () => void
     clear_date_range?: () => void
@@ -248,9 +250,11 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   return (
     <div className={styles.container} {...swipeable_handlers}>
       {/* id on toolbar used by modal scrollbar padding setting */}
-      <div className={styles.toolbar} id="toolbar">
-        <div>{props.slot_toolbar}</div>
-      </div>
+      {!props.is_showing_search_results && (
+        <div className={styles.toolbar} id="toolbar">
+          <div>{props.slot_toolbar}</div>
+        </div>
+      )}
       <div className={styles.content}>
         <aside
           className={cn(styles.sidebar, {
@@ -258,6 +262,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
               (is_right_side_open || is_right_side_moving) &&
               !is_left_side_moving,
             [styles['sidebar--collapsed']]: is_sidebar_collapsed,
+            [styles['sidebar--hidden']]: props.is_showing_search_results,
           })}
           ref={sidebar}
           style={{
@@ -396,7 +401,9 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
         </main>
 
         <aside
-          className={styles.aside}
+          className={cn(styles.aside, {
+            [styles['aside--hidden']]: props.is_showing_search_results,
+          })}
           ref={aside}
           style={{
             width: `${slidable_width}px`,

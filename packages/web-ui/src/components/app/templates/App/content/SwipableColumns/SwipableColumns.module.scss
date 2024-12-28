@@ -64,6 +64,12 @@
   &--collapsed {
     width: var(--_collapsed_aside_width);
   }
+  &--hidden {
+    pointer-events: none;
+    > div {
+      display: none;
+    }
+  }
   &__inner {
     width: 100%;
     position: fixed;
@@ -287,9 +293,9 @@
     width: var(--_aside-width) !important;
   }
   &--hidden {
-    @include to992 {
-      visibility: hidden;
-      pointer-events: none;
+    pointer-events: none;
+    > div {
+      display: none;
     }
   }
   &__inner {

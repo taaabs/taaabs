@@ -1,6 +1,6 @@
 import { use_library_dispatch } from '@/stores/library'
 import { SortBy } from '@shared/types/modules/bookmarks/sort-by'
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useContext, useRef, useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_filter_view_options } from './_hooks/use-filter-view-options'
 import { use_tag_view_options } from './_hooks/use-tag-view-options'
@@ -428,26 +428,27 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
               pinned_hook.is_updating)) ||
           false
         }
+        is_showing_search_results={
+          bookmarks_hook.showing_bookmarks_fetched_by_ids || false
+        }
         slot_main={
-          <>
-            {library_updated_at_timestamp ? (
-              <>
-                {!bookmarks_hook.showing_bookmarks_fetched_by_ids && (
-                  <_Pinned
-                    dictionary={props.dictionary}
-                    local_db={props.local_db}
-                  />
-                )}
-
-                <_Bookmarks
+          library_updated_at_timestamp ? (
+            <>
+              {!bookmarks_hook.showing_bookmarks_fetched_by_ids && (
+                <_Pinned
                   dictionary={props.dictionary}
                   local_db={props.local_db}
                 />
-              </>
-            ) : (
-              <Ui_app_library_BookmarksSkeleton />
-            )}
-          </>
+              )}
+
+              <_Bookmarks
+                dictionary={props.dictionary}
+                local_db={props.local_db}
+              />
+            </>
+          ) : (
+            <Ui_app_library_BookmarksSkeleton />
+          )
         }
         on_page_bottom_reached={async () => {
           if (!bookmarks_hook.bookmarks?.length) {
