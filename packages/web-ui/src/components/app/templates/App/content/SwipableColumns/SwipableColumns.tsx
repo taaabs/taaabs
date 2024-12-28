@@ -49,6 +49,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
   const on_window_resize = useWindowResize()
   const sidebar = useRef<HTMLDivElement>(null)
   const main = useRef<HTMLDivElement>(null)
+  const main_inner = useRef<HTMLDivElement>(null)
   const aside = useRef<HTMLDivElement>(null)
   const end_of_bookmarks = useRef<HTMLDivElement>(null)
   const is_end_of_bookmarks_visible = useViewportSpy(end_of_bookmarks)
@@ -121,7 +122,9 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
         set_is_right_side_moving(true)
       }
 
-      main.current!.style.transition = 'none'
+      main.current!.style.transition = ''
+      main_inner.current!.style.transition =
+        'opacity var(--transition-duration-250ms) var(--transition-timing-function)'
     },
     onSwiping: ({ deltaX, dir, event }) => {
       if (
@@ -132,8 +135,6 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
           (event as any).target.className.includes('sortable-ghost'))
       )
         return
-
-      main.current!.style.transition = `transform 30ms linear`
 
       if (
         (initial_swipe_direction.current == 'Left' &&
@@ -198,9 +199,12 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
         main.current!.style.transform = ''
       }
 
-      main.current!.style.transition = ''
+      main.current!.style.transition =
+        'transform var(--transition-duration-250ms) var(--transition-timing-function)'
 
       setTimeout(() => {
+        main.current!.style.transition = ''
+        main_inner.current!.style.transition = ''
         set_is_right_side_moving(false)
         set_is_left_side_moving(false)
       }, 250)
@@ -361,6 +365,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
               [styles['main__inner--dimmed']]:
                 (is_right_side_open || is_left_side_open) && !is_dragging,
             })}
+            ref={main_inner}
             style={{
               pointerEvents:
                 is_left_side_open || is_right_side_open ? 'none' : undefined,

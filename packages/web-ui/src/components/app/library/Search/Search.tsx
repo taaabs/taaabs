@@ -34,10 +34,7 @@ export namespace Search {
     on_click_get_help: () => void
     sort_by: SortBy
     translations: {
-      placeholder: {
-        default: string
-        full_text: string
-      }
+      placeholder: string
       type: string
       to_search: string
       footer_tip: string
@@ -200,7 +197,7 @@ export const Search: React.FC<Search.Props> = memo(
                   }`
                 : selected_hint_index != -1
                 ? undefined
-                : props.translations.placeholder.default}
+                : props.translations.placeholder}
             </div>
           )}
           <form

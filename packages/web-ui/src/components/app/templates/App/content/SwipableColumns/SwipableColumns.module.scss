@@ -180,7 +180,6 @@
     min-height: 100vh;
     position: relative;
     z-index: 1;
-    @include transition-250ms(transform);
     &::before {
       content: '';
       width: 1px;
@@ -211,7 +210,6 @@
     height: 100%;
     @include to992 {
       padding-top: var(--header-mobile-height);
-      @include transition-150ms(opacity);
     }
     @include at992 {
       background-color: var(--background);
@@ -260,7 +258,7 @@
         }
         > svg {
           width: var(--icon-dimension-18px);
-          fill: var(--white);
+          fill: white;
         }
       }
     }

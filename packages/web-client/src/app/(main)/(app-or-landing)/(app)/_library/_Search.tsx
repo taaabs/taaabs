@@ -144,10 +144,7 @@ export const _Search: React.FC<_Search.Props> = (props) => {
       on_click_get_help={() => {}}
       sort_by={sort_by_view_options_hook.current_sort_by}
       translations={{
-        placeholder: {
-          default: props.dictionary.app.library.search.placeholder.default,
-          full_text: props.dictionary.app.library.search.placeholder.full_text,
-        },
+        placeholder: props.dictionary.app.library.search.placeholder,
         footer_tip: props.dictionary.app.library.search.footer_tip,
         get_help_link: props.dictionary.app.library.search.get_help,
         type: props.dictionary.app.library.search.type,
