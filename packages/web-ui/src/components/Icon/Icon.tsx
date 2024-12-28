@@ -33,8 +33,7 @@ import LessThan from '../../assets/icons/less-than.svg'
 import Link from '../../assets/icons/link.svg'
 import Logo from '../../assets/icons/logo.svg'
 import Menu from '../../assets/icons/menu.svg'
-import MobileTitleBarLeft from '../../assets/icons/mobile-title-bar-left.svg'
-import MobileTitleBarRight from '../../assets/icons/mobile-title-bar-right.svg'
+import Filter from '../../assets/icons/filter.svg'
 import More from '../../assets/icons/more.svg'
 import NewTab from '../../assets/icons/new-tab.svg'
 import Note from '../../assets/icons/note.svg'
@@ -100,8 +99,7 @@ export namespace Icon {
     | 'LINK'
     | 'LOGO'
     | 'MENU'
-    | 'MOBILE_TITLE_BAR_LEFT'
-    | 'MOBILE_TITLE_BAR_RIGHT'
+    | 'FILTER'
     | 'MORE'
     | 'NEW_TAB'
     | 'NOTE'
@@ -244,11 +242,8 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'MENU':
       icon = <Menu />
       break
-    case 'MOBILE_TITLE_BAR_LEFT':
-      icon = <MobileTitleBarLeft />
-      break
-    case 'MOBILE_TITLE_BAR_RIGHT':
-      icon = <MobileTitleBarRight />
+    case 'FILTER':
+      icon = <Filter />
       break
     case 'MORE':
       icon = <More />

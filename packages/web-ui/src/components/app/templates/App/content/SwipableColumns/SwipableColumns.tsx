@@ -375,7 +375,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
                 className={styles.main__inner__sticky__toggler}
                 onClick={toggle_right_side}
               >
-                <Icon variant="MOBILE_TITLE_BAR_RIGHT" />
+                <Icon variant="FILTER" />
               </button>
             </div>
 
