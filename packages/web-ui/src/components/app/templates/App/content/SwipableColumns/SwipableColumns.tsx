@@ -391,7 +391,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
               {!props.is_showing_search_results && (
                 <button
                   className={styles.main__inner__sticky__toggler}
-                  onClick={toggle_left_side}
+                  onClick={toggle_right_side}
                 >
                   <Icon variant="FILTER" />
                 </button>
