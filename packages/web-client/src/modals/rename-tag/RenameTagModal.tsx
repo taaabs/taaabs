@@ -1,8 +1,8 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Modal as UiModal } from '@web-ui/components/Modal'
-import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
-import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
-import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
+import { Modal as Ui_Modal } from '@web-ui/components/Modal'
+import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
+import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
+import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
 import { useContext } from 'react'
 import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
@@ -52,7 +52,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
   }
 
   const content = (
-    <UiModal_Content>
+    <Ui_Modal_Content>
       <Controller
         name="name"
         control={control}
@@ -84,18 +84,18 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
           )
         }}
       />
-    </UiModal_Content>
+    </Ui_Modal_Content>
   )
 
   const header = (
-    <UiModal_Header
+    <Ui_Modal_Header
       title={props.dictionary.app.rename_tag_modal.rename_tag}
       on_close={props.on_close}
     />
   )
 
   const footer = (
-    <UiModal_Footer
+    <Ui_Modal_Footer
       button_label={props.dictionary.app.rename_tag_modal.rename}
       is_disabled={isSubmitting || (isSubmitted && isSubmitSuccessful)}
       button_on_click={handleSubmit(on_submit)}
@@ -107,7 +107,7 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
   )
 
   return (
-    <UiModal
+    <Ui_Modal
       is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}

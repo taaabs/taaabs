@@ -1,8 +1,8 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Modal as UiModal } from '@web-ui/components/Modal'
-import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
-import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
-import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
+import { Modal as Ui_Modal } from '@web-ui/components/Modal'
+import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
+import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
+import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
 import { useContext, useState } from 'react'
 import { ModalContext } from '@/providers/ModalProvider'
 
@@ -22,7 +22,7 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   const [is_deleting, set_is_deleting] = useState<boolean>()
 
   const content = (
-    <UiModal_Content>
+    <Ui_Modal_Content>
       <span>
         {props.dictionary.app.delete_modal.are_you_sure}{' '}
         {props.title ? (
@@ -31,18 +31,18 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
           <i>{props.dictionary.app.delete_modal.untitled}</i>
         )}
       </span>
-    </UiModal_Content>
+    </Ui_Modal_Content>
   )
 
   const header = (
-    <UiModal_Header
+    <Ui_Modal_Header
       title={props.dictionary.app.delete_modal.delete_bookmark}
       on_close={props.on_close}
     />
   )
 
   const footer = (
-    <UiModal_Footer
+    <Ui_Modal_Footer
       button_label={props.dictionary.app.delete_modal.delete}
       is_disabled={is_deleting}
       button_on_click={() => {
@@ -58,7 +58,7 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   )
 
   return (
-    <UiModal
+    <Ui_Modal
       is_open={modal_context.is_open}
       is_dismissible={!is_deleting}
       on_close={props.on_close}

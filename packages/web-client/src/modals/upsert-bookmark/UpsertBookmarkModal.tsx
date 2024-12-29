@@ -2,11 +2,11 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { system_values } from '@shared/constants/system-values'
 import { useContext, useEffect, useState } from 'react'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
-import { Modal as UiModal } from '@web-ui/components/Modal'
-import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
-import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
-import { UpsertBookmarkContent as UiModal_UpsertBookmarkContent } from '@web-ui/components/Modal/UpsertBookmarkContent'
-import { Section as UiModal_UpsertBookmarkContent_Section } from '@web-ui/components/Modal/UpsertBookmarkContent/Section'
+import { Modal as Ui_Modal } from '@web-ui/components/Modal'
+import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
+import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
+import { UpsertBookmarkContent as Ui_Modal_UpsertBookmarkContent } from '@web-ui/components/Modal/UpsertBookmarkContent'
+import { Section as Ui_Modal_UpsertBookmarkContent_Section } from '@web-ui/components/Modal/UpsertBookmarkContent/Section'
 import { Input as UiInput } from '@web-ui/components/Input'
 import { DraggableUpsertFormLinks as Ui_Modal_UpsertBookmarkContent_Section_DraggableUpsertFormLinks } from '@web-ui/components/Modal/UpsertBookmarkContent/Section/DraggableUpsertFormLinks'
 import { FormControllerFix as UiCommonTemplate_FormControllerFix } from '@web-ui/components/common/templates/form-controller-fix'
@@ -224,7 +224,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
   const build_content = () => {
     const title_section = (
-      <UiModal_UpsertBookmarkContent_Section
+      <Ui_Modal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.title}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -266,11 +266,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiModal_UpsertBookmarkContent_Section>
+      </Ui_Modal_UpsertBookmarkContent_Section>
     )
 
     const note_section = (
-      <UiModal_UpsertBookmarkContent_Section
+      <Ui_Modal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.note}
       >
         <UiCommonTemplate_FormControllerFix>
@@ -315,11 +315,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             }}
           />
         </UiCommonTemplate_FormControllerFix>
-      </UiModal_UpsertBookmarkContent_Section>
+      </Ui_Modal_UpsertBookmarkContent_Section>
     )
 
     const tags_section = (
-      <UiModal_UpsertBookmarkContent_Section
+      <Ui_Modal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.tags}
       >
         <Ui_app_library_TagsInput
@@ -355,11 +355,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
               props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
           }}
         />
-      </UiModal_UpsertBookmarkContent_Section>
+      </Ui_Modal_UpsertBookmarkContent_Section>
     )
 
     const links_section = (
-      <UiModal_UpsertBookmarkContent_Section
+      <Ui_Modal_UpsertBookmarkContent_Section
         label={props.dictionary.app.upsert_modal.links}
       >
         <Ui_Modal_UpsertBookmarkContent_Section_DraggableUpsertFormLinks
@@ -395,11 +395,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
             site: props.dictionary.app.upsert_modal.link.site,
           }}
         />
-      </UiModal_UpsertBookmarkContent_Section>
+      </Ui_Modal_UpsertBookmarkContent_Section>
     )
 
     return (
-      <UiModal_UpsertBookmarkContent
+      <Ui_Modal_UpsertBookmarkContent
         slot_title={title_section}
         slot_note={note_section}
         slot_tags={tags_section}
@@ -409,7 +409,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   }
 
   const header = (
-    <UiModal_Header
+    <Ui_Modal_Header
       title={
         props.action == 'update'
           ? props.dictionary.app.upsert_modal.edit_boomkark
@@ -420,7 +420,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   )
 
   const footer = (
-    <UiModal_Footer
+    <Ui_Modal_Footer
       on_click_cancel={props.on_close}
       button_label={
         props.action == 'update'
@@ -442,11 +442,11 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
           }}
         />
       )}
-    </UiModal_Footer>
+    </Ui_Modal_Footer>
   )
 
   return (
-    <UiModal
+    <Ui_Modal
       is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}

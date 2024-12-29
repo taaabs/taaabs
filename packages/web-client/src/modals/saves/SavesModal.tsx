@@ -1,7 +1,7 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Modal as UiModal } from '@web-ui/components/Modal'
-import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
-import { SavesContent as UiModal_SavesContent } from '@web-ui/components/Modal/SavesContent'
+import { Modal as Ui_Modal } from '@web-ui/components/Modal'
+import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
+import { SavesContent as Ui_Modal_SavesContent } from '@web-ui/components/Modal/SavesContent'
 import { useContext, useEffect, useState } from 'react'
 import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
@@ -52,7 +52,7 @@ export const SavesModal: React.FC<SavesModal.Props> = (props) => {
   }, [])
 
   const content = (
-    <UiModal_SavesContent
+    <Ui_Modal_SavesContent
       users={
         users?.map((user) => ({
           username: user.username,
@@ -74,14 +74,14 @@ export const SavesModal: React.FC<SavesModal.Props> = (props) => {
   )
 
   const header = (
-    <UiModal_Header
+    <Ui_Modal_Header
       title={props.dictionary.app.saves_modal.header}
       on_close={props.on_close}
     />
   )
 
   return (
-    <UiModal
+    <Ui_Modal
       is_open={modal_context.is_open}
       is_dismissible={true}
       on_close={props.on_close}

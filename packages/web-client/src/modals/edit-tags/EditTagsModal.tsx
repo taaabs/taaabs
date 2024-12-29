@@ -1,9 +1,9 @@
 import { Dictionary } from '@/dictionaries/dictionary'
-import { Modal as UiModal } from '@web-ui/components/Modal'
-import { Header as UiModal_Header } from '@web-ui/components/Modal/Header'
-import { Footer as UiModal_Footer } from '@web-ui/components/Modal/Footer'
-import { Content as UiModal_Content } from '@web-ui/components/Modal/Content'
-import { useContext, useState, useEffect, useRef } from 'react'
+import { Modal as Ui_Modal } from '@web-ui/components/Modal'
+import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
+import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
+import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
+import { useContext, useState, useEffect } from 'react'
 import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
@@ -38,7 +38,7 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   }, [])
 
   const content = (
-    <UiModal_Content>
+    <Ui_Modal_Content>
       <Ui_app_library_TagsInput
         selected_tags={selected_tags.map((tag) => ({
           name: tag.name,
@@ -71,18 +71,18 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
             props.dictionary.app.upsert_modal.tag_suggestions.recent_tags,
         }}
       />
-    </UiModal_Content>
+    </Ui_Modal_Content>
   )
 
   const header = (
-    <UiModal_Header
+    <Ui_Modal_Header
       title={props.dictionary.app.edit_tags_modal.edit_tags}
       on_close={props.on_close}
     />
   )
 
   const footer = (
-    <UiModal_Footer
+    <Ui_Modal_Footer
       button_label={props.dictionary.app.edit_tags_modal.update}
       is_disabled={is_updating}
       button_on_click={() => {
@@ -97,7 +97,7 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
   )
 
   return (
-    <UiModal
+    <Ui_Modal
       is_open={modal_context.is_open}
       is_dismissible={!is_updating}
       on_close={props.on_close}
