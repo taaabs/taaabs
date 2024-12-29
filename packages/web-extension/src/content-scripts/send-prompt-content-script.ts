@@ -307,7 +307,8 @@ namespace AssistantBugMitigation {
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
       gemini: 'div[role="textbox"]', // Needed in mobile viewport
-      grok: 'textarea' // Needed in mobile viewport
+      grok: 'textarea', // Needed in mobile viewport
+      deepseek: 'textarea', // Needed in mobile viewport
     }
 
     const selector = chatbot_selectors[assistant_name]

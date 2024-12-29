@@ -43,6 +43,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Grok',
     url: 'https://x.com/i/grok',
   },
+  deepseek: {
+    display_name: 'DeepSeek',
+    url: 'https://chat.deepseek.com/',
+  },
   // meta: {
   //   display_name: 'Meta AI',
   //   url: 'https://www.meta.ai/',
@@ -62,10 +66,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   huggingchat: {
     display_name: 'HuggingChat',
     url: 'https://huggingface.co/chat/',
-  },
-  deepseek: {
-    display_name: 'DeepSeek',
-    url: 'https://chat.deepseek.com/',
   },
   custom: {
     display_name: 'Custom',
