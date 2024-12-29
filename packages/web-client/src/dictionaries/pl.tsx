@@ -292,6 +292,13 @@ export const dictionary: Dictionary = {
       error_note_too_long: `Notka nie może mieć więcej jak ${system_values.bookmark.note.max_length} znaków.`,
       cover: 'Okładka',
     },
+    change_visibility_modal: {
+      change_visibility: 'Zmień widoczność',
+      change_to_public_confirmation:
+        'Czy na pewno chcesz ustawić tą zakładkę jako publiczną?',
+      confirm: 'Potwierdź',
+      cancel: 'Anuluj',
+    },
     delete_modal: {
       cancel: 'Anuluj',
       untitled: 'Bez tytułu',

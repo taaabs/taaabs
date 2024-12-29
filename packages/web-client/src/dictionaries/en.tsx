@@ -286,6 +286,13 @@ const dictionary: Dictionary = {
       error_note_too_long: `Note should be no longer than ${system_values.bookmark.note.max_length} characters.`,
       cover: 'Cover',
     },
+    change_visibility_modal: {
+      change_visibility: 'Change visibility',
+      change_to_public_confirmation:
+        'Are you sure you want to make this bookmark public?',
+      confirm: 'Confirm',
+      cancel: 'Cancel',
+    },
     delete_modal: {
       delete_bookmark: 'Delete bookmark',
       untitled: 'Untitled',

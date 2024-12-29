@@ -232,6 +232,12 @@ export type Dictionary = {
       error_note_too_long: string
       cover: string
     }
+    change_visibility_modal: {
+      change_visibility: string
+      change_to_public_confirmation: string
+      confirm: string
+      cancel: string
+    }
     delete_modal: {
       delete_bookmark: string
       untitled: string

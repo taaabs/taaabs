@@ -29,6 +29,7 @@ import { saves_modal_setter } from '@/modals/saves/saves-modal-setter'
 import { AuthContext } from '@/providers/AuthProvider'
 import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
 import { use_popstate_rerender_trigger } from './_hooks/use-popstate-rerender-trigger'
+import { change_visibility_modal_setter } from '@/modals/change-visibility/change-visibility-modal-setter'
 
 namespace _Bookmarks {
   export type Props = {
@@ -669,6 +670,70 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
       toast.success(props.dictionary.app.library.bookmark_updated)
     }
 
+    const handle_private_emoji_click = async (bookmark_id: number) => {
+      const is_confirmed = await change_visibility_modal_setter({
+        modal_context,
+        dictionary: props.dictionary,
+      })
+
+      if (!is_confirmed) {
+        modal_context.close()
+        return
+      }
+
+      dispatch(bookmarks_actions.set_is_upserting(true))
+
+      const full_bookmark = bookmarks_hook.bookmarks!.find(
+        (b) => b.id == bookmark_id,
+      )!
+
+      const modified_bookmark: UpsertBookmark_Params = {
+        bookmark_id: bookmark_id,
+        is_public: true,
+        title: full_bookmark.title,
+        note: full_bookmark.note,
+        tags: full_bookmark.tags.map((tag) => ({
+          name: tag.name,
+          is_public: true,
+        })),
+        links: full_bookmark.links.map((link) => ({
+          url: link.url,
+          site_path: link.site_path,
+          is_public: true,
+          is_pinned: link.is_pinned,
+          open_snapshot: link.open_snapshot,
+        })),
+        stars: full_bookmark.stars,
+        is_unsorted: full_bookmark.is_unsorted,
+        is_archived: full_bookmark.is_archived,
+      }
+
+      await dispatch(
+        bookmarks_actions.upsert_bookmark({
+          bookmark: modified_bookmark,
+          last_authorized_counts_params:
+            JSON.parse(
+              sessionStorage.getItem(
+                browser_storage.session_storage.library
+                  .last_authorized_counts_params,
+              ) || 'null',
+            ) || undefined,
+          get_tag_hierarchies_request_params:
+            tag_hierarchies_hook.get_authorized_request_params({
+              filter: filter_view_options_hook.current_filter,
+              gte: date_view_options_hook.current_gte,
+              lte: date_view_options_hook.current_lte,
+            }),
+          ky: auth_context.ky_instance,
+          encryption_key: auth_context.auth_data!.encryption_key,
+        }),
+      )
+
+      dispatch(bookmarks_actions.set_is_upserting(false))
+      modal_context.close()
+      toast.success(props.dictionary.app.library.bookmark_updated)
+    }
+
     return (
       <Ui_app_library_Bookmark
         key={`${bookmark.id}${i}${library_updated_at_timestamp}${
@@ -708,6 +773,9 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               }
             : undefined
         }
+        on_private_emoji_click={() => {
+          handle_private_emoji_click(bookmark.id)
+        }}
         title={bookmark.title}
         note={bookmark.note}
         on_click={handle_bookmark_click}

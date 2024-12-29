@@ -91,6 +91,7 @@ export namespace _Bookmark {
     on_selected_tag_click: (tag_id: number) => void
     on_get_points_given_click?: () => void
     on_give_point_click?: (points: number) => void
+    on_private_emoji_click?: () => void
     on_modify_tags_click?: () => void
     tags: {
       id: number // Sortable requires "id", so no mangling here
@@ -491,10 +492,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               </div>
             </button>
           ) : (
-            <div
+            <button
               className={
                 styles.container__inner__card__tags__actions__huggs__emoji
               }
+              onClick={props.on_private_emoji_click}
             >
               ⠀
               <div
@@ -551,7 +553,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   />
                 </svg>
               </div>
-            </div>
+            </button>
           )}
         </div>
         <div className={styles.container__inner__card__tags__actions__menu}>
