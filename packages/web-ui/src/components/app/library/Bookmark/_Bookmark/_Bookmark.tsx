@@ -674,7 +674,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             {cover ? (
               <div className={styles.container__inner__card__cover}>
                 <div
-                  className={styles.container__inner__card__cover__image}
+                  className={styles.container__inner__card__cover__inner}
                   onClick={
                     primary_url
                       ? () => {
@@ -687,24 +687,26 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 >
                   <img
                     className={
-                      styles.container__inner__card__cover__image__fill
+                      styles['container__inner__card__cover__inner__fill-image']
                     }
                     src={cover}
                   />
                   <img
-                    className={styles.container__inner__card__cover__image__top}
+                    className={
+                      styles['container__inner__card__cover__inner__top-image']
+                    }
                     src={cover}
                   />
                 </div>
               </div>
             ) : (
               <div className={styles.container__inner__card__cover}>
-                <div className={styles.container__inner__card__cover__image}>
+                <div className={styles.container__inner__card__cover__inner}>
                   {props.links && props.links.length > 0 ? (
                     is_fetching_cover ? (
                       <div
                         className={
-                          styles.container__inner__card__cover__image__loader
+                          styles.container__inner__card__cover__inner__loader
                         }
                       />
                     ) : is_fetching_cover === false ? (

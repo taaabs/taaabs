@@ -59,7 +59,7 @@
         @include at992 {
           padding: var(--padding-10px);
         }
-        &__image {
+        &__inner {
           display: flex;
           align-items: center;
           justify-content: center;
@@ -76,6 +76,10 @@
             width: 156px;
             height: 82px;
           }
+          > img {
+            width: 100%;
+            height: 100%;
+          }
           > svg {
             fill: var(--neutral300);
             @include dark {
@@ -86,11 +90,11 @@
               height: 29px;
             }
           }
-          &__top {
+          &__top-image {
             position: relative;
             object-fit: contain;
           }
-          &__fill {
+          &__fill-image {
             position: absolute;
             z-index: 0;
             top: 0;
