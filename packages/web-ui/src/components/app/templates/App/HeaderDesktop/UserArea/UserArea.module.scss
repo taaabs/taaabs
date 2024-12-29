@@ -25,8 +25,7 @@
     display: flex;
   }
   svg {
-    width: var(--icon-dimension-24px);
-    height: var(--icon-dimension-24px);
+    width: var(--icon-dimension-24px) !important;
   }
 }
 .theme-set-by-user {
