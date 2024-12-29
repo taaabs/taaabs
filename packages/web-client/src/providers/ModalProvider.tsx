@@ -1,5 +1,4 @@
 'use client'
-
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { createContext, useCallback, useEffect, useState } from 'react'
 
@@ -19,10 +18,9 @@ export const ModalProvider: React.FC<{ children: React.ReactNode }> = (
 
   const close = () => {
     set_is_open(false)
-    // Removing in the next frame needed to properly restore scroll on body
-    setTimeout(() => {
+    requestAnimationFrame(() => {
       set(undefined)
-    }, 0)
+    })
   }
 
   useUpdateEffect(() => {

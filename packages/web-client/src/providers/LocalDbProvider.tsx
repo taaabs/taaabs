@@ -1,5 +1,4 @@
 'use client'
-
 import { Orama, create, insert, insertMultiple, remove } from '@orama/orama'
 import { ReactNode, createContext, useContext, useState } from 'react'
 import { AuthContext } from './AuthProvider'

@@ -1,5 +1,4 @@
 'use client'
-
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 
 export const RecaptchaProvider: React.FC<{
