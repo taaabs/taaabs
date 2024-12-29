@@ -164,12 +164,12 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       set_library_updated_at_timestamp(Date.now())
       if (search_hook.result) {
         search_hook.set_highlights_commited(search_hook.highlights)
-        search_hook.set_highlights_sites_variants(
-          search_hook.incoming_highlights_sites_variants,
+        search_hook.set_highlights_sites_variants_commited(
+          search_hook.highlights_sites_variants,
         )
       } else if (search_hook.highlights_commited && !search_hook.result) {
         search_hook.set_highlights_commited(undefined)
-        search_hook.set_highlights_sites_variants(undefined)
+        search_hook.set_highlights_sites_variants_commited(undefined)
       }
     }
   }, [

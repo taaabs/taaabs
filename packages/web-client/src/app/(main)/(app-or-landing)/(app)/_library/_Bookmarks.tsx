@@ -1113,8 +1113,16 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           ),
         }))}
         menu_slot={menu}
-        highlights={search_hook.highlights_commited?.[bookmark.id.toString()]}
-        highlights_site_variants={search_hook.highlights_sites_variants}
+        highlights={
+          !bookmarks_hook.is_upserting
+            ? search_hook.highlights_commited?.[bookmark.id.toString()]
+            : undefined
+        }
+        highlights_site_variants={
+          !bookmarks_hook.is_upserting
+            ? search_hook.highlights_sites_variants_commited
+            : undefined
+        }
         orama_db_id={
           is_archived_filter
             ? props.local_db.archived_db?.id || ''

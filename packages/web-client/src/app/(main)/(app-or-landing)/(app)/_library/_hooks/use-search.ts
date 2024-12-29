@@ -41,10 +41,10 @@ export const use_search = (local_db: LocalDb) => {
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_commited, set_highlights_commited] = useState<Highlights>()
   const [
-    incoming_highlights_sites_variants,
-    set_incoming_highlights_sites_variants,
+    highlights_sites_variants,
+    set_highlights_sites_variants,
   ] = useState<string[]>()
-  const [highlights_sites_variants, set_highlights_sites_variants] =
+  const [highlights_sites_variants_commited, set_highlights_sites_variants_commited] =
     useState<string[]>()
   const [count, set_count] = useState<number>()
   // Used for refreshing highlights after bookmark update
@@ -201,7 +201,7 @@ export const use_search = (local_db: LocalDb) => {
       }, {}),
     )
 
-    set_incoming_highlights_sites_variants(
+    set_highlights_sites_variants(
       get_sites_variants_from_search_string(params.search_string),
     )
 
@@ -677,7 +677,7 @@ export const use_search = (local_db: LocalDb) => {
     set_result(undefined)
     set_hints(undefined)
     set_highlights(undefined)
-    set_incoming_highlights_sites_variants(undefined)
+    set_highlights_sites_variants(undefined)
   }
 
   useUpdateEffect(() => {
@@ -693,16 +693,16 @@ export const use_search = (local_db: LocalDb) => {
   }, [highlights_commited])
 
   useUpdateEffect(() => {
-    if (!highlights_sites_variants) return
+    if (!highlights_sites_variants_commited) return
     sessionStorage.setItem(
       browser_storage.session_storage.library.highlights_sites_variants({
         username,
         search_params: search_params.toString(),
         hash: `#q=${encodeURIComponent(search_string)}`,
       }),
-      JSON.stringify(highlights_sites_variants),
+      JSON.stringify(highlights_sites_variants_commited),
     )
-  }, [highlights_sites_variants])
+  }, [highlights_sites_variants_commited])
 
   useUpdateEffect(() => {
     if (!result) return
@@ -755,7 +755,7 @@ export const use_search = (local_db: LocalDb) => {
       }),
     )
     if (highlights_sites_variants) {
-      set_incoming_highlights_sites_variants(
+      set_highlights_sites_variants(
         JSON.parse(highlights_sites_variants),
       )
     }
@@ -834,9 +834,9 @@ export const use_search = (local_db: LocalDb) => {
     set_highlights_commited,
     remove_recent_hint,
     current_filter,
-    incoming_highlights_sites_variants,
     highlights_sites_variants,
-    set_highlights_sites_variants,
+    highlights_sites_variants_commited,
+    set_highlights_sites_variants_commited,
     hints_set_at_timestamp,
     queried_at_timestamp,
   }
