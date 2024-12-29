@@ -232,7 +232,7 @@
       align-items: center;
       gap: var(--padding-8px);
       z-index: 2;
-      top: calc(var(--header-mobile-height) + var(--padding-8px));
+      top: calc(var(--header-mobile-height) + var(--padding-12px));
       @include to992 {
         padding: 0 var(--padding-8px);
         margin: var(--padding-12px) 0;
