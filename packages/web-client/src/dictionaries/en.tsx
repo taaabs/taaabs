@@ -180,6 +180,7 @@ const dictionary: Dictionary = {
       no_results: 'No results',
       end_of_resutls: 'End of results',
       clear_selected_tags: 'Clear selected tags',
+      clear_custom_range: 'Clear custom range',
       follow: 'Follow',
       unfollow: 'Unfollow',
       welcome: 'Howdy',

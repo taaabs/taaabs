@@ -234,8 +234,8 @@
       z-index: 2;
       top: calc(var(--header-mobile-height) + var(--padding-8px));
       @include to992 {
-        padding: 0 13px 0 var(--padding-8px);
-        margin: var(--padding-8px) 0;
+        padding: 0 var(--padding-8px);
+        margin: var(--padding-12px) 0;
       }
       @include at992 {
         top: calc(var(--header-desktop-height) + var(--padding-16px));
@@ -253,6 +253,7 @@
         border-radius: 50%;
         background-color: var(--accent-color);
         box-shadow: var(--box-shadow-blue-strong);
+        margin-right: 5px;
         @include at992 {
           display: none;
         }

@@ -40,6 +40,7 @@ export namespace SwipableColumns {
       unfollow: string
       folders: string
       clear_selected_tags: string
+      clear_custom_range: string
     }
   }
 }
@@ -387,12 +388,14 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
             )}
             <div className={styles.main__inner__sticky}>
               {props.slot_search}
-              <button
-                className={styles.main__inner__sticky__toggler}
-                onClick={toggle_right_side}
-              >
-                <Icon variant="FILTER" />
-              </button>
+              {!props.is_showing_search_results && (
+                <button
+                  className={styles.main__inner__sticky__toggler}
+                  onClick={toggle_left_side}
+                >
+                  <Icon variant="FILTER" />
+                </button>
+              )}
             </div>
 
             <div
@@ -407,7 +410,7 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
               {props.info_text && <span>{props.info_text}</span>}
               {props.clear_date_range && (
                 <button onClick={props.clear_date_range}>
-                  Clear custom range
+                  {props.translations.clear_custom_range}
                 </button>
               )}
               {props.clear_selected_tags && (

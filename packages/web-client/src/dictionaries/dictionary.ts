@@ -128,6 +128,7 @@ export type Dictionary = {
       no_results: string
       end_of_resutls: string
       clear_selected_tags: string
+      clear_custom_range: string
       follow: string
       unfollow: string
       welcome: string

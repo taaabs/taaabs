@@ -529,6 +529,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           unfollow: props.dictionary.app.library.unfollow,
           folders: props.dictionary.app.library.folders,
           clear_selected_tags: props.dictionary.app.library.clear_selected_tags,
+          clear_custom_range: props.dictionary.app.library.clear_custom_range,
         }}
       />
     </LibraryContext.Provider>

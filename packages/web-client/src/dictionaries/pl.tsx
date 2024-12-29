@@ -185,6 +185,7 @@ export const dictionary: Dictionary = {
       no_results: 'Brak wyników',
       end_of_resutls: 'Koniec wyników',
       clear_selected_tags: 'Wyczyść zaznaczone tagi',
+      clear_custom_range: 'Wyczyść zakres miesięcy',
       follow: 'Obserwuj',
       unfollow: 'Przestań obserwować',
       welcome: 'Witaj',
