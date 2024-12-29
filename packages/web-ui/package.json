@@ -33,7 +33,7 @@
     "react-dom": "^18.3.1",
     "react-loading-skeleton": "^3.4.0",
     "react-markdown": "^9.0.1",
-    "react-modal-sheet": "^3.1.0",
+    "react-modal-sheet": "^4.0.0",
     "react-nestable": "^3.0.2",
     "react-outside-click-handler": "^1.3.0",
     "react-sortablejs": "^6.1.4",

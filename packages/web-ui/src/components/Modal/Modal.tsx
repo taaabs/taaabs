@@ -92,7 +92,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
         </Sheet.Header>
         <Sheet.Content>
           <Sheet.Scroller>
-            <div style={{ maxHeight: props.slot_footer ? '70svh' : '85svh' }}>
+            <div style={{ maxHeight: props.slot_footer ? '65svh' : '80svh' }}>
               {props.slot_content}
             </div>
           </Sheet.Scroller>
