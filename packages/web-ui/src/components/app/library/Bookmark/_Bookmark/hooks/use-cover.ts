@@ -13,7 +13,7 @@ export const use_cover = (props: _Bookmark.Props) => {
       window.postMessage({ action: 'get-cover', url }, '*')
       timeout_ref.current = setTimeout(() => {
         set_is_fetching(true)
-      }, 200)
+      }, 300)
     }
 
     const message_handler = (event: MessageEvent) => {
