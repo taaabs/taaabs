@@ -95,13 +95,11 @@ export const Popup: React.FC = () => {
       {!current_url_hook.url.startsWith('https://taaabs.com') &&
         !vision_mode_hook.is_vision_mode && <Actions />}
 
-      {!current_url_hook.url.startsWith('https://taaabs.com') && (
-        <RecentPrompts
-          prompt_field_value={prompt_field_value}
-          assistant_url={assistant_url}
-          shortened_plan_text={shortened_plan_text}
-        />
-      )}
+      <RecentPrompts
+        prompt_field_value={prompt_field_value}
+        assistant_url={assistant_url}
+        shortened_plan_text={shortened_plan_text}
+      />
 
       <PromptField
         assistant_url={assistant_url}

@@ -138,7 +138,8 @@ export const RecentPrompts: React.FC<{
       )}
 
       {!vision_mode_hook.is_vision_mode &&
-        !current_url_hook.is_new_tab_page && (
+        !current_url_hook.is_new_tab_page &&
+        !current_url_hook.url.startsWith('https://taaabs.com') && (
           <>
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
