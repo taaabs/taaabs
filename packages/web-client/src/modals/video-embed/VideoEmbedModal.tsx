@@ -1,7 +1,5 @@
 import { Dictionary } from '@/dictionaries/dictionary'
 import { VideoModal as Ui_modals_VideoModal } from '@web-ui/components/modals/VideoModal'
-import { useContext } from 'react'
-import { ModalContext } from '@/providers/ModalProvider'
 
 namespace VideoEmbedModal {
   export type Props = {
@@ -12,8 +10,6 @@ namespace VideoEmbedModal {
 }
 
 export const VideoEmbedModal: React.FC<VideoEmbedModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)
-
   const get_embed_url = (url: string): string => {
     // https://www.youtube.com/watch?v=dQw4w9WgXcQ to https://www.youtube.com/embed/dQw4w9WgXcQ
     if (url.includes('youtube.com') || url.includes('youtu.be')) {
@@ -39,7 +35,6 @@ export const VideoEmbedModal: React.FC<VideoEmbedModal.Props> = (props) => {
 
   return (
     <Ui_modals_VideoModal
-      is_open={modal_context.is_open}
       on_close={props.on_close}
       embed_url={embed_url}
     />

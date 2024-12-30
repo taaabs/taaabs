@@ -4,7 +4,6 @@ import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
 import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
 import { useContext, useState, useEffect } from 'react'
-import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
@@ -23,7 +22,6 @@ namespace EditTagsModal {
 }
 
 export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)
   const auth_context = useContext(AuthContext)
   const [my_tags, set_my_tags] = useState<Tags_Ro>()
   const [selected_tags, set_selected_tags] = useState(props.tags)
@@ -98,7 +96,6 @@ export const EditTagsModal: React.FC<EditTagsModal.Props> = (props) => {
 
   return (
     <Ui_Modal
-      is_open={modal_context.is_open}
       is_dismissible={!is_updating}
       on_close={props.on_close}
       width={500}

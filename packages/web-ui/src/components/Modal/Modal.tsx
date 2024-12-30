@@ -1,17 +1,15 @@
 import styles from './Modal.module.scss'
 import cn from 'classnames'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect } from 'react'
 import { Sheet } from 'react-modal-sheet'
 import Simplebar from 'simplebar-react'
+import { use_is_hydrated } from '@shared/hooks'
 
 namespace Modal {
   export type Props = {
-    children?: React.ReactNode
     slot_header: React.ReactNode
     slot_content: React.ReactNode
     slot_footer?: React.ReactNode
-    is_open: boolean
     on_close: () => void
     is_dismissible?: boolean
     width?: number
@@ -19,26 +17,28 @@ namespace Modal {
 }
 
 export const Modal: React.FC<Modal.Props> = (props) => {
-  useUpdateEffect(() => {
+  const is_hydrated = use_is_hydrated()
+
+  useEffect(() => {
     const header = document.querySelector<HTMLElement>('body > header')
     const top_divs = document.querySelectorAll<HTMLElement>('body > div')
     const toolbar = document.getElementById('toolbar')
-    if (props.is_open) {
-      const scrollbar_width = window.innerWidth - document.body.clientWidth
+    const scrollbar_width = window.innerWidth - document.body.clientWidth
 
-      document.body.style.overflow = 'hidden'
-      if (header) header.style.paddingRight = `${scrollbar_width}px`
-      top_divs.forEach(
-        (el: any) => (el.style.paddingRight = `${scrollbar_width}px`),
-      )
-      if (toolbar) toolbar.style.paddingRight = `${scrollbar_width}px`
-    } else {
+    document.body.style.overflow = 'hidden'
+    if (header) header.style.paddingRight = `${scrollbar_width}px`
+    top_divs.forEach(
+      (el: any) => (el.style.paddingRight = `${scrollbar_width}px`),
+    )
+    if (toolbar) toolbar.style.paddingRight = `${scrollbar_width}px`
+
+    return () => {
       document.body.style.overflow = ''
       if (header) header.style.paddingRight = ''
       top_divs.forEach((el: any) => (el.style.paddingRight = ''))
       if (toolbar) toolbar.style.paddingRight = ''
     }
-  }, [props.is_open])
+  }, [])
 
   useEffect(() => {
     const handle_keyboard = (event: KeyboardEvent) => {
@@ -53,13 +53,13 @@ export const Modal: React.FC<Modal.Props> = (props) => {
   return window.innerWidth >= 768 ? (
     <div
       className={cn(styles.modal, {
-        [styles['modal--visible']]: props.is_open,
+        [styles['modal--visible']]: is_hydrated,
       })}
       onMouseDown={props.on_close}
     >
       <div
         className={cn(styles.modal__inner, {
-          [styles['modal__inner--visible']]: props.is_open,
+          [styles['modal__inner--visible']]: is_hydrated,
         })}
         style={{ maxWidth: props.width, width: '100%' }}
         onMouseDown={(e) => {
@@ -79,7 +79,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
     </div>
   ) : (
     <Sheet
-      isOpen={props.is_open}
+      isOpen={is_hydrated}
       onClose={props.on_close}
       disableScrollLocking={true}
       detent="content-height"

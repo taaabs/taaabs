@@ -4,7 +4,6 @@ import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
 import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
 import { useContext } from 'react'
-import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { Controller, SubmitHandler, useForm } from 'react-hook-form'
 import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/tags.data-source-impl'
@@ -26,7 +25,6 @@ type FormValues = {
 }
 
 export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)
   const auth_context = useContext(AuthContext)
   const {
     control,
@@ -108,7 +106,6 @@ export const RenameTagModal: React.FC<RenameTagModal.Props> = (props) => {
 
   return (
     <Ui_Modal
-      is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}
       width={400}

@@ -17,7 +17,6 @@ import { Tags_DataSourceImpl } from '@repositories/modules/tags/infrastructure/t
 import { AuthContext } from '@/providers/AuthProvider'
 import { Tags_RepositoryImpl } from '@repositories/modules/tags/infrastructure/tags.repository-impl'
 import { Tags_Ro } from '@repositories/modules/tags/domain/tags.ro'
-import { ModalContext } from '@/providers/ModalProvider'
 import { TagsInput as Ui_app_library_TagsInput } from '@web-ui/components/app/library/TagsInput'
 import { Checkbox as Ui_Checkbox } from '@web-ui/components/Checkbox'
 import equal from 'fast-deep-equal'
@@ -53,11 +52,9 @@ export namespace UpsertBookmarkModal {
 export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
   props,
 ) => {
-  const modal_context = useContext(ModalContext)
   const {
     control,
     handleSubmit,
-    setValue,
     formState: { errors, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useForm<FormValues>({ mode: 'onBlur' })
   const auth_context = useContext(AuthContext)
@@ -447,7 +444,6 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
 
   return (
     <Ui_Modal
-      is_open={modal_context.is_open}
       is_dismissible={!(isSubmitting || (isSubmitted && isSubmitSuccessful))}
       on_close={props.on_close}
       width={900}

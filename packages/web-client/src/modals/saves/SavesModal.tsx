@@ -3,7 +3,6 @@ import { Modal as Ui_Modal } from '@web-ui/components/Modal'
 import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
 import { SavesContent as Ui_Modal_SavesContent } from '@web-ui/components/Modal/SavesContent'
 import { useContext, useEffect, useState } from 'react'
-import { ModalContext } from '@/providers/ModalProvider'
 import { AuthContext } from '@/providers/AuthProvider'
 import { Saves_DataSourceImpl } from '@repositories/modules/saves/infrastructure/data_sources/saves.data-source-impl'
 import { Saves_RepositoryImpl } from '@repositories/modules/saves/infrastructure/repositories/saves.repository-impl'
@@ -21,7 +20,6 @@ namespace SavesModal {
 }
 
 export const SavesModal: React.FC<SavesModal.Props> = (props) => {
-  const modal_context = useContext(ModalContext)
   const auth_context = useContext(AuthContext)
   const [users, set_users] = useState<GetSaves_Ro>()
   const pathname = usePathname()
@@ -82,7 +80,6 @@ export const SavesModal: React.FC<SavesModal.Props> = (props) => {
 
   return (
     <Ui_Modal
-      is_open={modal_context.is_open}
       is_dismissible={true}
       on_close={props.on_close}
       width={400}

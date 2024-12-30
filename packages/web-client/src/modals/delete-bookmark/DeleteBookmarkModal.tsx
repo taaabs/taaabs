@@ -3,8 +3,7 @@ import { Modal as Ui_Modal } from '@web-ui/components/Modal'
 import { Header as Ui_Modal_Header } from '@web-ui/components/Modal/Header'
 import { Footer as Ui_Modal_Footer } from '@web-ui/components/Modal/Footer'
 import { Content as Ui_Modal_Content } from '@web-ui/components/Modal/Content'
-import { useContext, useState } from 'react'
-import { ModalContext } from '@/providers/ModalProvider'
+import { useState } from 'react'
 
 namespace DeleteBookmarkModal {
   export type Props = {
@@ -18,7 +17,6 @@ namespace DeleteBookmarkModal {
 export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
   props,
 ) => {
-  const modal_context = useContext(ModalContext)
   const [is_deleting, set_is_deleting] = useState<boolean>()
 
   const content = (
@@ -59,7 +57,6 @@ export const DeleteBookmarkModal: React.FC<DeleteBookmarkModal.Props> = (
 
   return (
     <Ui_Modal
-      is_open={modal_context.is_open}
       is_dismissible={!is_deleting}
       on_close={props.on_close}
       width={400}
