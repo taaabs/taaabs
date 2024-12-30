@@ -1,7 +1,7 @@
 import { Header as Ui_extension_popup_templates_Popup_Header } from '@web-ui/components/extension/popup/templates/Popup/Header'
 import { HeaderVision as Ui_extension_popup_templates_Popup_HeaderVision } from '@web-ui/components/extension/popup/templates/Popup/HeaderVision'
 import browser from 'webextension-polyfill'
-import { usePopup } from '../../App'
+import { usePopup } from '../App'
 
 export const Header: React.FC = () => {
   const { vision_mode_hook, current_url_hook } = usePopup()

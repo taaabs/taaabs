@@ -1,15 +1,15 @@
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
-import { usePopup } from '../../App'
+import { usePopup } from '../App'
 import {
   default_prompts,
   default_vision_prompts,
-} from '../../data/default-prompts'
+} from '../data/default-prompts'
 import { SendPrompt_Message } from '@/types/messages'
 import browser from 'webextension-polyfill'
 import { useEffect } from 'react'
-import { use_prompts_history } from '../../hooks/use-prompts-history'
-import { use_prompts_vision_history } from '../../hooks/use-prompts-vision-history'
+import { use_prompts_history } from '../hooks/use-prompts-history'
+import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string

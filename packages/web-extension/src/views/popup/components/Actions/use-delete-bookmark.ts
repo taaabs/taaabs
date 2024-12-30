@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { get_ky_instance } from '@/background/api/get-ky-instance'
 import { get_auth_data } from '@/helpers/get-auth-data'
 import { SHA256 } from '@repositories/utils/sha256'
-import browser from 'webextension-polyfill'
 
 export const use_delete_bookmark = (params: {
   current_url: string

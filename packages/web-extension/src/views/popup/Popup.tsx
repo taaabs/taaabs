@@ -4,11 +4,10 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { assistants } from '@/constants/assistants'
 import { usePopup } from './App'
-import { Actions } from './components/actions/Actions'
-import { Header } from './components/header/Header'
-import { PromptField } from './components/prompt-field/PromptField'
-import { RecentPrompts } from './components/recent-prompts/RecentPrompts'
-import { use_text_selection } from './hooks/use-text-selection'
+import { Actions } from './components/Actions/Actions'
+import { Header } from './components/Header'
+import { PromptField } from './components/PromptField'
+import { RecentPrompts } from './components/RecentPrompts'
 
 export const Popup: React.FC = () => {
   const {

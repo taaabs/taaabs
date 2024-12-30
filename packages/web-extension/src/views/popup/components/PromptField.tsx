@@ -9,11 +9,11 @@ import {
 import { SendPrompt_Message } from '@/types/messages'
 
 import '@web-ui/styles/style.scss'
-import { usePopup } from '../../App'
+import { usePopup } from '../App'
 import {
   default_prompts,
   default_vision_prompts,
-} from '../../data/default-prompts'
+} from '../data/default-prompts'
 
 export const PromptField: React.FC<{
   assistant_url: string
