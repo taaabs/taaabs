@@ -46,10 +46,13 @@ export const Popup: React.FC = () => {
   }
 
   useUpdateEffect(() => {
-    if (!text_selection_hook.selected_text) {
+    if (
+      !text_selection_hook.selected_text &&
+      !current_url_hook.url.startsWith('https://taaabs.com')
+    ) {
       parsed_html_hook.get_parsed_html()
     }
-  }, [text_selection_hook.selected_text])
+  }, [text_selection_hook.selected_text, current_url_hook.url])
 
   // Shorten plain text whenever selected assistant is changed
   useUpdateEffect(() => {
@@ -84,18 +87,21 @@ export const Popup: React.FC = () => {
     <Ui_extension_popup_templates_Popup
       should_set_height={
         // Case when not showing recent prompts which adjust its height dynamically
-        !current_url_hook.is_new_tab_page
+        !current_url_hook.is_new_tab_page &&
+        !current_url_hook.url.startsWith('https://taaabs.com')
       }
       header_slot={<Header />}
     >
       {!current_url_hook.url.startsWith('https://taaabs.com') &&
         !vision_mode_hook.is_vision_mode && <Actions />}
 
-      <RecentPrompts
-        prompt_field_value={prompt_field_value}
-        assistant_url={assistant_url}
-        shortened_plan_text={shortened_plan_text}
-      />
+      {!current_url_hook.url.startsWith('https://taaabs.com') && (
+        <RecentPrompts
+          prompt_field_value={prompt_field_value}
+          assistant_url={assistant_url}
+          shortened_plan_text={shortened_plan_text}
+        />
+      )}
 
       <PromptField
         assistant_url={assistant_url}

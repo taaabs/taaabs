@@ -153,7 +153,10 @@ export const PromptField: React.FC<{
           ? false
           : attach_text_switch_hook.is_checked
       }
-      is_switch_visible={!current_url_hook.is_new_tab_page}
+      is_switch_visible={
+        !current_url_hook.is_new_tab_page &&
+        !current_url_hook.url.startsWith('https://taaabs.com')
+      }
       on_switch_click={() => {
         attach_text_switch_hook.set_is_checked(
           !attach_text_switch_hook.is_checked,
@@ -194,6 +197,7 @@ export const PromptField: React.FC<{
       }
       text_not_found={
         !current_url_hook.is_new_tab_page &&
+        !current_url_hook.url.startsWith('https://taaabs.com') &&
         parsed_html_hook.parsed_html === null
       }
       translations={{
