@@ -40,12 +40,12 @@ export const use_search = (local_db: LocalDb) => {
   const [result, set_result] = useState<Results<Result>>()
   const [highlights, set_highlights] = useState<Highlights>()
   const [highlights_commited, set_highlights_commited] = useState<Highlights>()
-  const [
-    highlights_sites_variants,
-    set_highlights_sites_variants,
-  ] = useState<string[]>()
-  const [highlights_sites_variants_commited, set_highlights_sites_variants_commited] =
+  const [highlights_sites_variants, set_highlights_sites_variants] =
     useState<string[]>()
+  const [
+    highlights_sites_variants_commited,
+    set_highlights_sites_variants_commited,
+  ] = useState<string[]>()
   const [count, set_count] = useState<number>()
   // Used for refreshing highlights after bookmark update
   const [queried_at_timestamp, set_queried_at_timestamp] = useState<number>()
@@ -755,9 +755,7 @@ export const use_search = (local_db: LocalDb) => {
       }),
     )
     if (highlights_sites_variants) {
-      set_highlights_sites_variants(
-        JSON.parse(highlights_sites_variants),
-      )
+      set_highlights_sites_variants(JSON.parse(highlights_sites_variants))
     }
 
     const count = sessionStorage.getItem(
@@ -798,12 +796,7 @@ export const use_search = (local_db: LocalDb) => {
           get_hints()
           set_is_search_focused(true)
         })
-      // Remove hash from url
-      window.history.replaceState(
-        {},
-        '',
-        window.location.pathname + window.location.search,
-      )
+      window.location.hash = ''
     }
   }, [auth_context.auth_data])
 

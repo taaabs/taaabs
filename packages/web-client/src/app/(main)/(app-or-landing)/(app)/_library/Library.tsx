@@ -154,11 +154,7 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
         }
       }
       if (window.location.hash == '#fresh') {
-        window.history.replaceState(
-          {},
-          '',
-          window.location.pathname + window.location.search,
-        )
+        window.location.hash = ''
       }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
