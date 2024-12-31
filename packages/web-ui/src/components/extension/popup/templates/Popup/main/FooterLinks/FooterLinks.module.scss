@@ -1,0 +1,16 @@
+// @type
+@use '../../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--padding-8px) 0;
+  font-size: var(--font-size-13px);
+  color: var(--text-color-dimmed);
+  > a {
+    @include hover {
+      @include text-decoration-underlinie-thin;
+    }
+  }
+}

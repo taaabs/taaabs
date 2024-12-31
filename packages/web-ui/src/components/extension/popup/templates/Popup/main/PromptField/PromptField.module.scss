@@ -48,13 +48,4 @@
     font-weight: var(--font-weight-inter-medium);
     gap: var(--padding-4px);
   }
-  &__bottom-line {
-    font-size: var(--font-size-13px);
-    color: var(--text-color-dimmed);
-    > a {
-      @include hover {
-        @include text-decoration-underlinie-thin;
-      }
-    }
-  }
 }

@@ -57,7 +57,7 @@ For more detailed information, please review the extension's [Privacy Policy](./
 
 ## License
 
-Taaabs is committed to transparency. The source code for the Taaabs browser extension is publicly available under the [AGPLv3](https://github.com/taaabs/taaabs/blob/master/packages/web-extension/LICENSE) license at [GitHub](https://github.com/taaabs/taaabs/tree/master/packages/web-extension). Other packages are source-available. We encourage community review and contributions.
+Taaabs is committed to transparency. The source code for the Taaabs browser extension is publicly available under the [AGPLv3](https://github.com/taaabs/taaabs/blob/master/packages/web-extension/LICENSE) license in [`/packages/web-extension`](https://github.com/taaabs/taaabs/tree/master/packages/web-extension). Other packages are source-available. We encourage community review and contributions.
 
 ## Acknowledgements
 

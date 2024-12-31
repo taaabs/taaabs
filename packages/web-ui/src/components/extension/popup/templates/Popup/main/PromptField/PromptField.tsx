@@ -136,22 +136,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           <span>{props.translations.active_assistant}</span>
           {props.assistant_selector_slot}
         </div>
-        <div className={styles['footer__bottom-line']}>
-          <a href="https://github.com/taaabs/taaabs" target="_blank">
-            Star on GitHub
-          </a>{' '}
-          <span>·</span>{' '}
-          <a href="https://buymeacoffee.com/robertpiosik" target="_blank">
-            Buy me a coffee
-          </a>{' '}
-          <span>·</span>{' '}
-          <a
-            href="https://github.com/taaabs/taaabs/discussions"
-            target="_blank"
-          >
-            Send feedback
-          </a>
-        </div>
       </div>
     </div>
   )

@@ -7,6 +7,7 @@ import { usePopup } from './App'
 import { Actions } from './components/Actions/Actions'
 import { Header } from './components/Header'
 import { PromptField } from './components/PromptField'
+import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 
 export const Popup: React.FC = () => {
@@ -107,6 +108,8 @@ export const Popup: React.FC = () => {
         assistant_url={assistant_url}
         shortened_plain_text={shortened_plain_text}
       />
+
+      <FooterLinks />
     </Ui_extension_popup_templates_Popup>
   )
 }
