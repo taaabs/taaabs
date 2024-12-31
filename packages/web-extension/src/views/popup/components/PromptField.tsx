@@ -17,7 +17,7 @@ import {
 
 export const PromptField: React.FC<{
   assistant_url: string
-  shortened_plan_text?: string
+  shortened_plain_text?: string
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
 }> = (props) => {
@@ -136,7 +136,7 @@ export const PromptField: React.FC<{
           plain_text:
             (attach_text_switch_hook.is_checked &&
               (text_selection_hook.selected_text ||
-                props.shortened_plan_text)) ||
+                props.shortened_plain_text)) ||
             '',
           window_height: window_dimensions_hook.dimensions?.height,
           window_width: window_dimensions_hook.dimensions?.width,
@@ -190,9 +190,9 @@ export const PromptField: React.FC<{
         ((!!parsed_html_hook.parsed_html ||
           !!text_selection_hook.selected_text) &&
           parsed_html_hook.parsed_html?.plain_text &&
-          props.shortened_plan_text &&
+          props.shortened_plain_text &&
           parsed_html_hook.parsed_html?.plain_text.length >
-            props.shortened_plan_text?.length) ||
+            props.shortened_plain_text?.length) ||
         false
       }
       text_not_found={
@@ -216,7 +216,7 @@ export const PromptField: React.FC<{
             ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
             {calculate_shortening_percentage(
               parsed_html_hook.parsed_html?.plain_text,
-              props.shortened_plan_text,
+              props.shortened_plain_text,
             )}
             % over the limit in{' '}
             {

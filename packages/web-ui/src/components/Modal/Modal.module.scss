@@ -17,9 +17,7 @@
   &--visible {
     pointer-events: all;
     opacity: 1;
-    transition-property: opacity;
-    transition-timing-function: var(--transition-timing-function);
-    transition-duration: var(--transition-duration-150ms);
+    @include transition-150ms(opacity);
   }
   &__inner {
     overflow: hidden;

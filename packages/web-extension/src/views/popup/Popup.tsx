@@ -23,7 +23,7 @@ export const Popup: React.FC = () => {
     text_selection_hook,
   } = usePopup()
   const [prompt_field_value, set_prompt_field_value] = useState('')
-  const [shortened_plan_text, set_shortened_plain_text] = useState<string>()
+  const [shortened_plain_text, set_shortened_plain_text] = useState<string>()
 
   let assistant_url = assistants['chatgpt'].url
   if (
@@ -95,17 +95,17 @@ export const Popup: React.FC = () => {
       {!current_url_hook.url.startsWith('https://taaabs.com') &&
         !vision_mode_hook.is_vision_mode && <Actions />}
 
-      <RecentPrompts
-        prompt_field_value={prompt_field_value}
-        assistant_url={assistant_url}
-        shortened_plan_text={shortened_plan_text}
-      />
-
       <PromptField
         assistant_url={assistant_url}
         prompt_field_value={prompt_field_value}
         set_prompt_field_value={set_prompt_field_value}
-        shortened_plan_text={shortened_plan_text}
+        shortened_plain_text={shortened_plain_text}
+      />
+
+      <RecentPrompts
+        prompt_field_value={prompt_field_value}
+        assistant_url={assistant_url}
+        shortened_plain_text={shortened_plain_text}
       />
     </Ui_extension_popup_templates_Popup>
   )

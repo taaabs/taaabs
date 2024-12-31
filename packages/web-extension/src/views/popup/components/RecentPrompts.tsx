@@ -14,8 +14,8 @@ import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
   assistant_url: string
-  shortened_plan_text?: string
-}> = ({ prompt_field_value, assistant_url, shortened_plan_text }) => {
+  shortened_plain_text?: string
+}> = ({ prompt_field_value, assistant_url, shortened_plain_text }) => {
   const {
     parsed_html_hook,
     attach_text_switch_hook,
@@ -41,7 +41,7 @@ export const RecentPrompts: React.FC<{
         assistant_name: selected_assistant_hook.selected_assistant_name!,
         assistant_url,
         prompt,
-        plain_text: text_selection_hook.selected_text || shortened_plan_text,
+        plain_text: text_selection_hook.selected_text || shortened_plain_text,
         open_in_new_tab: is_middle_click,
         window_height: window_dimensions_hook.dimensions!.height,
         window_width: window_dimensions_hook.dimensions!.width,
@@ -101,7 +101,7 @@ export const RecentPrompts: React.FC<{
     vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
     parsed_html_hook.parsed_html,
-    shortened_plan_text,
+    shortened_plain_text,
     selected_assistant_hook.selected_assistant_name,
     window_dimensions_hook.dimensions,
   ])
