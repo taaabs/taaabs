@@ -117,21 +117,15 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   )
 }
 
-const HighlightedText = ({
-  text,
-  highlight,
-}: {
-  text: string
-  highlight: string
-}) => {
-  if (!highlight.trim()) return text
-  const words = highlight
+const HighlightedText = (params: { text: string; highlight: string }) => {
+  if (!params.highlight.trim()) return params.text
+  const words = params.highlight
     .trim()
     .toLowerCase()
     .split(/\s+/)
     .filter((word) => word.length)
   const regex = new RegExp(`(${words.join('|')})`, 'gi')
-  const parts = text.split(regex)
+  const parts = params.text.split(regex)
   return parts.map((part, i) =>
     words.includes(part.toLowerCase()) ||
     (i > 0 &&

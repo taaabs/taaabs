@@ -6,6 +6,7 @@ import { Separator } from './main/Separator'
 import { RecentPrompts } from './main/RecentPrompts'
 import { AssistantSelector } from './main/PromptField/AssistantSelector'
 import { PromptField } from './main/PromptField'
+import { FooterLinks } from './main/FooterLinks'
 
 export default {
   component: Popup,
@@ -33,31 +34,6 @@ export const Primary = () => {
           <Button on_click={() => {}}>Test 2</Button>
         </Actions>
 
-        <RecentPrompts
-          on_recent_prompt_click={(id) => {
-            console.log(id)
-          }}
-          default_prompts={[]}
-          filter_phrase=""
-          on_recent_prompt_middle_click={() => {}}
-          is_disabled={false}
-          recent_prompts={[
-            'Summarize sflsd fjlksdjf lksda jf;lks faj;l kfajkl; sfaj;lksf sdlkfj sdlkfj sdlkjfjkdjf lksdjf  dskjflsdjf sdklj flksdj f',
-            'Rewrite simplified',
-            'In-depth analysis',
-            'Summarize',
-            'Rewrite simplified',
-            'In-depth analysis',
-            'Summarize',
-            'Rewrite simplified',
-            'In-depth analysis',
-          ]}
-          translations={{
-            heading: 'Recent prompts',
-            searching_heading: 'Searching in recents...',
-          }}
-        />
-        <Separator />
         <PromptField
           value=""
           on_submit={() => {}}
@@ -91,6 +67,52 @@ export const Primary = () => {
             text_not_found: '',
             active_assistant: 'Connected with',
           }}
+        />
+
+        <Separator />
+
+        <RecentPrompts
+          on_recent_prompt_click={(id) => {
+            console.log(id)
+          }}
+          default_prompts={[]}
+          filter_phrase=""
+          on_recent_prompt_middle_click={() => {}}
+          is_disabled={false}
+          recent_prompts={[
+            'Summarize sflsd fjlksdjf lksda jf;lks faj;l kfajkl; sfaj;lksf sdlkfj sdlkfj sdlkjfjkdjf lksdjf  dskjflsdjf sdklj flksdj f',
+            'Rewrite simplified',
+            'In-depth analysis',
+            'Summarize',
+            'Rewrite simplified',
+            'In-depth analysis',
+            'Summarize',
+            'Rewrite simplified',
+            'In-depth analysis',
+          ]}
+          translations={{
+            heading: 'Recent prompts',
+            searching_heading: 'Searching in recents...',
+          }}
+        />
+
+        <Separator />
+
+        <FooterLinks
+          links={[
+            {
+              href: 'https://example.com',
+              text: 'Lorem ipsum',
+            },
+            {
+              href: 'https://example.com',
+              text: 'Lorem ipsum',
+            },
+            {
+              href: 'https://example.com',
+              text: 'Lorem ipsum',
+            },
+          ]}
         />
       </Popup>
     </div>

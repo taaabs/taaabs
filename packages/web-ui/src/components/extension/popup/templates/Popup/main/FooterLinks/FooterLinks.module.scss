@@ -4,7 +4,7 @@
 .container {
   display: flex;
   justify-content: center;
-  gap: 2px;
+  gap: var(--padding-4px);
   padding: var(--padding-8px) 0;
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
