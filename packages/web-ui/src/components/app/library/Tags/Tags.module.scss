@@ -115,7 +115,6 @@
     color: var(--green400);
     background-color: var(--green900);
   }
-  @include transition-150ms(background-color);
   @include hover {
     background-color: var(--green200);
     @include dark {
