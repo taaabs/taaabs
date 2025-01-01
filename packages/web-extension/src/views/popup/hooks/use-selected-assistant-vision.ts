@@ -1,17 +1,10 @@
 import { AssistantName, assistants_vision } from '@/constants/assistants'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useState } from 'react'
 import browser from 'webextension-polyfill'
 
 export const use_selected_assistant_vision = () => {
   const [selected_assistant_name, set_selected_assistant_name] =
     useState<AssistantName>()
-
-  useUpdateEffect(() => {
-    browser.storage.local.set({
-      last_used_chatbot_vision_name: selected_assistant_name,
-    })
-  }, [selected_assistant_name])
 
   useEffect(() => {
     browser.storage.local
@@ -30,6 +23,5 @@ export const use_selected_assistant_vision = () => {
 
   return {
     selected_assistant_name,
-    set_selected_assistant_name,
   }
 }

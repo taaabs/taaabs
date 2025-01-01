@@ -5,7 +5,6 @@ export const PLAIN_TEXT_MAX_LENGTH = {
   copilot: 9500,
   claude: 30000,
   perplexity: 38000,
-  huggingchat: 45000,
   deepseek: 400000, // ~100k tokens
   mistral: 200000,
   cohere: 200000,

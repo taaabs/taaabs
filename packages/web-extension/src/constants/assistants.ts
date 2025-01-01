@@ -8,7 +8,6 @@ export type AssistantName =
   // | 'meta'
   | 'mistral'
   | 'cohere'
-  | 'huggingchat'
   | 'deepseek'
   | 'perplexity'
   | 'custom'
@@ -63,10 +62,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Perplexity',
     url: 'https://www.perplexity.ai/',
   },
-  huggingchat: {
-    display_name: 'HuggingChat',
-    url: 'https://huggingface.co/chat/',
-  },
   custom: {
     display_name: 'Custom',
     url: '',
@@ -77,7 +72,6 @@ export const assistants_vision: AssistantName[] = [
   // 'chatgpt',
   'claude',
   'mistral',
-  // 'huggingchat',
   'copilot',
   'custom',
 ]

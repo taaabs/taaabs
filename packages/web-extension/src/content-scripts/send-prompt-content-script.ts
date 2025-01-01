@@ -302,8 +302,6 @@ namespace AssistantBugMitigation {
     let active_element = document.activeElement as HTMLElement
 
     const chatbot_selectors: Partial<Record<AssistantName, string>> = {
-      huggingchat:
-        '.svelte-jxi03l.focus-visible\\:ring-0.focus\\:ring-0.outline-none.p-3.bg-transparent.border-0.overflow-y-scroll.overflow-x-hidden.scroll-p-3.resize-none.w-full.h-full.m-0.top-0.absolute.scrollbar-custom',
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
       gemini: 'div[role="textbox"]', // Needed in mobile viewport

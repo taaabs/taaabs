@@ -15,7 +15,6 @@ export namespace PromptField {
     on_switch_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
-    assistant_selector_slot: React.ReactNode
     is_plain_text_too_long: boolean
     text_not_found: boolean
     translations: {
@@ -25,7 +24,6 @@ export namespace PromptField {
       active_input_placeholder_suffix: string
       plain_text_too_long: React.ReactNode
       text_not_found: React.ReactNode
-      active_assistant: string
     }
   }
 }
@@ -130,13 +128,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }}
         on_key_down={handle_key_down}
       />
-
-      <div className={styles.footer}>
-        <div className={styles['footer__top-line']}>
-          <span>{props.translations.active_assistant}</span>
-          {props.assistant_selector_slot}
-        </div>
-      </div>
     </div>
   )
 }

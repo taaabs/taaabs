@@ -1,11 +1,6 @@
 import browser from 'webextension-polyfill'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
-import { AssistantSelector as Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField/AssistantSelector'
-import {
-  AssistantName,
-  assistants,
-  assistants_vision,
-} from '@/constants/assistants'
+import { assistants } from '@/constants/assistants'
 import { SendPrompt_Message } from '@/types/messages'
 
 import '@web-ui/styles/style.scss'
@@ -69,29 +64,10 @@ export const PromptField: React.FC<{
         ),
       ].reverse()}
       is_history_enabled={true}
-      assistant_selector_slot={
-        <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
-          selected_assistant_name={
-            selected_assistant_vision_hook.selected_assistant_name!
-          }
-          chatbots={Object.entries(assistants)
-            .filter(([key]) => assistants_vision.includes(key as AssistantName))
-            .map(([key, value]) => ({
-              name: key,
-              display_name: value.display_name,
-            }))}
-          on_assistant_change={(assistant_name) => {
-            selected_assistant_vision_hook.set_selected_assistant_name(
-              assistant_name as AssistantName,
-            )
-          }}
-        />
-      }
       is_plain_text_too_long={false}
       text_not_found={false}
       translations={{
         new_prompt: 'New chat',
-        active_assistant: 'Selected chatbot:',
         placeholder: `Ask ${
           assistants[selected_assistant_vision_hook.selected_assistant_name!]
             .display_name
@@ -170,22 +146,6 @@ export const PromptField: React.FC<{
       is_history_enabled={
         !!parsed_html_hook.parsed_html || !!text_selection_hook.selected_text
       }
-      assistant_selector_slot={
-        <Ui_extension_popup_templates_Popup_main_PromptField_AssistantSelector
-          selected_assistant_name={
-            selected_assistant_hook.selected_assistant_name!
-          }
-          chatbots={Object.entries(assistants).map(([key, value]) => ({
-            name: key,
-            display_name: value.display_name,
-          }))}
-          on_assistant_change={(chatbot_name) => {
-            selected_assistant_hook.set_selected_assistant_name(
-              chatbot_name as AssistantName,
-            )
-          }}
-        />
-      }
       is_plain_text_too_long={
         ((!!parsed_html_hook.parsed_html ||
           !!text_selection_hook.selected_text) &&
@@ -202,7 +162,6 @@ export const PromptField: React.FC<{
       }
       translations={{
         new_prompt: 'New chat',
-        active_assistant: 'Selected chatbot:',
         placeholder: `Ask ${
           assistants[selected_assistant_hook.selected_assistant_name!]
             .display_name
