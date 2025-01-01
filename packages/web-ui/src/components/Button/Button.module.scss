@@ -10,7 +10,6 @@
   background: var(--accent-color);
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
-  @include transition-150ms(background-color);
   border-radius: var(--border-radius-999px);
   height: var(--button-dimension-40px);
   padding: 0 16px;
