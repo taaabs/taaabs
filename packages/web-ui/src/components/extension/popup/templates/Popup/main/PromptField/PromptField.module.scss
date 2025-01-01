@@ -2,26 +2,11 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  padding: 0 var(--padding-16px);
+  padding: 0 var(--padding-16px) var(--padding-12px) var(--padding-16px);
   display: flex;
   flex-direction: column;
 }
-.alert {
-  align-self: flex-start;
-  font-size: var(--font-size-13px);
-  margin-top: var(--padding-12px);
-  margin-left: -6px;
-  padding: var(--padding-4px) var(--padding-8px);
-  border-radius: var(--border-radius-8px);
-  font-weight: var(--font-weight-inter-medium);
-  &--warn {
-    background-color: #ffc400;
-  }
-  &--error {
-    background-color: var(--red);
-    color: white;
-  }
-}
+
 .header {
   display: flex;
   justify-content: space-between;
@@ -34,18 +19,19 @@
     font-size: var(--font-size-14px);
   }
 }
-.footer {
-  display: flex;
-  gap: var(--padding-2px);
-  padding: var(--padding-8px) 0;
-  flex-direction: column;
-  align-items: center;
-  &__top-line {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-13px);
-    font-weight: var(--font-weight-inter-medium);
-    gap: var(--padding-4px);
+
+.alert {
+  align-self: flex-start;
+  font-size: var(--font-size-13px);
+  margin-top: var(--padding-10px);
+  padding: var(--padding-4px) var(--padding-8px);
+  border-radius: var(--border-radius-8px);
+  font-weight: var(--font-weight-inter-medium);
+  &--warn {
+    background-color: #ffc400;
+  }
+  &--error {
+    background-color: var(--red);
+    color: white;
   }
 }

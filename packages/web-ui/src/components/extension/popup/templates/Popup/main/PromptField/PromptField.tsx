@@ -71,17 +71,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      {props.is_plain_text_too_long && (
-        <div className={`${styles.alert} ${styles['alert--warn']}`}>
-          {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.text_not_found && (
-        <div className={`${styles.alert} ${styles['alert--error']}`}>
-          {props.translations.text_not_found}
-        </div>
-      )}
-
       <div className={styles.header}>
         <span>{props.translations.new_prompt}</span>
 
@@ -128,6 +117,17 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }}
         on_key_down={handle_key_down}
       />
+
+      {props.is_plain_text_too_long && (
+        <div className={`${styles.alert} ${styles['alert--warn']}`}>
+          {props.translations.plain_text_too_long}
+        </div>
+      )}
+      {props.text_not_found && (
+        <div className={`${styles.alert} ${styles['alert--error']}`}>
+          {props.translations.text_not_found}
+        </div>
+      )}
     </div>
   )
 }

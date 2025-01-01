@@ -4,7 +4,6 @@ import { Popup } from './Popup'
 import { Actions } from './main/Actions'
 import { Separator } from './main/Separator'
 import { RecentPrompts } from './main/RecentPrompts'
-import { AssistantSelector } from './main/PromptField/AssistantSelector'
 import { PromptField } from './main/PromptField'
 import { FooterLinks } from './main/FooterLinks'
 
@@ -42,18 +41,6 @@ export const Primary = () => {
           on_switch_click={() => {}}
           is_switch_visible={true}
           prompts_history={['a', 'b']}
-          assistant_selector_slot={
-            <AssistantSelector
-              chatbots={[
-                { display_name: 'Assistant 1', name: 'assistant1' },
-                { display_name: 'Assistant 22222', name: 'assistant2' },
-              ]}
-              selected_assistant_name="assistant1"
-              on_assistant_change={(chatbot_name) => {
-                console.log(chatbot_name)
-              }}
-            />
-          }
           is_history_enabled={false}
           is_plain_text_too_long={false}
           text_not_found={false}
@@ -63,9 +50,8 @@ export const Primary = () => {
             placeholder: 'Message ChatGPT',
             switch: 'Send page',
             active_input_placeholder_suffix: '(⇅ for history)',
-            plain_text_too_long: '',
-            text_not_found: '',
-            active_assistant: 'Connected with',
+            plain_text_too_long: 'Plain text too long',
+            text_not_found: 'Text not found',
           }}
         />
 
