@@ -30,6 +30,9 @@ type FilteredPrompt =
 export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   const container_ref = useRef<HTMLDivElement>(null)
   const [container_height, set_container_height] = useState<number>()
+  const simplebar_ref = useRef<any>()
+  const [show_top_shadow, set_show_top_shadow] = useState(false)
+  const [show_bottom_shadow, set_show_bottom_shadow] = useState(true)
 
   const filtered_prompts: FilteredPrompt[] = props.is_disabled
     ? props.recent_prompts
@@ -68,9 +71,33 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
     return () => resize_observer.disconnect()
   }, [])
 
+  // Subscribe to scroll events of simplebar
+  useEffect(() => {
+    const simplebar_el = simplebar_ref.current.getScrollElement()
+    const handle_scroll = () => {
+      set_show_top_shadow(simplebar_el.scrollTop > 5)
+      set_show_bottom_shadow(
+        simplebar_el.scrollTop + simplebar_el.clientHeight <
+          simplebar_el.scrollHeight - 5,
+      )
+    }
+    simplebar_el.addEventListener('scroll', handle_scroll)
+    return () => simplebar_el.removeEventListener('scroll', handle_scroll)
+  }, [])
+
   return (
-    <div className={styles.container} ref={container_ref}>
-      <SimpleBar style={{ height: container_height }} autoHide={false}>
+    <div
+      className={cn(styles.container, {
+        [styles['container--show-top-shadow']]: show_top_shadow,
+        [styles['container--show-bottom-shadow']]: show_bottom_shadow,
+      })}
+      ref={container_ref}
+    >
+      <SimpleBar
+        style={{ height: container_height }}
+        autoHide={false}
+        ref={simplebar_ref}
+      >
         <div
           className={cn(styles.prompts, {
             [styles['prompts--disabled']]: props.is_disabled,
