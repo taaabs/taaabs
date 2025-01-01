@@ -8,6 +8,8 @@
   padding: var(--padding-8px) 0;
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
+  background-color: var(--white);
+  border-top: var(--border-primary);
   > a {
     @include hover {
       @include text-decoration-underlinie-thin;

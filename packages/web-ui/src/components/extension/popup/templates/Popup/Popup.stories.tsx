@@ -6,6 +6,7 @@ import { Separator } from './main/Separator'
 import { RecentPrompts } from './main/RecentPrompts'
 import { PromptField } from './main/PromptField'
 import { FooterLinks } from './main/FooterLinks'
+import { FlexRow } from './main/Actions/FlexRow'
 
 export default {
   component: Popup,
@@ -31,6 +32,10 @@ export const Primary = () => {
         <Actions>
           <Button on_click={() => {}}>Test 1</Button>
           <Button on_click={() => {}}>Test 2</Button>
+          <FlexRow>
+            <Button on_click={() => {}}>Test 3</Button>
+            <Button on_click={() => {}}>Test 4</Button>
+          </FlexRow>
         </Actions>
 
         <PromptField
@@ -78,11 +83,9 @@ export const Primary = () => {
           ]}
           translations={{
             heading: 'Recent prompts',
-            searching_heading: 'Searching in recents...',
+            searching_heading: 'Searching...',
           }}
         />
-
-        <Separator />
 
         <FooterLinks
           links={[

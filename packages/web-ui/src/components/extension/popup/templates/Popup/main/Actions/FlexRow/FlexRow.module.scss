@@ -1,0 +1,11 @@
+// @type
+@use '../../../../../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--padding-8px);
+  > * {
+    flex-grow: 1;
+  }
+}

@@ -110,6 +110,8 @@ export const RecentPrompts: React.FC<{
     <>
       {vision_mode_hook.is_vision_mode && (
         <>
+          <Ui_extension_popup_templates_Popup_main_Separator />
+
           <Ui_extension_popup_templates_Popup_main_RecentPrompts
             recent_prompts={[
               ...prompts_vision_history_hook.prompts_history,
@@ -128,12 +130,10 @@ export const RecentPrompts: React.FC<{
             }}
             is_disabled={false}
             translations={{
-              searching_heading: 'Searching in recents...',
+              searching_heading: 'Searching...',
               heading: 'Recent prompts',
             }}
           />
-
-          <Ui_extension_popup_templates_Popup_main_Separator />
         </>
       )}
 
@@ -141,6 +141,8 @@ export const RecentPrompts: React.FC<{
         !current_url_hook.is_new_tab_page &&
         !current_url_hook.url.startsWith('https://taaabs.com') && (
           <>
+            <Ui_extension_popup_templates_Popup_main_Separator />
+
             <Ui_extension_popup_templates_Popup_main_RecentPrompts
               recent_prompts={[
                 ...prompts_history_hook.prompts_history,
@@ -165,12 +167,10 @@ export const RecentPrompts: React.FC<{
                 !text_selection_hook.selected_text
               }
               translations={{
-                searching_heading: 'Searching in recents...',
+                searching_heading: 'Searching...',
                 heading: 'Recent prompts',
               }}
             />
-
-            <Ui_extension_popup_templates_Popup_main_Separator />
           </>
         )}
     </>

@@ -5,6 +5,7 @@ import browser from 'webextension-polyfill'
 import { usePopup } from '../../App'
 import { use_create_bookmark } from './use-create-bookmark'
 import { use_delete_bookmark } from './use-delete-bookmark'
+import { FlexRow as Ui_extension_popup_templates_Popup_main_Actions_FlexRow } from '@web-ui/components/extension/popup/templates/Popup/main/Actions/FlexRow'
 
 export const Actions: React.FC = () => {
   const {
@@ -22,38 +23,41 @@ export const Actions: React.FC = () => {
   })
 
   const saved_items = [
-    <UiButton
-      key="edit"
-      href={
-        'https://taaabs.com/library#url=' +
-        encodeURIComponent(current_url_hook.url)
-      }
-      on_click={async (e) => {
-        e.preventDefault()
-        const [current_tab] = await browser.tabs.query({
-          active: true,
-          currentWindow: true,
-        })
-        browser.tabs.update(current_tab.id, {
-          url:
-            'https://taaabs.com/library#url=' +
-            encodeURIComponent(current_url_hook.url),
-        })
-        window.close()
-      }}
-      rel="noreferrer noopener"
-      is_disabled={delete_bookmark_hook.is_deleting}
-    >
-      Edit
-    </UiButton>,
-    <UiButton
-      key="delete"
-      on_click={delete_bookmark_hook.delete_bookmark}
-      is_danger={true}
-      is_disabled={delete_bookmark_hook.is_deleting}
-    >
-      Delete
-    </UiButton>,
+    <Ui_extension_popup_templates_Popup_main_Actions_FlexRow>
+      <UiButton
+        key="edit"
+        href={
+          'https://taaabs.com/library#url=' +
+          encodeURIComponent(current_url_hook.url)
+        }
+        on_click={async (e) => {
+          e.preventDefault()
+          const [current_tab] = await browser.tabs.query({
+            active: true,
+            currentWindow: true,
+          })
+          browser.tabs.update(current_tab.id, {
+            url:
+              'https://taaabs.com/library#url=' +
+              encodeURIComponent(current_url_hook.url),
+          })
+          window.close()
+        }}
+        rel="noreferrer noopener"
+        is_disabled={delete_bookmark_hook.is_deleting}
+      >
+        Edit
+      </UiButton>
+      ,
+      <UiButton
+        key="delete"
+        on_click={delete_bookmark_hook.delete_bookmark}
+        is_danger={true}
+        is_disabled={delete_bookmark_hook.is_deleting}
+      >
+        Delete
+      </UiButton>
+    </Ui_extension_popup_templates_Popup_main_Actions_FlexRow>,
   ]
 
   const unsaved_items = [
@@ -73,7 +77,7 @@ export const Actions: React.FC = () => {
   return (
     <Ui_extension_popup_templates_Popup_main_Actions>
       <UiButton
-        href='https://taaabs.com/library'
+        href="https://taaabs.com/library"
         rel="noreferrer noopener"
         is_outlined={true}
         on_click={async (e) => {

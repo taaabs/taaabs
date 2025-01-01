@@ -9,6 +9,7 @@ import { Header } from './components/Header'
 import { PromptField } from './components/PromptField'
 import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
+import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 
 export const Popup: React.FC = () => {
   const {
