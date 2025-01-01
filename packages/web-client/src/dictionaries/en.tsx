@@ -13,7 +13,7 @@ const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'Unlock the joy',
+          first_line: 'Unleash the joy',
           second_line: 'of your web research',
         },
         subheading:

@@ -1,7 +1,7 @@
 <h3 align="center">Taaabs</h3>
 
 <p align="center">
-    <b>Unlock the joy of your web research.</b>
+    <b>Unleash the joy of your web research.</b>
     <br />
     Privately clip any page to your personal library. Assist browsing with ChatGPT.
     <br />
@@ -32,7 +32,7 @@ Our extension is completely free and open-source. The built-in AI assistant pars
 
 The extension's AI integration supports virtually any site via its Vision Mode.
 
-Add Taaabs to your browser and unlock the joy of your web research!
+Add Taaabs to your browser and unleash the joy of your web research!
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/taaabs-zero-knowledge-boo/mfpmbjjgeklnhjmpahigldafhcdoaona)
 - [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/taaabs/)

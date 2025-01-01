@@ -48,7 +48,6 @@ export const Actions: React.FC = () => {
       >
         Edit
       </UiButton>
-      ,
       <UiButton
         key="delete"
         on_click={delete_bookmark_hook.delete_bookmark}
