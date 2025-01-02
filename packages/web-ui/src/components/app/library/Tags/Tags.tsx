@@ -90,10 +90,12 @@ export const Tags: React.FC<Tags.Props> = memo(
 
     return (
       <div className={styles.container}>
-        {filtered_tags.length > 0 && (
-          <div className={cn(styles.search, {
+        {props.tags.length > 0 && (
+          <div
+            className={cn(styles.search, {
               [styles.search__focused]: is_search_focused,
-            })}>
+            })}
+          >
             <UiIcon variant="SEARCH" />
             <input
               type="text"
