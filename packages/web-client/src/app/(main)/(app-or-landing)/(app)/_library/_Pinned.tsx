@@ -17,6 +17,7 @@ import { LibraryContext } from './Library'
 import { bookmarks_actions } from '@repositories/stores/library/bookmarks/bookmarks.slice'
 import { video_embed_setter } from '@/modals/video-embed/video-embed-modal-setter'
 import { use_popstate_rerender_trigger } from './_hooks/use-popstate-rerender-trigger'
+import { useSearchParams } from 'next/navigation'
 
 namespace _Pinned {
   export type Props = {
@@ -26,6 +27,7 @@ namespace _Pinned {
 }
 
 export const _Pinned: React.FC<_Pinned.Props> = (props) => {
+  const search_params = useSearchParams()
   const auth_context = useContext(AuthContext)
   const modal_context = useContext(ModalContext)
   const {
@@ -210,7 +212,7 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
         sessionStorage.getItem(
           browser_storage.session_storage.library.is_pinned_revealed({
             username,
-            search_params: window.location.search,
+            search_params: search_params.toString(),
             hash: window.location.hash,
           }),
         ) === 'true'
@@ -219,7 +221,7 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
         sessionStorage.setItem(
           browser_storage.session_storage.library.is_pinned_revealed({
             username,
-            search_params: window.location.search,
+            search_params: search_params.toString(),
             hash: window.location.hash,
           }),
           'true',
