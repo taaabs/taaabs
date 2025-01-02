@@ -4,30 +4,23 @@
 .container {
   background-color: var(--background);
   @include to992 {
-    border-top: var(--border-primary);
-    border-bottom: var(--border-secondary);
+    border-top: var(--border-secondary);
+    box-shadow: 0 1px 0 0 var(--border-color-secondary);
+    border-bottom: 0;
   }
   @include at992 {
     border: var(--border-primary);
     border-radius: var(--border-radius-12px);
   }
-  &--compact {
-    @include to992 {
-      box-shadow: 0 1px 0 0 var(--border-color-secondary);
-      border-bottom: 0;
-    }
+  @include hover {
+    border-color: var(--border-color-hover);
   }
-  &--compact--opened {
+  &--opened {
     @include to992 {
       border-top: var(--border-primary);
     }
     @include to992 {
       box-shadow: 0 1px 0 0 var(--border-color-secondary);
-    }
-  }
-  &--clickable {
-    @include hover {
-      border-color: var(--border-color-hover);
     }
   }
   &__inner {
@@ -53,12 +46,12 @@
       }
       &__cover {
         grid-area: cover;
-        position: relative;
-        padding: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
+        margin: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
         @include at992 {
-          padding: var(--padding-10px);
+          margin: var(--padding-10px);
         }
         &__inner {
+          position: relative;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -74,6 +67,21 @@
           @include at992 {
             width: 156px;
             height: 82px;
+          }
+          &::after {
+            content: '';
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.08);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+          }
+          @include hover {
+            &::after {
+              opacity: 1;
+            }
           }
           > img {
             width: 100%;
@@ -121,6 +129,26 @@
               100% {
                 transform: rotate(360deg);
               }
+            }
+          }
+          &__site-name {
+            position: absolute;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: var(--padding-4px);
+            bottom: var(--padding-4px);
+            left: var(--padding-4px);
+            font-family: var(--font-family-inter-tight);
+            font-size: var(--font-size-11px);
+            border-radius: var(--border-radius-4px);
+            font-weight: var(--font-weight-inter-semi-bold);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 2px 5px;
+            > svg {
+              width: 8px;
+              fill: white;
             }
           }
         }
@@ -354,7 +382,7 @@
         &__actions {
           float: right;
           display: flex;
-          gap: 14px;
+          gap: 12px;
           padding-right: 10px;
           @include at992 {
             padding-right: 8px;

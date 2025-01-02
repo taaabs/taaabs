@@ -23,6 +23,7 @@ import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dro
 import { url_path_for_display } from '@shared/utils/url-path-for-display/url-path-for-display'
 import { use_favicons } from './hooks/use-favicons'
 import { use_cover } from './hooks/use-cover'
+import { is_video_url } from '@shared/utils/is-video-url'
 
 dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
@@ -81,7 +82,6 @@ export namespace _Bookmark {
     note?: string
     date: Date
     created_at: Date
-    density: 'default' | 'compact'
     is_compact?: boolean
     library_url: string
     on_tag_click: (tag_id: number) => void
@@ -496,7 +496,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               className={
                 styles.container__inner__card__tags__actions__huggs__emoji
               }
-              onClick={props.on_private_emoji_click}
+              onClick={(e) => {
+                e.stopPropagation()
+                props.on_private_emoji_click?.()
+              }}
             >
               ⠀
               <div
@@ -611,27 +614,18 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
 
     return (
       <div
-        className={cn(
-          styles.container,
-          {
-            [styles['container--clickable']]: props.density == 'compact',
-          },
-          {
-            [styles['container--compact']]: props.density == 'compact',
-          },
-          {
-            [styles['container--compact--opened']]:
-              props.density == 'compact' && props.is_compact == false,
-          },
-        )}
-        role="button"
+        className={cn(styles.container, {
+          [styles['container--opened']]: props.is_compact == false,
+        })}
         onClick={() => {
           if (
             !is_desktop_menu_open &&
             !is_mobile_menu_open &&
             !link_url_menu_opened
-          )
+          ) {
+            console.log(is_desktop_menu_open)
             props.on_click()
+          }
         }}
         onMouseUp={() => {
           if (
@@ -679,13 +673,20 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   className={styles.container__inner__card__cover__inner}
                   onClick={
                     primary_url
-                      ? () => {
-                          set_recently_visited_link_idx(0)
-                          props.on_link_click(primary_url)
-                        }
+                      ? is_video_url(primary_url)
+                        ? (e) => {
+                            e.stopPropagation()
+                            props.on_video_player_click(primary_url)
+                          }
+                        : (e) => {
+                            e.stopPropagation()
+                            set_recently_visited_link_idx(0)
+                            props.on_link_click(primary_url)
+                          }
                       : undefined
                   }
                   style={{ cursor: primary_url ? 'pointer' : undefined }}
+                  role={primary_url ? 'button' : undefined}
                 >
                   <img
                     className={
@@ -699,11 +700,46 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     }
                     src={cover}
                   />
+                  {primary_url && (
+                    <div
+                      className={
+                        styles[
+                          'container__inner__card__cover__inner__site-name'
+                        ]
+                      }
+                    >
+                      {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
+                      {get_domain_from_url(primary_url)
+                        .replace('www.', '')
+                        .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
+                        .slice(0, 20) +
+                        (get_domain_from_url(primary_url).replace('www.', '')
+                          .length > 20
+                          ? '...'
+                          : '')}
+                    </div>
+                  )}
                 </div>
               </div>
             ) : (
               <div className={styles.container__inner__card__cover}>
-                <div className={styles.container__inner__card__cover__inner}>
+                <div
+                  className={styles.container__inner__card__cover__inner}
+                  onClick={
+                    primary_url
+                      ? is_video_url(primary_url)
+                        ? () => {
+                            props.on_video_player_click(primary_url)
+                          }
+                        : () => {
+                            set_recently_visited_link_idx(0)
+                            props.on_link_click(primary_url)
+                          }
+                      : undefined
+                  }
+                  style={{ cursor: primary_url ? 'pointer' : undefined }}
+                  role={primary_url ? 'button' : undefined}
+                >
                   {props.links && props.links.length > 0 ? (
                     is_fetching_cover ? (
                       <div
@@ -718,6 +754,25 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     )
                   ) : (
                     <Icon variant="NOTE" />
+                  )}
+                  {primary_url && (
+                    <div
+                      className={
+                        styles[
+                          'container__inner__card__cover__inner__site-name'
+                        ]
+                      }
+                    >
+                      {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
+                      {get_domain_from_url(primary_url)
+                        .replace('www.', '')
+                        .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
+                        .slice(0, 20) +
+                        (get_domain_from_url(primary_url).replace('www.', '')
+                          .length > 20
+                          ? '...'
+                          : '')}
+                    </div>
                   )}
                 </div>
               </div>
@@ -740,7 +795,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               >
                 <OutsideClickHandler
                   disabled={!is_desktop_menu_open}
-                  onOutsideClick={toggle_is_desktop_menu_open}
+                  onOutsideClick={() => {
+                    requestAnimationFrame(toggle_is_desktop_menu_open)
+                  }}
                 >
                   <button
                     className={cn(
@@ -788,8 +845,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     onClick={(e) => {
                       e.stopPropagation()
                       e.preventDefault()
-                      set_recently_visited_link_idx(0)
-                      props.on_link_click(primary_url)
+                      if (is_video_url(primary_url)) {
+                        props.on_video_player_click(primary_url)
+                      } else {
+                        set_recently_visited_link_idx(0)
+                        props.on_link_click(primary_url)
+                      }
                     }}
                     onAuxClick={(e) => {
                       if (e.button != 1) return
@@ -810,6 +871,22 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     styles.container__inner__card__title__text,
                     styles['container__inner__card__title__text--untitled'],
                   )}
+                  onClick={(e) => {
+                    // Added onClick handler here
+                    e.stopPropagation()
+                    e.preventDefault()
+                    if (is_video_url(primary_url)) {
+                      props.on_video_player_click(primary_url)
+                    } else {
+                      set_recently_visited_link_idx(0)
+                      props.on_link_click(primary_url)
+                    }
+                  }}
+                  onAuxClick={(e) => {
+                    // Added onAuxClick handler here for middle-click functionality
+                    if (e.button != 1) return
+                    props.on_link_middle_click()
+                  }}
                 >
                   {title}
                 </a>
@@ -849,7 +926,10 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 {tags_dom}
                 <button
                   key={'edit-tags'}
-                  onClick={props.on_modify_tags_click}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    props.on_modify_tags_click?.()
+                  }}
                   className={cn(
                     styles.container__inner__card__tags__edit,
                     'static',
@@ -960,6 +1040,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             ]]: is_site_highlighted,
                           },
                         )}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                        }}
                       >
                         {link.is_public ? (
                           <img
@@ -989,7 +1072,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                               'container__inner__links__item__link__player'
                             ]
                           }
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation()
                             props.on_video_player_click(link.url)
                           }}
                         >
@@ -1058,7 +1142,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                               'container__inner__links__item__actions__public-saves'
                             ]
                           }
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation()
                             props.on_saves_click({
                               url: link.url,
                               saves: link.saves!,
@@ -1088,7 +1173,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         <OutsideClickHandler
                           disabled={link_url_menu_opened != link.url}
                           onOutsideClick={() => {
-                            set_link_url_menu_opened(undefined)
+                            requestAnimationFrame(() => {
+                              set_link_url_menu_opened(undefined)
+                            })
                           }}
                         >
                           <button
@@ -1146,7 +1233,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     o.points == n.points &&
     o.points_given == n.points_given &&
     o.is_compact == n.is_compact &&
-    o.density == n.density &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&
     o.dragged_tag?.id == n.dragged_tag?.id &&
@@ -1209,18 +1295,6 @@ const highlight_link_text = (
       <span key={i}>{word}</span>
     )
   })
-}
-
-// Video urls must be supported by VideoEmbedModal
-const is_video_url = (url: string): boolean => {
-  const youtube_regex = /^https:\/\/www\.youtube\.com\/watch\?v=[a-zA-Z0-9_-]+$/
-  const pornhub_regex =
-    /^https:\/\/(?:[a-z]{3}\.)?pornhub\.com\/view_video\.php\?viewkey=[a-zA-Z0-9]+$/
-  const twitch_regex = /^https:\/\/www\.twitch\.tv\/videos\/\d+$/
-
-  return (
-    youtube_regex.test(url) || pornhub_regex.test(url) || twitch_regex.test(url)
-  )
 }
 
 const get_primary_url = (

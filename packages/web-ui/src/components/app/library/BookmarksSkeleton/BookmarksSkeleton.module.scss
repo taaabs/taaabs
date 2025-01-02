@@ -6,16 +6,10 @@
   flex-direction: column;
   z-index: 1;
   width: 100%;
-  @include to992 {
-    gap: 12px;
-  }
-  @include at992 {
-    gap: 16px;
-  }
+  gap: 8px;
   > span > span {
-    height: 160px;
+    height: 145px;
     @include at992 {
-      height: 145px;
       border-radius: var(--border-radius-12px);
     }
   }

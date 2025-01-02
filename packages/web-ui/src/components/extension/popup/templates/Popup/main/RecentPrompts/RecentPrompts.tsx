@@ -75,10 +75,10 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   useEffect(() => {
     const simplebar_el = simplebar_ref.current.getScrollElement()
     const handle_scroll = () => {
-      set_show_top_shadow(simplebar_el.scrollTop > 5)
+      set_show_top_shadow(simplebar_el.scrollTop)
       set_show_bottom_shadow(
         simplebar_el.scrollTop + simplebar_el.clientHeight <
-          simplebar_el.scrollHeight - 5,
+          simplebar_el.scrollHeight,
       )
     }
     simplebar_el.addEventListener('scroll', handle_scroll)

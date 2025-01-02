@@ -1,9 +1,7 @@
 declare const styles: {
   readonly "bookmark_shake": string;
   readonly "container": string;
-  readonly "container--clickable": string;
-  readonly "container--compact": string;
-  readonly "container--compact--opened": string;
+  readonly "container--opened": string;
   readonly "container__inner": string;
   readonly "container__inner__card": string;
   readonly "container__inner__card--corners-fix": string;
@@ -11,6 +9,7 @@ declare const styles: {
   readonly "container__inner__card__cover__inner": string;
   readonly "container__inner__card__cover__inner__fill-image": string;
   readonly "container__inner__card__cover__inner__loader": string;
+  readonly "container__inner__card__cover__inner__site-name": string;
   readonly "container__inner__card__cover__inner__top-image": string;
   readonly "container__inner__card__date": string;
   readonly "container__inner__card__date__text": string;

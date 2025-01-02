@@ -6,6 +6,9 @@
   flex-direction: column;
   border-top: var(--border-primary);
   border-bottom: var(--border-primary);
+  @include to992 {
+    margin-bottom: 8px;
+  }
   @include at992 {
     border: var(--border-primary);
     border-radius: var(--border-radius-12px);
@@ -26,6 +29,9 @@
   padding: 0 var(--padding-16px);
   border-top: var(--border-primary);
   border-bottom: var(--border-primary);
+  @include to992 {
+    margin-bottom: 8px;
+  }
   @include at992 {
     border: var(--border-primary);
     border-radius: var(--border-radius-12px);
@@ -49,6 +55,9 @@
   padding: 0 var(--padding-16px);
   border-top: var(--border-primary);
   border-bottom: var(--border-primary);
+  @include to992 {
+    margin-bottom: 8px;
+  }
   @include at992 {
     border: var(--border-primary);
     border-radius: var(--border-radius-12px);

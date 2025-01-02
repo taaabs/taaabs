@@ -29,28 +29,22 @@ export const get_authorized_bookmarks_by_ids = (params: {
         params.encryption_key,
       )
 
-      let bookmarks_with_density: Bookmark_Entity[] = []
-
-      if (get_state().bookmarks.density == 'compact') {
-        bookmarks_with_density = bookmarks
-          ? bookmarks.map((bookmark) => ({
-              ...bookmark,
-              is_compact: true,
-            }))
-          : []
-      } else {
-        bookmarks_with_density = bookmarks || []
-      }
+      const bookmarks_not_compact = bookmarks
+        ? bookmarks.map((bookmark) => ({
+            ...bookmark,
+            is_compact: false,
+          }))
+        : []
 
       dispatch(bookmarks_actions.set_is_fetching(false))
       dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(true))
 
       if (params.is_next_page) {
-        dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
+        dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_not_compact))
         dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
       } else {
         dispatch(
-          bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density),
+          bookmarks_actions.set_incoming_bookmarks(bookmarks_not_compact),
         )
         dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
         dispatch(

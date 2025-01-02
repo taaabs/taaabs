@@ -2,20 +2,14 @@
 @use '../../../../styles/foundation' as *;
 
 .wrapper {
-  margin: var(--padding-12px) 0;
+  @include to992 {
+    margin: 0;
+  }
   @include at992 {
-    margin: var(--padding-16px) 0;
-  }
-  &--compact {
-    @include to992 {
-      margin: 0;
-    }
-    @include at992 {
-      margin: var(--padding-8px) 0;
-    }
-  }
-  &--compact-open {
     margin: var(--padding-8px) 0;
+  }
+  &--open {
+    margin: var(--padding-16px) 0;
     @include at992 {
       margin: var(--padding-16px) 0;
     }

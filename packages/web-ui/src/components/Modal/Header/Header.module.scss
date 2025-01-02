@@ -53,7 +53,6 @@
   height: var(--button-dimension-28px);
   background-color: var(--blue100);
   border-radius: 50%;
-  transition: var(--transition-duration-150ms);
   @include dark {
     background-color: var(--dark300);
   }

@@ -2,7 +2,6 @@ import { Bookmark_Entity } from '@repositories/modules/bookmarks/domain/entities
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import * as thunks from './action-creators'
-import { system_values } from '@shared/constants/system-values'
 
 type BookmarksState = {
   is_fetching?: boolean
@@ -16,12 +15,9 @@ type BookmarksState = {
   has_more_bookmarks?: boolean
   processing_progress?: number // Filling tag combinations and generating counts
   import_progress?: number
-  density: 'default' | 'compact'
 }
 
-const initial_state: BookmarksState = {
-  density: 'default',
-}
+const initial_state: BookmarksState = {}
 
 export const bookmarks_slice = createSlice({
   name: 'bookmarks',
@@ -98,34 +94,6 @@ export const bookmarks_slice = createSlice({
       action: PayloadAction<BookmarksState['import_progress']>,
     ) {
       state.import_progress = action.payload
-    },
-    set_density(state, action: PayloadAction<BookmarksState['density']>) {
-      state.density = action.payload
-    },
-    set_density_of_current_bookmarks(
-      state,
-      action: PayloadAction<BookmarksState['density']>,
-    ) {
-      state.density = action.payload
-
-      if (state.bookmarks) {
-        if (
-          state.has_more_bookmarks == false &&
-          state.bookmarks.length > system_values.library.bookmarks.per_page
-        ) {
-          state.has_more_bookmarks = true
-        }
-
-        const bookmarks = state.bookmarks
-          .slice(0, system_values.library.bookmarks.per_page)
-          .map((bookmark) => ({
-            ...bookmark,
-            render_height: undefined,
-            is_compact: action.payload == 'compact',
-          }))
-        state.incoming_bookmarks = bookmarks
-        state.bookmarks = bookmarks
-      }
     },
     set_bookmark_is_compact(
       state,

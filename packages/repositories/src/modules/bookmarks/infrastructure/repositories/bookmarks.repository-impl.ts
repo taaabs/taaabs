@@ -79,6 +79,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         ? await AES.decrypt(bookmark.note_aes, encryption_key)
         : undefined,
       is_unsorted: bookmark.is_unsorted,
+      is_compact: true,
       stars: bookmark.stars || 0,
       points: bookmark.points,
       tags,

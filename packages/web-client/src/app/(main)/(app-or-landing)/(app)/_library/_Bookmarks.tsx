@@ -463,22 +463,20 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
     }
 
     const handle_bookmark_click = () => {
-      if (bookmarks_hook.density == 'compact') {
-        if (bookmark.is_compact || bookmark.is_compact === undefined) {
-          dispatch(
-            bookmarks_actions.set_bookmark_is_compact({
-              index: i,
-              is_compact: false,
-            }),
-          )
-        } else {
-          dispatch(
-            bookmarks_actions.set_bookmark_is_compact({
-              index: i,
-              is_compact: true,
-            }),
-          )
-        }
+      if (bookmark.is_compact) {
+        dispatch(
+          bookmarks_actions.set_bookmark_is_compact({
+            index: i,
+            is_compact: false,
+          }),
+        )
+      } else {
+        dispatch(
+          bookmarks_actions.set_bookmark_is_compact({
+            index: i,
+            is_compact: true,
+          }),
+        )
       }
     }
 
@@ -750,7 +748,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           !username ? tag_view_options_hook.set_dragged_tag : undefined
         }
         on_modify_tags_click={!username ? handle_modify_tags_click : undefined}
-        density={bookmarks_hook.density}
         is_search_result={bookmarks_hook.showing_bookmarks_fetched_by_ids}
         is_compact={bookmark.is_compact}
         updated_at={bookmark.updated_at}

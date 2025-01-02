@@ -3,14 +3,15 @@
 
 .item {
   display: flex;
-  gap: 12px;
+  gap: var(--padding-8px);
   justify-content: space-between;
   position: relative;
-  padding: 0 16px 0 12px;
+  padding: 0 var(--padding-16px) 0 var(--padding-12px);
   border-bottom: var(--border-secondary);
   height: var(--button-dimension-52px);
   @include at992 {
-    padding: 0 12px;
+    padding: 0 var(--padding-12px);
+    gap: var(--padding-12px);
   }
   &:nth-of-type(even) {
     background-color: var(--neutral25);
@@ -20,8 +21,8 @@
   }
   &:last-of-type {
     border-bottom: none;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    border-bottom-left-radius: var(--padding-12px);
+    border-bottom-right-radius: var(--padding-12px);
   }
   &--recently-visited {
     &::after {

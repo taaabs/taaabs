@@ -29,7 +29,6 @@ export const use_bookmarks = () => {
     incoming_bookmarks,
     is_fetching_more_bookmarks,
     has_more_bookmarks,
-    density,
     is_fetching,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
@@ -281,16 +280,6 @@ export const use_bookmarks = () => {
             ),
           )
         }
-        const density = sessionStorage.getItem(
-          browser_storage.session_storage.library.density({
-            username: username as string,
-            search_params: search_params.toString(),
-            hash: window.location.hash,
-          }),
-        )
-        if (density) {
-          dispatch(bookmarks_actions.set_density(density as any))
-        }
       } else {
         throw new Error('Session data was not found.')
       }
@@ -306,7 +295,6 @@ export const use_bookmarks = () => {
       bookmarks: Bookmark_Entity[]
       search_params: string
       has_more_bookmarks: boolean
-      density: string
       username?: string
     }) => {
       sessionStorage.setItem(
@@ -324,14 +312,6 @@ export const use_bookmarks = () => {
         }),
         `${params.has_more_bookmarks}`,
       )
-      sessionStorage.setItem(
-        browser_storage.session_storage.library.density({
-          username: params.username,
-          search_params: params.search_params,
-          hash: window.location.hash,
-        }),
-        `${params.density}`,
-      )
     },
     [],
     100,
@@ -344,7 +324,6 @@ export const use_bookmarks = () => {
       search_params: search_params.toString(),
       has_more_bookmarks,
       username,
-      density,
     })
   }, [bookmarks])
 
@@ -356,7 +335,6 @@ export const use_bookmarks = () => {
     is_fetching,
     is_fetching_more_bookmarks,
     has_more_bookmarks,
-    density,
     showing_bookmarks_fetched_by_ids,
     first_bookmarks_fetched_at_timestamp,
     is_fetching_first_bookmarks,

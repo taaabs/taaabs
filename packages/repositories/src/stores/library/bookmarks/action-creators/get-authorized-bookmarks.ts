@@ -83,19 +83,6 @@ export const get_authorized_bookmarks = (params: {
       dispatch(pinned_actions.set_should_refetch(true))
     }
 
-    let bookmarks_with_density: Bookmark_Entity[] = []
-
-    if (get_state().bookmarks.density == 'compact') {
-      bookmarks_with_density = result.bookmarks
-        ? result.bookmarks.map((bookmark) => ({
-            ...bookmark,
-            is_compact: true,
-          }))
-        : []
-    } else {
-      bookmarks_with_density = result.bookmarks || []
-    }
-
     dispatch(bookmarks_actions.set_is_fetching(false))
     dispatch(bookmarks_actions.set_showing_bookmarks_fetched_by_ids(false))
     dispatch(
@@ -105,10 +92,10 @@ export const get_authorized_bookmarks = (params: {
     )
 
     if (params.request_params.after) {
-      dispatch(bookmarks_actions.set_more_bookmarks(bookmarks_with_density))
+      dispatch(bookmarks_actions.set_more_bookmarks(result.bookmarks))
       dispatch(bookmarks_actions.set_is_fetching_more_bookmarks(false))
     } else {
-      dispatch(bookmarks_actions.set_incoming_bookmarks(bookmarks_with_density))
+      dispatch(bookmarks_actions.set_incoming_bookmarks(result.bookmarks))
       dispatch(bookmarks_actions.set_is_fetching_first_bookmarks(false))
       dispatch(
         bookmarks_actions.set_first_bookmarks_fetched_at_timestamp(Date.now()),
