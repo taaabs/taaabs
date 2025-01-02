@@ -46,6 +46,8 @@ export namespace PinnedBookmarks {
       open_snapshot: string
       unpin: string
     }
+    is_revealed?: boolean
+    on_uncollapsed: () => void
   }
 }
 
@@ -62,6 +64,9 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
       })),
     )
     const [is_sortable_disabled, set_is_sortable_disabled] = useState<boolean>()
+    const [is_collapsed, set_is_collapsed] = useState<boolean>(
+      props.is_revealed === undefined ? true : !props.is_revealed,
+    )
 
     let relevant_items = 0
 
@@ -179,37 +184,54 @@ export const PinnedBookmarks: React.FC<PinnedBookmarks.Props> = memo(
     return (
       <>
         {relevant_items == 0 ? (
-          <div className={styles.items}>
-            <div className={styles['nothing-pinned']}>
-              {props.translations.nothing_pinned}
-            </div>
+          <div className={styles['nothing-pinned']}>
+            {props.translations.nothing_pinned}
           </div>
-        ) : props.is_draggable ? (
-          <ReactSortable
-            list={sortable_items}
-            setList={(new_sortable_items) => {
-              if (
-                JSON.stringify(new_sortable_items.map((i) => i.id)) ==
-                JSON.stringify(sortable_items.map((i) => i.id))
-              )
-                return
-              set_sortable_items(new_sortable_items)
-              props.on_change(new_sortable_items)
-            }}
-            animation={system_values.sortablejs_animation_duration}
-            className={styles.items}
-            delay={system_values.sortablejs_delay}
-            delayOnTouchOnly={true}
-            filter=".no-drag"
-            disabled={is_sortable_disabled}
-          >
-            {items_dom}
-          </ReactSortable>
         ) : (
-          <div className={styles.items}>{items_dom}</div>
+          <>
+            {is_collapsed ? (
+              <div
+                className={styles['collapsed-state']}
+                onClick={() => {
+                  set_is_collapsed(false)
+                  props.on_uncollapsed?.()
+                }}
+              >
+                <button>{relevant_items} pinned bookmarks</button>
+              </div>
+            ) : props.is_draggable ? (
+              <ReactSortable
+                list={sortable_items}
+                setList={(new_sortable_items) => {
+                  if (
+                    JSON.stringify(new_sortable_items.map((i) => i.id)) ==
+                    JSON.stringify(sortable_items.map((i) => i.id))
+                  )
+                    return
+                  set_sortable_items(new_sortable_items)
+                  props.on_change(
+                    new_sortable_items.map((i) => {
+                      const { id, ...rest } = i
+                      return rest
+                    }),
+                  )
+                }}
+                animation={system_values.sortablejs_animation_duration}
+                className={styles.items}
+                delay={system_values.sortablejs_delay}
+                delayOnTouchOnly={true}
+                filter=".no-drag"
+                disabled={is_sortable_disabled}
+              >
+                {items_dom}
+              </ReactSortable>
+            ) : (
+              <div className={styles.items}>{items_dom}</div>
+            )}
+          </>
         )}
       </>
     )
   },
-  () => true
+  () => true,
 )

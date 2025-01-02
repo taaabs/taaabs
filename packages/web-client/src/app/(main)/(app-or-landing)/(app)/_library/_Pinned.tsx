@@ -34,7 +34,6 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
     filter_view_options_hook,
     pinned_hook,
     bookmarks_hook,
-
     username,
     library_updated_at_timestamp,
     is_archived_filter,
@@ -207,6 +206,25 @@ export const _Pinned: React.FC<_Pinned.Props> = (props) => {
       selected_archived={is_archived_filter}
       current_gte={date_view_options_hook.current_gte}
       current_lte={date_view_options_hook.current_lte}
+      is_revealed={
+        sessionStorage.getItem(
+          browser_storage.session_storage.library.is_pinned_revealed({
+            username,
+            search_params: window.location.search,
+            hash: window.location.hash,
+          }),
+        ) === 'true'
+      }
+      on_uncollapsed={() => {
+        sessionStorage.setItem(
+          browser_storage.session_storage.library.is_pinned_revealed({
+            username,
+            search_params: window.location.search,
+            hash: window.location.hash,
+          }),
+          'true',
+        )
+      }}
       translations={{
         nothing_pinned: props.dictionary.app.library.nothing_pinned,
         open_original_url:

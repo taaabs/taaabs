@@ -26,13 +26,15 @@
   flex-direction: column;
 }
 .feedback {
-  height: var(--search-mobile-height);
+  height: calc(
+    var(--search-mobile-height) + var(--padding-12px) + var(--padding-12px)
+  );
   display: flex;
   justify-content: center;
   align-items: center;
   @include at992 {
-    margin-bottom: 16px;
-    height: var(--button-dimension-52px);
+    height: calc(var(--search-desktop-height));
+    margin-bottom: var(--padding-16px);
   }
   > a {
     color: var(--accent-color);

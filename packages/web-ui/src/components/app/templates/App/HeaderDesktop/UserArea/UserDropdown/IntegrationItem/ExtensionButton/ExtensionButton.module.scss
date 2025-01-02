@@ -9,7 +9,6 @@
   border: var(--border-primary);
   padding: var(--padding-8px) var(--padding-12px);
   border-radius: var(--border-radius-12px);
-  @include transition-150ms(border-color);
   @include hover {
     border-color: var(--border-color-hover);
   }

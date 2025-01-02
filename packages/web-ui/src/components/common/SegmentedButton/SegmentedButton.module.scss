@@ -3,15 +3,14 @@
 
 .container {
   border-radius: var(--border-radius-10px);
-  outline: 1px solid var(--border-color-secondary);
+  outline: 1px solid var(--border-color-primary);
   outline-offset: 3px;
   margin: 4px;
   display: flex;
   justify-content: space-evenly;
   position: relative;
-  @include transition-150ms(outline-color);
   @include hover {
-    outline-color: var(--border-color-primary);
+    outline-color: var(--border-color-hover);
   }
   &--disabled {
     opacity: var(--dimmed-opacity);
@@ -40,7 +39,7 @@
     opacity: 0;
     background-color: var(--neutral150);
     @include dark {
-      background-color: var(--dark200);
+      background-color: var(--dark300);
     }
   }
   &--show-separator-after::after {

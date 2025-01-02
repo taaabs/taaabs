@@ -17,7 +17,6 @@
     right: 0;
     background-color: var(--transparent-hover-background);
     opacity: 0;
-    @include transition-150ms(opacity);
   }
   @include hover {
     &::before {

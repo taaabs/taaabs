@@ -8,7 +8,6 @@
   height: 100%;
   width: var(--header-desktop-height);
   position: relative;
-  @include transition-150ms(background-color);
   @include hover {
     background-color: var(--transparent-hover-background);
   }

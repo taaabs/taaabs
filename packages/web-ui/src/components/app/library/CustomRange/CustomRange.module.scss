@@ -6,12 +6,15 @@
   border-radius: var(--border-radius-12px);
   border-bottom-left-radius: 13px;
   border-bottom-right-radius: 13px;
-  border: var(--border-secondary);
+  border: var(--border-primary);
   overflow: hidden;
   height: var(--custom-range-height);
   display: flex;
   align-items: center;
   justify-content: center;
+  @include hover {
+    border-color: var(--border-color-hover);
+  }
   &__details {
     position: absolute;
     z-index: 1;

@@ -6,6 +6,6 @@
   flex-direction: row;
   gap: var(--padding-8px);
   > * {
-    flex-grow: 1;
+    flex: 1;
   }
 }

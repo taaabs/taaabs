@@ -11,7 +11,6 @@
   white-space: nowrap;
   font-size: var(--font-size-16px);
   font-weight: var(--font-weight-inter-semi-bold);
-  @include transition-150ms(background-color);
   @include hover {
     background-color: var(--neutral100);
     @include dark {

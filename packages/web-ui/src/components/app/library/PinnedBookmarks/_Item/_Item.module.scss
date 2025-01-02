@@ -87,7 +87,6 @@
       align-items: center;
       justify-content: center;
       border-radius: var(--border-radius-999px);
-      @include transition-150ms(background-color);
       width: var(--button-dimension-40px);
       height: var(--button-dimension-28px);
       background-color: var(--blue100);
@@ -99,13 +98,12 @@
         @include dark {
           fill: var(--blue500);
         }
-        @include transition-150ms(fill);
         width: 10px;
       }
       @include hover {
         background-color: var(--blue200);
         @include dark {
-          background-color: var(--dark300);
+          background-color: var(--dark400);
         }
       }
     }
@@ -172,7 +170,6 @@
       align-items: center;
       justify-content: center;
       border-radius: var(--border-radius-999px);
-      @include transition-150ms(background-color);
       width: var(--button-dimension-28px);
       height: var(--button-dimension-28px);
       background-color: var(--neutral100);
@@ -184,7 +181,6 @@
         @include dark {
           fill: var(--dark500);
         }
-        @include transition-150ms(fill);
         width: 10px;
       }
       @include hover {
@@ -206,7 +202,6 @@
         align-items: center;
         justify-content: center;
         border-radius: var(--border-radius-999px);
-        @include transition-150ms(background-color);
         width: var(--button-dimension-28px);
         height: var(--button-dimension-28px);
         background-color: var(--neutral100);
@@ -215,7 +210,6 @@
         }
         > svg {
           fill: var(--neutral500);
-          @include transition-150ms(fill);
           width: var(--icon-dimension-16px);
           @include dark {
             fill: var(--dark500);

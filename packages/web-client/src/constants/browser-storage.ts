@@ -54,6 +54,14 @@ export const browser_storage = {
         }${params.hash}`,
       pinned: (params: { username?: string }) =>
         `library.pinned.${params.username || ''}`,
+      is_pinned_revealed: (params: {
+        username?: string
+        search_params: string
+        hash: string
+      }) =>
+        `library.is_pinned_revealed.${params.username || ''}?${
+          params.search_params || ''
+        }${params.hash}`,
       highlights: (params: {
         username?: string
         search_params: string

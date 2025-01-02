@@ -9,7 +9,6 @@
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  @include transition-150ms(background-color);
   width: var(--button-dimension-40px);
   height: var(--button-dimension-40px);
   @include hover {
@@ -19,6 +18,5 @@
     width: var(--icon-dimension-20px);
     height: var(--icon-dimension-20px);
     fill: var(--black);
-    @include transition-150ms(fill);
   }
 }

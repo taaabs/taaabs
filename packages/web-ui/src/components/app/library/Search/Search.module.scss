@@ -17,7 +17,6 @@
   border-radius: var(--border-radius-999px);
   gap: var(--padding-6px);
   height: var(--search-mobile-height);
-  @include transition-150ms;
   @include at992 {
     transform: translateX(calc(8px * -1));
     width: calc(100% + (8px * 2));

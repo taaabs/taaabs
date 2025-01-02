@@ -4,10 +4,10 @@
 .items {
   display: flex;
   flex-direction: column;
-  border-top: var(--border-secondary);
-  border-bottom: var(--border-secondary);
+  border-top: var(--border-primary);
+  border-bottom: var(--border-primary);
   @include at992 {
-    border: var(--border-secondary);
+    border: var(--border-primary);
     border-radius: var(--border-radius-12px);
   }
 }
@@ -25,4 +25,32 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
+  border-top: var(--border-primary);
+  border-bottom: var(--border-primary);
+  @include at992 {
+    border: var(--border-primary);
+    border-radius: var(--border-radius-12px);
+  }
+}
+.collapsed-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-dimension-52px);
+  font-size: var(--font-size-13px);
+  text-align: center;
+  width: 100%;
+  padding: 0 var(--padding-16px);
+  border-top: var(--border-primary);
+  border-bottom: var(--border-primary);
+  @include at992 {
+    border: var(--border-primary);
+    border-radius: var(--border-radius-12px);
+  }
+  > button {
+    @include hover {
+      cursor: pointer;
+      @include text-decoration-underlinie-thin;
+    }
+  }
 }
