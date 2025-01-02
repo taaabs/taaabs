@@ -11,9 +11,6 @@
     border: var(--border-primary);
     border-radius: var(--border-radius-12px);
   }
-  @include hover {
-    border-color: var(--border-color-hover);
-  }
   &--compact {
     @include to992 {
       box-shadow: 0 1px 0 0 var(--border-color-secondary);

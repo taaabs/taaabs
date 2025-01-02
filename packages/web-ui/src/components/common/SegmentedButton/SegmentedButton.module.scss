@@ -9,9 +9,6 @@
   display: flex;
   justify-content: space-evenly;
   position: relative;
-  @include hover {
-    outline-color: var(--border-color-hover);
-  }
   &--disabled {
     opacity: var(--dimmed-opacity);
     pointer-events: none;
