@@ -158,7 +158,8 @@ export const PromptField: React.FC<{
       text_not_found={
         !current_url_hook.is_new_tab_page &&
         !current_url_hook.url.startsWith('https://taaabs.com') &&
-        parsed_html_hook.parsed_html === null
+        parsed_html_hook.parsed_html === null &&
+        !text_selection_hook.selected_text
       }
       translations={{
         new_prompt: 'New chat',
