@@ -234,14 +234,6 @@ export const use_bookmarks = () => {
 
   useUpdateEffect(() => {
     try {
-      // In two cases fresh results should be loaded - URL has #fresh or #url.
-      // #fresh is passed when user navigates to the library from the extension.
-      // We prevent stale results if library was previously opened on a given tab.
-      // #url=URL is passed by bookmarklet or extension.
-      if (window.location.hash.startsWith('#fresh')) {
-        throw new Error('Should load fresh results.')
-      }
-
       const bookmarks = sessionStorage.getItem(
         browser_storage.session_storage.library.bookmarks({
           username: username as string,

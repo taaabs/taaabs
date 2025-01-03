@@ -145,14 +145,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       counts_hook.set_fetched_at_timestamp_commited(
         counts_hook.fetched_at_timestamp,
       )
-      // Initial scroll position restoration
-      if (initial_scroll_y && !library_updated_at_timestamp) {
-        if (window.location.hash != '#fresh') {
-          requestAnimationFrame(() => {
-            window.scrollTo(0, initial_scroll_y)
-          })
-        }
-      }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
       if (search_hook.result) {
