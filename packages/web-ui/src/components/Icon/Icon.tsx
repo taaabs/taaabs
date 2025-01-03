@@ -9,6 +9,7 @@ import ChatBubbleCorner from '../../assets/icons/chat-bubble-corner.svg'
 import Chat from '../../assets/icons/chat.svg'
 import ChatFilled from '../../assets/icons/chat-filled.svg'
 import Check from '../../assets/icons/check.svg'
+import Chevron from '../../assets/icons/chevron.svg'
 import Chrome from '../../assets/icons/chrome.svg'
 import Collapse from '../../assets/icons/collapse.svg'
 import Copy from '../../assets/icons/copy.svg'
@@ -19,6 +20,7 @@ import DensityDefault from '../../assets/icons/density-default.svg'
 import Edit from '../../assets/icons/edit.svg'
 import ExtensionIcon from '../../assets/icons/extension-icon.svg'
 import Eye from '../../assets/icons/eye.svg'
+import Filter from '../../assets/icons/filter.svg'
 import GitHub from '../../assets/icons/github.svg'
 import Globe from '../../assets/icons/globe.svg'
 import Google from '../../assets/icons/google.svg'
@@ -33,7 +35,6 @@ import LessThan from '../../assets/icons/less-than.svg'
 import Link from '../../assets/icons/link.svg'
 import Logo from '../../assets/icons/logo.svg'
 import Menu from '../../assets/icons/menu.svg'
-import Filter from '../../assets/icons/filter.svg'
 import More from '../../assets/icons/more.svg'
 import NewTab from '../../assets/icons/new-tab.svg'
 import Note from '../../assets/icons/note.svg'
@@ -75,6 +76,7 @@ export namespace Icon {
     | 'CHAT_BUBBLE_CORNER'
     | 'CHAT_FILLED'
     | 'CHECK'
+    | 'CHEVRON'
     | 'CHROME'
     | 'COLLAPSE'
     | 'COPY'
@@ -85,6 +87,7 @@ export namespace Icon {
     | 'EDIT'
     | 'EXTENSION_ICON'
     | 'EYE'
+    | 'FILTER'
     | 'GITHUB'
     | 'GLOBE'
     | 'GOOGLE'
@@ -99,7 +102,6 @@ export namespace Icon {
     | 'LINK'
     | 'LOGO'
     | 'MENU'
-    | 'FILTER'
     | 'MORE'
     | 'NEW_TAB'
     | 'NOTE'
@@ -170,6 +172,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
     case 'CHECK':
       icon = <Check />
       break
+    case 'CHEVRON':
+      icon = <Chevron />
+      break
     case 'CHROME':
       icon = <Chrome />
       break
@@ -199,6 +204,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'EYE':
       icon = <Eye />
+      break
+    case 'FILTER':
+      icon = <Filter />
       break
     case 'GITHUB':
       icon = <GitHub />
@@ -241,9 +249,6 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'MENU':
       icon = <Menu />
-      break
-    case 'FILTER':
-      icon = <Filter />
       break
     case 'MORE':
       icon = <More />

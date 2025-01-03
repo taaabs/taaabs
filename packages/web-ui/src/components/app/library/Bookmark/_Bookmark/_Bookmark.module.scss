@@ -329,6 +329,28 @@
             }
           }
         }
+        &__toggle-compact {
+          display: inline-flex;
+          float: left;
+          align-items: center;
+          justify-content: center;
+          border-radius: var(--border-radius-999px);
+          width: var(--button-dimension-28px);
+          height: var(--button-dimension-28px);
+          border: var(--border-secondary);
+          svg {
+            padding-top: 1px;
+            fill: var(--black);
+            width: var(--icon-dimension-13px);
+            opacity: 0.4;
+          }
+          @include hover {
+            border-color: var(--border-color-primary);
+          }
+          &--open svg {
+            transform: scaleY(-1);
+          }
+        }
         &__tag {
           display: inline-flex;
           float: left;
@@ -806,7 +828,7 @@
 }
 .slot {
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   top: calc(var(--button-dimension-28px));
   right: 0;
   bottom: 0;

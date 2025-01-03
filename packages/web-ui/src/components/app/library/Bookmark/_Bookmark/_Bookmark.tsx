@@ -204,6 +204,18 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     }, [props.updated_at])
 
     const tags_dom = [
+      <button
+        className={cn(styles['container__inner__card__tags__toggle-compact'], {
+          [styles['container__inner__card__tags__toggle-compact--open']]:
+            !props.is_compact,
+        })}
+        onClick={(e) => {
+          e.stopPropagation()
+          props.on_click()
+        }}
+      >
+        <UiIcon variant="CHEVRON" />
+      </button>,
       ...tags.map((tag, i) => {
         const tag_first_char_index_in_search_title = (
           (props.title ? `${props.title} ` : '') +
