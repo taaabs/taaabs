@@ -194,13 +194,13 @@ export const PromptField: React.FC<{
 }
 
 const get_attach_text_checkbox_label = (url: string) => {
-  const conversation = 'Attach chat'
+  const conversation = 'Attach chat and save'
   const label_map = {
-    'https://www.youtube.com/watch': 'Attach transcript',
-    'https://m.youtube.com/watch': 'Attach transcript',
-    'https://x.com': 'Attach tweet',
-    'https://twitter.com': 'Attach tweet',
-    'https://www.reddit.com/r/': 'Attach post',
+    'https://www.youtube.com/watch': 'Attach transcript and save',
+    'https://m.youtube.com/watch': 'Attach transcript and save',
+    'https://x.com': 'Attach tweet and save',
+    'https://twitter.com': 'Attach tweet and save',
+    'https://www.reddit.com/r/': 'Attach post and save',
     'https://gemini.google.com/app/': conversation,
     'https://chatgpt.com/c/': conversation,
     'https://huggingface.co/chat/conversation/': conversation,
@@ -208,10 +208,10 @@ const get_attach_text_checkbox_label = (url: string) => {
     'https://chat.mistral.ai/chat/': conversation,
     'https://coral.cohere.com/c/': conversation,
     'https://aistudio.google.com/app/prompts/': conversation,
-    'https://mail.google.com/mail/': 'Attach e-mail',
+    'https://mail.google.com/mail/': 'Attach e-mail and save',
   }
 
-  let label = 'Attach page' // Default label
+  let label = 'Attach page and save' // Default label
 
   for (const prefix in label_map) {
     if (url.startsWith(prefix)) {

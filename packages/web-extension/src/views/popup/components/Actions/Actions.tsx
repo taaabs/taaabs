@@ -76,13 +76,23 @@ export const Actions: React.FC = () => {
         href="https://taaabs.com/library"
         is_outlined={true}
         on_click={async (e) => {
-          browser.tabs.create({
-            url: 'https://taaabs.com/library',
-          })
+          if (current_url_hook.is_new_tab_page) {
+            const [current_tab] = await browser.tabs.query({
+              active: true,
+              currentWindow: true,
+            })
+            await browser.tabs.update(current_tab.id, {
+              url: 'https://taaabs.com/library',
+            })
+          } else {
+            browser.tabs.create({
+              url: 'https://taaabs.com/library',
+            })
+          }
           window.close()
         }}
       >
-        {auth_state_hook.is_authenticated ? 'Go to library' : 'Sign in'}
+        {auth_state_hook.is_authenticated ? 'Open my library' : 'Sign in'}
       </UiButton>
       {auth_state_hook.is_authenticated &&
         !current_url_hook.is_new_tab_page &&

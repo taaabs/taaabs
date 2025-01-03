@@ -82,7 +82,7 @@ export const Primary = () => {
             'In-depth analysis',
           ]}
           translations={{
-            heading: 'Recent prompts',
+            heading: 'Saved prompts',
             searching_heading: 'Searching...',
           }}
         />

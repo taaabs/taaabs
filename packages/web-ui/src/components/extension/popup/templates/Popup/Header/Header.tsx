@@ -1,12 +1,13 @@
 import { Icon } from '@web-ui/components/Icon'
 import styles from './Header.module.scss'
+import cn from 'classnames'
 
 export namespace Header {
   export type Props = {
     settings_on_click: () => void
     vision_mode_on_click: () => void
     is_vision_mode_available: boolean
-    logo_on_click: () => void
+    logo_on_click?: () => void
     translations: {
       trigger_popup_shortcut: string
     }
@@ -25,7 +26,11 @@ export const Header: React.FC<Header.Props> = (props) => {
           </button>
         </div>
       )}
-      <button className={styles.logo} onClick={props.logo_on_click}>
+      <button
+        className={styles.logo}
+        style={props.logo_on_click ? undefined : { pointerEvents: 'none' }}
+        onClick={props.logo_on_click}
+      >
         <Icon variant="LOGO" />
       </button>
       <div className={styles.actions}>

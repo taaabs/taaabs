@@ -30,12 +30,26 @@ export const Header: React.FC = () => {
         // Firefox requires closing manually
         if (browser.browserAction) window.close()
       }}
-      logo_on_click={async () => {
-        browser.tabs.create({
-          url: 'https://taaabs.com/',
-        })
-        window.close()
-      }}
+      logo_on_click={
+        !current_url_hook.url.startsWith('https://taaabs.com')
+          ? async () => {
+              if (current_url_hook.is_new_tab_page) {
+                const [current_tab] = await browser.tabs.query({
+                  active: true,
+                  currentWindow: true,
+                })
+                await browser.tabs.update(current_tab.id, {
+                  url: 'https://taaabs.com/',
+                })
+              } else {
+                browser.tabs.create({
+                  url: 'https://taaabs.com/',
+                })
+              }
+              window.close()
+            }
+          : undefined
+      }
       translations={{
         trigger_popup_shortcut: 'Trigger popup shortcut',
       }}
