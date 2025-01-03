@@ -666,8 +666,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               className={cn(styles.container__inner__card, {
                 [styles['container__inner__card--corners-fix']]:
                   (!props.links.length && !props.note) || props.is_compact,
-                [styles['container__inner__card--highlighted']]:
-                  recently_visited_link_idx !== undefined, // Highlight if a link is highlighted
+                [styles.highlighted]: recently_visited_link_idx !== undefined, // Highlight if a link is highlighted
               })}
               onContextMenu={(e) => {
                 if ('ontouchstart' in window) {
@@ -965,8 +964,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             {props.note && !props.is_compact && (
               <div
                 className={cn(styles.container__inner__note, {
-                  [styles['container__inner__note--highlighted']]:
-                    recently_visited_link_idx !== undefined,
+                  [styles.highlighted]: recently_visited_link_idx !== undefined,
                 })}
               >
                 {props.highlights
@@ -1024,9 +1022,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 return (
                   <div
                     className={cn(styles.container__inner__links__item, {
-                      [styles[
-                        'container__inner__links__item--recently-visited'
-                      ]]: recently_visited_link_idx == i,
+                      [styles.highlighted]: recently_visited_link_idx == i,
                     })}
                     key={link.url}
                     onContextMenu={(e) => {
