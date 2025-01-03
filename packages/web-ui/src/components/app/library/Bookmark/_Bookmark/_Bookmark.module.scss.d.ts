@@ -4,6 +4,7 @@ declare const styles: {
   readonly "container__inner": string;
   readonly "container__inner__card": string;
   readonly "container__inner__card--corners-fix": string;
+  readonly "container__inner__card--highlighted": string;
   readonly "container__inner__card__cover": string;
   readonly "container__inner__card__cover__inner": string;
   readonly "container__inner__card__cover__inner__fill-image": string;
@@ -48,6 +49,7 @@ declare const styles: {
   readonly "container__inner__links": string;
   readonly "container__inner__links--compact": string;
   readonly "container__inner__links__item": string;
+  readonly "container__inner__links__item--highlighted": string;
   readonly "container__inner__links__item__actions": string;
   readonly "container__inner__links__item__actions__menu": string;
   readonly "container__inner__links__item__actions__menu__button": string;
@@ -63,7 +65,7 @@ declare const styles: {
   readonly "container__inner__links__item__link__url--via-wayback": string;
   readonly "container__inner__links__item__pinned": string;
   readonly "container__inner__note": string;
-  readonly "highlighted": string;
+  readonly "container__inner__note--highlighted": string;
   readonly "rotation": string;
   readonly "shake": string;
   readonly "slot": string;
