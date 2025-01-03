@@ -347,7 +347,7 @@
           @include hover {
             border-color: var(--border-color-primary);
           }
-          &--open svg {
+          &--opened svg {
             transform: scaleY(-1);
           }
         }

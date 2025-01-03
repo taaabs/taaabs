@@ -204,18 +204,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     }, [props.updated_at])
 
     const tags_dom = [
-      <button
-        className={cn(styles['container__inner__card__tags__toggle-compact'], {
-          [styles['container__inner__card__tags__toggle-compact--open']]:
-            !props.is_compact,
-        })}
-        onClick={(e) => {
-          e.stopPropagation()
-          props.on_click()
-        }}
-      >
-        <UiIcon variant="CHEVRON" />
-      </button>,
       ...tags.map((tag, i) => {
         const tag_first_char_index_in_search_title = (
           (props.title ? `${props.title} ` : '') +
@@ -324,6 +312,41 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
           ]
         : []),
     ]
+
+    const tags_actions_dom = (
+      <>
+        <button
+          key={'edit-tags'}
+          onClick={(e) => {
+            e.stopPropagation()
+            props.on_modify_tags_click?.()
+          }}
+          className={cn(styles.container__inner__card__tags__edit, 'static')}
+        >
+          <UiIcon variant="TAG" />
+        </button>
+        {(props.links.length > 0 || props.note) && (
+          <button
+            key={'toggle-compact'}
+            className={cn(
+              styles['container__inner__card__tags__toggle-compact'],
+              {
+                [styles[
+                  'container__inner__card__tags__toggle-compact--opened'
+                ]]: !props.is_compact,
+              },
+              'static',
+            )}
+            onClick={(e) => {
+              e.stopPropagation()
+              props.on_click()
+            }}
+          >
+            <UiIcon variant="CHEVRON" />
+          </button>
+        )}
+      </>
+    )
 
     const actions_dom = (
       <div
@@ -632,7 +655,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
       >
         <div
           className={cn(styles.container, {
-            [styles['container--opened']]: props.is_compact == false,
+            [styles['container--opened']]:
+              props.is_compact == false &&
+              (props.links.length > 0 || props.note),
           })}
           onClick={() => {
             if (
@@ -951,19 +976,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   }
                 >
                   {tags_dom}
-                  <button
-                    key={'edit-tags'}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      props.on_modify_tags_click?.()
-                    }}
-                    className={cn(
-                      styles.container__inner__card__tags__edit,
-                      'static',
-                    )}
-                  >
-                    <UiIcon variant="TAG" />
-                  </button>
+                  {tags_actions_dom}
                   {actions_dom}
                 </ReactSortable>
               ) : (

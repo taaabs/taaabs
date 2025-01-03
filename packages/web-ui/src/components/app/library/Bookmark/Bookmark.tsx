@@ -38,7 +38,8 @@ export const Bookmark: React.FC<Bookmark.Props> = (props) => {
         height: !is_visible ? props.render_height : undefined,
       }}
       className={cn(styles.wrapper, {
-        [styles['wrapper--open']]: !props.is_compact,
+        [styles['wrapper--opened']]:
+          !props.is_compact && (props.links.length > 0 || props.note),
       })}
       onMouseEnter={() => {
         set_dragged_tag(props.dragged_tag)

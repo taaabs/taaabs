@@ -4,8 +4,8 @@
 .items {
   display: flex;
   flex-direction: column;
-  border-top: var(--border-primary);
-  border-bottom: var(--border-primary);
+  border-top: var(--border-secondary);
+  border-bottom: var(--border-secondary);
   @include to992 {
     margin-bottom: 8px;
   }
@@ -27,8 +27,8 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
-  border-top: var(--border-primary);
-  border-bottom: var(--border-primary);
+  border-top: var(--border-secondary);
+  border-bottom: var(--border-secondary);
   @include to992 {
     margin-bottom: 8px;
   }
@@ -53,8 +53,8 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
-  border-top: var(--border-primary);
-  border-bottom: var(--border-primary);
+  border-top: var(--border-secondary);
+  border-bottom: var(--border-secondary);
   @include to992 {
     margin-bottom: 8px;
   }

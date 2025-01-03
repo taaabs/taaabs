@@ -36,7 +36,7 @@ declare const styles: {
   readonly "container__inner__card__tags__tag__name--selected": string;
   readonly "container__inner__card__tags__tag__yields": string;
   readonly "container__inner__card__tags__toggle-compact": string;
-  readonly "container__inner__card__tags__toggle-compact--open": string;
+  readonly "container__inner__card__tags__toggle-compact--opened": string;
   readonly "container__inner__card__title": string;
   readonly "container__inner__card__title__menu": string;
   readonly "container__inner__card__title__menu--toggled": string;
