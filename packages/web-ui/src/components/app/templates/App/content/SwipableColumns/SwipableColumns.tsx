@@ -14,6 +14,7 @@ export namespace SwipableColumns {
     slot_column_left: React.ReactNode
     left_column_opening_count: number
     slot_column_right: React.ReactNode
+    right_column_opening_count?: number
     slot_toolbar: React.ReactNode
     slot_search: React.ReactNode
     slot_main: React.ReactNode
@@ -269,9 +270,8 @@ export const SwipableColumns: React.FC<SwipableColumns.Props> = (props) => {
     }
   }, [is_end_of_bookmarks_visible])
 
-  useUpdateEffect(() => {
-    toggle_left_side()
-  }, [props.left_column_opening_count])
+  useUpdateEffect(toggle_left_side, [props.left_column_opening_count])
+  useUpdateEffect(toggle_right_side, [props.right_column_opening_count])
 
   return (
     <div className={styles.container} {...swipeable_handlers}>

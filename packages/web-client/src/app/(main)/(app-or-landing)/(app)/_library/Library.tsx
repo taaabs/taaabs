@@ -153,9 +153,6 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
           })
         }
       }
-      if (window.location.hash == '#fresh') {
-        window.location.hash = ''
-      }
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
       if (search_hook.result) {

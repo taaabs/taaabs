@@ -31,11 +31,7 @@ export const Header: React.FC = () => {
         if (browser.browserAction) window.close()
       }}
       logo_on_click={async () => {
-        const [current_tab] = await browser.tabs.query({
-          active: true,
-          currentWindow: true,
-        })
-        browser.tabs.update(current_tab.id, {
+        browser.tabs.create({
           url: 'https://taaabs.com/',
         })
         window.close()

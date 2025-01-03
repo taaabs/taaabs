@@ -30,20 +30,17 @@ export const Actions: React.FC = () => {
           'https://taaabs.com/library#url=' +
           encodeURIComponent(current_url_hook.url)
         }
-        on_click={async (e) => {
-          e.preventDefault()
-          const [current_tab] = await browser.tabs.query({
-            active: true,
-            currentWindow: true,
-          })
-          browser.tabs.update(current_tab.id, {
+        on_click={() => {
+          browser.windows.create({
             url:
               'https://taaabs.com/library#url=' +
               encodeURIComponent(current_url_hook.url),
+            type: 'popup',
+            width: 560,
+            height: 700,
           })
           window.close()
         }}
-        rel="noreferrer noopener"
         is_disabled={delete_bookmark_hook.is_deleting}
       >
         Edit
@@ -69,7 +66,7 @@ export const Actions: React.FC = () => {
       }}
       is_disabled={create_bookmark_hook.is_creating}
     >
-      Clip this page
+      Bookmark this tab
     </UiButton>,
   ]
 
@@ -77,16 +74,10 @@ export const Actions: React.FC = () => {
     <Ui_extension_popup_templates_Popup_main_Actions>
       <UiButton
         href="https://taaabs.com/library"
-        rel="noreferrer noopener"
         is_outlined={true}
         on_click={async (e) => {
-          e.preventDefault()
-          const [current_tab] = await browser.tabs.query({
-            active: true,
-            currentWindow: true,
-          })
-          browser.tabs.update(current_tab.id, {
-            url: 'https://taaabs.com/library#fresh',
+          browser.tabs.create({
+            url: 'https://taaabs.com/library',
           })
           window.close()
         }}

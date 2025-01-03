@@ -732,7 +732,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             }
                         : undefined
                     }
-                    style={{ cursor: primary_url ? 'pointer' : undefined }}
                     role={primary_url ? 'button' : undefined}
                   >
                     <img
@@ -763,7 +762,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         {get_domain_from_url(primary_url)
                           .replace('www.', '')
                           .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
-                          .slice(0, 20) +
+                          .slice(0, window.innerWidth >= 768 ? 20 : 15) +
                           (get_domain_from_url(primary_url).replace('www.', '')
                             .length > 20
                             ? '...'
@@ -788,7 +787,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                             }
                         : undefined
                     }
-                    style={{ cursor: primary_url ? 'pointer' : undefined }}
+                    style={{
+                      pointerEvents: !props.links.length ? 'none' : undefined,
+                    }}
                     role={primary_url ? 'button' : undefined}
                   >
                     {props.links && props.links.length > 0 ? (
@@ -818,7 +819,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         {get_domain_from_url(primary_url)
                           .replace('www.', '')
                           .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
-                          .slice(0, 20) +
+                          .slice(0, window.innerWidth >= 768 ? 20 : 15) +
                           (get_domain_from_url(primary_url).replace('www.', '')
                             .length > 20
                             ? '...'
