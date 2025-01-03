@@ -613,236 +613,282 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     const primary_url = get_primary_url(props.links, props.created_at)
 
     return (
-      <div
-        className={cn(styles.container, {
-          [styles['container--opened']]: props.is_compact == false,
-        })}
-        onClick={() => {
-          if (
-            !is_desktop_menu_open &&
-            !is_mobile_menu_open &&
-            !link_url_menu_opened
-          ) {
-            console.log(is_desktop_menu_open)
-            props.on_click()
-          }
-        }}
-        onMouseUp={() => {
-          if (
-            props.on_mouse_up &&
-            props.dragged_tag &&
-            !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
-          ) {
-            document.body.classList.remove('adding-tag')
-            props.on_mouse_up()
-            if (props.tags.length < system_values.bookmark.tags.limit) {
-              set_tags([
-                ...tags,
-                {
-                  id: 0,
-                  is_public: true,
-                  name: props.dragged_tag.name,
-                  yields:
-                    props.dragged_tag.yields && props.dragged_tag.yields + 1,
-                },
-              ])
-            }
-          }
+      <OutsideClickHandler
+        onOutsideClick={() => {
+          set_recently_visited_link_idx(undefined) // Clear highlight on outside click
         }}
       >
-        <div className={styles.container__inner}>
-          {tag_context_menu.contextMenu}
-          {main_context_menu.contextMenu}
-          {link_context_menu.contextMenu}
-          <div
-            className={cn(styles.container__inner__card, {
-              [styles['container__inner__card--corners-fix']]:
-                (!props.links.length && !props.note) || props.is_compact,
-            })}
-            onContextMenu={(e) => {
-              if ('ontouchstart' in window) {
-                e.preventDefault()
-              } else {
-                main_context_menu.onContextMenu(e)
+        <div
+          className={cn(styles.container, {
+            [styles['container--opened']]: props.is_compact == false,
+          })}
+          onClick={() => {
+            if (
+              !is_desktop_menu_open &&
+              !is_mobile_menu_open &&
+              !link_url_menu_opened
+            ) {
+              console.log(is_desktop_menu_open)
+              props.on_click()
+            }
+          }}
+          onMouseUp={() => {
+            if (
+              props.on_mouse_up &&
+              props.dragged_tag &&
+              !props.tags.find((tag) => tag.name == props.dragged_tag!.name)
+            ) {
+              document.body.classList.remove('adding-tag')
+              props.on_mouse_up()
+              if (props.tags.length < system_values.bookmark.tags.limit) {
+                set_tags([
+                  ...tags,
+                  {
+                    id: 0,
+                    is_public: true,
+                    name: props.dragged_tag.name,
+                    yields:
+                      props.dragged_tag.yields && props.dragged_tag.yields + 1,
+                  },
+                ])
               }
-            }}
-          >
-            {cover ? (
-              <div className={styles.container__inner__card__cover}>
-                <div
-                  className={styles.container__inner__card__cover__inner}
-                  onClick={
-                    primary_url
-                      ? is_video_url(primary_url)
-                        ? (e) => {
-                            e.stopPropagation()
-                            props.on_video_player_click(primary_url)
-                          }
-                        : (e) => {
-                            e.stopPropagation()
-                            set_recently_visited_link_idx(0)
-                            props.on_link_click(primary_url)
-                          }
-                      : undefined
-                  }
-                  style={{ cursor: primary_url ? 'pointer' : undefined }}
-                  role={primary_url ? 'button' : undefined}
-                >
-                  <img
-                    className={
-                      styles['container__inner__card__cover__inner__fill-image']
+            }
+          }}
+          onMouseEnter={() => {
+            set_recently_visited_link_idx(undefined)
+          }}
+        >
+          <div className={styles.container__inner}>
+            {tag_context_menu.contextMenu}
+            {main_context_menu.contextMenu}
+            {link_context_menu.contextMenu}
+            <div
+              className={cn(styles.container__inner__card, {
+                [styles['container__inner__card--corners-fix']]:
+                  (!props.links.length && !props.note) || props.is_compact,
+                [styles['container__inner__card--highlighted']]:
+                  recently_visited_link_idx !== undefined, // Highlight if a link is highlighted
+              })}
+              onContextMenu={(e) => {
+                if ('ontouchstart' in window) {
+                  e.preventDefault()
+                } else {
+                  main_context_menu.onContextMenu(e)
+                }
+              }}
+            >
+              {cover ? (
+                <div className={styles.container__inner__card__cover}>
+                  <div
+                    className={styles.container__inner__card__cover__inner}
+                    onClick={
+                      primary_url
+                        ? is_video_url(primary_url)
+                          ? (e) => {
+                              e.stopPropagation()
+                              props.on_video_player_click(primary_url)
+                            }
+                          : (e) => {
+                              e.stopPropagation()
+                              set_recently_visited_link_idx(0)
+                              props.on_link_click(primary_url)
+                            }
+                        : undefined
                     }
-                    src={cover}
-                  />
-                  <img
-                    className={
-                      styles['container__inner__card__cover__inner__top-image']
-                    }
-                    src={cover}
-                  />
-                  {primary_url && (
-                    <div
+                    style={{ cursor: primary_url ? 'pointer' : undefined }}
+                    role={primary_url ? 'button' : undefined}
+                  >
+                    <img
                       className={
                         styles[
-                          'container__inner__card__cover__inner__site-name'
+                          'container__inner__card__cover__inner__fill-image'
                         ]
                       }
-                    >
-                      {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
-                      {get_domain_from_url(primary_url)
-                        .replace('www.', '')
-                        .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
-                        .slice(0, 20) +
-                        (get_domain_from_url(primary_url).replace('www.', '')
-                          .length > 20
-                          ? '...'
-                          : '')}
-                    </div>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className={styles.container__inner__card__cover}>
-                <div
-                  className={styles.container__inner__card__cover__inner}
-                  onClick={
-                    primary_url
-                      ? is_video_url(primary_url)
-                        ? () => {
-                            props.on_video_player_click(primary_url)
-                          }
-                        : () => {
-                            set_recently_visited_link_idx(0)
-                            props.on_link_click(primary_url)
-                          }
-                      : undefined
-                  }
-                  style={{ cursor: primary_url ? 'pointer' : undefined }}
-                  role={primary_url ? 'button' : undefined}
-                >
-                  {props.links && props.links.length > 0 ? (
-                    is_fetching_cover ? (
+                      src={cover}
+                    />
+                    <img
+                      className={
+                        styles[
+                          'container__inner__card__cover__inner__top-image'
+                        ]
+                      }
+                      src={cover}
+                    />
+                    {primary_url && (
                       <div
                         className={
-                          styles.container__inner__card__cover__inner__loader
+                          styles[
+                            'container__inner__card__cover__inner__site-name'
+                          ]
                         }
-                      />
-                    ) : is_fetching_cover === false ? (
-                      <Icon variant="BOOKMARK_FILLED" />
+                      >
+                        {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
+                        {get_domain_from_url(primary_url)
+                          .replace('www.', '')
+                          .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
+                          .slice(0, 20) +
+                          (get_domain_from_url(primary_url).replace('www.', '')
+                            .length > 20
+                            ? '...'
+                            : '')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.container__inner__card__cover}>
+                  <div
+                    className={styles.container__inner__card__cover__inner}
+                    onClick={
+                      primary_url
+                        ? is_video_url(primary_url)
+                          ? () => {
+                              props.on_video_player_click(primary_url)
+                            }
+                          : () => {
+                              set_recently_visited_link_idx(0)
+                              props.on_link_click(primary_url)
+                            }
+                        : undefined
+                    }
+                    style={{ cursor: primary_url ? 'pointer' : undefined }}
+                    role={primary_url ? 'button' : undefined}
+                  >
+                    {props.links && props.links.length > 0 ? (
+                      is_fetching_cover ? (
+                        <div
+                          className={
+                            styles.container__inner__card__cover__inner__loader
+                          }
+                        />
+                      ) : is_fetching_cover === false ? (
+                        <Icon variant="BOOKMARK_FILLED" />
+                      ) : (
+                        <></>
+                      )
                     ) : (
-                      <></>
-                    )
-                  ) : (
-                    <Icon variant="NOTE" />
-                  )}
-                  {primary_url && (
-                    <div
-                      className={
-                        styles[
-                          'container__inner__card__cover__inner__site-name'
-                        ]
-                      }
-                    >
-                      {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
-                      {get_domain_from_url(primary_url)
-                        .replace('www.', '')
-                        .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
-                        .slice(0, 20) +
-                        (get_domain_from_url(primary_url).replace('www.', '')
-                          .length > 20
-                          ? '...'
-                          : '')}
-                    </div>
-                  )}
+                      <Icon variant="NOTE" />
+                    )}
+                    {primary_url && (
+                      <div
+                        className={
+                          styles[
+                            'container__inner__card__cover__inner__site-name'
+                          ]
+                        }
+                      >
+                        {is_video_url(primary_url) && <UiIcon variant="PLAY" />}
+                        {get_domain_from_url(primary_url)
+                          .replace('www.', '')
+                          .replace(/\.[a-z]{2,}(?:\.[a-z]{2})?$/i, '')
+                          .slice(0, 20) +
+                          (get_domain_from_url(primary_url).replace('www.', '')
+                            .length > 20
+                            ? '...'
+                            : '')}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              <div className={styles.container__inner__card__date}>
+                <div className={styles.container__inner__card__date__text}>
+                  {bookmark_date}
                 </div>
               </div>
-            )}
 
-            <div className={styles.container__inner__card__date}>
-              <div className={styles.container__inner__card__date__text}>
-                {bookmark_date}
-              </div>
-            </div>
-
-            <div className={styles.container__inner__card__title}>
-              <div
-                className={styles.container__inner__card__title__menu}
-                style={
-                  is_desktop_menu_open
-                    ? { position: 'relative', zIndex: 1 }
-                    : undefined
-                }
-              >
-                <OutsideClickHandler
-                  disabled={!is_desktop_menu_open}
-                  onOutsideClick={() => {
-                    requestAnimationFrame(toggle_is_desktop_menu_open)
-                  }}
+              <div className={styles.container__inner__card__title}>
+                <div
+                  className={styles.container__inner__card__title__menu}
+                  style={
+                    is_desktop_menu_open
+                      ? { position: 'relative', zIndex: 1 }
+                      : undefined
+                  }
                 >
-                  <button
-                    className={cn(
-                      styles.container__inner__card__title__menu__button,
-                      {
-                        [styles[
-                          'container__inner__card__title__menu--toggled'
-                        ]]: is_desktop_menu_open,
-                      },
-                    )}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      toggle_is_desktop_menu_open()
+                  <OutsideClickHandler
+                    disabled={!is_desktop_menu_open}
+                    onOutsideClick={() => {
+                      requestAnimationFrame(toggle_is_desktop_menu_open)
                     }}
                   >
-                    <UiIcon variant="MORE" />
-                  </button>
+                    <button
+                      className={cn(
+                        styles.container__inner__card__title__menu__button,
+                        {
+                          [styles[
+                            'container__inner__card__title__menu--toggled'
+                          ]]: is_desktop_menu_open,
+                        },
+                      )}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggle_is_desktop_menu_open()
+                      }}
+                    >
+                      <UiIcon variant="MORE" />
+                    </button>
+                    <div
+                      className={cn(styles.slot, {
+                        [styles['slot--visible']]: is_desktop_menu_open,
+                      })}
+                      onClick={toggle_is_desktop_menu_open}
+                    >
+                      {props.menu_slot}
+                    </div>
+                  </OutsideClickHandler>
+                </div>
+                {props.is_unsorted && (
                   <div
-                    className={cn(styles.slot, {
-                      [styles['slot--visible']]: is_desktop_menu_open,
-                    })}
-                    onClick={toggle_is_desktop_menu_open}
+                    className={styles.container__inner__card__title__unsorted}
                   >
-                    {props.menu_slot}
+                    UNSORTED
                   </div>
-                </OutsideClickHandler>
-              </div>
-              {props.is_unsorted && (
-                <div className={styles.container__inner__card__title__unsorted}>
-                  UNSORTED
-                </div>
-              )}
-              {props.stars >= 1 && (
-                <div className={styles.container__inner__card__title__stars}>
-                  {[...new Array(props.stars)].map((_, i) => (
-                    <UiIcon variant="STAR_FILLED" key={i} />
-                  ))}
-                </div>
-              )}
-              {props.title ? (
-                primary_url ? (
+                )}
+                {props.stars >= 1 && (
+                  <div className={styles.container__inner__card__title__stars}>
+                    {[...new Array(props.stars)].map((_, i) => (
+                      <UiIcon variant="STAR_FILLED" key={i} />
+                    ))}
+                  </div>
+                )}
+                {props.title ? (
+                  primary_url ? (
+                    <a
+                      href={primary_url}
+                      className={styles.container__inner__card__title__text}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        if (is_video_url(primary_url)) {
+                          props.on_video_player_click(primary_url)
+                        } else {
+                          set_recently_visited_link_idx(0)
+                          props.on_link_click(primary_url)
+                        }
+                      }}
+                      onAuxClick={(e) => {
+                        if (e.button != 1) return
+                        props.on_link_middle_click()
+                      }}
+                    >
+                      {title}
+                    </a>
+                  ) : (
+                    <div className={styles.container__inner__card__title__text}>
+                      {title}
+                    </div>
+                  )
+                ) : primary_url ? (
                   <a
                     href={primary_url}
-                    className={styles.container__inner__card__title__text}
+                    className={cn(
+                      styles.container__inner__card__title__text,
+                      styles['container__inner__card__title__text--untitled'],
+                    )}
                     onClick={(e) => {
+                      // Added onClick handler here
                       e.stopPropagation()
                       e.preventDefault()
                       if (is_video_url(primary_url)) {
@@ -853,6 +899,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                       }
                     }}
                     onAuxClick={(e) => {
+                      // Added onAuxClick handler here for middle-click functionality
                       if (e.button != 1) return
                       props.on_link_middle_click()
                     }}
@@ -860,108 +907,77 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     {title}
                   </a>
                 ) : (
-                  <div className={styles.container__inner__card__title__text}>
+                  <div
+                    className={cn(
+                      styles.container__inner__card__title__text,
+                      styles['container__inner__card__title__text--untitled'],
+                    )}
+                  >
                     {title}
                   </div>
-                )
-              ) : primary_url ? (
-                <a
-                  href={primary_url}
-                  className={cn(
-                    styles.container__inner__card__title__text,
-                    styles['container__inner__card__title__text--untitled'],
-                  )}
-                  onClick={(e) => {
-                    // Added onClick handler here
-                    e.stopPropagation()
-                    e.preventDefault()
-                    if (is_video_url(primary_url)) {
-                      props.on_video_player_click(primary_url)
-                    } else {
-                      set_recently_visited_link_idx(0)
-                      props.on_link_click(primary_url)
-                    }
+                )}
+              </div>
+
+              {props.on_tags_order_change ? (
+                <ReactSortable
+                  list={tags}
+                  setList={(new_tags) => {
+                    if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
+                    set_tags(new_tags)
+                    props.on_tags_order_change?.(new_tags)
                   }}
-                  onAuxClick={(e) => {
-                    // Added onAuxClick handler here for middle-click functionality
-                    if (e.button != 1) return
-                    props.on_link_middle_click()
-                  }}
+                  animation={system_values.sortablejs_animation_duration}
+                  forceFallback={true}
+                  dropBubble={true} // Needed for clearing dragged tag UI
+                  delay={system_values.sortablejs_delay}
+                  delayOnTouchOnly={true}
+                  className={styles.container__inner__card__tags}
+                  filter={`.static`}
+                  fallbackClass={
+                    !('ontouchstart' in window)
+                      ? styles['sortable-fallback']
+                      : undefined
+                  }
                 >
-                  {title}
-                </a>
+                  {tags_dom}
+                  <button
+                    key={'edit-tags'}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      props.on_modify_tags_click?.()
+                    }}
+                    className={cn(
+                      styles.container__inner__card__tags__edit,
+                      'static',
+                    )}
+                  >
+                    <UiIcon variant="TAG" />
+                  </button>
+                  {actions_dom}
+                </ReactSortable>
               ) : (
-                <div
-                  className={cn(
-                    styles.container__inner__card__title__text,
-                    styles['container__inner__card__title__text--untitled'],
-                  )}
-                >
-                  {title}
+                <div className={styles.container__inner__card__tags}>
+                  {tags_dom}
+                  {actions_dom}
                 </div>
               )}
             </div>
-
-            {props.on_tags_order_change ? (
-              <ReactSortable
-                list={tags}
-                setList={(new_tags) => {
-                  if (JSON.stringify(new_tags) == JSON.stringify(tags)) return
-                  set_tags(new_tags)
-                  props.on_tags_order_change?.(new_tags)
-                }}
-                animation={system_values.sortablejs_animation_duration}
-                forceFallback={true}
-                dropBubble={true} // Needed for clearing dragged tag UI
-                delay={system_values.sortablejs_delay}
-                delayOnTouchOnly={true}
-                className={styles.container__inner__card__tags}
-                filter={`.static`}
-                fallbackClass={
-                  !('ontouchstart' in window)
-                    ? styles['sortable-fallback']
-                    : undefined
-                }
+            {props.note && !props.is_compact && (
+              <div
+                className={cn(styles.container__inner__note, {
+                  [styles['container__inner__note--highlighted']]:
+                    recently_visited_link_idx !== undefined,
+                })}
               >
-                {tags_dom}
-                <button
-                  key={'edit-tags'}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    props.on_modify_tags_click?.()
-                  }}
-                  className={cn(
-                    styles.container__inner__card__tags__edit,
-                    'static',
-                  )}
-                >
-                  <UiIcon variant="TAG" />
-                </button>
-                {actions_dom}
-              </ReactSortable>
-            ) : (
-              <div className={styles.container__inner__card__tags}>
-                {tags_dom}
-                {actions_dom}
+                {props.highlights
+                  ? highlight_text(
+                      props.note,
+                      props.highlights,
+                      (props.title ? `${props.title} ` : '').length,
+                    )
+                  : props.note}
               </div>
             )}
-          </div>
-          {props.note && !props.is_compact && (
-            <div className={styles.container__inner__note}>
-              {props.highlights
-                ? highlight_text(
-                    props.note,
-                    props.highlights,
-                    (props.title ? `${props.title} ` : '').length,
-                  )
-                : props.note}
-            </div>
-          )}
-          <OutsideClickHandler
-            onOutsideClick={() => {
-              set_recently_visited_link_idx(undefined)
-            }}
-          >
             <div
               className={cn(styles.container__inner__links, {
                 [styles['container__inner__links--compact']]: props.is_compact,
@@ -1012,14 +1028,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         'container__inner__links__item--recently-visited'
                       ]]: recently_visited_link_idx == i,
                     })}
-                    onClick={() => {
-                      set_recently_visited_link_idx(undefined)
-                    }}
-                    onMouseEnter={() => {
-                      if (recently_visited_link_idx == i) {
-                        set_recently_visited_link_idx(undefined)
-                      }
-                    }}
                     key={link.url}
                     onContextMenu={(e) => {
                       if ('ontouchstart' in window) {
@@ -1221,9 +1229,9 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 )
               })}
             </div>
-          </OutsideClickHandler>
+          </div>
         </div>
-      </div>
+      </OutsideClickHandler>
     )
   },
   (o, n) =>

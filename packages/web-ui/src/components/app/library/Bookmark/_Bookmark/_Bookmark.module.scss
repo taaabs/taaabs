@@ -44,6 +44,16 @@
           border-bottom-right-radius: 11px;
         }
       }
+      &--highlighted {
+        background: linear-gradient(to right, var(--blue50), transparent);
+        @include dark {
+          background: linear-gradient(
+            to right,
+            rgba(97, 50, 20, 0.3),
+            transparent
+          );
+        }
+      }
       &__cover {
         grid-area: cover;
         margin: var(--padding-10px) var(--padding-10px) var(--padding-10px) 0;
@@ -567,6 +577,16 @@
     &__note {
       border-top: var(--border-secondary);
       padding: var(--padding-14px);
+      &--highlighted {
+        background: linear-gradient(to right, var(--blue50), transparent);
+        @include dark {
+          background: linear-gradient(
+            to right,
+            rgba(97, 50, 20, 0.3),
+            transparent
+          );
+        }
+      }
     }
     &__links {
       display: block;
