@@ -27,8 +27,8 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
-  border-top: var(--border-secondary);
-  border-bottom: var(--border-secondary);
+  border-top: var(--border-primary);
+  border-bottom: var(--border-primary);
   @include to992 {
     margin-bottom: 8px;
   }
@@ -53,8 +53,8 @@
   text-align: center;
   width: 100%;
   padding: 0 var(--padding-16px);
-  border-top: var(--border-secondary);
-  border-bottom: var(--border-secondary);
+  border-top: var(--border-primary);
+  border-bottom: var(--border-primary);
   @include to992 {
     margin-bottom: 8px;
   }

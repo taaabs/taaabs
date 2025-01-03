@@ -4,8 +4,8 @@
 .container {
   background-color: var(--background);
   @include to992 {
-    border-top: var(--border-secondary);
-    box-shadow: 0 1px 0 0 var(--border-color-secondary);
+    border-top: var(--border-primary);
+    box-shadow: 0 1px 0 0 var(--border-color-primary);
     border-bottom: 0;
   }
   @include at992 {
