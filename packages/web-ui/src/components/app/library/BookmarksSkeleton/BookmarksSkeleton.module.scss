@@ -7,8 +7,11 @@
   z-index: 1;
   width: 100%;
   gap: 8px;
+  > span:first-child > span {
+    height: 54px;
+  }
   > span > span {
-    height: 145px;
+    height: 102px;
     @include at992 {
       border-radius: var(--border-radius-12px);
     }

@@ -9,7 +9,6 @@ export type AssistantName =
   | 'mistral'
   | 'cohere'
   | 'deepseek'
-  | 'perplexity'
   | 'custom'
 
 export interface AssistantDetails {
@@ -57,10 +56,6 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   cohere: {
     display_name: 'Cohere',
     url: 'https://coral.cohere.com/',
-  },
-  perplexity: {
-    display_name: 'Perplexity',
-    url: 'https://www.perplexity.ai/',
   },
   custom: {
     display_name: 'Custom',
