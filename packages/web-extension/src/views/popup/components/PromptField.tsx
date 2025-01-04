@@ -174,7 +174,7 @@ export const PromptField: React.FC<{
             .display_name
         }`,
         switch: text_selection_hook.selected_text
-          ? 'Attach text selection'
+          ? 'Attach text selection and save prompt'
           : get_attach_text_checkbox_label(current_url_hook.url),
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: (
