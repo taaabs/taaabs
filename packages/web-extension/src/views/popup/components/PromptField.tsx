@@ -130,7 +130,6 @@ export const PromptField: React.FC<{
         !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
       }
       is_switch_checked={
-        parsed_html_hook.parsed_html === null &&
         !text_selection_hook.selected_text
           ? false
           : attach_text_switch_hook.is_checked

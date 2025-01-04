@@ -90,10 +90,6 @@ export const Popup: React.FC = () => {
       should_set_height={
         // Cases when not showing recent prompts which adjust its height dynamically
         !current_url_hook.is_new_tab_page &&
-        ((!vision_mode_hook.is_vision_mode &&
-          attach_text_switch_hook.is_checked) ||
-          (vision_mode_hook.is_vision_mode &&
-            vision_mode_hook.is_save_prompt_checked)) &&
         !current_url_hook.url.startsWith('https://taaabs.com')
       }
       header_slot={<Header />}

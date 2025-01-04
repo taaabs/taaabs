@@ -108,39 +108,39 @@ export const RecentPrompts: React.FC<{
 
   return (
     <>
-      {vision_mode_hook.is_vision_mode &&
-        vision_mode_hook.is_save_prompt_checked && (
-          <>
-            <Ui_extension_popup_templates_Popup_main_Separator />
+      {vision_mode_hook.is_vision_mode && (
+        <>
+          <Ui_extension_popup_templates_Popup_main_Separator />
 
-            <Ui_extension_popup_templates_Popup_main_RecentPrompts
-              recent_prompts={[
-                ...prompts_vision_history_hook.prompts_history,
-              ].reverse()}
-              filter_phrase={
-                !prompts_vision_history_hook.prompts_history.includes(
-                  prompt_field_value,
-                )
-                  ? prompt_field_value
-                  : ''
-              }
-              default_prompts={default_vision_prompts}
-              on_recent_prompt_click={handle_quick_prompt_vision_click}
-              on_recent_prompt_middle_click={(prompt) => {
-                handle_quick_prompt_vision_click(prompt, true)
-              }}
-              is_disabled={false}
-              translations={{
-                searching_heading: 'Searching...',
-                heading: 'Saved prompts',
-              }}
-            />
-          </>
-        )}
+          <Ui_extension_popup_templates_Popup_main_RecentPrompts
+            recent_prompts={[
+              ...prompts_vision_history_hook.prompts_history,
+            ].reverse()}
+            filter_phrase={
+              prompt_field_value &&
+              !default_vision_prompts.includes(prompt_field_value) &&
+              !prompts_vision_history_hook.prompts_history.includes(
+                prompt_field_value,
+              )
+                ? prompt_field_value
+                : ''
+            }
+            default_prompts={default_vision_prompts}
+            on_recent_prompt_click={handle_quick_prompt_vision_click}
+            on_recent_prompt_middle_click={(prompt) => {
+              handle_quick_prompt_vision_click(prompt, true)
+            }}
+            is_disabled={false}
+            translations={{
+              searching_heading: 'Searching...',
+              heading: 'Saved prompts',
+            }}
+          />
+        </>
+      )}
 
       {!vision_mode_hook.is_vision_mode &&
         !current_url_hook.is_new_tab_page &&
-        attach_text_switch_hook.is_checked &&
         !current_url_hook.url.startsWith('https://taaabs.com') && (
           <>
             <Ui_extension_popup_templates_Popup_main_Separator />
