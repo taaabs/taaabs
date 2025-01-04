@@ -30,14 +30,14 @@ declare const styles: {
   readonly "container__inner__card__tags__actions__menu": string;
   readonly "container__inner__card__tags__actions__menu--toggled": string;
   readonly "container__inner__card__tags__actions__menu__button": string;
+  readonly "container__inner__card__tags__actions__toggle-compact": string;
+  readonly "container__inner__card__tags__actions__toggle-compact--opened": string;
   readonly "container__inner__card__tags__edit": string;
   readonly "container__inner__card__tags__tag": string;
   readonly "container__inner__card__tags__tag--selected": string;
   readonly "container__inner__card__tags__tag__name": string;
   readonly "container__inner__card__tags__tag__name--selected": string;
   readonly "container__inner__card__tags__tag__yields": string;
-  readonly "container__inner__card__tags__toggle-compact": string;
-  readonly "container__inner__card__tags__toggle-compact--opened": string;
   readonly "container__inner__card__title": string;
   readonly "container__inner__card__title__menu": string;
   readonly "container__inner__card__title__menu--toggled": string;

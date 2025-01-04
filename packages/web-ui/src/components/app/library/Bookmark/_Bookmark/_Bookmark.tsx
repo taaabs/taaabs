@@ -314,28 +314,31 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     ]
 
     const tags_actions_dom = (
-      <>
-        <button
-          key={'edit-tags'}
-          onClick={(e) => {
-            e.stopPropagation()
-            props.on_modify_tags_click?.()
-          }}
-          className={cn(styles.container__inner__card__tags__edit, 'static')}
-        >
-          <UiIcon variant="TAG" />
-        </button>
+      <button
+        key={'edit-tags'}
+        onClick={(e) => {
+          e.stopPropagation()
+          props.on_modify_tags_click?.()
+        }}
+        className={cn(styles.container__inner__card__tags__edit, 'static')}
+      >
+        <UiIcon variant="TAG" />
+      </button>
+    )
+
+    const actions_dom = (
+      <div
+        className={cn(styles.container__inner__card__tags__actions, 'static')}
+      >
         {(props.links.length > 0 || props.note) && (
           <button
-            key={'toggle-compact'}
             className={cn(
-              styles['container__inner__card__tags__toggle-compact'],
+              styles['container__inner__card__tags__actions__toggle-compact'],
               {
                 [styles[
-                  'container__inner__card__tags__toggle-compact--opened'
+                  'container__inner__card__tags__actions__toggle-compact--opened'
                 ]]: !props.is_compact,
               },
-              'static',
             )}
             onClick={(e) => {
               e.stopPropagation()
@@ -345,20 +348,13 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
             <UiIcon variant="CHEVRON" />
           </button>
         )}
-      </>
-    )
-
-    const actions_dom = (
-      <div
-        className={cn(styles.container__inner__card__tags__actions, 'static')}
-      >
         <div
           className={cn(styles.container__inner__card__tags__actions__huggs, {
             [styles['container__inner__card__tags__actions__huggs--has-poits']]:
               props.points,
           })}
         >
-          {props.is_public && (
+          {props.is_public && props.points && props.points > 0 && (
             <button
               className={
                 styles.container__inner__card__tags__actions__huggs__amount

@@ -74,8 +74,8 @@
           @include dark {
             background-color: var(--dark200);
           }
-          width: 111px;
-          height: 58px;
+          width: 120px;
+          height: 63px;
           @include at992 {
             width: 156px;
             height: 82px;
@@ -341,28 +341,6 @@
             }
           }
         }
-        &__toggle-compact {
-          display: inline-flex;
-          float: left;
-          align-items: center;
-          justify-content: center;
-          border-radius: var(--border-radius-999px);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
-          border: var(--border-secondary);
-          svg {
-            padding-top: 1px;
-            fill: var(--black);
-            width: var(--icon-dimension-13px);
-            opacity: 0.4;
-          }
-          @include hover {
-            border-color: var(--border-color-primary);
-          }
-          &--opened svg {
-            transform: scaleY(-1);
-          }
-        }
         &__tag {
           display: inline-flex;
           float: left;
@@ -416,21 +394,52 @@
         &__actions {
           float: right;
           display: flex;
-          gap: 12px;
+          gap: 10px;
           padding-right: 10px;
           @include at992 {
             padding-right: 8px;
           }
+          &__toggle-compact {
+            display: inline-flex;
+            float: left;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--border-radius-999px);
+            width: var(--button-dimension-28px);
+            height: var(--button-dimension-28px);
+            border: var(--border-primary);
+            background-color: var(--white);
+            @include dark {
+              background-color: var(--dark100);
+            }
+            svg {
+              padding-top: 1px;
+              fill: var(--black);
+              width: var(--icon-dimension-13px);
+            }
+            @include hover {
+              border-color: var(--border-color-hover);
+            }
+            &--opened svg {
+              transform: scaleY(-1);
+            }
+          }
           &__huggs {
+            --shift: 4px;
             display: flex;
             align-items: center;
             gap: 3px;
             height: var(--button-dimension-28px);
             border-radius: var(--border-radius-999px);
-            padding-left: 10px;
             font-weight: var(--font-weight-inter-semi-bold);
             font-size: var(--font-size-14px);
+            margin-left: calc(var(--shift) * -1);
+            @include to992 {
+              margin-right: var(--shift);
+            }
             &--has-poits {
+              padding-left: var(--padding-10px);
+              margin-left: 0;
               background: linear-gradient(
                 to right,
                 var(--blue100),
@@ -446,8 +455,8 @@
             }
             &__emoji {
               position: relative;
-              width: 32px;
-              transform: translateX(4px);
+              width: var(--icon-dimension-32px);
+              transform: translateX(var(--shift));
               > div {
                 @include transition-150ms(transform);
               }
