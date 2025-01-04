@@ -36,9 +36,11 @@ export const PromptField: React.FC<{
       on_submit={() => {
         if (!props.prompt_field_value) return
 
-        prompts_vision_history_hook.update_stored_prompts_history(
-          props.prompt_field_value,
-        )
+        if (vision_mode_hook.is_save_prompt_checked) {
+          prompts_vision_history_hook.update_stored_prompts_history(
+            props.prompt_field_value,
+          )
+        }
 
         const message: SendPrompt_Message = {
           action: 'send-prompt',
@@ -55,9 +57,13 @@ export const PromptField: React.FC<{
         window.close()
       }}
       is_switch_disabled={false}
-      is_switch_checked={false}
-      is_switch_visible={false}
-      on_switch_click={() => {}}
+      is_switch_checked={vision_mode_hook.is_save_prompt_checked}
+      is_switch_visible={true}
+      on_switch_click={() => {
+        vision_mode_hook.set_is_save_prompt_checked(
+          !vision_mode_hook.is_save_prompt_checked,
+        )
+      }}
       prompts_history={[
         ...prompts_vision_history_hook.prompts_history.filter(
           (prompt) => !default_vision_prompts.includes(prompt),
@@ -72,7 +78,7 @@ export const PromptField: React.FC<{
           assistants[selected_assistant_vision_hook.selected_assistant_name!]
             .display_name
         }`,
-        switch: '',
+        switch: 'Save prompt',
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: <></>,
         text_not_found: <></>,

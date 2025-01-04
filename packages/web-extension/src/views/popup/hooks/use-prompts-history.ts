@@ -11,7 +11,7 @@ export const use_prompts_history = () => {
     const new_prompts_history = prompts_history.filter((item) => item != prompt)
     new_prompts_history.push(prompt)
     const prompts_history_copy = new Set<string>(
-      new_prompts_history.slice(-30).reverse(),
+      new_prompts_history.slice(-15).reverse(),
     )
     default_prompts.forEach((prompt) => prompts_history_copy.add(prompt))
 

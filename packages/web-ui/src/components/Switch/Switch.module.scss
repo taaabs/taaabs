@@ -48,7 +48,6 @@
   border-radius: 999px;
   background-color: var(--neutral300);
   right: 0;
-  @include transition-150ms;
   @include dark {
     background-color: var(--dark300);
   }
@@ -66,6 +65,5 @@
     position: absolute;
     top: 2px;
     left: 2px;
-    @include transition-150ms;
   }
 }
