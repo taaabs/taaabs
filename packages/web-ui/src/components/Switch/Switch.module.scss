@@ -5,13 +5,18 @@
   --swich-width: 32px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   position: relative;
   cursor: pointer;
-  user-select: none; // Prevent text selection
-  @include transition-150ms;
-  > span {
-    padding-right: calc(var(--swich-width) + var(--padding-8px));
+  user-select: none;
+  .label {
+    padding-left: var(--padding-8px);
+  }
+  &--label-left {
+    flex-direction: row-reverse;
+    .label {
+      padding-left: 0;
+      padding-right: var(--padding-8px);
+    }
   }
   &--disabled {
     pointer-events: none;
@@ -42,7 +47,6 @@
   height: 22px;
   border-radius: 999px;
   background-color: var(--neutral300);
-  position: absolute;
   right: 0;
   @include transition-150ms;
   @include dark {

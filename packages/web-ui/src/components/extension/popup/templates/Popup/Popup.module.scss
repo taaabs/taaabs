@@ -7,9 +7,9 @@
   background-color: var(--background);
   &--height {
     height: 100svh;
-    min-height: 570px;
+    min-height: 600px;
     @media (hover: hover) and (pointer: fine) {
-      height: 570px;
+      height: 600px;
       min-height: unset;
     }
   }

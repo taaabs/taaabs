@@ -9,15 +9,17 @@
 
 .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: var(--padding-10px) 0;
   > span {
     font-weight: var(--font-weight-inter-medium);
   }
-  &__switch {
-    font-size: var(--font-size-14px);
-  }
+}
+
+.switch {
+  align-self: flex-start;
+  margin-top: var(--padding-12px);
+  font-size: var(--font-size-14px);
 }
 
 .alert {

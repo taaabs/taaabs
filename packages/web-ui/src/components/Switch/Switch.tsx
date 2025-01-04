@@ -7,15 +7,16 @@ export namespace Switch {
     on_change: (is_checked: boolean) => void
     is_disabled?: boolean
     label?: string
+    label_position?: 'left' | 'right'
   }
 }
 
 export const Switch: React.FC<Switch.Props> = (props) => {
-  const { is_checked, on_change, is_disabled, label } = props
+  const label_position = props.label_position || 'right'
 
   const handle_change = () => {
-    if (!is_disabled) {
-      on_change(!is_checked)
+    if (!props.is_disabled) {
+      props.on_change(!props.is_checked)
     }
   }
 
@@ -23,15 +24,21 @@ export const Switch: React.FC<Switch.Props> = (props) => {
     <div
       role="button"
       className={cn(styles.container, {
-        [styles['container--disabled']]: is_disabled,
-        [styles['container--checked']]: is_checked,
+        [styles['container--disabled']]: props.is_disabled,
+        [styles['container--checked']]: props.is_checked,
+        [styles['container--label-left']]: label_position == 'left',
       })}
       onClick={handle_change}
     >
-      {label && <span>{label}</span>}
+      {props.label && label_position == 'left' && (
+        <span className={styles.label}>{props.label}</span>
+      )}
       <div className={styles.switch}>
         <div className={styles.thumb} />
       </div>
+      {props.label && label_position == 'right' && (
+        <span className={styles.label}>{props.label}</span>
+      )}
     </div>
   )
 }

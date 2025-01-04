@@ -73,20 +73,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
     <div className={styles.container}>
       <div className={styles.header}>
         <span>{props.translations.new_prompt}</span>
-
-        <div className={styles.header__switch}>
-          {props.is_switch_visible && (
-            <Switch
-              label={props.translations.switch}
-              is_checked={props.is_switch_checked}
-              on_change={() => {
-                props.on_switch_click()
-                set_input_focus_trigger(input_focus_trigger + 1)
-              }}
-              is_disabled={props.is_switch_disabled}
-            />
-          )}
-        </div>
       </div>
 
       <Input
@@ -117,6 +103,20 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         }}
         on_key_down={handle_key_down}
       />
+
+      {props.is_switch_visible && (
+        <div className={styles.switch}>
+          <Switch
+            label={props.translations.switch}
+            is_checked={props.is_switch_checked}
+            on_change={() => {
+              props.on_switch_click()
+              set_input_focus_trigger(input_focus_trigger + 1)
+            }}
+            is_disabled={props.is_switch_disabled}
+          />
+        </div>
+      )}
 
       {props.is_plain_text_too_long && (
         <div className={`${styles.alert} ${styles['alert--warn']}`}>
