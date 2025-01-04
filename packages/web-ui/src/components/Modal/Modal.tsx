@@ -90,7 +90,7 @@ export const Modal: React.FC<Modal.Props> = (props) => {
         <Sheet.Header>
           <div draggable={false}>{props.slot_header}</div>
         </Sheet.Header>
-        <Sheet.Content>
+        <Sheet.Content disableDrag={true}>
           <Sheet.Scroller>
             <div style={{ maxHeight: props.slot_footer ? '65svh' : '80svh' }}>
               {props.slot_content}
