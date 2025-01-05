@@ -29,62 +29,7 @@ export const PromptField: React.FC<{
     current_url_hook,
   } = usePopup()
 
-  return vision_mode_hook.is_vision_mode ? (
-    <Ui_extension_popup_templates_Popup_main_PromptField
-      value={props.prompt_field_value}
-      on_change={props.set_prompt_field_value}
-      on_submit={() => {
-        if (!props.prompt_field_value) return
-
-        if (vision_mode_hook.is_save_prompt_checked) {
-          prompts_vision_history_hook.update_stored_prompts_history(
-            props.prompt_field_value,
-          )
-        }
-
-        const message: SendPrompt_Message = {
-          action: 'send-prompt',
-          is_touch_screen: 'ontouchstart' in window,
-          assistant_name:
-            selected_assistant_vision_hook.selected_assistant_name!,
-          assistant_url: props.assistant_url,
-          prompt: props.prompt_field_value,
-          window_height: window_dimensions_hook.dimensions!.height,
-          window_width: window_dimensions_hook.dimensions!.width,
-          image: vision_mode_hook.image!,
-        }
-        browser.runtime.sendMessage(message)
-        window.close()
-      }}
-      is_switch_disabled={false}
-      is_switch_checked={vision_mode_hook.is_save_prompt_checked}
-      is_switch_visible={true}
-      on_switch_click={() => {
-        vision_mode_hook.set_is_save_prompt_checked(
-          !vision_mode_hook.is_save_prompt_checked,
-        )
-      }}
-      prompts_history={[
-        ...prompts_vision_history_hook.prompts_history.filter(
-          (prompt) => !default_vision_prompts.includes(prompt),
-        ),
-      ].reverse()}
-      is_history_enabled={true}
-      is_plain_text_too_long={false}
-      text_not_found={false}
-      translations={{
-        new_prompt: 'New chat',
-        placeholder: `Ask ${
-          assistants[selected_assistant_vision_hook.selected_assistant_name!]
-            .display_name
-        }`,
-        switch: 'Save prompt',
-        active_input_placeholder_suffix: '(⇅ for history)',
-        plain_text_too_long: <></>,
-        text_not_found: <></>,
-      }}
-    />
-  ) : (
+  return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
       value={props.prompt_field_value}
       on_change={(value) => {
@@ -129,11 +74,7 @@ export const PromptField: React.FC<{
       is_switch_disabled={
         !parsed_html_hook.parsed_html && !text_selection_hook.selected_text
       }
-      is_switch_checked={
-        !text_selection_hook.selected_text
-          ? false
-          : attach_text_switch_hook.is_checked
-      }
+      is_switch_checked={attach_text_switch_hook.is_checked}
       is_switch_visible={
         !current_url_hook.is_new_tab_page &&
         !current_url_hook.url.startsWith('https://taaabs.com')
@@ -193,6 +134,61 @@ export const PromptField: React.FC<{
         text_not_found: current_url_hook.is_youtube_video
           ? '⚠ Transcript not found'
           : '⚠ Unable to read this page',
+      }}
+    />
+  ) : (
+    <Ui_extension_popup_templates_Popup_main_PromptField
+      value={props.prompt_field_value}
+      on_change={props.set_prompt_field_value}
+      on_submit={() => {
+        if (!props.prompt_field_value) return
+
+        if (vision_mode_hook.is_save_prompt_checked) {
+          prompts_vision_history_hook.update_stored_prompts_history(
+            props.prompt_field_value,
+          )
+        }
+
+        const message: SendPrompt_Message = {
+          action: 'send-prompt',
+          is_touch_screen: 'ontouchstart' in window,
+          assistant_name:
+            selected_assistant_vision_hook.selected_assistant_name!,
+          assistant_url: props.assistant_url,
+          prompt: props.prompt_field_value,
+          window_height: window_dimensions_hook.dimensions!.height,
+          window_width: window_dimensions_hook.dimensions!.width,
+          image: vision_mode_hook.image!,
+        }
+        browser.runtime.sendMessage(message)
+        window.close()
+      }}
+      is_switch_disabled={false}
+      is_switch_checked={vision_mode_hook.is_save_prompt_checked}
+      is_switch_visible={true}
+      on_switch_click={() => {
+        vision_mode_hook.set_is_save_prompt_checked(
+          !vision_mode_hook.is_save_prompt_checked,
+        )
+      }}
+      prompts_history={[
+        ...prompts_vision_history_hook.prompts_history.filter(
+          (prompt) => !default_vision_prompts.includes(prompt),
+        ),
+      ].reverse()}
+      is_history_enabled={true}
+      is_plain_text_too_long={false}
+      text_not_found={false}
+      translations={{
+        new_prompt: 'New chat',
+        placeholder: `Ask ${
+          assistants[selected_assistant_vision_hook.selected_assistant_name!]
+            .display_name
+        }`,
+        switch: 'Save prompt',
+        active_input_placeholder_suffix: '(⇅ for history)',
+        plain_text_too_long: <></>,
+        text_not_found: <></>,
       }}
     />
   )
