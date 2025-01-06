@@ -13,7 +13,9 @@
     border-radius: var(--border-radius-12px);
   }
   @include hover {
-    border-color: var(--border-color-hover);
+    @include at992 {
+      border-color: var(--border-color-hover);
+    }
   }
   &--opened {
     @include to992 {
