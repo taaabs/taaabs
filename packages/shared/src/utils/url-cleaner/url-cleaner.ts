@@ -25,15 +25,17 @@ export const url_cleaner = (url: string): string => {
 
     // Special handling for YouTube URLs
     if (
-      (parsed_url.hostname == 'www.youtube.com' &&
-        parsed_url.pathname == '/watch') ||
-      (parsed_url.hostname == 'm.youtube.com' &&
-        parsed_url.pathname == '/watch')
+      parsed_url.hostname == 'www.youtube.com' ||
+      parsed_url.hostname == 'm.youtube.com'
     ) {
-      const video_id = search_params.get('v')
-      if (video_id) {
-        return `https://www.youtube.com/watch?v=${video_id}`
-      }
+      parsed_url.hostname = 'www.youtube.com' // Normalize to www.youtube.com
+
+      if (parsed_url.pathname == '/watch') {
+        const video_id = search_params.get('v')
+        if (video_id) {
+          return `https://www.youtube.com/watch?v=${video_id}`
+        }
+      } // Removed the else if block handling /shorts/ URLs
     } else if (
       parsed_url.hostname == 'twitter.com' ||
       parsed_url.hostname == 'x.com'
