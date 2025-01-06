@@ -30,7 +30,8 @@ export const Actions: React.FC = () => {
           'https://taaabs.com/library#url=' +
           encodeURIComponent(current_url_hook.url)
         }
-        on_click={() => {
+        on_click={(e) => {
+          e.preventDefault()
           browser.windows.create({
             url:
               'https://taaabs.com/library#url=' +
@@ -76,12 +77,13 @@ export const Actions: React.FC = () => {
         href="https://taaabs.com/library"
         is_outlined={true}
         on_click={async (e) => {
+          e.preventDefault()
           if (current_url_hook.is_new_tab_page) {
             const [current_tab] = await browser.tabs.query({
               active: true,
               currentWindow: true,
             })
-            await browser.tabs.update(current_tab.id, {
+            browser.tabs.update(current_tab.id, {
               url: 'https://taaabs.com/library',
             })
           } else {
