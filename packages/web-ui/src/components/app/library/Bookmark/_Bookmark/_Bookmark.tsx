@@ -774,10 +774,12 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                     onClick={
                       primary_url
                         ? is_video_url(primary_url)
-                          ? () => {
+                          ? (e) => {
+                              e.stopPropagation()
                               props.on_video_player_click(primary_url)
                             }
-                          : () => {
+                          : (e) => {
+                              e.stopPropagation()
                               set_recently_visited_link_idx(0)
                               props.on_link_click(primary_url)
                             }
