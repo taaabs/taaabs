@@ -4,7 +4,7 @@ declare const styles: {
   readonly "alert--warn": string;
   readonly "container": string;
   readonly "header": string;
-  readonly "switch": string;
+  readonly "switches": string;
 };
 export = styles;
 

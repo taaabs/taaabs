@@ -16,8 +16,10 @@
   }
 }
 
-.switch {
+.switches {
   align-self: flex-start;
+  display: flex;
+  gap: var(--padding-14px);
   margin-top: var(--padding-12px);
   font-size: var(--font-size-14px);
 }

@@ -2,21 +2,17 @@ import { Input } from '@web-ui/components/Input'
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { Switch } from '@web-ui/components/Switch/Switch'
 
 export namespace PromptField {
   export type Props = {
     value: string
     on_submit: () => void
     on_change: (value: string) => void
-    is_switch_disabled: boolean
-    is_switch_checked: boolean
-    is_switch_visible: boolean
-    on_switch_click: () => void
     is_history_enabled: boolean
     prompts_history: string[]
     is_plain_text_too_long: boolean
     text_not_found: boolean
+    switches_slot: React.ReactNode
     translations: {
       new_prompt: string
       placeholder: string
@@ -32,10 +28,9 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   const [is_focused, set_is_focused] = useState<boolean>(false)
   const [prompts_history_index, set_prompts_history_index] =
     useState<number>(-1)
-  const [input_focus_trigger, set_input_focus_trigger] = useState(0)
 
   const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!props.is_switch_checked || !props.is_history_enabled) return
+    if (!props.is_history_enabled) return
 
     if (is_focused) {
       if (e.key == 'ArrowUp') {
@@ -76,7 +71,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       </div>
 
       <Input
-        key={input_focus_trigger}
         value={props.value}
         on_change={handle_change}
         min_lines={2}
@@ -86,7 +80,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         on_enter_pressed={props.on_submit}
         placeholder={
           props.translations.placeholder +
-          (is_focused && props.is_history_enabled && props.is_switch_checked
+          (is_focused && props.is_history_enabled
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }
@@ -104,18 +98,8 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         on_key_down={handle_key_down}
       />
 
-      {props.is_switch_visible && (
-        <div className={styles.switch}>
-          <Switch
-            label={props.translations.switch}
-            is_checked={props.is_switch_checked}
-            on_change={() => {
-              props.on_switch_click()
-              set_input_focus_trigger(input_focus_trigger + 1)
-            }}
-            is_disabled={props.is_switch_disabled}
-          />
-        </div>
+      {props.switches_slot && (
+        <div className={styles.switches}>{props.switches_slot}</div>
       )}
 
       {props.is_plain_text_too_long && (
