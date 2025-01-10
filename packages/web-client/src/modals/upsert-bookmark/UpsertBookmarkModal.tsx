@@ -302,7 +302,7 @@ export const UpsertBookmarkModal: React.FC<UpsertBookmarkModal.Props> = (
                   }}
                   message_type={error_message ? 'error' : undefined}
                   message={error_message}
-                  min_lines={3}
+                  min_lines={window.innerWidth < 992 ? 2 : 3}
                   placeholder={
                     props.dictionary.app.upsert_modal.jot_something_down
                   }
