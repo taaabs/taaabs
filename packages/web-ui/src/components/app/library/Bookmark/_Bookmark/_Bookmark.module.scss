@@ -601,6 +601,12 @@
                 }
                 width: var(--icon-dimension-16px);
               }
+              @include hover {
+                background-color: var(--blue200);
+                @include dark {
+                  background-color: var(--dark400);
+                }
+              }
             }
             &--toggled {
               background-color: var(--blue200);

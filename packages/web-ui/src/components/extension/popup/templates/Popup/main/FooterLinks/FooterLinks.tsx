@@ -6,6 +6,7 @@ type Props = {
     href: string
     text: string
   }[]
+  on_link_click: (url: string) => void
 }
 
 export const FooterLinks: React.FC<Props> = (props) => {
@@ -13,7 +14,13 @@ export const FooterLinks: React.FC<Props> = (props) => {
     <div className={styles.container}>
       {props.links.map((link, i) => (
         <React.Fragment key={link.href}>
-          <a href={link.href} target="_blank" rel="noopener noreferrer">
+          <a
+            href={link.href}
+            onClick={(e) => {
+              e.preventDefault()
+              props.on_link_click(link.href)
+            }}
+          >
             {link.text}
           </a>
           {i < props.links.length - 1 && <span>·</span>}

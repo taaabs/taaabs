@@ -32,14 +32,27 @@ export const Actions: React.FC = () => {
         }
         on_click={(e) => {
           e.preventDefault()
-          browser.windows.create({
-            url:
-              'https://taaabs.com/library#url=' +
-              encodeURIComponent(current_url_hook.url),
-            type: 'popup',
-            width: 560,
-            height: 700,
-          })
+          if (
+            !(
+              navigator.userAgent.includes('Firefox') &&
+              navigator.userAgent.includes('Mobile')
+            )
+          ) {
+            browser.windows.create({
+              url:
+                'https://taaabs.com/library#url=' +
+                encodeURIComponent(current_url_hook.url),
+              type: 'popup',
+              width: 560,
+              height: 720,
+            })
+          } else {
+            browser.tabs.create({
+              url:
+                'https://taaabs.com/library#url=' +
+                encodeURIComponent(current_url_hook.url),
+            })
+          }
           window.close()
         }}
         is_disabled={delete_bookmark_hook.is_deleting}
