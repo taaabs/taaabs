@@ -202,29 +202,6 @@ export namespace HtmlParser {
           }
         }
       }
-      // HuggingFace
-      else if (params.url.startsWith('https://huggingface.co/chat/')) {
-        const user_selector =
-          '.dark\\:text-gray-400.text-gray-500.py-3\\.5.px-5.bg-inherit.break-words.text-wrap.whitespace-break-spaces.appearance-none.w-full.disabled'
-        const assistant_selector =
-          '.dark\\:text-gray-300.dark\\:from-gray-800\\/40.dark\\:border-gray-800.prose-pre\\:my-2.text-gray-600.py-3\\.5.px-5.from-gray-50.bg-gradient-to-br.border-gray-100.border.rounded-2xl.break-words.min-w-\\[60px\\].min-h-\\[calc\\(2rem\\+theme\\(spacing\\[3\\.5\\]\\)\\*2\\)\\].relative'
-        const { messages, plain_text } = parse_chat_messages({
-          html: params.html,
-          user_selector,
-          assistant_selector,
-          turndown_service,
-        })
-        if (messages.length) {
-          const reader_data: ReaderData.Chat = {
-            type: ReaderData.ContentType.CHAT,
-            conversation: messages,
-          }
-          return {
-            reader_data: JSON.stringify(reader_data),
-            plain_text,
-          }
-        }
-      }
       // Claude
       else if (params.url.startsWith('https://claude.ai/chat/')) {
         const user_selector = 'div.font-user-message'

@@ -85,7 +85,6 @@ export const use_bookmarklet_handler = (props: {
         const websites_with_generic_description = [
           'https://chatgpt.com/',
           'https://chat.mistral.ai/chat/',
-          'https://huggingface.co/chat/',
           'https://gemini.google.com/app/',
           'https://claude.ai/chat/',
           'https://www.reddit.com/r/',
