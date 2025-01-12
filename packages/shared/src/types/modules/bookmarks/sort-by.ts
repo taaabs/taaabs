@@ -3,4 +3,5 @@ export enum SortBy {
   UPDATED_AT = 'updated_at',
   VISITED_AT = 'visited_at',
   POPULARITY = 'popularity',
+  VIEWS = 'views',
 }

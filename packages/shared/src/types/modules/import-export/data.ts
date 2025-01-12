@@ -65,6 +65,7 @@ export const bookmark_schema = z.object({
       ]),
     )
     .max(system_values.bookmark.links.limit),
+  views: z.number().int().optional(),
 })
 export namespace TagHierarchy {
   const base_tag_hierarchy_schema = z.object({

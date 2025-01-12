@@ -23,6 +23,7 @@ export type Bookmark = {
   note?: string
   note_aes?: string
   created_at: string // TODO make optional
+  views: number
   is_public?: boolean
   is_archived?: boolean
   stars?: number

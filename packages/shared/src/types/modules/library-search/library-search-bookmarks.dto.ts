@@ -44,6 +44,7 @@ export namespace LibrarySearchBookmarks_Dto {
       is_unsorted?: boolean
       links: AuthorizedLink[]
       tags: AuthorizedTag[]
+      views: number
     }
 
     type PublicTag = {
