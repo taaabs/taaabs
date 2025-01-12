@@ -257,6 +257,7 @@ describe('Bookmarks_RepositoryImpl', () => {
         points: undefined,
         stars: 0,
         title_aes: undefined,
+        views: 0,
       }
 
       data_source_mock.find_by_url_hash.mockResolvedValue(dto_mock)

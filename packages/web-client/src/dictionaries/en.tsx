@@ -227,7 +227,8 @@ const dictionary: Dictionary = {
       use_original: 'Link is back to its original URL',
       sort_by_options: {
         date: 'Date...',
-        the_huggiest: 'The huggiest!',
+        views: 'Views',
+        points: 'Points',
         added: 'added',
         visited: 'visited',
         updated: 'updated',

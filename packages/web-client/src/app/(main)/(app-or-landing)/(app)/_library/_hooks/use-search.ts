@@ -144,7 +144,7 @@ export const use_search = (local_db: LocalDb) => {
         sortBy: {
           property:
             sortby ==
-            Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
+            Object.values(SortBy).indexOf(SortBy.POINTS).toString()
               ? 'points'
               : sortby ==
                 Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
@@ -155,7 +155,7 @@ export const use_search = (local_db: LocalDb) => {
               : 'created_at',
           order:
             sortby ==
-            Object.values(SortBy).indexOf(SortBy.POPULARITY).toString()
+            Object.values(SortBy).indexOf(SortBy.POINTS).toString()
               ? 'DESC'
               : order == Object.values(Order).indexOf(Order.ASC).toString()
               ? 'ASC'

@@ -78,6 +78,7 @@ export namespace _Bookmark {
     is_public: boolean
     points?: number
     points_given?: number
+    views?: number
     title?: string
     note?: string
     date: Date
@@ -951,7 +952,8 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                   >
                     {title}
                   </div>
-                )}
+                )}{' '}
+                {props.views ? <sup>{props.views}</sup> : <></>}
               </div>
 
               {props.on_tags_order_change ? (
@@ -1263,6 +1265,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
     o.is_search_result == n.is_search_result &&
     o.points == n.points &&
     o.points_given == n.points_given &&
+    o.views == n.views &&
     o.is_compact == n.is_compact &&
     o.orama_db_id == n.orama_db_id &&
     o.current_filter == n.current_filter &&

@@ -273,14 +273,14 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
     search_hook.set_current_filter(filter_view_options_hook.current_filter)
   }, [filter_view_options_hook.current_filter])
 
-  // Clear cache when user selects visited at sort_by option or popularity order.
+  // Clear cache when user selects visited at sort_by option or points/views order.
   // Filter is in deps because we want to clear cache when setting to archive.
-  // NOTE: Could be reworked to avoid unnecesary invalidations.
   const search_cache_to_be_cleared = useRef(false)
   useUpdateEffect(() => {
     if (
       sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
-      sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+      sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
+      sort_by_view_options_hook.current_sort_by == SortBy.VIEWS
     ) {
       search_cache_to_be_cleared.current = true
     } else {

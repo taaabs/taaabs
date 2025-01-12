@@ -91,7 +91,7 @@ export const _Search: React.FC<_Search.Props> = (props) => {
               sort_by_view_options_hook.current_sort_by == SortBy.VISITED_AT ||
               undefined,
             include_points:
-              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY ||
+              sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
               undefined,
           })
           search_cache_to_be_cleared.current = false

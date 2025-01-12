@@ -174,7 +174,8 @@ export type Dictionary = {
       use_original: string
       sort_by_options: {
         date: string
-        the_huggiest: string
+        views: string
+        points: string
         added: string
         updated: string
         visited: string

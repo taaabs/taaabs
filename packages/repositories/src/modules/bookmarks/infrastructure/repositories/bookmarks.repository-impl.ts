@@ -82,6 +82,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
       is_compact: true,
       stars: bookmark.stars || 0,
       points: bookmark.points,
+      views: bookmark.views,
       tags,
       links,
     }

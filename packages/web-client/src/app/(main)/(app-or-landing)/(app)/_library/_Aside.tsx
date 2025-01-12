@@ -50,45 +50,84 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
       support_href="https://github.com/taaabs/taaabs/discussions"
       slot_segmented_buttons={
         <>
-          <Ui_common_SegmentedButton
-            key={`1-${popstate_count_commited}`}
-            is_not_interactive={is_not_interactive}
-            items={[
-              {
-                label: props.dictionary.app.library.sort_by_options.date,
-                is_selected:
-                  sort_by_view_options_hook.current_sort_by !=
-                  SortBy.POPULARITY,
-              },
-              {
-                label:
-                  props.dictionary.app.library.sort_by_options.the_huggiest,
-                is_selected:
-                  sort_by_view_options_hook.current_sort_by ==
-                  SortBy.POPULARITY,
-              },
-            ]}
-            on_item_click={(option_idx) => {
-              if (
-                option_idx == 0 &&
-                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
-              ) {
-                sort_by_view_options_hook.set_sort_by_query_param(
-                  SortBy.CREATED_AT,
-                )
-              } else if (option_idx == 1) {
-                sort_by_view_options_hook.set_sort_by_query_param(
-                  SortBy.POPULARITY,
-                )
-              }
-            }}
-          />
+          {!username ? (
+            <Ui_common_SegmentedButton
+              key={`1-${popstate_count_commited}`}
+              is_not_interactive={is_not_interactive}
+              items={[
+                {
+                  label: props.dictionary.app.library.sort_by_options.date,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by !=
+                      SortBy.POINTS &&
+                    sort_by_view_options_hook.current_sort_by != SortBy.VIEWS,
+                },
+                {
+                  label: props.dictionary.app.library.sort_by_options.views,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by == SortBy.VIEWS,
+                },
+                {
+                  label: props.dictionary.app.library.sort_by_options.points,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by == SortBy.POINTS,
+                },
+              ]}
+              on_item_click={(option_idx) => {
+                if (option_idx == 0) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.CREATED_AT,
+                  )
+                } else if (option_idx == 1) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.VIEWS,
+                  )
+                } else if (option_idx == 2) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.POINTS,
+                  )
+                }
+              }}
+            />
+          ) : (
+            <Ui_common_SegmentedButton
+              key={`1-${popstate_count_commited}`}
+              is_not_interactive={is_not_interactive}
+              items={[
+                {
+                  label: props.dictionary.app.library.sort_by_options.date,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by != SortBy.POINTS,
+                },
+                {
+                  label: props.dictionary.app.library.sort_by_options.points,
+                  is_selected:
+                    sort_by_view_options_hook.current_sort_by == SortBy.POINTS,
+                },
+              ]}
+              on_item_click={(option_idx) => {
+                if (
+                  option_idx == 0 &&
+                  sort_by_view_options_hook.current_sort_by == SortBy.POINTS
+                ) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.CREATED_AT,
+                  )
+                } else if (option_idx == 1) {
+                  sort_by_view_options_hook.set_sort_by_query_param(
+                    SortBy.POINTS,
+                  )
+                }
+              }}
+            />
+          )}
           {!username ? (
             <Ui_common_SegmentedButton
               key={`2-${popstate_count_commited}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
-                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+                sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
+                sort_by_view_options_hook.current_sort_by == SortBy.VIEWS
               }
               items={[
                 {
@@ -131,7 +170,7 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
               key={`2-${popstate_count_commited}`}
               is_not_interactive={is_not_interactive}
               is_disabled={
-                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+                sort_by_view_options_hook.current_sort_by == SortBy.POINTS
               }
               items={[
                 {
@@ -164,7 +203,8 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
             key={`3-${popstate_count_commited}`}
             is_not_interactive={is_not_interactive}
             is_disabled={
-              sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+              sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
+              sort_by_view_options_hook.current_sort_by == SortBy.VIEWS
             }
             items={[
               {
@@ -217,7 +257,8 @@ export const _Aside: React.FC<_Aside.Props> = (props) => {
                   SortBy.UPDATED_AT ||
                 sort_by_view_options_hook.current_sort_by ==
                   SortBy.VISITED_AT ||
-                sort_by_view_options_hook.current_sort_by == SortBy.POPULARITY
+                sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
+                sort_by_view_options_hook.current_sort_by == SortBy.VIEWS
               }
               translations={{
                 custom_range: props.dictionary.app.library.range_of_months,

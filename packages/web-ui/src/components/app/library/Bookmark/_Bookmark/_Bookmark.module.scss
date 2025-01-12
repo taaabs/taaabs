@@ -190,6 +190,11 @@
         @include at992 {
           padding: 10px 14px 0 0;
         }
+        > sup {
+          font-size: var(--font-size-11px);
+          color: var(--text-color-dimmed);
+          margin-left: -2px;
+        }
         &__unsorted {
           display: inline-flex;
           align-items: center;
