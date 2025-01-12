@@ -103,15 +103,6 @@ export const bookmarks_slice = createSlice({
       state.bookmarks[action.payload.index].is_compact =
         action.payload.is_compact
     },
-    increment_bookmark_views(state, action: PayloadAction<{ index: number }>) {
-      if (!state.bookmarks || !state.bookmarks[action.payload.index].views)
-        return
-      const bookmark = state.bookmarks[action.payload.index]
-      state.bookmarks[action.payload.index] = {
-        ...bookmark,
-        views: bookmark.views ? bookmark.views + 1 : 1,
-      }
-    },
   },
 })
 

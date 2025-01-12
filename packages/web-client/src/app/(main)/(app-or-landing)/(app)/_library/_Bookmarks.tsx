@@ -490,7 +490,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
           browser_storage.local_storage.authorized_library.record_visit_params,
           JSON.stringify(record_visit_params),
         )
-        dispatch(bookmarks_actions.increment_bookmark_views({ index: i }))
       }
       window.onbeforeunload = null
       location.href = url
@@ -846,7 +845,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               bookmark_id: bookmark.id,
               visited_at: new Date().toISOString(),
             })
-            dispatch(bookmarks_actions.increment_bookmark_views({ index: i }))
           }
         }}
         on_link_middle_click={() => {
@@ -859,7 +857,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               bookmark_id: bookmark.id,
               visited_at: new Date().toISOString(),
             })
-            dispatch(bookmarks_actions.increment_bookmark_views({ index: i }))
           }
         }}
         on_new_tab_click={(url) => {
@@ -872,7 +869,6 @@ export const _Bookmarks: React.FC<_Bookmarks.Props> = (props) => {
               bookmark_id: bookmark.id,
               visited_at: new Date().toISOString(),
             })
-            dispatch(bookmarks_actions.increment_bookmark_views({ index: i }))
           }
           window.open(url, '_blank')
         }}
