@@ -13,4 +13,5 @@ export type Bookmark_Entity = {
   is_deleted?: boolean
   stars: number
   points: number
+  views: number
 }

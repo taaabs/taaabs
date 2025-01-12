@@ -143,9 +143,10 @@ export const use_search = (local_db: LocalDb) => {
         },
         sortBy: {
           property:
-            sortby ==
-            Object.values(SortBy).indexOf(SortBy.POINTS).toString()
+            sortby == Object.values(SortBy).indexOf(SortBy.POINTS).toString()
               ? 'points'
+              : Object.values(SortBy).indexOf(SortBy.VIEWS).toString()
+              ? 'views'
               : sortby ==
                 Object.values(SortBy).indexOf(SortBy.UPDATED_AT).toString()
               ? 'updated_at'
@@ -154,8 +155,8 @@ export const use_search = (local_db: LocalDb) => {
               ? 'visited_at'
               : 'created_at',
           order:
-            sortby ==
-            Object.values(SortBy).indexOf(SortBy.POINTS).toString()
+            sortby == Object.values(SortBy).indexOf(SortBy.POINTS).toString() ||
+            sortby == Object.values(SortBy).indexOf(SortBy.VIEWS).toString()
               ? 'DESC'
               : order == Object.values(Order).indexOf(Order.ASC).toString()
               ? 'ASC'

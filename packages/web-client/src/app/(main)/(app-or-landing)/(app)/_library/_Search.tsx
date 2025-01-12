@@ -93,6 +93,9 @@ export const _Search: React.FC<_Search.Props> = (props) => {
             include_points:
               sort_by_view_options_hook.current_sort_by == SortBy.POINTS ||
               undefined,
+            include_views:
+              sort_by_view_options_hook.current_sort_by == SortBy.VIEWS ||
+              undefined,
           })
           search_cache_to_be_cleared.current = false
         } else if (

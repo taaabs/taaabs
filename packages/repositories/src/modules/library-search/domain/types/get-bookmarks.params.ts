@@ -3,6 +3,7 @@ export namespace GetBookmarks_Params {
     is_archived: boolean
     include_visited_at?: boolean
     include_points?: boolean
+    include_views?: boolean
     after?: number
   }
   export type Public = {

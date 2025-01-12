@@ -31,6 +31,7 @@ export type BookmarkForSearch = {
   links: { url: string; site_path?: string }[]
   tag_ids: number[]
   points?: number
+  views?: number
 }
 
 export const schema = {
@@ -46,6 +47,7 @@ export const schema = {
   is_unsorted: 'boolean',
   stars: 'number',
   points: 'number',
+  views: 'number',
 } as const
 
 export type LocalDb = {
@@ -54,6 +56,7 @@ export type LocalDb = {
     force_reinitialization?: boolean
     include_visited_at?: boolean
     include_points?: boolean
+    include_views?: boolean
   }) => Promise<{
     db: Orama<typeof schema>
   }>
@@ -115,6 +118,7 @@ export const LocalDbProvider: React.FC<{
     force_reinitialization?: boolean
     include_visited_at?: boolean
     include_points?: boolean
+    include_views?: boolean
   }): Promise<{
     db: Orama<typeof schema>
   }> => {
@@ -150,6 +154,7 @@ export const LocalDbProvider: React.FC<{
           after: !params.force_reinitialization ? cached_at : undefined,
           include_visited_at: params.include_visited_at,
           include_points: params.include_points,
+          include_views: params.include_views,
         },
         auth_context.auth_data!.encryption_key,
       )
@@ -208,6 +213,9 @@ export const LocalDbProvider: React.FC<{
             stars: bookmark.stars,
             points: bookmark.points
               ? parseInt(`${bookmark.points}${bookmark.created_at}`)
+              : bookmark.created_at,
+            views: bookmark.views
+              ? parseInt(`${bookmark.views}${bookmark.created_at}`)
               : bookmark.created_at,
           })
         }
@@ -282,6 +290,9 @@ export const LocalDbProvider: React.FC<{
               points: bookmark.points
                 ? parseInt(`${bookmark.points}${bookmark.created_at}`)
                 : bookmark.created_at,
+              views: bookmark.views
+                ? parseInt(`${bookmark.views}${bookmark.created_at}`)
+                : bookmark.created_at,
             })
           }
         }
@@ -318,6 +329,9 @@ export const LocalDbProvider: React.FC<{
                 stars: bookmark.stars,
                 points: bookmark.points
                   ? parseInt(`${bookmark.points}${bookmark.created_at}`)
+                  : bookmark.created_at,
+                views: bookmark.views
+                  ? parseInt(`${bookmark.views}${bookmark.created_at}`)
                   : bookmark.created_at,
               })),
             chunk_size,
@@ -420,6 +434,9 @@ export const LocalDbProvider: React.FC<{
       stars: params.bookmark.stars,
       points: params.bookmark.points
         ? parseInt(`${params.bookmark.points}${params.bookmark.created_at}`)
+        : Math.round(new Date(params.bookmark.created_at).getTime() / 1000),
+      views: params.bookmark.views
+        ? parseInt(`${params.bookmark.views}${params.bookmark.created_at}`)
         : Math.round(new Date(params.bookmark.created_at).getTime() / 1000),
     })
   }

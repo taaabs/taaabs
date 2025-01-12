@@ -13,6 +13,7 @@ export class LibrarySearch_DataSourceImpl implements LibrarySearch_DataSource {
       is_archived: params.is_archived ? true : undefined,
       after: params.after,
       include_points: params.include_points,
+      include_views: params.include_views,
       include_visited_at: params.include_visited_at,
     }
 

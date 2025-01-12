@@ -10,6 +10,9 @@ export namespace LibrarySearchBookmarks_Dto {
     public include_points?: boolean
 
     @ToBoolean()
+    public include_views?: boolean
+
+    @ToBoolean()
     public include_visited_at?: boolean
 
     @Type()
@@ -44,7 +47,7 @@ export namespace LibrarySearchBookmarks_Dto {
       is_unsorted?: boolean
       links: AuthorizedLink[]
       tags: AuthorizedTag[]
-      views: number
+      views?: number
     }
 
     type PublicTag = {

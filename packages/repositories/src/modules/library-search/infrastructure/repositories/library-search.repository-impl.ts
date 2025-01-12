@@ -69,6 +69,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
         is_deleted: bookmark.is_deleted,
         stars: bookmark.stars || 0,
         points: bookmark.points || 0,
+        views: bookmark.views || 0,
       })
     }
 
@@ -99,6 +100,7 @@ export class LibrarySearch_RepositoryImpl implements LibrarySearch_Repository {
           tags: bookmark.tags,
           stars: bookmark.stars || 0,
           points: bookmark.points || 0,
+          views: 0,
         }
       }),
       version,
