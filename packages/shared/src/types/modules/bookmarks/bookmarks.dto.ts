@@ -81,7 +81,7 @@ export namespace Bookmarks_Dto {
       public links: AuthorizedLink[]
       public tags: AuthorizedTag[]
       public note_aes?: string
-      public views: number
+      public views?: number
     }
     export class PublicBookmark extends Bookmark {
       public links: PublicLink[]
