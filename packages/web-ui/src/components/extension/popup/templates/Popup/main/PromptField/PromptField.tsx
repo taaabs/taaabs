@@ -13,6 +13,7 @@ export namespace PromptField {
     is_plain_text_too_long: boolean
     text_not_found: boolean
     switches_slot: React.ReactNode
+    autofocus: boolean
     translations: {
       new_prompt: string
       placeholder: string
@@ -74,9 +75,9 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         value={props.value}
         on_change={handle_change}
         min_lines={2}
-        max_lines={8}
+        max_lines={6}
         disable_enter_new_lines={true}
-        autofocus={true}
+        autofocus={props.autofocus}
         on_enter_pressed={props.on_submit}
         placeholder={
           props.translations.placeholder +

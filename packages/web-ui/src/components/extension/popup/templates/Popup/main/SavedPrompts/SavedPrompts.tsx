@@ -1,22 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './RecentPrompts.module.scss'
+import styles from './SavedPrompts.module.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
 
 import 'simplebar-react/dist/simplebar.min.css'
 
-export namespace RecentPrompts {
-  export type Props = {
-    recent_prompts: string[]
-    default_prompts: string[]
-    on_recent_prompt_click: (prompt: string) => void
-    on_recent_prompt_middle_click: (prompt: string) => void
-    is_disabled: boolean
-    filter_phrase: string
-    translations: {
-      heading: string
-      searching_heading: string
-    }
+export type Props = {
+  recent_prompts: string[]
+  default_prompts: string[]
+  on_recent_prompt_click: (prompt: string) => void
+  on_recent_prompt_middle_click: (prompt: string) => void
+  is_disabled: boolean
+  filter_phrase: string
+  translations: {
+    heading: string
+    searching_heading: string
   }
 }
 
@@ -27,7 +25,7 @@ type FilteredPrompt =
       highlighted_prompt: string
     }
 
-export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
+export const SavedPrompts: React.FC<Props> = (props) => {
   const container_ref = useRef<HTMLDivElement>(null)
   const [container_height, set_container_height] = useState<number>()
   const simplebar_ref = useRef<any>()
@@ -75,9 +73,9 @@ export const RecentPrompts: React.FC<RecentPrompts.Props> = (props) => {
   useEffect(() => {
     const simplebar_el = simplebar_ref.current.getScrollElement()
     const handle_scroll = () => {
-      set_show_top_shadow(simplebar_el.scrollTop)
+      set_show_top_shadow(simplebar_el.scrollTop > 5)
       set_show_bottom_shadow(
-        simplebar_el.scrollTop + simplebar_el.clientHeight <
+        simplebar_el.scrollTop + simplebar_el.clientHeight + 5 <
           simplebar_el.scrollHeight,
       )
     }

@@ -14,7 +14,6 @@
     height: 10px;
     box-shadow: inset 0px 10px 8px -8px rgba(0, 0, 0, 0.06);
     opacity: 0;
-    @include transition-250ms(opacity);
   }
   &::after {
     content: '';
@@ -25,7 +24,6 @@
     height: 10px;
     box-shadow: inset 0px -10px 8px -8px rgba(0, 0, 0, 0.06);
     opacity: 0;
-    @include transition-250ms(opacity);
   }
   &--show-top-shadow {
     &::before {
@@ -41,7 +39,6 @@
 .prompts {
   display: flex;
   flex-direction: column;
-  @include transition-250ms();
   &--disabled {
     pointer-events: none;
     opacity: var(--dimmed-opacity);
@@ -56,7 +53,6 @@
     font-weight: var(--font-weight-inter-regular);
     padding: var(--padding-8px) var(--padding-16px) 9px var(--padding-16px);
     position: relative;
-    @include transition-150ms(background-color);
     &::before {
       content: '';
       position: absolute;
@@ -65,7 +61,6 @@
       width: 100%;
       height: 1px;
       background-color: var(--neutral100);
-      @include transition-150ms(opacity);
       opacity: 0;
     }
     @include hover {

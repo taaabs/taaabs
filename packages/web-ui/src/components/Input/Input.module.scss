@@ -22,7 +22,6 @@
       fill: var(--accent-color);
       width: var(--icon-dimension-18px);
       height: var(--icon-dimension-18px);
-      @include transition-150ms(fill);
     }
     @include hover {
       > svg {
@@ -43,7 +42,6 @@
   @include light {
     box-shadow: var(--box-shadow-inset);
   }
-  @include transition-150ms();
   @include hover {
     border-color: var(--neutral250);
     @include dark {

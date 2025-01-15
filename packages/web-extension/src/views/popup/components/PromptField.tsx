@@ -80,37 +80,38 @@ export const PromptField: React.FC<{
           <>
             <UiSwitch
               is_checked={attach_text_switch_hook.is_checked}
+              is_disabled={
+                !parsed_html_hook.parsed_html &&
+                !text_selection_hook.selected_text
+              }
               on_change={() => {
                 attach_text_switch_hook.set_is_checked(
                   !attach_text_switch_hook.is_checked,
                 )
               }}
-              is_disabled={
-                !parsed_html_hook.parsed_html &&
-                !text_selection_hook.selected_text
-              }
               label={
                 text_selection_hook.selected_text
                   ? 'Attach selection'
                   : get_attach_text_checkbox_label(current_url_hook.url)
               }
             />
-            {attach_text_switch_hook.is_checked && (
-              <UiSwitch
-                is_checked={save_prompt_switch_hook.is_checked}
-                is_disabled={
-                  !attach_text_switch_hook.is_checked ||
-                  (!parsed_html_hook.parsed_html &&
-                    !text_selection_hook.selected_text)
-                }
-                on_change={() => {
-                  save_prompt_switch_hook.set_is_checked(
-                    !save_prompt_switch_hook.is_checked,
-                  )
-                }}
-                label={'Save prompt'}
-              />
-            )}
+            <UiSwitch
+              is_checked={
+                attach_text_switch_hook.is_checked &&
+                save_prompt_switch_hook.is_checked
+              }
+              is_disabled={
+                !attach_text_switch_hook.is_checked ||
+                (!parsed_html_hook.parsed_html &&
+                  !text_selection_hook.selected_text)
+              }
+              on_change={() => {
+                save_prompt_switch_hook.set_is_checked(
+                  !save_prompt_switch_hook.is_checked,
+                )
+              }}
+              label={'Save prompt'}
+            />
           </>
         )
       }
@@ -137,6 +138,12 @@ export const PromptField: React.FC<{
         !current_url_hook.url.startsWith('https://taaabs.com') &&
         parsed_html_hook.parsed_html === null &&
         !text_selection_hook.selected_text
+      }
+      autofocus={
+        !(
+          navigator.userAgent.includes('Firefox') &&
+          navigator.userAgent.includes('Mobile')
+        )
       }
       translations={{
         new_prompt: 'New chat',
@@ -195,15 +202,23 @@ export const PromptField: React.FC<{
         window.close()
       }}
       switches_slot={
-        <UiSwitch
-          is_checked={vision_mode_hook.is_save_prompt_checked}
-          on_change={() => {
-            vision_mode_hook.set_is_save_prompt_checked(
-              !vision_mode_hook.is_save_prompt_checked,
-            )
-          }}
-          label={'Save prompt'}
-        />
+        <>
+          <UiSwitch
+            is_checked={vision_mode_hook.is_save_prompt_checked}
+            is_disabled={true}
+            on_change={() => {}}
+            label={'Attach screenshot'}
+          />
+          <UiSwitch
+            is_checked={vision_mode_hook.is_save_prompt_checked}
+            on_change={() => {
+              vision_mode_hook.set_is_save_prompt_checked(
+                !vision_mode_hook.is_save_prompt_checked,
+              )
+            }}
+            label={'Save prompt'}
+          />
+        </>
       }
       prompts_history={[
         ...prompts_vision_history_hook.prompts_history.filter(
@@ -213,6 +228,12 @@ export const PromptField: React.FC<{
       is_history_enabled={true}
       is_plain_text_too_long={false}
       text_not_found={false}
+      autofocus={
+        !(
+          navigator.userAgent.includes('Firefox') &&
+          navigator.userAgent.includes('Mobile')
+        )
+      }
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${

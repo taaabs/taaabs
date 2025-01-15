@@ -257,7 +257,23 @@ const send_prompt = async (params: {
 namespace AssistantBugMitigation {
   export const on_load = async (params: { assistant_name: AssistantName }) => {
     // AI Studio and Mistral needs a little time before are ready to take a prompt.
-    if (params.assistant_name == 'mistral') {
+    if (params.assistant_name == 'aistudio') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('.title-container')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
+      })
+    } else if (params.assistant_name == 'mistral') {
       await new Promise(async (resolve) => {
         while (
           document.querySelector(

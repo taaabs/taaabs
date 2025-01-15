@@ -1,5 +1,5 @@
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
-import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
+import { SavedPrompts as Ui_extension_popup_templates_Popup_main_SavedPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/SavedPrompts'
 import { usePopup } from '../App'
 import {
   default_prompts,
@@ -11,7 +11,7 @@ import { useEffect } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 
-export const RecentPrompts: React.FC<{
+export const SavedPrompts: React.FC<{
   prompt_field_value: string
   assistant_url: string
   shortened_plain_text?: string
@@ -112,7 +112,7 @@ export const RecentPrompts: React.FC<{
         <>
           <Ui_extension_popup_templates_Popup_main_Separator />
 
-          <Ui_extension_popup_templates_Popup_main_RecentPrompts
+          <Ui_extension_popup_templates_Popup_main_SavedPrompts
             recent_prompts={[
               ...prompts_vision_history_hook.prompts_history,
             ].reverse()}
@@ -145,7 +145,7 @@ export const RecentPrompts: React.FC<{
           <>
             <Ui_extension_popup_templates_Popup_main_Separator />
 
-            <Ui_extension_popup_templates_Popup_main_RecentPrompts
+            <Ui_extension_popup_templates_Popup_main_SavedPrompts
               recent_prompts={[
                 ...prompts_history_hook.prompts_history,
               ].reverse()}

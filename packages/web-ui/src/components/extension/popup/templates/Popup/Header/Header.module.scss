@@ -14,12 +14,6 @@
   > svg {
     height: 50px;
     fill: var(--accent-color);
-    @include transition-150ms(fill);
-  }
-  @include hover {
-    > svg {
-      fill: var(--blue800);
-    }
   }
 }
 .vision {
@@ -34,7 +28,6 @@
     border-radius: 50%;
     width: 42px;
     height: 42px;
-    @include transition-150ms;
     @include hover {
       background-color: var(--neutral100);
     }
@@ -78,7 +71,6 @@
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    @include transition-150ms(background-color);
     @include hover {
       background-color: var(--neutral100);
       @include dark {
