@@ -149,6 +149,7 @@ export class Bookmarks_RepositoryImpl implements Bookmarks_Repository {
         bookmarks.push({
           id: bookmark.id,
           is_public: true,
+          is_compact: true,
           created_at: bookmark.created_at,
           updated_at: bookmark.updated_at,
           visited_at: bookmark.visited_at,
