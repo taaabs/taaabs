@@ -594,9 +594,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
         <div className={styles.container__inner__card__tags__actions__menu}>
           <OutsideClickHandler
             disabled={!is_mobile_menu_open}
-            onOutsideClick={() => {
-              toggle_is_mobile_menu_open()
-            }}
+            onOutsideClick={toggle_is_mobile_menu_open}
           >
             <button
               className={cn(
@@ -662,7 +660,6 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
               !is_mobile_menu_open &&
               !link_url_menu_opened
             ) {
-              console.log(is_desktop_menu_open)
               props.on_click()
             }
           }}
@@ -851,9 +848,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 >
                   <OutsideClickHandler
                     disabled={!is_desktop_menu_open}
-                    onOutsideClick={() => {
-                      requestAnimationFrame(toggle_is_desktop_menu_open)
-                    }}
+                    onOutsideClick={toggle_is_desktop_menu_open}
                   >
                     <button
                       className={cn(
@@ -1211,9 +1206,7 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                         <OutsideClickHandler
                           disabled={link_url_menu_opened != link.url}
                           onOutsideClick={() => {
-                            requestAnimationFrame(() => {
-                              set_link_url_menu_opened(undefined)
-                            })
+                            set_link_url_menu_opened(undefined)
                           }}
                         >
                           <button
