@@ -2,12 +2,12 @@ import { memo, useEffect, useRef, useState } from 'react'
 import styles from './TagHierarchies.module.scss'
 import cn from 'classnames'
 import Nestable from 'react-nestable'
-import { Icon as UiIcon } from '@web-ui/components/Icon'
+import { Icon } from '@web-ui/components/Icon'
 import { toast } from 'react-toastify'
 import { system_values } from '@shared/constants/system-values'
 import { useContextMenu } from 'use-context-menu'
-import { Dropdown as Ui_Dropdown } from '@web-ui/components/Dropdown'
-import { StandardItem as Ui_Dropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
+import { Dropdown } from '@web-ui/components/Dropdown'
+import { StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import Skeleton from 'react-loading-skeleton'
 import Simplebar from 'simplebar-react'
@@ -33,10 +33,10 @@ export namespace TagHierarchies {
     tree?: Node[]
     is_updating?: boolean
     dragged_tag?: { id: number; name: string }
-    is_read_only?: boolean
     all_bookmarks_yields?: number
     on_tag_rename_click: (params: { id: number; name: string }) => void
     on_ready: () => void // We call it when collapsed state is restored
+    username?: string
     translations: {
       drag_here: string
       all_bookmarks: string
@@ -79,8 +79,8 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     const [context_menu_of_item_id, set_context_menu_of_item_id] =
       useState<number>()
     const { contextMenu, onContextMenu } = useContextMenu(
-      <Ui_Dropdown>
-        <Ui_Dropdown_StandardItem
+      <Dropdown>
+        <StandardItem
           label={props.translations.rename}
           icon_variant="EDIT"
           on_click={() => {
@@ -111,7 +111,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             }
           }}
         />
-        <Ui_Dropdown_StandardItem
+        <StandardItem
           label={props.translations.delete}
           icon_variant="DELETE"
           on_click={() => {
@@ -121,7 +121,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
             set_selected_tag_ids([])
           }}
         />
-      </Ui_Dropdown>,
+      </Dropdown>,
     )
 
     useUpdateEffect(() => {
@@ -148,30 +148,31 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
     useUpdateEffect(() => {
       if (!props.tree) return
 
-      const filteredItems = props.tree
+      const filtered_items = props.tree
         .map((node) =>
           tag_to_item({ node, hierarchy_ids: [], hierarchy_tag_ids: [] }),
         )
         .filter((item): item is Item => item != null)
 
-      set_items(filteredItems)
+      set_items(filtered_items)
 
-      if (!props.is_read_only) {
-        const stored_closed_ids = localStorage.getItem(
-          'tag-hierarchy-closed-ids',
-        )
-        const initial_closed_ids = stored_closed_ids
-          ? JSON.parse(stored_closed_ids)
-          : []
-
-        // Collapse the tree after it's rendered
-        setTimeout(() => {
-          ;(nestable.current as any)?.collapse(initial_closed_ids)
-          props.on_ready()
-        }, 0)
-      } else {
-        props.on_ready()
+      const restored_open_ids = localStorage.getItem(
+        `${props.username ? `${props.username}:` : ''}tag-hierarchy-open-ids`,
+      )
+      const open_ids = restored_open_ids ? JSON.parse(restored_open_ids) : []
+      const all_ids: number[] = []
+      const traverse = (items: Item[]) => {
+        items.forEach((item) => {
+          all_ids.push(item.id)
+          traverse(item.children)
+        })
       }
+      traverse(filtered_items)
+      const closed_ids = all_ids.filter((id) => !open_ids.includes(id))
+      setTimeout(() => {
+        ;(nestable.current as any)?.collapse(closed_ids)
+        props.on_ready()
+      }, 0)
     }, [props.tree])
 
     useEffect(() => {
@@ -194,7 +195,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
       hierarchy_ids: number[]
       hierarchy_tag_ids: number[]
     }): Item | null => {
-      if (props.is_read_only && params.node.yields == 0) {
+      if (props.username && params.node.yields == 0) {
         return null
       }
 
@@ -324,7 +325,7 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
               }
             }}
             onContextMenu={(e) => {
-              if (props.is_read_only) return
+              if (props.username) return
               set_context_menu_of_item_id((item as Item).id)
               onContextMenu(e)
             }}
@@ -352,9 +353,9 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
           })}
         >
           {params.is_collapsed ? (
-            <UiIcon variant="LESS_THAN" />
+            <Icon variant="LESS_THAN" />
           ) : (
-            <UiIcon variant="LESS_THAN" />
+            <Icon variant="LESS_THAN" />
           )}
         </button>
       )
@@ -531,21 +532,21 @@ export const TagHierarchies: React.FC<TagHierarchies.Props> = memo(
                   set_is_dragging(false)
                 }}
                 maxDepth={5}
-                disableDrag={props.is_read_only}
+                disableDrag={!!props.username}
                 renderCollapseIcon={({ isCollapsed }) =>
                   render_collapse_icon({ is_collapsed: isCollapsed })
                 }
-                collapsed={props.is_read_only}
+                collapsed={true}
                 onCollapseChange={(params: any) => {
-                  if (params.closedIds) {
-                    localStorage.setItem(
-                      'tag-hierarchy-closed-ids',
-                      JSON.stringify(params.closedIds),
-                    )
-                  }
+                  localStorage.setItem(
+                    `${
+                      props.username ? `${props.username}:` : ''
+                    }tag-hierarchy-open-ids`,
+                    JSON.stringify(params.openIds),
+                  )
                 }}
               />
-              {!props.is_read_only && (
+              {!props.username && (
                 <div
                   className={cn(
                     styles['drop-zone'],

@@ -52,7 +52,6 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
       }}
       is_not_interactive={is_not_interactive}
       is_fetching_initial_tag_hierarchies={is_fetching_initial_tag_hierarchies}
-      is_read_only={!!username}
       tree={tag_hierarchies_hook.tag_hierarchies}
       on_update={async (
         tag_hierarchies: Ui_app_library_TagHierarchies.Node[],
@@ -115,6 +114,7 @@ export const _TagHierarchies: React.FC<_TagHierarchies.Props> = (props) => {
       on_tag_rename_click={({ id, name }) => {
         on_tag_rename_click({ id, name })
       }}
+      username={username}
       translations={{
         all_bookmarks: props.dictionary.app.library.all_bookmarks,
         drag_here: props.dictionary.app.library.drag_tag_here,
