@@ -17,7 +17,7 @@
 .button {
   position: relative;
   flex-grow: 1;
-  height: var(--button-dimension-34px);
+  height: var(--button-size-34px);
   color: transparent;
   font-weight: var(--font-weight-inter-medium);
   @include hover {

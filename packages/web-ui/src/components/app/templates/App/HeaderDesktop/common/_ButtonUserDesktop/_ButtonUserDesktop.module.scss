@@ -5,8 +5,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--button-dimension-40px);
-  min-width: var(--button-dimension-40px);
+  height: var(--button-size-40px);
+  min-width: var(--button-size-40px);
   border-radius: 20px;
   @include hover {
     background-color: var(--transparent-hover-background);

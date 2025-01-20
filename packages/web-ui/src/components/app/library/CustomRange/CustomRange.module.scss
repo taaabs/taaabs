@@ -85,8 +85,8 @@
     justify-content: center;
     top: 10px;
     right: 6px;
-    height: var(--button-dimension-28px);
-    width: var(--button-dimension-28px);
+    height: var(--button-size-28px);
+    width: var(--button-size-28px);
     @include transition-150ms(background-color);
     border-radius: var(--border-radius-999px);
     @include hover {

@@ -280,8 +280,8 @@
             align-items: center;
             justify-content: center;
             border-radius: var(--border-radius-999px);
-            width: var(--button-dimension-28px);
-            height: var(--button-dimension-28px);
+            width: var(--button-size-28px);
+            height: var(--button-size-28px);
             background-color: var(--blue100);
             @include dark {
               background-color: var(--dark300);
@@ -328,8 +328,8 @@
           align-items: center;
           justify-content: center;
           border-radius: 50%;
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
+          width: var(--button-size-28px);
+          height: var(--button-size-28px);
           background-color: var(--green100);
           @include dark {
             background-color: var(--green900);
@@ -354,7 +354,7 @@
           align-items: center;
           gap: 4px;
           border-radius: var(--border-radius-999px);
-          height: var(--button-dimension-28px);
+          height: var(--button-size-28px);
           padding: 0 var(--padding-10px);
           color: var(--green600);
           background-color: var(--green100);
@@ -412,8 +412,8 @@
             align-items: center;
             justify-content: center;
             border-radius: var(--border-radius-999px);
-            width: var(--button-dimension-28px);
-            height: var(--button-dimension-28px);
+            width: var(--button-size-28px);
+            height: var(--button-size-28px);
             border: var(--border-primary);
             background-color: var(--white);
             @include dark {
@@ -436,7 +436,7 @@
             display: flex;
             align-items: center;
             gap: 3px;
-            height: var(--button-dimension-28px);
+            height: var(--button-size-28px);
             border-radius: var(--border-radius-999px);
             font-weight: var(--font-weight-inter-semi-bold);
             font-size: var(--font-size-14px);
@@ -593,8 +593,8 @@
               align-items: center;
               justify-content: center;
               border-radius: var(--border-radius-999px);
-              width: var(--button-dimension-28px);
-              height: var(--button-dimension-28px);
+              width: var(--button-size-28px);
+              height: var(--button-size-28px);
               background-color: var(--blue100);
               @include dark {
                 background-color: var(--dark300);
@@ -706,8 +706,8 @@
             align-items: center;
             justify-content: center;
             border-radius: var(--border-radius-999px);
-            width: var(--button-dimension-40px);
-            height: var(--button-dimension-28px);
+            width: var(--button-size-40px);
+            height: var(--button-size-28px);
             background-color: var(--blue100);
             @include dark {
               background-color: var(--dark200);
@@ -794,8 +794,8 @@
             align-items: center;
             justify-content: center;
             border-radius: var(--border-radius-999px);
-            width: var(--button-dimension-28px);
-            height: var(--button-dimension-28px);
+            width: var(--button-size-28px);
+            height: var(--button-size-28px);
             background-color: var(--neutral100);
             @include dark {
               background-color: var(--dark200);
@@ -826,8 +826,8 @@
               align-items: center;
               justify-content: center;
               border-radius: var(--border-radius-999px);
-              width: var(--button-dimension-28px);
-              height: var(--button-dimension-28px);
+              width: var(--button-size-28px);
+              height: var(--button-size-28px);
               background-color: var(--neutral100);
               @include dark {
                 background-color: var(--dark200);
@@ -883,7 +883,7 @@
 .slot {
   position: absolute;
   z-index: 2;
-  top: calc(var(--button-dimension-28px));
+  top: calc(var(--button-size-28px));
   right: 0;
   bottom: 0;
   opacity: 0;

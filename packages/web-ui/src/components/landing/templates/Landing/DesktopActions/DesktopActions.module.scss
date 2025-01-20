@@ -11,8 +11,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: var(--large-button-dimension);
-    width: var(--large-button-dimension);
+    height: var(--large-button-size);
+    width: var(--large-button-size);
     background-color: black;
     border-radius: var(--border-radius-999px);
     @include transition-150ms(transform);

@@ -13,20 +13,30 @@
 .left {
   display: flex;
   height: 100%;
-  &__menu {
+  &__menu-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
-    width: 32px;
+    width: var(--button-size-40px);
+    height: var(--button-size-40px);
+    border-radius: 50%;
     margin: 0 12px;
     > svg {
       width: 20px;
     }
+    @include hover {
+      background-color: var(--transparent-hover-background);
+    }
+  }
+  &__logo {
+    display: flex;
+    > svg {
+      fill: var(--accent-color);
+      height: 39px;
+    }
   }
 }
-.logo {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+.left {
+  display: flex;
+  align-items: center;
 }

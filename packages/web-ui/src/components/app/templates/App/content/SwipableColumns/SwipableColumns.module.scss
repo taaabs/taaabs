@@ -140,7 +140,7 @@
         display: flex;
         align-items: center;
         width: 42px;
-        height: var(--button-dimension-40px);
+        height: var(--button-size-40px);
         > svg {
           fill: var(--accent-color);
         }
@@ -248,18 +248,21 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: var(--button-dimension-34px);
-        height: var(--button-dimension-34px);
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         background-color: var(--accent-color);
         box-shadow: var(--box-shadow-blue-strong);
-        margin-right: 5px;
+        margin-right: 4px;
         @include at992 {
           display: none;
         }
         > svg {
-          width: var(--icon-dimension-18px);
+          width: var(--icon-dimension-20px);
           fill: white;
+        }
+        @include hover {
+          background-color: var(--blue600);
         }
       }
     }

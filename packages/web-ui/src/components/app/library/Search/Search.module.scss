@@ -61,8 +61,8 @@
   }
   &__left-side {
     margin-left: 6px;
-    width: var(--button-dimension-28px);
-    height: var(--button-dimension-28px);
+    width: var(--button-size-28px);
+    height: var(--button-size-28px);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,8 +75,8 @@
       }
     }
     @include at992 {
-      width: var(--button-dimension-34px);
-      height: var(--button-dimension-34px);
+      width: var(--button-size-34px);
+      height: var(--button-size-34px);
       margin-left: 8px;
     }
     > svg {
@@ -110,7 +110,7 @@
     position: absolute;
     font-weight: var(--font-weight-inter-medium);
     left: calc(
-      var(--padding-4px) + var(--button-dimension-28px) + var(--padding-8px)
+      var(--padding-4px) + var(--button-size-28px) + var(--padding-8px)
     );
     color: var(--blue500);
     @include dark {
@@ -122,11 +122,11 @@
     }
     @include at992 {
       font-size: var(--font-size-16px);
-      left: calc(var(--padding-8px) + var(--button-dimension-34px) + 4px);
+      left: calc(var(--padding-8px) + var(--button-size-34px) + 4px);
     }
     @include at1200 {
       font-size: var(--font-size-17px);
-      left: calc(var(--padding-8px) + var(--button-dimension-34px) + 13px);
+      left: calc(var(--padding-8px) + var(--button-size-34px) + 13px);
     }
   }
   &__form {
@@ -292,8 +292,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: var(--button-dimension-28px);
-      height: var(--button-dimension-28px);
+      width: var(--button-size-28px);
+      height: var(--button-size-28px);
       border-radius: var(--border-radius-999px);
       @include transition-150ms(background-color);
       @include hover {
@@ -343,7 +343,7 @@
   }
   @include at992 {
     width: 100%;
-    top: calc(var(--button-dimension-52px) + 4px);
+    top: calc(var(--button-size-52px) + 4px);
   }
   &--hidden {
     opacity: 0;
@@ -370,7 +370,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      height: var(--button-dimension-34px);
+      height: var(--button-size-34px);
       padding: 0 14px;
       @include hover {
         background-color: var(--neutral100);
@@ -478,10 +478,10 @@
     transform: translateX(calc(16px * -1));
   }
   > span > span {
-    height: var(--button-dimension-40px);
+    height: var(--button-size-40px);
     border-radius: var(--border-radius-999px);
     @include at992 {
-      height: var(--button-dimension-52px);
+      height: var(--button-size-52px);
       width: calc(100% + (16px * 2));
     }
   }

@@ -11,7 +11,7 @@
   font-family: var(--font-family-plus-jakarta-sans);
   font-weight: var(--font-weight-plus-jakarta-sans-bold);
   border-radius: var(--border-radius-999px);
-  height: var(--button-dimension-40px);
+  height: var(--button-size-40px);
   padding: 0 16px;
   font-size: var(--font-size-16px);
   border: none;
@@ -48,7 +48,7 @@
     }
   }
   &--small {
-    height: var(--button-dimension-34px);
+    height: var(--button-size-34px);
     font-size: var(--font-size-13px);
     padding: 0 14px;
   }
@@ -63,7 +63,7 @@
     }
   }
   &--large {
-    height: var(--large-button-dimension);
+    height: var(--large-button-size);
     font-size: clamp(var(--font-size-17px), 1.38vw, var(--font-size-22px));
     padding: 0 1.2em;
   }

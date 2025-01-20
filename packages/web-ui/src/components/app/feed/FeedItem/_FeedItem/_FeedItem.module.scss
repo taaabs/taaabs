@@ -44,8 +44,8 @@
       column-gap: var(--padding-8px);
       &__avatar {
         grid-area: avatar;
-        width: var(--button-dimension-40px);
-        height: var(--button-dimension-40px);
+        width: var(--button-size-40px);
+        height: var(--button-size-40px);
         background-color: var(--border-color-secondary);
         border-radius: 50%;
         display: flex;
@@ -87,8 +87,8 @@
           justify-content: center;
           border-radius: var(--border-radius-999px);
           @include transition-150ms(background-color);
-          width: var(--button-dimension-28px);
-          height: var(--button-dimension-28px);
+          width: var(--button-size-28px);
+          height: var(--button-size-28px);
           background-color: var(--blue100);
           @include dark {
             background-color: var(--dark300);
@@ -197,7 +197,7 @@
 .slot {
   position: absolute;
   z-index: 1;
-  top: calc(var(--button-dimension-28px));
+  top: calc(var(--button-size-28px));
   right: 0;
   bottom: 0;
   opacity: 0;

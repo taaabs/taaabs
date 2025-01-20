@@ -53,7 +53,7 @@
     display: flex;
     > svg {
       fill: var(--accent-color);
-      height: 34px;
+      height: 39px;
       @include at992 {
         height: 42px;
       }

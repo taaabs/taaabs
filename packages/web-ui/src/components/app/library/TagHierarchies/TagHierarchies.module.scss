@@ -73,7 +73,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: var(--button-dimension-34px);
+  height: var(--button-size-34px);
   padding-left: 5px;
   padding-right: 10px;
   svg {
@@ -102,7 +102,7 @@
   }
   &__button {
     position: relative;
-    height: var(--button-dimension-34px);
+    height: var(--button-size-34px);
     display: flex;
     align-items: center;
     width: 100%;
@@ -177,7 +177,7 @@
   }
   &--slim {
     padding: 0;
-    height: var(--button-dimension-34px);
+    height: var(--button-size-34px);
   }
   &--active {
     @include hover {

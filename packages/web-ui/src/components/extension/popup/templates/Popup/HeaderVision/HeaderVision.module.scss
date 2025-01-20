@@ -40,8 +40,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--button-dimension-34px);
-  height: var(--button-dimension-34px);
+  width: var(--button-size-34px);
+  height: var(--button-size-34px);
   pointer-events: none;
   > svg {
     fill: var(--neutral300);

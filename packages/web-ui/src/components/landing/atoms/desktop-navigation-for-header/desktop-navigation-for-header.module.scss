@@ -15,18 +15,18 @@
   }
   &__item {
     position: relative;
-    height: var(--button-dimension-52px);
+    height: var(--button-size-52px);
     display: flex;
     align-items: center;
     @include at992 {
-      height: var(--button-dimension-48px);
+      height: var(--button-size-48px);
       font-size: var(--font-size-18px);
     }
     @include at1200 {
       font-size: var(--font-size-20px);
     }
     @include at1380 {
-      height: var(--button-dimension-52px);
+      height: var(--button-size-52px);
       font-size: var(--font-size-22px);
     }
     @include hover {

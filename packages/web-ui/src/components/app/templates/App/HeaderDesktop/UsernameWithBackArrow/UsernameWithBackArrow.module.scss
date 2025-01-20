@@ -11,10 +11,10 @@
   padding-right: 16px;
   padding-left: 16px;
   margin-left: calc(16px * -1);
-  height: var(--button-dimension-34px);
+  height: var(--button-size-34px);
   @include at992 {
     padding-right: 30px;
-    height: var(--button-dimension-40px);
+    height: var(--button-size-40px);
   }
   @include hover {
     svg {

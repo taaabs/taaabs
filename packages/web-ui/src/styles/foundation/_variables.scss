@@ -1,11 +1,11 @@
 @mixin variables {
   --site-max-width: 1380px;
   --header-desktop-height: 62px;
-  --header-mobile-height: 45px;
+  --header-mobile-height: 56px;
   --custom-range-height: 160px;
   --dimmed-opacity: 0.5;
-  --search-desktop-height: var(--button-dimension-52px);
-  --search-mobile-height: var(--button-dimension-40px);
+  --search-desktop-height: var(--button-size-52px);
+  --search-mobile-height: var(--button-size-40px);
 
   --padding-2px: 2px;
   --padding-4px: 4px;
@@ -70,14 +70,14 @@
   --font-weight-plus-jakarta-sans-bold: 700;
   --font-weight-plus-jakarta-sans-extra-bold: 800;
 
-  --button-dimension-28px: 28px;
-  --button-dimension-34px: 34px;
-  --button-dimension-40px: 40px;
-  --button-dimension-44px: 44px;
-  --button-dimension-48px: 48px;
-  --button-dimension-50px: 50px;
-  --button-dimension-52px: 52px;
-  --large-button-dimension: clamp(var(--button-dimension-44px), 3.8vw, 60px);
+  --button-size-28px: 28px;
+  --button-size-34px: 34px;
+  --button-size-40px: 40px;
+  --button-size-44px: 44px;
+  --button-size-48px: 48px;
+  --button-size-50px: 50px;
+  --button-size-52px: 52px;
+  --large-button-size: clamp(var(--button-size-44px), 3.8vw, 60px);
 
   --border-radius-3px: 3px;
   --border-radius-4px: 4px;

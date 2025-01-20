@@ -9,8 +9,8 @@
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  width: var(--button-dimension-40px);
-  height: var(--button-dimension-40px);
+  width: var(--button-size-40px);
+  height: var(--button-size-40px);
   @include hover {
     background-color: var(--transparent-hover-background);
   }

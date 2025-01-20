@@ -9,7 +9,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: var(--padding-6px);
-  min-height: var(--button-dimension-40px);
+  min-height: var(--button-size-40px);
   padding: var(--padding-8px);
   background-color: var(--white);
   border-radius: var(--border-radius-10px);
@@ -56,7 +56,7 @@
   gap: 4px;
   cursor: grab;
   border-radius: var(--border-radius-999px);
-  height: var(--button-dimension-28px);
+  height: var(--button-size-28px);
   padding-left: var(--padding-10px);
   padding-right: 4px;
   font-weight: var(--font-weight-inter-medium);

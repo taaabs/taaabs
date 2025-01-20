@@ -49,8 +49,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--button-dimension-28px);
-  height: var(--button-dimension-28px);
+  width: var(--button-size-28px);
+  height: var(--button-size-28px);
   background-color: var(--blue100);
   border-radius: 50%;
   @include dark {
