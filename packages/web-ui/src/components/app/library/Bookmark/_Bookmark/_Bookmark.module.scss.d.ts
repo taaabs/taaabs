@@ -13,6 +13,7 @@ declare const styles: {
   readonly "container__inner__card__cover__inner__top-image": string;
   readonly "container__inner__card__date": string;
   readonly "container__inner__card__date__text": string;
+  readonly "container__inner__card__hover-highlight": string;
   readonly "container__inner__card__tags": string;
   readonly "container__inner__card__tags__actions": string;
   readonly "container__inner__card__tags__actions__huggs": string;

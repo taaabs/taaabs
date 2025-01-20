@@ -711,6 +711,11 @@ export const _Bookmark: React.FC<_Bookmark.Props> = memo(
                 }
               }}
             >
+              {(props.links.length > 0 || props.note) && (
+                <div
+                  className={styles['container__inner__card__hover-highlight']}
+                />
+              )}
               {cover ? (
                 <div className={styles.container__inner__card__cover}>
                   <div
