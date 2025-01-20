@@ -147,6 +147,11 @@ const Library: React.FC<{ dictionary: Dictionary; local_db: LocalDb }> = (
       )
       set_is_fetching_first_bookmarks(false)
       set_library_updated_at_timestamp(Date.now())
+      if (initial_scroll_y) {
+        requestAnimationFrame(() => {
+          window.scrollTo(0, initial_scroll_y)
+        })
+      }
       if (search_hook.result) {
         search_hook.set_highlights_commited(search_hook.highlights)
         search_hook.set_highlights_sites_variants_commited(
