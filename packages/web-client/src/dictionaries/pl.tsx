@@ -53,8 +53,7 @@ export const dictionary: Dictionary = {
           description: 'Rozpocznij przygodę z Taaabs',
           bullets_heading: 'Najważniejsze cechy:',
           bullets: [
-            'Nielimitowane zakładki',
-            'Nielimitowane tagi',
+            'Nielimitowane zakładki i tagi',
             'Błyskawiczne wyszukiwanie',
             'Szyfrowanie end-to-end',
           ],
@@ -64,12 +63,7 @@ export const dictionary: Dictionary = {
           name: 'Pro',
           description: 'Wykorzystaj pełnię możliwości jakie daje Taaabs',
           bullets_heading: 'Wszystko co w darmowym, plus:',
-          bullets: [
-            'Oznaczanie fragmentów',
-            'Powiązane odnośniki',
-            'Brak reklam',
-            'Przejmij krótszy nick',
-          ],
+          bullets: ['Odznaka PRO', 'Oznaczanie fragmentów', 'Krótszy nick'],
           button_label: 'Subskrybuj',
         },
       ],

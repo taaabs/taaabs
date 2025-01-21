@@ -47,8 +47,7 @@ const dictionary: Dictionary = {
           description: 'Start building your personal library',
           bullets_heading: "What's included:",
           bullets: [
-            'Unlimited bookmarks',
-            'Unlimited tags',
+            'Unlimited bookmarks & tags',
             'Flash search',
             'End-to-end encryption',
           ],
@@ -58,12 +57,7 @@ const dictionary: Dictionary = {
           name: 'Pro',
           description: 'Get the most out of Taaabs',
           bullets_heading: 'Level-up with:',
-          bullets: [
-            'Highlights',
-            'Related links',
-            'Zero ads',
-            'Shorter username',
-          ],
+          bullets: ['PRO badge', 'Highlights', 'Shorter username'],
           button_label: 'Subscribe now',
         },
       ],
