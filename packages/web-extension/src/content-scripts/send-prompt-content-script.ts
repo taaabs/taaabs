@@ -143,16 +143,17 @@ const send_prompt = async (params: {
 
       const form = input_element.closest('form')
 
-      if (params.assistant_name == 'gemini') {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 0)
-        })
-        ;(
-          document.querySelector('mat-icon[fonticon="send"]') as HTMLElement
-        ).click()
-      } else if (params.assistant_name == 'claude') {
+      // if (params.assistant_name == 'gemini') {
+      //   await new Promise((resolve) => {
+      //     setTimeout(() => {
+      //       resolve(true)
+      //     }, 0)
+      //   })
+      //   ;(
+      //     document.querySelector('mat-icon[fonticon="send"]') as HTMLElement
+      //   ).click()
+      // } else
+      if (params.assistant_name == 'claude') {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true)
@@ -303,7 +304,7 @@ namespace AssistantBugMitigation {
     const chatbot_selectors: Partial<Record<AssistantName, string>> = {
       claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
-      gemini: 'div[role="textbox"]', // Needed in mobile viewport
+      // gemini: 'rich-textarea-no-quill > div', // Needed in mobile viewport
       grok: 'textarea', // Needed in mobile viewport
       deepseek: 'textarea', // Needed in mobile viewport
     }

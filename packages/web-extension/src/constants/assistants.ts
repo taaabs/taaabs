@@ -1,6 +1,6 @@
 export type AssistantName =
   | 'chatgpt'
-  | 'gemini'
+  // | 'gemini'
   | 'copilot'
   | 'claude'
   | 'aistudio'
@@ -21,10 +21,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'ChatGPT',
     url: 'https://chatgpt.com/',
   },
-  gemini: {
-    display_name: 'Gemini',
-    url: 'https://gemini.google.com/app',
-  },
+  // gemini: {
+  //   display_name: 'Gemini',
+  //   url: 'https://gemini.google.com/app',
+  // },
   copilot: {
     display_name: 'Copilot',
     url: 'https://copilot.microsoft.com/',
