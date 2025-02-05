@@ -133,7 +133,7 @@ export const SavedPrompts: React.FC<{
             is_disabled={false}
             translations={{
               searching_heading: 'Searching...',
-              heading: 'Saved prompts',
+              heading: 'Recently used prompts',
             }}
           />
         </>
@@ -170,7 +170,7 @@ export const SavedPrompts: React.FC<{
               }
               translations={{
                 searching_heading: 'Searching...',
-                heading: 'Saved prompts',
+                heading: 'Recently used prompts',
               }}
             />
           </>

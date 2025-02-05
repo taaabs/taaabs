@@ -110,7 +110,7 @@ export const PromptField: React.FC<{
                   !save_prompt_switch_hook.is_checked,
                 )
               }}
-              label={'Save prompt'}
+              label={'Keep in recents'}
             />
           </>
         )
@@ -204,10 +204,10 @@ export const PromptField: React.FC<{
       switches_slot={
         <>
           <UiSwitch
-            is_checked={vision_mode_hook.is_save_prompt_checked}
+            is_checked={true}
             is_disabled={true}
             on_change={() => {}}
-            label={'Attach screenshot'}
+            label={'Attach image'}
           />
           <UiSwitch
             is_checked={vision_mode_hook.is_save_prompt_checked}
@@ -216,7 +216,7 @@ export const PromptField: React.FC<{
                 !vision_mode_hook.is_save_prompt_checked,
               )
             }}
-            label={'Save prompt'}
+            label={'Keep in recents'}
           />
         </>
       }
@@ -240,7 +240,7 @@ export const PromptField: React.FC<{
           assistants[selected_assistant_vision_hook.selected_assistant_name!]
             .display_name
         }`,
-        switch: 'Save prompt',
+        switch: 'Keep in recents',
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: <></>,
         text_not_found: <></>,
