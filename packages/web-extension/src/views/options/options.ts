@@ -30,6 +30,19 @@ logout_button?.addEventListener('click', async () => {
   browser.runtime.sendMessage({ action: 'logout' })
 })
 
+const clear_history_button = document.getElementById('clear-history-button')
+clear_history_button?.addEventListener('click', async () => {
+  const user_confirmed = confirm(
+    'Are you sure you want to clear your recent prompts history? This action cannot be undone.',
+  )
+
+  if (user_confirmed) {
+    await browser.storage.local.remove('prompts_history')
+    await browser.storage.local.remove('prompts_vision_history')
+    alert('Recent prompts history cleared!')
+  }
+})
+
 const defaultAssistantSelect = document.getElementById(
   'default-assistant',
 ) as HTMLSelectElement

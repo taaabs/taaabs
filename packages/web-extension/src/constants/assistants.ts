@@ -65,7 +65,7 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
 
 export const assistants_vision: AssistantName[] = [
   // 'chatgpt',
-  'claude',
+  // 'claude',
   'mistral',
   'copilot',
   'custom',

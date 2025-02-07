@@ -22,7 +22,6 @@
       Default Assistant:
       <select id="default-assistant">
         <option value="chatgpt">ChatGPT</option>
-        <option value="gemini">Gemini</option>
         <option value="copilot">Copilot</option>
         <option value="claude">Claude</option>
         <option value="aistudio">AI Studio</option>
@@ -38,7 +37,7 @@
       Default Vision Assistant:
       <select id="default-vision-assistant">
         <option value="copilot">Copilot</option>
-        <option value="claude">Claude</option>
+        <!-- <option value="claude">Claude</option> -->
         <option value="mistral">Mistral</option>
         <option value="custom">Custom</option>
       </select>
@@ -50,10 +49,12 @@
     </label>
 
     <label id="open-assistant-in-new-tab-row">
-      <input type="checkbox" id="open-assistant-in-new-tab" /> Open assistant in a
-      new tab
+      <input type="checkbox" id="open-assistant-in-new-tab" /> Open assistant in
+      a new tab
     </label>
 
+    <button id="clear-history-button">Clear recent prompts history</button>
+    <br /><br />
     <button id="logout-button">Logout</button>
 
     <script src="options.js"></script>
