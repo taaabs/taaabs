@@ -1,6 +1,5 @@
 import { Icon } from '@web-ui/components/Icon'
 import styles from './Header.module.scss'
-import cn from 'classnames'
 
 export namespace Header {
   export type Props = {
@@ -38,7 +37,7 @@ export const Header: React.FC<Header.Props> = (props) => {
           <div className={styles.actions__shortcut}>
             <div className={styles.actions__shortcut__key}>Alt</div>
             <span className={styles.actions__shortcut__plus}>+</span>
-            <div className={styles.actions__shortcut__key}>S</div>
+            <div className={styles.actions__shortcut__key}>T</div>
           </div>
         )}
         <button

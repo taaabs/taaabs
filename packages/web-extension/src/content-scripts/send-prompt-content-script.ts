@@ -2,7 +2,8 @@ import { AssistantName } from '@/constants/assistants'
 import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 
-// When testing each supported assistant, make sure to test both, desktop and mobile screens.
+// When testing each supported assistant, make sure to test both, desktop and mobile
+// as some assistants have input fields not focused on touch screens.
 
 const is_open_webui = document.title.includes('Open WebUI')
 
@@ -10,7 +11,7 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
   if (is_message(message) && message.action == 'send-prompt') {
     const assistant_name = message.assistant_name
 
-    await AssistantBugMitigation.on_load({ assistant_name })
+    await QuirksMitigation.on_load({ assistant_name })
 
     // Handle image upload if present
     if (message.image) {
@@ -22,7 +23,7 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
     // Send prompt
     const prompt = message.plain_text
-      ? `<instruction>\n${message.prompt}\n</instruction>\n<text>\n${message.plain_text}\n</text>`
+      ? `${message.prompt}\n<text>\n${message.plain_text}\n</text>`
       : message.prompt
     send_prompt({ prompt, assistant_name })
   }
@@ -32,13 +33,10 @@ const handle_image_upload = async (params: {
   assistant_name: AssistantName
   image: string
 }) => {
-  let file_input_selector = 'input[type="file"]'
-  if (params.assistant_name == 'mistral') {
-    file_input_selector = 'input[type="file"][name="img-upload"]'
-  }
+  const file_input_selector = 'input[type="file"]'
 
   // In OpenWebUI and ChatGPT file input is not immediately available
-  if (is_open_webui || params.assistant_name == 'chatgpt') {
+  if (is_open_webui) {
     await new Promise(async (resolve) => {
       while (!document.querySelector(file_input_selector)) {
         await new Promise((resolve) => {
@@ -66,6 +64,17 @@ const handle_image_upload = async (params: {
         while (
           document.querySelector('button[data-testid="send-button"][disabled]')
         ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'copilot') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('div[data-testid="composer"] img')) {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
@@ -129,7 +138,7 @@ const send_prompt = async (params: {
   assistant_name: AssistantName
 }) => {
   try {
-    const input_element = AssistantBugMitigation.get_input_element(
+    const input_element = QuirksMitigation.get_input_element(
       params.assistant_name,
     )
 
@@ -143,16 +152,6 @@ const send_prompt = async (params: {
 
       const form = input_element.closest('form')
 
-      // if (params.assistant_name == 'gemini') {
-      //   await new Promise((resolve) => {
-      //     setTimeout(() => {
-      //       resolve(true)
-      //     }, 0)
-      //   })
-      //   ;(
-      //     document.querySelector('mat-icon[fonticon="send"]') as HTMLElement
-      //   ).click()
-      // } else
       if (params.assistant_name == 'claude') {
         await new Promise((resolve) => {
           setTimeout(() => {
@@ -197,17 +196,6 @@ const send_prompt = async (params: {
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
-      } else if (params.assistant_name == 'mistral') {
-        await new Promise((resolve) => {
-          setTimeout(() => {
-            resolve(true)
-          }, 0)
-        })
-        ;(
-          document.querySelector(
-            'button[aria-label="Send question"]',
-          ) as HTMLElement
-        ).click()
       } else if (params.assistant_name == 'grok') {
         await new Promise((resolve) => {
           setTimeout(() => {
@@ -255,10 +243,44 @@ const send_prompt = async (params: {
   }
 }
 
-namespace AssistantBugMitigation {
+namespace QuirksMitigation {
   export const on_load = async (params: { assistant_name: AssistantName }) => {
-    // AI Studio and Mistral needs a little time before are ready to take a prompt.
-    if (params.assistant_name == 'aistudio') {
+    if (params.assistant_name == 'chatgpt') {
+      const model_selector =
+        'button[data-testid="model-switcher-dropdown-button"]'
+      await new Promise(async (resolve) => {
+        while (!document.querySelector(model_selector)) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'gemini') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('bard-mode-switcher')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'grok') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('textarea')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (params.assistant_name == 'aistudio') {
       await new Promise(async (resolve) => {
         while (!document.querySelector('.title-container')) {
           await new Promise((resolve) => {
@@ -276,11 +298,7 @@ namespace AssistantBugMitigation {
       })
     } else if (params.assistant_name == 'mistral') {
       await new Promise(async (resolve) => {
-        while (
-          document.querySelector(
-            'template[data-dgst="BAILOUT_TO_CLIENT_SIDE_RENDERING"]',
-          )
-        ) {
+        while (document.querySelector('span[data-radix-focus-guard]')) {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
@@ -289,11 +307,49 @@ namespace AssistantBugMitigation {
         }
         resolve(null)
       })
-    } else if (params.assistant_name == 'copilot') {
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 2000)
+        }, 100)
+      })
+    } else if (params.assistant_name == 'copilot') {
+      // Chat sometimes shows captcha
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('textarea')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 1000)
+      })
+    } else if (params.assistant_name == 'claude') {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('fieldset')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (is_open_webui) {
+      await new Promise(async (resolve) => {
+        while (!document.querySelector('img[src="/static/favicon.png"]')) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
       })
     }
   }
@@ -302,9 +358,9 @@ namespace AssistantBugMitigation {
     let active_element = document.activeElement as HTMLElement
 
     const chatbot_selectors: Partial<Record<AssistantName, string>> = {
-      claude: 'div[contenteditable=true] > p',
       mistral: 'textarea',
-      // gemini: 'rich-textarea-no-quill > div', // Needed in mobile viewport
+      claude: 'div[contenteditable=true]',
+      gemini: 'div[contenteditable=true]', // Needed in mobile viewport
       grok: 'textarea', // Needed in mobile viewport
       deepseek: 'textarea', // Needed in mobile viewport
     }

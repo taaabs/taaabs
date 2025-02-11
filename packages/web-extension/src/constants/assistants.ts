@@ -1,6 +1,6 @@
 export type AssistantName =
   | 'chatgpt'
-  // | 'gemini'
+  | 'gemini'
   | 'copilot'
   | 'claude'
   | 'aistudio'
@@ -9,6 +9,7 @@ export type AssistantName =
   | 'mistral'
   | 'cohere'
   | 'deepseek'
+  | 'openwebui'
   | 'custom'
 
 export interface AssistantDetails {
@@ -21,10 +22,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'ChatGPT',
     url: 'https://chatgpt.com/',
   },
-  // gemini: {
-  //   display_name: 'Gemini',
-  //   url: 'https://gemini.google.com/app',
-  // },
+  gemini: {
+    display_name: 'Gemini',
+    url: 'https://gemini.google.com/app',
+  },
   copilot: {
     display_name: 'Copilot',
     url: 'https://copilot.microsoft.com/',
@@ -57,6 +58,10 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Cohere',
     url: 'https://coral.cohere.com/',
   },
+  openwebui: {
+    display_name: 'Open WebUI',
+    url: 'http://openwebui/',
+  },
   custom: {
     display_name: 'Custom',
     url: '',
@@ -64,9 +69,11 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
 }
 
 export const assistants_vision: AssistantName[] = [
-  // 'chatgpt',
-  // 'claude',
+  'chatgpt',
+  'claude',
+  'grok',
   'mistral',
   'copilot',
+  'openwebui',
   'custom',
 ]
