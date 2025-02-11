@@ -16,13 +16,6 @@ if (is_touch_screen) {
     'none'
 }
 
-document
-  .getElementById('custom-assistant-url')!
-  .addEventListener('input', (event: Event) => {
-    const custom_assistant_url = (event.target as HTMLInputElement).value
-    browser.storage.local.set({ custom_assistant_url })
-  })
-
 const logout_button = document.getElementById('logout-button')
 logout_button?.addEventListener('click', async () => {
   await browser.storage.local.remove('auth_data')
@@ -66,7 +59,6 @@ defaultVisionAssistantSelect.addEventListener('change', () => {
 browser.storage.local
   .get([
     'open_chatbot_in_new_tab',
-    'custom_assistant_url',
     'auth_data',
     'last_used_chatbot_name',
     'last_used_chatbot_vision_name',
@@ -75,9 +67,6 @@ browser.storage.local
     ;(
       document.getElementById('open-assistant-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
-    ;(
-      document.getElementById('custom-assistant-url') as HTMLInputElement
-    ).value = data.custom_assistant_url
     logout_button!.style.display = !data.auth_data ? 'none' : ''
     defaultAssistantSelect.value = data.last_used_chatbot_name || 'chatgpt'
     defaultVisionAssistantSelect.value =

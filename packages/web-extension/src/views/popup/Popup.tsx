@@ -17,7 +17,6 @@ export const Popup: React.FC = () => {
     parsed_html_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
-    custom_assistant_url_hook,
     attach_text_switch_hook,
     vision_mode_hook,
     current_url_hook,
@@ -31,19 +30,11 @@ export const Popup: React.FC = () => {
     !vision_mode_hook.is_vision_mode &&
     selected_assistant_hook.selected_assistant_name
   ) {
-    if (selected_assistant_hook.selected_assistant_name != 'custom') {
-      assistant_url =
-        assistants[selected_assistant_hook.selected_assistant_name].url
-    } else if (custom_assistant_url_hook.custom_assistant_url) {
-      assistant_url = custom_assistant_url_hook.custom_assistant_url
-    }
+    assistant_url =
+      assistants[selected_assistant_hook.selected_assistant_name].url
   } else if (selected_assistant_vision_hook.selected_assistant_name) {
-    if (selected_assistant_vision_hook.selected_assistant_name != 'custom') {
-      assistant_url =
-        assistants[selected_assistant_vision_hook.selected_assistant_name].url
-    } else if (custom_assistant_url_hook.custom_assistant_url) {
-      assistant_url = custom_assistant_url_hook.custom_assistant_url
-    }
+    assistant_url =
+      assistants[selected_assistant_vision_hook.selected_assistant_name].url
   }
 
   useUpdateEffect(() => {

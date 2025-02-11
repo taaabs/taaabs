@@ -33,7 +33,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://taaabs.com/*", "http://localhost/*"],
+      "matches": ["https://taaabs.com/*"],
       "js": [
         "get-auth-data-content-script.js",
         "get-favicon-content-script.js",
@@ -51,7 +51,6 @@
         "https://chat.deepseek.com/*",
         "https://chat.mistral.ai/*",
         "https://coral.cohere.com/*",
-        "http://localhost/*",
         "http://openwebui/"
       ],
       "js": ["send-prompt-content-script.js"]
