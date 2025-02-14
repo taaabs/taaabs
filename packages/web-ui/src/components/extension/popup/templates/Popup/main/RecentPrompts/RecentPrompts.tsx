@@ -2,19 +2,22 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './RecentPrompts.module.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
-
-import 'simplebar-react/dist/simplebar.min.css'
+import { useContextMenu } from 'use-context-menu'
+import { Dropdown as UiDropdown } from '@web-ui/components/Dropdown'
+import { StandardItem as UiDropdown_StandardItem } from '@web-ui/components/Dropdown/StandardItem'
 
 export type Props = {
   recent_prompts: string[]
   default_prompts: string[]
   on_recent_prompt_click: (prompt: string) => void
   on_recent_prompt_middle_click: (prompt: string) => void
+  on_remove_prompt: (prompt: string) => void
   is_disabled: boolean
   filter_phrase: string
   translations: {
     heading: string
     searching_heading: string
+    delete: string
   }
 }
 
@@ -31,6 +34,21 @@ export const RecentPrompts: React.FC<Props> = (props) => {
   const simplebar_ref = useRef<any>()
   const [show_top_shadow, set_show_top_shadow] = useState(false)
   const [show_bottom_shadow, set_show_bottom_shadow] = useState(true)
+  const prompt_to_remove_ref = useRef<string>()
+
+  const { contextMenu, onContextMenu } = useContextMenu(
+    <UiDropdown>
+      <UiDropdown_StandardItem
+        label={props.translations.delete}
+        icon_variant="DELETE"
+        on_click={() => {
+          props.on_remove_prompt(prompt_to_remove_ref.current!)
+          prompt_to_remove_ref.current = undefined
+        }}
+        is_danger={true}
+      />
+    </UiDropdown>,
+  )
 
   const filtered_prompts: FilteredPrompt[] = props.is_disabled
     ? props.recent_prompts
@@ -91,6 +109,7 @@ export const RecentPrompts: React.FC<Props> = (props) => {
       })}
       ref={container_ref}
     >
+      {contextMenu}
       <SimpleBar
         style={{ height: container_height }}
         autoHide={false}
@@ -119,6 +138,10 @@ export const RecentPrompts: React.FC<Props> = (props) => {
                 onAuxClick={() =>
                   props.on_recent_prompt_middle_click(original_prompt)
                 }
+                onContextMenu={(e) => {
+                  prompt_to_remove_ref.current = original_prompt
+                  onContextMenu(e)
+                }}
                 className={cn(styles.prompts__button, {
                   [styles['prompts__button--clamp']]: !props.filter_phrase,
                 })}

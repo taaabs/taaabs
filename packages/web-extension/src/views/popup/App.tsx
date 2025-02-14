@@ -16,6 +16,8 @@ import { use_vision_mode } from './hooks/use-vision-mode'
 import { use_window_dimensions } from './hooks/use-window-dimensions'
 
 import '@web-ui/styles/style.scss'
+import 'use-context-menu/styles.css'
+import 'simplebar-react/dist/simplebar.min.css'
 
 interface PopupContext {
   attach_text_switch_hook: ReturnType<typeof use_attach_text_switch>

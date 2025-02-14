@@ -71,6 +71,14 @@ export const RecentPrompts: React.FC<{
     window.close()
   }
 
+  const handle_remove_prompt = async (prompt: string) => {
+    if (vision_mode_hook.is_vision_mode) {
+      await prompts_vision_history_hook.remove_prompt(prompt)
+    } else {
+      await prompts_history_hook.remove_prompt(prompt)
+    }
+  }
+
   // Quick select with keyboard numbers (1-9)
   useEffect(() => {
     const handle_key_down = (e: KeyboardEvent) => {
@@ -130,10 +138,12 @@ export const RecentPrompts: React.FC<{
             on_recent_prompt_middle_click={(prompt) => {
               handle_quick_prompt_vision_click(prompt, true)
             }}
+            on_remove_prompt={handle_remove_prompt}
             is_disabled={false}
             translations={{
               searching_heading: 'Searching...',
               heading: 'Recently used prompts',
+              delete: 'Remove',
             }}
           />
         </>
@@ -164,6 +174,7 @@ export const RecentPrompts: React.FC<{
               on_recent_prompt_middle_click={(prompt) => {
                 handle_quick_prompt_click(prompt, true)
               }}
+              on_remove_prompt={handle_remove_prompt}
               is_disabled={
                 !parsed_html_hook.parsed_html &&
                 !text_selection_hook.selected_text
@@ -171,6 +182,7 @@ export const RecentPrompts: React.FC<{
               translations={{
                 searching_heading: 'Searching...',
                 heading: 'Recently used prompts',
+                delete: 'Delete',
               }}
             />
           </>

@@ -74,10 +74,11 @@ module.exports = (_, argv) => {
         },
         {
           test: /\.css$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader'], // Add this rule
+          use: [MiniCssExtractPlugin.loader, 'css-loader'],
         },
         {
           test: /\.scss$/,
+          exclude: /style\.scss$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -92,6 +93,10 @@ module.exports = (_, argv) => {
             },
             'sass-loader',
           ],
+        },
+        {
+          test: /style\.scss$/,
+          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         },
         {
           test: /\.svg$/i,

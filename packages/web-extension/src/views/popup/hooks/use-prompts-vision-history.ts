@@ -17,15 +17,22 @@ export const use_prompts_vision_history = () => {
       const prompts_history_copy = new Set<string>(
         new_prompts_history.reverse(),
       )
-      // Add defaults in case they were somehow removed
-      default_vision_prompts.forEach((prompt) =>
-        prompts_history_copy.add(prompt),
-      )
 
       browser.storage.local.set({
         prompts_vision_history: [...prompts_history_copy].reverse(),
       })
     }
+  }
+
+  const remove_prompt = async (prompt: string) => {
+    const new_prompts_history = prompts_history.filter((p) => p != prompt)
+    set_prompts_history(new_prompts_history)
+
+    await browser.storage.local.set({
+      prompts_vision_history: new_prompts_history,
+    })
+
+    return true
   }
 
   useEffect(() => {
@@ -39,5 +46,6 @@ export const use_prompts_vision_history = () => {
   return {
     prompts_history,
     update_stored_prompts_history,
+    remove_prompt,
   }
 }

@@ -3,7 +3,7 @@ import { Header } from './Header'
 import { Popup } from './Popup'
 import { Actions } from './main/Actions'
 import { Separator } from './main/Separator'
-import { Props } from './main/RecentPrompts'
+import { RecentPrompts } from './main/RecentPrompts'
 import { PromptField } from './main/PromptField'
 import { FooterLinks } from './main/FooterLinks'
 import { FlexRow } from './main/Actions/FlexRow'
@@ -84,6 +84,7 @@ export const Primary = () => {
           translations={{
             heading: 'Saved prompts',
             searching_heading: 'Searching...',
+            delete: 'Delete',
           }}
         />
 
