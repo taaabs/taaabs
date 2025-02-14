@@ -162,7 +162,7 @@ export const PromptField: React.FC<{
               parsed_html_hook.parsed_html?.plain_text,
               props.shortened_plain_text,
             )}
-            % over the limit in{' '}
+            % over the limit for{' '}
             {
               assistants[selected_assistant_hook.selected_assistant_name!]
                 .display_name

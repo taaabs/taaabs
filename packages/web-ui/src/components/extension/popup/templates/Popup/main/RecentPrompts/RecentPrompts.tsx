@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './SavedPrompts.module.scss'
+import styles from './RecentPrompts.module.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
 
@@ -25,7 +25,7 @@ type FilteredPrompt =
       highlighted_prompt: string
     }
 
-export const SavedPrompts: React.FC<Props> = (props) => {
+export const RecentPrompts: React.FC<Props> = (props) => {
   const container_ref = useRef<HTMLDivElement>(null)
   const [container_height, set_container_height] = useState<number>()
   const simplebar_ref = useRef<any>()

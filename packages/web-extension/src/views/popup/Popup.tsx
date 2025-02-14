@@ -8,7 +8,7 @@ import { Actions } from './components/Actions/Actions'
 import { Header } from './components/Header'
 import { PromptField } from './components/PromptField'
 import { FooterLinks } from './components/FooterLinks'
-import { SavedPrompts } from './components/SavedPrompts'
+import { RecentPrompts } from './components/RecentPrompts'
 
 export const Popup: React.FC = () => {
   const {
@@ -94,7 +94,7 @@ export const Popup: React.FC = () => {
         shortened_plain_text={shortened_plain_text}
       />
 
-      <SavedPrompts
+      <RecentPrompts
         prompt_field_value={prompt_field_value}
         assistant_url={assistant_url}
         shortened_plain_text={shortened_plain_text}
