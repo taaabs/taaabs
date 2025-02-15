@@ -107,6 +107,14 @@ browser.webNavigation.onCommitted.addListener((details) => {
   }
 })
 
+browser.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason == 'install') {
+    browser.storage.local.set({
+      custom_assistant_url: 'http://localhost:8080/',
+    })
+  }
+})
+
 // Keep alive in Chromium
 if (!browser.browserAction) {
   const keep_alive_alarm_name = 'keep-alive-alarm'

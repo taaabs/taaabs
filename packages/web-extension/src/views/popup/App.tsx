@@ -4,6 +4,7 @@ import { Popup } from './Popup'
 import { use_attach_text_switch } from './hooks/use-attach-text-switch'
 import { use_auth_state } from './hooks/use-auth-state'
 import { use_current_url } from './hooks/use-current-url'
+import { use_custom_assistant_url } from './hooks/use-custom-assistant-url'
 import { use_parsed_html } from './hooks/use-parsed-html'
 import { use_prompts_history } from './hooks/use-prompts-history'
 import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
@@ -23,6 +24,7 @@ interface PopupContext {
   attach_text_switch_hook: ReturnType<typeof use_attach_text_switch>
   auth_state_hook: ReturnType<typeof use_auth_state>
   current_url_hook: ReturnType<typeof use_current_url>
+  custom_assistant_url_hook: ReturnType<typeof use_custom_assistant_url>
   parsed_html_hook: ReturnType<typeof use_parsed_html>
   prompts_history_hook: ReturnType<typeof use_prompts_history>
   prompts_vision_history_hook: ReturnType<typeof use_prompts_vision_history>
@@ -51,6 +53,7 @@ export const App: React.FC = () => {
   const attach_text_switch_hook = use_attach_text_switch()
   const auth_state_hook = use_auth_state()
   const current_url_hook = use_current_url()
+  const custom_assistant_url_hook = use_custom_assistant_url()
   const parsed_html_hook = use_parsed_html()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
@@ -66,6 +69,7 @@ export const App: React.FC = () => {
     attach_text_switch_hook,
     auth_state_hook,
     current_url_hook,
+    custom_assistant_url_hook,
     parsed_html_hook,
     prompts_history_hook,
     prompts_vision_history_hook,

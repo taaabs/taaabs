@@ -9,7 +9,7 @@ export type AssistantName =
   | 'mistral'
   | 'cohere'
   | 'deepseek'
-  | 'openwebui'
+  | 'custom'
 
 export interface AssistantDetails {
   display_name: string
@@ -57,9 +57,9 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
     display_name: 'Cohere',
     url: 'https://coral.cohere.com/',
   },
-  openwebui: {
-    display_name: 'Open WebUI',
-    url: 'http://openwebui/',
+  custom: {
+    display_name: 'Custom',
+    url: '',
   },
 }
 
@@ -69,5 +69,5 @@ export const assistants_vision: AssistantName[] = [
   'grok',
   'mistral',
   'copilot',
-  'openwebui',
+  'custom',
 ]

@@ -13,47 +13,66 @@
         display: block;
         margin-bottom: 10px;
       }
+      .input-group {
+        display: flex;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 10px;
+      }
+      .input-group input {
+        flex: 1;
+      }
     </style>
   </head>
   <body>
-    <h1>Options</h1>
+    <div style="display: flex; flex-direction: column; align-items: flex-start">
+      <h1>Options</h1>
 
-    <label>
-      Default Assistant:
-      <select id="default-assistant">
-        <option value="chatgpt">ChatGPT</option>
-        <option value="gemini">Gemini</option>
-        <option value="copilot">Copilot</option>
-        <option value="claude">Claude</option>
-        <option value="aistudio">AI Studio</option>
-        <option value="grok">Grok</option>
-        <option value="deepseek">DeepSeek</option>
-        <option value="mistral">Mistral</option>
-        <option value="cohere">Cohere</option>
-        <option value="openwebui">Open WebUI</option>
-      </select>
-    </label>
+      <label>
+        Default Assistant:
+        <select id="default-assistant">
+          <option value="chatgpt">ChatGPT</option>
+          <option value="gemini">Gemini</option>
+          <option value="copilot">Copilot</option>
+          <option value="claude">Claude</option>
+          <option value="aistudio">AI Studio</option>
+          <option value="grok">Grok</option>
+          <option value="deepseek">DeepSeek</option>
+          <option value="mistral">Mistral</option>
+          <option value="cohere">Cohere</option>
+          <option value="custom">Custom</option>
+        </select>
+      </label>
 
-    <label>
-      Default Vision Assistant:
-      <select id="default-vision-assistant">
-        <option value="chatgpt">ChatGPT</option>
-        <option value="copilot">Copilot</option>
-        <option value="claude">Claude</option>
-        <option value="grok">Grok</option>
-        <option value="mistral">Mistral</option>
-        <option value="openwebui">Open WebUI</option>
-      </select>
-    </label>
+      <label>
+        Default Vision Assistant:
+        <select id="default-vision-assistant">
+          <option value="chatgpt">ChatGPT</option>
+          <option value="copilot">Copilot</option>
+          <option value="claude">Claude</option>
+          <option value="grok">Grok</option>
+          <option value="mistral">Mistral</option>
+          <option value="custom">Custom</option>
+        </select>
+      </label>
 
-    <label id="open-assistant-in-new-tab-row">
-      <input type="checkbox" id="open-assistant-in-new-tab" /> Open assistant in
-      a new tab
-    </label>
+      <label>
+        Custom assistant url:
+        <div class="input-group">
+          <input type="text" id="custom-assistant-url" />
+          <button id="save-custom-url">Save</button>
+        </div>
+      </label>
 
-    <button id="reset-history-button">Reset recent prompts history</button>
-    <br /><br />
-    <button id="logout-button">Logout</button>
+      <label id="open-assistant-in-new-tab-row">
+        <input type="checkbox" id="open-assistant-in-new-tab" /> Open assistant
+        in a new tab
+      </label>
+
+      <button id="reset-history-button">Reset recent prompts history</button>
+      <br /><br />
+      <button id="logout-button">Logout</button>
+    </div>
 
     <script src="options.js"></script>
   </body>

@@ -4,7 +4,7 @@
   "name": "Taaabs - Free zero-knowledge bookmarks & AI",
   "short_name": "taaabs",
   "description": "Unleash the joy of your web research. Save bookmarks to your personal library. Assist browsing with AI.",
-  "version": "0.3.46",
+  "version": "0.3.47",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {
     "default_icon": {
@@ -41,27 +41,13 @@
       ]
     },
     {
-      "matches": [
-        "https://chatgpt.com/*",
-        "https://gemini.google.com/app*",
-        "https://copilot.microsoft.com/*",
-        "https://claude.ai/*",
-        "https://aistudio.google.com/app/prompts/*",
-        "https://x.com/i/grok*",
-        "https://chat.deepseek.com/*",
-        "https://chat.mistral.ai/*",
-        "https://coral.cohere.com/*",
-        "http://openwebui/"
-      ],
-      "js": ["send-prompt-content-script.js"]
-    },
-    {
       "matches": ["<all_urls>"],
       "js": [
         "get-parsed-html-content-script.js",
         "get-upsert-bookmark-params-content-script.js",
         "get-window-dimensions-content-script.js",
-        "get-selected-text-content-script.js"
+        "get-selected-text-content-script.js",
+        "send-prompt-content-script.js"
       ]
     }
   ],

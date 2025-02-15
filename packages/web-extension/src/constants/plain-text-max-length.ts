@@ -8,4 +8,5 @@ export const PLAIN_TEXT_MAX_LENGTH = {
   mistral: 200000,
   cohere: 200000,
   aistudio: Infinity,
+  custom: Infinity,
 }

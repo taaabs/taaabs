@@ -35,7 +35,7 @@ const handle_image_upload = async (params: {
 }) => {
   const file_input_selector = 'input[type="file"]'
 
-  // In OpenWebUI and ChatGPT file input is not immediately available
+  // In OpenWebUI file input is not immediately available
   if (is_open_webui) {
     await new Promise(async (resolve) => {
       while (!document.querySelector(file_input_selector)) {
@@ -246,10 +246,8 @@ const send_prompt = async (params: {
 namespace QuirksMitigation {
   export const on_load = async (params: { assistant_name: AssistantName }) => {
     if (params.assistant_name == 'chatgpt') {
-      const model_selector =
-        'button[data-testid="model-switcher-dropdown-button"]'
       await new Promise(async (resolve) => {
-        while (!document.querySelector(model_selector)) {
+        while (!document.querySelector('span[data-radix-focus-guard]')) {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)

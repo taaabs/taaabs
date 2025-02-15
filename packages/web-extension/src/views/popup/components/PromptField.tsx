@@ -3,8 +3,6 @@ import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } fr
 import { Switch as UiSwitch } from '@web-ui/components/Switch'
 import { assistants } from '@/constants/assistants'
 import { SendPrompt_Message } from '@/types/messages'
-
-import '@web-ui/styles/style.scss'
 import { usePopup } from '../App'
 import {
   default_prompts,
@@ -79,7 +77,10 @@ export const PromptField: React.FC<{
         !current_url_hook.url.startsWith('https://taaabs.com') && (
           <>
             <UiSwitch
-              is_checked={attach_text_switch_hook.is_checked}
+              is_checked={
+                attach_text_switch_hook.is_checked &&
+                parsed_html_hook.parsed_html !== null
+              }
               is_disabled={
                 !parsed_html_hook.parsed_html &&
                 !text_selection_hook.selected_text
@@ -98,7 +99,8 @@ export const PromptField: React.FC<{
             <UiSwitch
               is_checked={
                 attach_text_switch_hook.is_checked &&
-                save_prompt_switch_hook.is_checked
+                save_prompt_switch_hook.is_checked &&
+                parsed_html_hook.parsed_html !== null
               }
               is_disabled={
                 !attach_text_switch_hook.is_checked ||
