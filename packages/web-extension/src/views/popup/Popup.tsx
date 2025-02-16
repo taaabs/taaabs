@@ -73,6 +73,18 @@ export const Popup: React.FC = () => {
     set_shortened_plain_text(shortened_plain_text)
   }, [parsed_html_hook, selected_assistant_hook.selected_assistant_name])
 
+  // Change popup width in vision mode. Value is set in index.html
+  useUpdateEffect(() => {
+    const root_element = document.getElementById('root')
+    if (root_element) {
+      if (vision_mode_hook.is_vision_mode) {
+        root_element.classList.add('vision-mode')
+      } else {
+        root_element.classList.remove('vision-mode')
+      }
+    }
+  }, [vision_mode_hook.is_vision_mode])
+
   if (
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&

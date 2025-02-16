@@ -36,7 +36,6 @@ const custom_assistant_url_input = document.getElementById(
   'custom-assistant-url',
 ) as HTMLInputElement
 
-// Save button handler
 document
   .getElementById('save-custom-url')!
   .addEventListener('click', async () => {

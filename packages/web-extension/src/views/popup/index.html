@@ -20,11 +20,15 @@
       :root {
         --font-family-plus-jakarta-sans: 'Plus Jakarta Sans', sans-serif;
         --font-family-inter: 'Inter', sans-serif;
+        --width: 360px;
       }
       @media (hover: hover) and (pointer: fine) {
         #root {
-          width: 360px;
+          width: var(--width);
         }
+      }
+      #root.vision-mode {
+        --width: 450px;
       }
     </style>
     <link rel="stylesheet" href="popup.css" />
