@@ -3,7 +3,7 @@ import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } fr
 import { Switch as UiSwitch } from '@web-ui/components/Switch'
 import { assistants } from '@/constants/assistants'
 import { SendPrompt_Message } from '@/types/messages'
-import { usePopup } from '../App'
+import { use_popup } from '../App'
 import {
   default_prompts,
   default_vision_prompts,
@@ -27,7 +27,7 @@ export const PromptField: React.FC<{
     window_dimensions_hook,
     current_url_hook,
     save_prompt_switch_hook,
-  } = usePopup()
+  } = use_popup()
 
   return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField

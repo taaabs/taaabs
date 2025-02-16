@@ -2,7 +2,7 @@ import { Actions as Ui_extension_popup_templates_Popup_main_Actions } from '@web
 import { Button as UiButton } from '@web-ui/components/Button'
 import React from 'react'
 import browser from 'webextension-polyfill'
-import { usePopup } from '../../App'
+import { use_popup } from '../../App'
 import { use_create_bookmark } from './use-create-bookmark'
 import { use_delete_bookmark } from './use-delete-bookmark'
 import { FlexRow as Ui_extension_popup_templates_Popup_main_Actions_FlexRow } from '@web-ui/components/extension/popup/templates/Popup/main/Actions/FlexRow'
@@ -13,7 +13,7 @@ export const Actions: React.FC = () => {
     current_url_hook,
     saved_check_hook,
     parsed_html_hook,
-  } = usePopup()
+  } = use_popup()
   const create_bookmark_hook = use_create_bookmark({
     set_is_saved: saved_check_hook.set_is_saved,
   })

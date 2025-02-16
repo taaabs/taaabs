@@ -3,7 +3,7 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { assistants } from '@/constants/assistants'
-import { usePopup } from './App'
+import { use_popup } from './App'
 import { Actions } from './components/Actions/Actions'
 import { Header } from './components/Header'
 import { PromptField } from './components/PromptField'
@@ -22,7 +22,7 @@ export const Popup: React.FC = () => {
     vision_mode_hook,
     current_url_hook,
     text_selection_hook,
-  } = usePopup()
+  } = use_popup()
   const [prompt_field_value, set_prompt_field_value] = useState('')
   const [shortened_plain_text, set_shortened_plain_text] = useState<string>()
 

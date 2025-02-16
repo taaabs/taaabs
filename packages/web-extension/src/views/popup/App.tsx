@@ -41,7 +41,7 @@ interface PopupContext {
 
 const PopupContext = createContext<PopupContext | undefined>(undefined)
 
-export const usePopup = () => {
+export const use_popup = () => {
   const context = useContext(PopupContext)
   if (!context) {
     throw new Error('usePopupContext must be used within a PopupProvider')

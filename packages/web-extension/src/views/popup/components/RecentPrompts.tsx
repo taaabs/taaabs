@@ -1,6 +1,6 @@
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
-import { usePopup } from '../App'
+import { use_popup } from '../App'
 import {
   default_prompts,
   default_vision_prompts,
@@ -25,7 +25,7 @@ export const RecentPrompts: React.FC<{
     selected_assistant_hook,
     selected_assistant_vision_hook,
     window_dimensions_hook,
-  } = usePopup()
+  } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
 
