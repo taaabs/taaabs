@@ -10,7 +10,7 @@ import { FlexRow as Ui_extension_popup_templates_Popup_main_Actions_FlexRow } fr
 export const Actions: React.FC = () => {
   const {
     auth_state_hook,
-    current_url_hook,
+    current_tab_hook,
     saved_check_hook,
     parsed_html_hook,
   } = use_popup()
@@ -18,7 +18,7 @@ export const Actions: React.FC = () => {
     set_is_saved: saved_check_hook.set_is_saved,
   })
   const delete_bookmark_hook = use_delete_bookmark({
-    current_url: current_url_hook.url,
+    current_url: current_tab_hook.url,
     set_is_saved: saved_check_hook.set_is_saved,
   })
 
@@ -28,7 +28,7 @@ export const Actions: React.FC = () => {
         key="edit"
         href={
           'https://taaabs.com/library#url=' +
-          encodeURIComponent(current_url_hook.url)
+          encodeURIComponent(current_tab_hook.url)
         }
         on_click={(e) => {
           e.preventDefault()
@@ -41,7 +41,7 @@ export const Actions: React.FC = () => {
             browser.windows.create({
               url:
                 'https://taaabs.com/library#url=' +
-                encodeURIComponent(current_url_hook.url),
+                encodeURIComponent(current_tab_hook.url),
               type: 'popup',
               width: 560,
               height: 720,
@@ -50,7 +50,7 @@ export const Actions: React.FC = () => {
             browser.tabs.create({
               url:
                 'https://taaabs.com/library#url=' +
-                encodeURIComponent(current_url_hook.url),
+                encodeURIComponent(current_tab_hook.url),
             })
           }
           window.close()
@@ -91,7 +91,7 @@ export const Actions: React.FC = () => {
         is_outlined={true}
         on_click={async (e) => {
           e.preventDefault()
-          if (current_url_hook.is_new_tab_page) {
+          if (current_tab_hook.is_new_tab_page) {
             const [current_tab] = await browser.tabs.query({
               active: true,
               currentWindow: true,
@@ -110,7 +110,7 @@ export const Actions: React.FC = () => {
         {auth_state_hook.is_authenticated ? 'Open my library' : 'Sign in'}
       </UiButton>
       {auth_state_hook.is_authenticated &&
-        !current_url_hook.is_new_tab_page &&
+        !current_tab_hook.is_new_tab_page &&
         (saved_check_hook.is_saved ? saved_items : unsaved_items)}
     </Ui_extension_popup_templates_Popup_main_Actions>
   )

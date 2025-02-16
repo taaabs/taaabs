@@ -2,8 +2,9 @@ import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { useEffect, useState } from 'react'
 import browser from 'webextension-polyfill'
 
-export const use_current_url = () => {
+export const use_current_tab = () => {
   const [url, set_url] = useState<string>('')
+  const [title, set_title] = useState<string>('')
   const [is_new_tab_page, set_is_new_tab_page] = useState(false)
   const [is_youtube_video, set_is_youtube_video] = useState(false)
 
@@ -15,8 +16,10 @@ export const use_current_url = () => {
       })
       .then(([current_tab]) => {
         const url = current_tab.url!
+        const title = current_tab.title!
         const cleaned_url = url_cleaner(url)
         set_url(cleaned_url)
+        set_title(title)
         set_is_new_tab_page(
           url.startsWith('chrome://') ||
             url.startsWith('moz-extension://') ||
@@ -29,5 +32,5 @@ export const use_current_url = () => {
       })
   }, [])
 
-  return { url, is_new_tab_page, is_youtube_video }
+  return { url, title, is_new_tab_page, is_youtube_video }
 }

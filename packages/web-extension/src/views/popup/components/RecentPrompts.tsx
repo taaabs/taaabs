@@ -21,7 +21,7 @@ export const RecentPrompts: React.FC<{
     attach_text_switch_hook,
     text_selection_hook,
     vision_mode_hook,
-    current_url_hook,
+    current_tab_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
     window_dimensions_hook,
@@ -150,8 +150,8 @@ export const RecentPrompts: React.FC<{
       )}
 
       {!vision_mode_hook.is_vision_mode &&
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com') && (
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com') && (
           <>
             <Ui_extension_popup_templates_Popup_main_Separator />
 

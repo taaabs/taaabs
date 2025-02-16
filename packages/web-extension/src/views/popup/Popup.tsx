@@ -20,7 +20,7 @@ export const Popup: React.FC = () => {
     custom_assistant_url_hook,
     attach_text_switch_hook,
     vision_mode_hook,
-    current_url_hook,
+    current_tab_hook,
     text_selection_hook,
   } = use_popup()
   const [prompt_field_value, set_prompt_field_value] = useState('')
@@ -49,11 +49,11 @@ export const Popup: React.FC = () => {
   useUpdateEffect(() => {
     if (
       !text_selection_hook.selected_text &&
-      !current_url_hook.url.startsWith('https://taaabs.com')
+      !current_tab_hook.url.startsWith('https://taaabs.com')
     ) {
       parsed_html_hook.get_parsed_html()
     }
-  }, [text_selection_hook.selected_text, current_url_hook.url])
+  }, [text_selection_hook.selected_text, current_tab_hook.url])
 
   // Shorten plain text whenever selected assistant is changed
   useUpdateEffect(() => {
@@ -100,12 +100,12 @@ export const Popup: React.FC = () => {
     <Ui_extension_popup_templates_Popup
       should_set_height={
         // Cases when not showing recent prompts which adjust its height dynamically
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com')
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com')
       }
       header_slot={<Header />}
     >
-      {!current_url_hook.url.startsWith('https://taaabs.com') &&
+      {!current_tab_hook.url.startsWith('https://taaabs.com') &&
         !vision_mode_hook.is_vision_mode && <Actions />}
 
       <PromptField

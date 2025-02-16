@@ -4,7 +4,7 @@ import browser from 'webextension-polyfill'
 import { use_popup } from '../App'
 
 export const Header: React.FC = () => {
-  const { vision_mode_hook, current_url_hook } = use_popup()
+  const { vision_mode_hook, current_tab_hook } = use_popup()
 
   return vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_HeaderVision
@@ -22,8 +22,8 @@ export const Header: React.FC = () => {
     <Ui_extension_popup_templates_Popup_Header
       vision_mode_on_click={vision_mode_hook.enter_vision_mode}
       is_vision_mode_available={
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com')
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com')
       }
       settings_on_click={() => {
         browser.runtime.openOptionsPage()
@@ -31,9 +31,9 @@ export const Header: React.FC = () => {
         if (browser.browserAction) window.close()
       }}
       logo_on_click={
-        !current_url_hook.url.startsWith('https://taaabs.com')
+        !current_tab_hook.url.startsWith('https://taaabs.com')
           ? async () => {
-              if (current_url_hook.is_new_tab_page) {
+              if (current_tab_hook.is_new_tab_page) {
                 const [current_tab] = await browser.tabs.query({
                   active: true,
                   currentWindow: true,

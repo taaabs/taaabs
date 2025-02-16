@@ -4,6 +4,11 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace PromptField {
+  type ContextItem = {
+    id: string
+    title: string
+    is_checked: boolean
+  }
   export type Props = {
     value: string
     on_submit: () => void
@@ -14,6 +19,7 @@ export namespace PromptField {
     text_not_found: boolean
     switches_slot: React.ReactNode
     autofocus: boolean
+    context?: ContextItem[]
     translations: {
       new_prompt: string
       placeholder: string
@@ -90,7 +96,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           set_is_focused(false)
         }}
         on_key_down={handle_key_down}
-        context={[]}
+        context={props.context}
       />
 
       {props.switches_slot && (

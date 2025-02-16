@@ -19,7 +19,7 @@ export namespace ChatField {
     disable_enter_new_lines?: boolean
     on_submit?: () => void
     on_key_down?: (event: React.KeyboardEvent<any>) => void
-    context: ContextItem[]
+    context?: ContextItem[]
     on_focus?: () => void
     on_blur?: () => void
   }
@@ -50,7 +50,7 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
       })}
       onClick={handle_container_click}
     >
-      {props.context.length > 0 && (
+      {props.context && props.context.length > 0 && (
         <div className={styles.context}>
           {props.context.map((item) => (
             <button

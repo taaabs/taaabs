@@ -25,7 +25,7 @@ export const PromptField: React.FC<{
     text_selection_hook,
     vision_mode_hook,
     window_dimensions_hook,
-    current_url_hook,
+    current_tab_hook,
     save_prompt_switch_hook,
   } = use_popup()
 
@@ -73,8 +73,8 @@ export const PromptField: React.FC<{
         window.close()
       }}
       switches_slot={
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com') && (
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com') && (
           <>
             <UiSwitch
               is_checked={
@@ -93,7 +93,7 @@ export const PromptField: React.FC<{
               label={
                 text_selection_hook.selected_text
                   ? 'Attach selection'
-                  : get_attach_text_checkbox_label(current_url_hook.url)
+                  : get_attach_text_checkbox_label(current_tab_hook.url)
               }
             />
             <UiSwitch
@@ -136,8 +136,8 @@ export const PromptField: React.FC<{
         false
       }
       text_not_found={
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com') &&
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com') &&
         parsed_html_hook.parsed_html === null &&
         !text_selection_hook.selected_text
       }
@@ -147,6 +147,13 @@ export const PromptField: React.FC<{
           navigator.userAgent.includes('Mobile')
         )
       }
+      context={[
+        {
+          id: '1',
+          is_checked: true,
+          title: current_tab_hook.title,
+        },
+      ]}
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${
@@ -155,11 +162,11 @@ export const PromptField: React.FC<{
         }`,
         switch: text_selection_hook.selected_text
           ? 'Attach selection'
-          : get_attach_text_checkbox_label(current_url_hook.url),
+          : get_attach_text_checkbox_label(current_tab_hook.url),
         active_input_placeholder_suffix: '(⇅ for history)',
         plain_text_too_long: (
           <>
-            ⚠ {current_url_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
+            ⚠ {current_tab_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
             {calculate_shortening_percentage(
               parsed_html_hook.parsed_html?.plain_text,
               props.shortened_plain_text,
@@ -171,7 +178,7 @@ export const PromptField: React.FC<{
             }
           </>
         ),
-        text_not_found: current_url_hook.is_youtube_video
+        text_not_found: current_tab_hook.is_youtube_video
           ? '⚠ Transcript not found'
           : '⚠ Unable to read this page',
       }}
