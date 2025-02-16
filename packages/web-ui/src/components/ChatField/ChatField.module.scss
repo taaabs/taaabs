@@ -1,0 +1,96 @@
+// @type
+@use '../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-4px);
+  background-color: var(--white);
+  border-radius: var(--border-radius-10px);
+  border: 1.5px solid var(--neutral200);
+  padding: 8px;
+  box-shadow: var(--box-shadow-inset);
+  cursor: text;
+  @include hover {
+    border-color: var(--neutral250);
+  }
+  > textarea {
+    border: none;
+    background-color: transparent;
+    resize: none;
+  }
+  &--focused {
+    border-color: var(--blue400) !important;
+    box-shadow: inset 0 1px 3px var(--blue100) !important;
+  }
+}
+
+.context {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--padding-4px);
+  &__item {
+    display: flex;
+    align-items: center;
+    background-color: var(--neutral50);
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: var(--font-size-12px);
+    color: var(--text-color-dimmed);
+    font-style: italic;
+    max-width: 100%;
+    @include hover {
+      color: var(--text-color-normal);
+      background-color: var(--neutral100);
+      > svg {
+        fill: var(--red600);
+      }
+    }
+    > span {
+      display: block;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    > svg {
+      flex-shrink: 0;
+      fill: var(--blue600);
+      width: 10px;
+      margin-right: 4px;
+    }
+    &--selected {
+      color: var(--blue600);
+      background-color: var(--blue50);
+      font-style: normal;
+      font-weight: var(--font-weight-inter-medium);
+      @include hover {
+        color: var(--red600);
+        background-color: var(--red100);
+      }
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  &__models {
+    display: flex;
+  }
+  &__submit {
+    display: flex;
+    > button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: var(--button-size-28px);
+      height: var(--button-size-28px);
+      > svg {
+        width: 19px;
+        fill: var(--accent-color);
+      }
+    }
+  }
+}

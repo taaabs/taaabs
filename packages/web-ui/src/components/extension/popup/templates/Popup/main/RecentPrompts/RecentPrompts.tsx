@@ -112,7 +112,6 @@ export const RecentPrompts: React.FC<Props> = (props) => {
       {contextMenu}
       <SimpleBar
         style={{ height: container_height }}
-        autoHide={false}
         ref={simplebar_ref}
       >
         <div
