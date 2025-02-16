@@ -8,20 +8,12 @@ export const use_prompts_history = () => {
   )
 
   const update_stored_prompts_history = (prompt: string) => {
-    // Only add if not already present
-    if (!prompts_history.includes(prompt)) {
-      const new_prompts_history = [...prompts_history]
-      new_prompts_history.push(prompt)
+    const new_prompts_history = prompts_history.filter((p) => p != prompt)
+    new_prompts_history.push(prompt)
 
-      // Create a Set to ensure uniqueness while preserving order
-      const prompts_history_copy = new Set<string>(
-        new_prompts_history.reverse(),
-      )
-
-      browser.storage.local.set({
-        prompts_history: [...prompts_history_copy].reverse(),
-      })
-    }
+    browser.storage.local.set({
+      prompts_history: new_prompts_history,
+    })
   }
 
   const remove_prompt = async (prompt: string) => {
