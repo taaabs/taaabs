@@ -135,9 +135,12 @@ export const RecentPrompts: React.FC<Props> = (props) => {
                 key={i}
                 role="button"
                 onClick={() => props.on_recent_prompt_click(original_prompt)}
-                onAuxClick={() =>
-                  props.on_recent_prompt_middle_click(original_prompt)
-                }
+                onAuxClick={(e) => {
+                  if (e.button == 1) {
+                    // Button check fixes Firefox
+                    props.on_recent_prompt_middle_click(original_prompt)
+                  }
+                }}
                 onContextMenu={(e) => {
                   prompt_to_remove_ref.current = original_prompt
                   onContextMenu(e)
