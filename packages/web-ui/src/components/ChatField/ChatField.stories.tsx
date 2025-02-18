@@ -19,12 +19,12 @@ export const Primary = () => {
           {
             id: '1',
             title: 'Atom - Wikipedia, wolna encyklopedia',
-            is_checked: true,
+            is_pinned: true,
           },
           {
             id: '2',
             title: 'Molecule - Wikipedia, wolna encyklopedia',
-            is_checked: false,
+            is_pinned: false,
           },
         ]}
       />
@@ -37,7 +37,7 @@ export const Primary = () => {
           {
             id: '2',
             title: 'Molecule - Wikipedia, wolna encyklopedia',
-            is_checked: false,
+            is_pinned: false,
           },
         ]}
       />

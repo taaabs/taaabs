@@ -6,9 +6,12 @@ import { Icon } from '../Icon'
 
 export namespace ChatField {
   type ContextItem = {
-    id: string
+    url: string
     title: string
-    is_checked: boolean
+    tokens: number
+    favicon: string
+    is_pinned: boolean
+    is_enabled: boolean
   }
   export type Props = {
     value: string
@@ -22,6 +25,7 @@ export namespace ChatField {
     context?: ContextItem[]
     on_focus?: () => void
     on_blur?: () => void
+    on_context_item_click?: (url: string) => void
   }
 }
 
@@ -54,12 +58,13 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
         <div className={styles.context}>
           {props.context.map((item) => (
             <button
+              key={item.url}
               className={cn(styles.context__item, {
-                [styles['context__item--selected']]: item.is_checked,
+                [styles['context__item--selected']]: item.is_pinned,
               })}
-              key={item.id}
+              onClick={() => props.on_context_item_click?.(item.url)}
             >
-              {item.is_checked && <Icon variant="CHECK" />}
+              {item.is_pinned && <Icon variant="CHECK" />}
               <span>{item.title}</span>
             </button>
           ))}
