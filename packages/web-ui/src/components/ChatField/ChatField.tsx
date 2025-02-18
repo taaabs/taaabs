@@ -5,7 +5,7 @@ import { useState, useRef, useMemo } from 'react'
 import { Icon } from '../Icon'
 
 export namespace ChatField {
-  type ContextItem = {
+  export type Website = {
     url: string
     title: string
     tokens: number
@@ -22,11 +22,11 @@ export namespace ChatField {
     disable_enter_new_lines?: boolean
     on_submit?: () => void
     on_key_down?: (event: React.KeyboardEvent<any>) => void
-    context?: ContextItem[]
+    websites?: Website[]
     on_focus?: () => void
     on_blur?: () => void
-    on_context_item_title_click?: (url: string) => void
-    on_context_item_pin_click?: (url: string) => void
+    on_website_click?: (url: string) => void
+    on_pin_click?: (url: string) => void
   }
 }
 
@@ -39,8 +39,8 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
     let total = 0
 
     // Add tokens from pinned context items
-    if (props.context) {
-      total += props.context
+    if (props.websites) {
+      total += props.websites
         .filter((item) => item.is_enabled)
         .reduce((sum, item) => sum + item.tokens, 0)
     }
@@ -50,7 +50,7 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
     total += input_text_tokens
 
     return total
-  }, [props.value, props.context])
+  }, [props.value, props.websites])
 
   const handle_focus = () => {
     set_is_focused(true)
@@ -73,25 +73,31 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
       })}
       onClick={handle_container_click}
     >
-      {props.context && props.context.length > 0 && (
-        <div className={styles.context}>
-          {props.context.map((item) => (
-            <div className={styles.context__item} key={item.url}>
+      {props.websites && props.websites.length > 0 && (
+        <div className={styles.websites}>
+          {props.websites.map((item) => (
+            <div className={styles.websites__item} key={item.url}>
               <button
-                className={cn(styles.context__item__bar, {
-                  [styles['context__item__bar--selected']]: item.is_pinned,
+                className={cn(styles.websites__item__bar, {
+                  [styles['websites__item__bar--selected']]: item.is_enabled,
                 })}
-                onClick={() => props.on_context_item_title_click?.(item.url)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  props.on_website_click?.(item.url)
+                }}
                 title={item.title + ` (${item.tokens} tokens)`}
               >
                 {item.favicon && <img src={item.favicon} />}
                 <span>{item.title}</span>
               </button>
               <button
-                className={cn(styles.context__item__pin, {
-                  [styles['context__item__pin--pinned']]: item.is_pinned,
+                className={cn(styles.websites__item__pin, {
+                  [styles['websites__item__pin--pinned']]: item.is_pinned,
                 })}
-                onClick={() => props.on_context_item_pin_click?.(item.url)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  props.on_pin_click?.(item.url)
+                }}
               >
                 {item.is_pinned ? (
                   <Icon variant="PIN_FILLED" />
@@ -124,8 +130,11 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
       <div className={styles.footer}>
         <div className={styles.footer__models}></div>
         <div className={styles.footer__right}>
-          <div className={styles.footer__right__total}>
-            {total_tokens > 1000 ? total_tokens : ''}
+          <div
+            className={styles.footer__right__total}
+            title="Total tokens of the prompt (estimated)"
+          >
+            {total_tokens}
           </div>
           <div className={styles.footer__right__submit}>
             <button onClick={props.on_submit}>

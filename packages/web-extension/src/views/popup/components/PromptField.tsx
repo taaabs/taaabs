@@ -8,6 +8,8 @@ import {
   default_prompts,
   default_vision_prompts,
 } from '../data/default-prompts'
+import { useMemo } from 'react'
+import { ChatField } from '@web-ui/components/ChatField'
 
 export const PromptField: React.FC<{
   assistant_url: string
@@ -20,13 +22,46 @@ export const PromptField: React.FC<{
     prompts_vision_history_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
-    attach_text_switch_hook,
+    current_tab_hook,
     text_selection_hook,
     vision_mode_hook,
     window_dimensions_hook,
-    current_tab_hook,
     save_prompt_switch_hook,
+    pinned_websites_hook,
   } = use_popup()
+
+  const websites = useMemo<ChatField.Website[]>(() => {
+    const websites = pinned_websites_hook.pinned_websites.map((website) => ({
+      url: website.url,
+      title: website.title,
+      tokens: Math.ceil(website.plain_text.length / 4),
+      favicon: '',
+      is_pinned: true,
+      is_enabled: website.is_enabled,
+    }))
+
+    // Add current tab if it's not already pinned and has content
+    const is_current_tab_pinned = pinned_websites_hook.pinned_websites.some(
+      (website) => website.url == current_tab_hook.url,
+    )
+
+    if (!is_current_tab_pinned && current_tab_hook.parsed_html?.plain_text) {
+      websites.push({
+        url: current_tab_hook.url,
+        title: current_tab_hook.title,
+        tokens: Math.ceil(current_tab_hook.parsed_html.plain_text.length / 4),
+        favicon: current_tab_hook.favicon,
+        is_pinned: false,
+        is_enabled: current_tab_hook.include_in_prompt,
+      })
+    }
+
+    return websites
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.parsed_html,
+    current_tab_hook.include_in_prompt,
+  ])
 
   return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
@@ -38,20 +73,46 @@ export const PromptField: React.FC<{
         if (
           !props.prompt_field_value &&
           !(
-            attach_text_switch_hook.is_checked &&
+            current_tab_hook.include_in_prompt &&
             text_selection_hook.selected_text
           )
         )
           return
 
         if (
-          attach_text_switch_hook.is_checked &&
+          current_tab_hook.include_in_prompt &&
           save_prompt_switch_hook.is_checked &&
           (current_tab_hook.parsed_html || text_selection_hook.selected_text)
         ) {
           prompts_history_hook.update_stored_prompts_history(
             props.prompt_field_value,
           )
+        }
+
+        let plain_text = ''
+
+        plain_text = pinned_websites_hook.pinned_websites
+          .filter((website) => website.is_enabled)
+          .map(
+            (website) =>
+              `<page title="${website.title}">${website.plain_text}</page>\n`,
+          )
+          .join('')
+
+        if (current_tab_hook.include_in_prompt) {
+          // Add current tab content if it's not already in pinned websites
+          const is_current_tab_pinned =
+            pinned_websites_hook.pinned_websites.some(
+              (website) => website.url == current_tab_hook.url,
+            )
+
+          if (!is_current_tab_pinned) {
+            if (text_selection_hook.selected_text) {
+              plain_text += text_selection_hook.selected_text
+            } else if (props.shortened_plain_text) {
+              plain_text += `<page title="${current_tab_hook.title}">${props.shortened_plain_text}</page>`
+            }
+          }
         }
 
         const message: SendPrompt_Message = {
@@ -61,7 +122,7 @@ export const PromptField: React.FC<{
           assistant_url: props.assistant_url,
           prompt: props.prompt_field_value,
           plain_text:
-            (attach_text_switch_hook.is_checked &&
+            (current_tab_hook.include_in_prompt &&
               (text_selection_hook.selected_text ||
                 props.shortened_plain_text)) ||
             '',
@@ -77,32 +138,12 @@ export const PromptField: React.FC<{
           <>
             <UiSwitch
               is_checked={
-                attach_text_switch_hook.is_checked &&
-                current_tab_hook.parsed_html !== null
-              }
-              is_disabled={
-                !current_tab_hook.parsed_html &&
-                !text_selection_hook.selected_text
-              }
-              on_change={() => {
-                attach_text_switch_hook.set_is_checked(
-                  !attach_text_switch_hook.is_checked,
-                )
-              }}
-              label={
-                text_selection_hook.selected_text
-                  ? 'Attach selection'
-                  : get_attach_text_checkbox_label(current_tab_hook.url)
-              }
-            />
-            <UiSwitch
-              is_checked={
-                attach_text_switch_hook.is_checked &&
+                current_tab_hook.include_in_prompt &&
                 save_prompt_switch_hook.is_checked &&
                 current_tab_hook.parsed_html !== null
               }
               is_disabled={
-                !attach_text_switch_hook.is_checked ||
+                !current_tab_hook.include_in_prompt ||
                 (!current_tab_hook.parsed_html &&
                   !text_selection_hook.selected_text)
               }
@@ -122,7 +163,7 @@ export const PromptField: React.FC<{
         ),
       ].reverse()}
       is_history_enabled={
-        attach_text_switch_hook.is_checked &&
+        current_tab_hook.include_in_prompt &&
         (!!current_tab_hook.parsed_html || !!text_selection_hook.selected_text)
       }
       is_plain_text_too_long={
@@ -146,16 +187,37 @@ export const PromptField: React.FC<{
           navigator.userAgent.includes('Mobile')
         )
       }
-      context={[
-        {
-          url: current_tab_hook.url,
-          title: current_tab_hook.title,
-          tokens: 100,
-          favicon: '',
-          is_pinned: false,
-          is_enabled: true,
-        },
-      ]}
+      websites={websites}
+      on_pin_click={(url) => {
+        if (
+          pinned_websites_hook.pinned_websites.find(
+            (website) => website.url == url,
+          )
+        ) {
+          pinned_websites_hook.unpin_website(url)
+        } else {
+          pinned_websites_hook.pin_website({
+            url: current_tab_hook.url,
+            title: current_tab_hook.title,
+            plain_text: current_tab_hook.parsed_html?.plain_text || '',
+            is_enabled: true,
+          })
+          current_tab_hook.set_include_in_prompt(true)
+        }
+      }}
+      on_website_click={(url) => {
+        if (
+          pinned_websites_hook.pinned_websites.find(
+            (website) => website.url == url,
+          )
+        ) {
+          pinned_websites_hook.toggle_is_enabled(url)
+        } else {
+          current_tab_hook.set_include_in_prompt(
+            !current_tab_hook.include_in_prompt,
+          )
+        }
+      }}
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${

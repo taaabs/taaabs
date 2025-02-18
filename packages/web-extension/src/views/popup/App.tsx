@@ -14,6 +14,7 @@ import { use_selected_assistant_vision } from './hooks/use-selected-assistant-vi
 import { use_text_selection } from './hooks/use-text-selection'
 import { use_vision_mode } from './hooks/use-vision-mode'
 import { use_window_dimensions } from './hooks/use-window-dimensions'
+import { use_pinned_websites } from './hooks/use-pinned-websites'
 
 import '@web-ui/styles/style.scss'
 import 'use-context-menu/styles.css'
@@ -35,6 +36,7 @@ interface PopupContext {
   text_selection_hook: ReturnType<typeof use_text_selection>
   vision_mode_hook: ReturnType<typeof use_vision_mode>
   window_dimensions_hook: ReturnType<typeof use_window_dimensions>
+  pinned_websites_hook: ReturnType<typeof use_pinned_websites>
 }
 
 const PopupContext = createContext<PopupContext | undefined>(undefined)
@@ -61,6 +63,7 @@ export const App: React.FC = () => {
   const text_selection_hook = use_text_selection()
   const vision_mode_hook = use_vision_mode()
   const window_dimensions_hook = use_window_dimensions()
+  const pinned_websites_hook = use_pinned_websites()
 
   const context_value: PopupContext = {
     attach_text_switch_hook,
@@ -76,6 +79,7 @@ export const App: React.FC = () => {
     text_selection_hook,
     vision_mode_hook,
     window_dimensions_hook,
+    pinned_websites_hook,
   }
 
   return (

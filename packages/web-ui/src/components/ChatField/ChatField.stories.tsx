@@ -15,7 +15,7 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
-        context={[
+        websites={[
           {
             url: 'https://en.wikipedia.org/wiki/Atom',
             title: 'Atom - Wikipedia, wolna encyklopedia',
@@ -39,7 +39,7 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
-        context={[
+        websites={[
           {
             url: 'https://en.wikipedia.org/wiki/Molecule',
             title: 'Molecule - Wikipedia, wolna encyklopedia',
@@ -55,7 +55,7 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
-        context={[]}
+        websites={[]}
       />
     </StorybookMargin>
   )

@@ -24,11 +24,13 @@
   }
 }
 
-.context {
+.websites {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding-top: 4px;
+  padding-bottom: 4px;
+  border-bottom: var(--border-secondary);
   &__item {
     --height: 22px;
     --border-radius: 6px;

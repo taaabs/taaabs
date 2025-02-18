@@ -4,66 +4,130 @@ import browser from 'webextension-polyfill'
 import { is_message } from '@/utils/is-message'
 import { GetParsedHtml_Message } from '@/types/messages'
 import { HtmlParser } from '@shared/utils/html-parser'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const use_current_tab = () => {
   const [url, set_url] = useState<string>('')
   const [title, set_title] = useState<string>('')
+  const [favicon, set_favicon] = useState<string>('')
   const [is_new_tab_page, set_is_new_tab_page] = useState(false)
   const [is_youtube_video, set_is_youtube_video] = useState(false)
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>()
+  const [include_in_prompt, set_include_in_prompt] = useState<boolean>(true)
+  const [current_tab, set_current_tab] = useState<browser.Tabs.Tab | null>(null)
 
+  // Load include_in_prompt setting from storage
+  useEffect(() => {
+    browser.storage.local
+      .get('include_current_tab_in_prompt')
+      .then(({ include_current_tab_in_prompt }) => {
+        if (include_current_tab_in_prompt !== undefined) {
+          set_include_in_prompt(include_current_tab_in_prompt as boolean)
+        }
+      })
+  }, [])
+
+  // Get current tab information
   useEffect(() => {
     browser.tabs
       .query({
         active: true,
         currentWindow: true,
       })
-      .then(([current_tab]) => {
-        const url = current_tab.url!
-        const title = current_tab.title!
-        const cleaned_url = url_cleaner(url)
-        set_url(cleaned_url)
-        set_title(title)
-        set_is_new_tab_page(
-          url.startsWith('chrome://') ||
-            url.startsWith('moz-extension://') ||
-            url == 'about:newtab',
-        )
-        set_is_youtube_video(
-          cleaned_url.startsWith('https://www.youtube.com/watch') ||
-            cleaned_url.startsWith('https://m.youtube.com/watch'),
-        )
-
-        const get_parsed_html_message: GetParsedHtml_Message = {
-          action: 'get-parsed-html',
+      .then(([tab]) => {
+        if (tab) {
+          set_current_tab(tab)
         }
-        browser.tabs.sendMessage(current_tab.id!, get_parsed_html_message)
       })
+  }, [])
 
-    // Set up message listener for parsed HTML
+  // Update URL, title, and other states when current_tab changes
+  useEffect(() => {
+    if (!current_tab?.url) return
+    const url = current_tab.url
+    const title = current_tab.title || ''
+    const cleaned_url = url_cleaner(url)
+
+    set_url(cleaned_url)
+    set_title(title)
+    set_is_new_tab_page(
+      url.startsWith('chrome://') ||
+        url.startsWith('moz-extension://') ||
+        url == 'about:newtab',
+    )
+    set_is_youtube_video(
+      cleaned_url.startsWith('https://www.youtube.com/watch') ||
+        cleaned_url.startsWith('https://m.youtube.com/watch'),
+    )
+  }, [current_tab])
+
+  // Send message to content script to get parsed HTML
+  useEffect(() => {
+    if (!current_tab?.id) return
+
+    const get_parsed_html_message: GetParsedHtml_Message = {
+      action: 'get-parsed-html',
+    }
+    browser.tabs.sendMessage(current_tab.id, get_parsed_html_message)
+  }, [current_tab?.id])
+
+  // Fetch favicon
+  useEffect(() => {
+    if (!url) return
+
+    try {
+      const domain = new URL(url).hostname
+      if (!domain) return
+
+      const handle_favicon = (event: MessageEvent) => {
+        if (
+          event.source === window &&
+          event.data?.action == 'favicon' &&
+          event.data?.domain == domain
+        ) {
+          set_favicon(event.data.favicon || '')
+          window.removeEventListener('message', handle_favicon)
+        }
+      }
+
+      window.addEventListener('message', handle_favicon)
+      window.postMessage({ action: 'get-favicon', domain }, '*')
+
+      return () => {
+        window.removeEventListener('message', handle_favicon)
+      }
+    } catch (error) {
+      console.error('Error fetching favicon:', error)
+    }
+  }, [url])
+
+  // Set up parsed HTML message listener
+  useEffect(() => {
     const message_listener = (message: any, _: any, __: any): any => {
       if (is_message(message) && message.action == 'parsed-html') {
         set_parsed_html(message.parsed_html)
       }
     }
+
     browser.runtime.onMessage.addListener(message_listener)
     return () => browser.runtime.onMessage.removeListener(message_listener)
   }, [])
 
-  const get_parsed_html = () => {
-    browser.tabs
-      .query({
-        active: true,
-        currentWindow: true,
-      })
-      .then(([current_tab]) => {
-        const message: GetParsedHtml_Message = {
-          action: 'get-parsed-html',
-        }
-        browser.tabs.sendMessage(current_tab.id!, message)
-      })
+  // Persist include_in_prompt setting
+  useUpdateEffect(() => {
+    browser.storage.local.set({
+      include_current_tab_in_prompt: include_in_prompt,
+    })
+  }, [include_in_prompt])
 
+  const get_parsed_html = () => {
+    if (!current_tab?.id) return
+
+    const message: GetParsedHtml_Message = {
+      action: 'get-parsed-html',
+    }
+    browser.tabs.sendMessage(current_tab.id, message)
     browser.runtime.onMessage.addListener((message: any, _, __): any => {
       if (is_message(message) && message.action == 'parsed-html') {
         set_parsed_html(message.parsed_html)
@@ -74,9 +138,12 @@ export const use_current_tab = () => {
   return {
     url,
     title,
+    favicon,
     is_new_tab_page,
     is_youtube_video,
     parsed_html,
     get_parsed_html,
+    include_in_prompt,
+    set_include_in_prompt,
   }
 }

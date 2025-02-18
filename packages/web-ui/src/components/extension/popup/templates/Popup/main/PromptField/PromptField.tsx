@@ -4,14 +4,6 @@ import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace PromptField {
-  type ContextItem = {
-    url: string
-    title: string
-    tokens: number
-    favicon: string
-    is_pinned: boolean
-    is_enabled: boolean
-  }
   export type Props = {
     value: string
     on_submit: () => void
@@ -22,7 +14,9 @@ export namespace PromptField {
     text_not_found: boolean
     switches_slot: React.ReactNode
     autofocus: boolean
-    context?: ContextItem[]
+    websites?: ChatField.Website[]
+    on_website_click?: (url: string) => void
+    on_pin_click?: (url: string) => void
     translations: {
       new_prompt: string
       placeholder: string
@@ -99,7 +93,9 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           set_is_focused(false)
         }}
         on_key_down={handle_key_down}
-        context={props.context}
+        websites={props.websites}
+        on_pin_click={props.on_pin_click}
+        on_website_click={props.on_website_click}
       />
 
       {props.switches_slot && (
