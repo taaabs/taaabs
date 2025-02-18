@@ -12,7 +12,6 @@ export const Actions: React.FC = () => {
     auth_state_hook,
     current_tab_hook,
     saved_check_hook,
-    parsed_html_hook,
   } = use_popup()
   const create_bookmark_hook = use_create_bookmark({
     set_is_saved: saved_check_hook.set_is_saved,
@@ -75,7 +74,7 @@ export const Actions: React.FC = () => {
       key="clip"
       on_click={() => {
         create_bookmark_hook.create_bookmark({
-          reader_data: parsed_html_hook.parsed_html?.reader_data,
+          reader_data: current_tab_hook.parsed_html?.reader_data,
         })
       }}
       is_disabled={create_bookmark_hook.is_creating}

@@ -18,7 +18,6 @@ export const PromptField: React.FC<{
   const {
     prompts_history_hook,
     prompts_vision_history_hook,
-    parsed_html_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
     attach_text_switch_hook,
@@ -48,7 +47,7 @@ export const PromptField: React.FC<{
         if (
           attach_text_switch_hook.is_checked &&
           save_prompt_switch_hook.is_checked &&
-          (parsed_html_hook.parsed_html || text_selection_hook.selected_text)
+          (current_tab_hook.parsed_html || text_selection_hook.selected_text)
         ) {
           prompts_history_hook.update_stored_prompts_history(
             props.prompt_field_value,
@@ -79,10 +78,10 @@ export const PromptField: React.FC<{
             <UiSwitch
               is_checked={
                 attach_text_switch_hook.is_checked &&
-                parsed_html_hook.parsed_html !== null
+                current_tab_hook.parsed_html !== null
               }
               is_disabled={
-                !parsed_html_hook.parsed_html &&
+                !current_tab_hook.parsed_html &&
                 !text_selection_hook.selected_text
               }
               on_change={() => {
@@ -100,11 +99,11 @@ export const PromptField: React.FC<{
               is_checked={
                 attach_text_switch_hook.is_checked &&
                 save_prompt_switch_hook.is_checked &&
-                parsed_html_hook.parsed_html !== null
+                current_tab_hook.parsed_html !== null
               }
               is_disabled={
                 !attach_text_switch_hook.is_checked ||
-                (!parsed_html_hook.parsed_html &&
+                (!current_tab_hook.parsed_html &&
                   !text_selection_hook.selected_text)
               }
               on_change={() => {
@@ -124,21 +123,21 @@ export const PromptField: React.FC<{
       ].reverse()}
       is_history_enabled={
         attach_text_switch_hook.is_checked &&
-        (!!parsed_html_hook.parsed_html || !!text_selection_hook.selected_text)
+        (!!current_tab_hook.parsed_html || !!text_selection_hook.selected_text)
       }
       is_plain_text_too_long={
-        ((!!parsed_html_hook.parsed_html ||
+        ((!!current_tab_hook.parsed_html ||
           !!text_selection_hook.selected_text) &&
-          parsed_html_hook.parsed_html?.plain_text &&
+          current_tab_hook.parsed_html?.plain_text &&
           props.shortened_plain_text &&
-          parsed_html_hook.parsed_html?.plain_text.length >
+          current_tab_hook.parsed_html?.plain_text.length >
             props.shortened_plain_text?.length) ||
         false
       }
       text_not_found={
         !current_tab_hook.is_new_tab_page &&
         !current_tab_hook.url.startsWith('https://taaabs.com') &&
-        parsed_html_hook.parsed_html === null &&
+        current_tab_hook.parsed_html === null &&
         !text_selection_hook.selected_text
       }
       autofocus={
@@ -149,9 +148,12 @@ export const PromptField: React.FC<{
       }
       context={[
         {
-          id: '1',
-          is_checked: true,
+          url: current_tab_hook.url,
           title: current_tab_hook.title,
+          tokens: 100,
+          favicon: '',
+          is_pinned: false,
+          is_enabled: true,
         },
       ]}
       translations={{
@@ -168,7 +170,7 @@ export const PromptField: React.FC<{
           <>
             ⚠ {current_tab_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
             {calculate_shortening_percentage(
-              parsed_html_hook.parsed_html?.plain_text,
+              current_tab_hook.parsed_html?.plain_text,
               props.shortened_plain_text,
             )}
             % over the limit for{' '}

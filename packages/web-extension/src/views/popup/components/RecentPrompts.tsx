@@ -17,7 +17,6 @@ export const RecentPrompts: React.FC<{
   shortened_plain_text?: string
 }> = ({ prompt_field_value, assistant_url, shortened_plain_text }) => {
   const {
-    parsed_html_hook,
     attach_text_switch_hook,
     text_selection_hook,
     vision_mode_hook,
@@ -33,7 +32,7 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
+    if (text_selection_hook.selected_text || current_tab_hook.parsed_html) {
       prompts_history_hook.update_stored_prompts_history(prompt)
       const message: SendPrompt_Message = {
         action: 'send-prompt',
@@ -108,7 +107,7 @@ export const RecentPrompts: React.FC<{
     prompts_vision_history_hook.prompts_history,
     vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
-    parsed_html_hook.parsed_html,
+    current_tab_hook.parsed_html,
     shortened_plain_text,
     selected_assistant_hook.selected_assistant_name,
     window_dimensions_hook.dimensions,
@@ -161,7 +160,7 @@ export const RecentPrompts: React.FC<{
               ].reverse()}
               filter_phrase={
                 attach_text_switch_hook.is_checked &&
-                (parsed_html_hook.parsed_html ||
+                (current_tab_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
                   prompt_field_value,
@@ -176,7 +175,7 @@ export const RecentPrompts: React.FC<{
               }}
               on_remove_prompt={handle_remove_prompt}
               is_disabled={
-                !parsed_html_hook.parsed_html &&
+                !current_tab_hook.parsed_html &&
                 !text_selection_hook.selected_text
               }
               translations={{

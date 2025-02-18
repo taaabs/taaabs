@@ -5,9 +5,12 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export namespace PromptField {
   type ContextItem = {
-    id: string
+    url: string
     title: string
-    is_checked: boolean
+    tokens: number
+    favicon: string
+    is_pinned: boolean
+    is_enabled: boolean
   }
   export type Props = {
     value: string

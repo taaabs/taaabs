@@ -14,7 +14,6 @@ export const Popup: React.FC = () => {
   const {
     auth_state_hook,
     saved_check_hook,
-    parsed_html_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
     custom_assistant_url_hook,
@@ -51,7 +50,7 @@ export const Popup: React.FC = () => {
       !text_selection_hook.selected_text &&
       !current_tab_hook.url.startsWith('https://taaabs.com')
     ) {
-      parsed_html_hook.get_parsed_html()
+      current_tab_hook.get_parsed_html()
     }
   }, [text_selection_hook.selected_text, current_tab_hook.url])
 
@@ -63,15 +62,15 @@ export const Popup: React.FC = () => {
       ] || PLAIN_TEXT_MAX_LENGTH['default']
 
     const shortened_plain_text =
-      parsed_html_hook.parsed_html?.plain_text &&
-      (parsed_html_hook.parsed_html.plain_text.length > max_length
-        ? parsed_html_hook.parsed_html.plain_text
+    current_tab_hook.parsed_html?.plain_text &&
+      (current_tab_hook.parsed_html.plain_text.length > max_length
+        ? current_tab_hook.parsed_html.plain_text
             .substring(0, max_length)
             .trim() + '...'
-        : parsed_html_hook.parsed_html.plain_text)
+        : current_tab_hook.parsed_html.plain_text)
 
     set_shortened_plain_text(shortened_plain_text)
-  }, [parsed_html_hook, selected_assistant_hook.selected_assistant_name])
+  }, [current_tab_hook.parsed_html, selected_assistant_hook.selected_assistant_name])
 
   // Change popup width in vision mode. Value is set in index.html
   useUpdateEffect(() => {
