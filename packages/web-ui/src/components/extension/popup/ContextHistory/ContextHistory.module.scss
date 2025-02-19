@@ -3,7 +3,7 @@
 
 .container {
   display: flex;
-  gap: 4px;
+  gap: var(--padding-2px);
 }
 
 .button {
@@ -25,12 +25,12 @@
   }
   &:first-child {
     > svg {
-      transform: rotate(90deg);
+      transform: rotate(90deg) translateY(1px);
     }
   }
   &:last-child {
     > svg {
-      transform: rotate(-90deg);
+      transform: rotate(-90deg) translateY(1px);
     }
   }
   > svg {

@@ -32,20 +32,31 @@ export const Popup: React.FC = () => {
     const snapshot = context_history_hook.navigate_back()
     if (snapshot) {
       prompt_field_hook.update_value(snapshot.prompt)
-      // Restore pinned websites from URLs
-      pinned_websites_hook.pinned_websites.forEach((website) => {
-        pinned_websites_hook.unpin_website(website.url)
-      })
-      for (const url of snapshot.pinned_websites_urls) {
-        const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
-        if (stored) {
-          pinned_websites_hook.pin_website({
-            url: stored.url,
-            title: stored.title,
-            plain_text: stored.plain_text,
-            is_enabled: stored.is_enabled,
-          })
-        }
+
+      // Batch all the website updates into a single operation
+      try {
+        // First gather all the stored website data
+        const websites_to_restore = await Promise.all(
+          snapshot.pinned_websites_urls.map(async (url) => {
+            const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
+            return stored
+              ? {
+                  url: stored.url,
+                  title: stored.title,
+                  plain_text: stored.plain_text,
+                  is_enabled: stored.is_enabled,
+                }
+              : null
+          }),
+        )
+
+        // Then update state in a single batch
+        const filtered_websites = websites_to_restore.filter(
+          (w): w is NonNullable<typeof w> => w !== null,
+        )
+        pinned_websites_hook.update_all_websites(filtered_websites)
+      } catch (error) {
+        console.error('Error restoring pinned websites:', error)
       }
     }
   }
@@ -54,27 +65,35 @@ export const Popup: React.FC = () => {
     const snapshot = context_history_hook.navigate_forward()
     if (snapshot) {
       prompt_field_hook.update_value(snapshot.prompt)
-      // Restore pinned websites from URLs
-      pinned_websites_hook.pinned_websites.forEach((website) => {
-        pinned_websites_hook.unpin_website(website.url)
-      })
-      for (const url of snapshot.pinned_websites_urls) {
-        const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
-        if (stored) {
-          pinned_websites_hook.pin_website({
-            url: stored.url,
-            title: stored.title,
-            plain_text: stored.plain_text,
-            is_enabled: stored.is_enabled,
-          })
-        }
+
+      try {
+        // First gather all the stored website data
+        const websites_to_restore = await Promise.all(
+          snapshot.pinned_websites_urls.map(async (url) => {
+            const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
+            return stored
+              ? {
+                  url: stored.url,
+                  title: stored.title,
+                  plain_text: stored.plain_text,
+                  is_enabled: stored.is_enabled,
+                }
+              : null
+          }),
+        )
+
+        // Then update state in a single batch
+        const filtered_websites = websites_to_restore.filter(
+          (w): w is NonNullable<typeof w> => w !== null,
+        )
+        pinned_websites_hook.update_all_websites(filtered_websites)
+      } catch (error) {
+        console.error('Error restoring pinned websites:', error)
       }
     } else {
       // Clear if we've returned to current state
       prompt_field_hook.update_value('')
-      pinned_websites_hook.pinned_websites.forEach((website) => {
-        pinned_websites_hook.unpin_website(website.url)
-      })
+      pinned_websites_hook.update_all_websites([])
     }
   }
 

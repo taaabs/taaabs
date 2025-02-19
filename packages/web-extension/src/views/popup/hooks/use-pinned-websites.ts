@@ -6,7 +6,7 @@ export interface StoredPinnedWebsite {
   title: string
   plain_text: string
   pinned_at: number
-  is_enabled: boolean // Added this field to persist enabled state
+  is_enabled: boolean
 }
 
 // Initialize localforage instance for website data
@@ -19,7 +19,7 @@ export const websites_store = localforage.createInstance({
 // Key for localStorage to store pinned websites order
 const PINNED_WEBSITES_KEY = 'pinned-websites'
 
-type PinnedWebsite = {
+export type PinnedWebsite = {
   url: string
   title: string
   plain_text: string
@@ -152,10 +152,25 @@ export const use_pinned_websites = () => {
     }
   }
 
+  const update_all_websites = async (websites: PinnedWebsite[]) => {
+    try {
+      set_pinned_websites(websites)
+      // Update localStorage with new order
+      const pinned_urls = websites.map((website) => website.url)
+      localStorage.setItem(
+        PINNED_WEBSITES_KEY,
+        JSON.stringify({ urls: pinned_urls }),
+      )
+    } catch (error) {
+      console.error('Error updating all pinned websites:', error)
+    }
+  }
+
   return {
     pinned_websites,
     pin_website,
     unpin_website,
     toggle_is_enabled,
+    update_all_websites,
   }
 }

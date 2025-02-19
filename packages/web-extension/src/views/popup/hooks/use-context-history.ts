@@ -28,16 +28,21 @@ export const use_context_history = () => {
     }
   }, [])
 
-  const save_snapshot = async (prompt: string, pinned_websites_urls: string[]) => {
+  const save_snapshot = async (
+    prompt: string,
+    pinned_websites_urls: string[],
+  ) => {
     try {
-      const newSnapshot: ContextSnapshot = {
+      const new_snapshot: ContextSnapshot = {
         prompt,
         pinned_websites_urls,
         timestamp: Date.now(),
       }
 
       // Add new snapshot and limit total number
-      const updated_snapshots = [...snapshots, newSnapshot].slice(-MAX_SNAPSHOTS)
+      const updated_snapshots = [...snapshots, new_snapshot].slice(
+        -MAX_SNAPSHOTS,
+      )
 
       // Store in localStorage
       localStorage.setItem(
@@ -64,7 +69,7 @@ export const use_context_history = () => {
     if (current_index > 0) {
       set_current_index(current_index - 1)
       return snapshots[snapshots.length - 1 - current_index + 1]
-    } else if (current_index === 0) {
+    } else if (current_index == 0) {
       set_current_index(-1)
       return null // Return null to indicate returning to current state
     }
@@ -73,7 +78,9 @@ export const use_context_history = () => {
 
   return {
     current_snapshot:
-      current_index >= 0 ? snapshots[snapshots.length - 1 - current_index] : null,
+      current_index >= 0
+        ? snapshots[snapshots.length - 1 - current_index]
+        : null,
     can_navigate_back: current_index < snapshots.length - 1,
     can_navigate_forward: current_index >= 0,
     save_snapshot,
