@@ -1,7 +1,5 @@
 import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
 import { useState } from 'react'
-import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { PLAIN_TEXT_MAX_LENGTH } from '@/constants/plain-text-max-length'
 import { assistants } from '@/constants/assistants'
 import { use_popup } from './App'
 import { Actions } from './components/Actions/Actions'
@@ -9,6 +7,7 @@ import { Header } from './components/Header'
 import { PromptField } from './components/PromptField'
 import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
+import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 
 export const Popup: React.FC = () => {
   const {
@@ -17,13 +16,11 @@ export const Popup: React.FC = () => {
     selected_assistant_hook,
     selected_assistant_vision_hook,
     custom_assistant_url_hook,
-    attach_text_switch_hook,
     vision_mode_hook,
     current_tab_hook,
     text_selection_hook,
   } = use_popup()
   const [prompt_field_value, set_prompt_field_value] = useState('')
-  const [shortened_plain_text, set_shortened_plain_text] = useState<string>()
 
   let assistant_url = assistants['chatgpt'].url
   if (
@@ -45,32 +42,12 @@ export const Popup: React.FC = () => {
     }
   }
 
-  useUpdateEffect(() => {
-    if (
-      !text_selection_hook.selected_text &&
-      !current_tab_hook.url.startsWith('https://taaabs.com')
-    ) {
-      current_tab_hook.get_parsed_html()
-    }
-  }, [text_selection_hook.selected_text, current_tab_hook.url])
-
-  // Shorten plain text whenever selected assistant is changed
-  useUpdateEffect(() => {
-    const max_length =
-      (PLAIN_TEXT_MAX_LENGTH as any)[
-        selected_assistant_hook.selected_assistant_name!
-      ] || PLAIN_TEXT_MAX_LENGTH['default']
-
-    const shortened_plain_text =
-    current_tab_hook.parsed_html?.plain_text &&
-      (current_tab_hook.parsed_html.plain_text.length > max_length
-        ? current_tab_hook.parsed_html.plain_text
-            .substring(0, max_length)
-            .trim() + '...'
-        : current_tab_hook.parsed_html.plain_text)
-
-    set_shortened_plain_text(shortened_plain_text)
-  }, [current_tab_hook.parsed_html, selected_assistant_hook.selected_assistant_name])
+  if (
+    !text_selection_hook.selected_text &&
+    !current_tab_hook.url.startsWith('https://taaabs.com')
+  ) {
+    current_tab_hook.get_parsed_html()
+  }
 
   // Change popup width in vision mode. Value is set in index.html
   useUpdateEffect(() => {
@@ -89,8 +66,7 @@ export const Popup: React.FC = () => {
     (auth_state_hook.is_authenticated &&
       saved_check_hook.is_saved === undefined) ||
     selected_assistant_hook.selected_assistant_name === undefined ||
-    selected_assistant_vision_hook.selected_assistant_name === undefined ||
-    attach_text_switch_hook.is_checked === undefined
+    selected_assistant_vision_hook.selected_assistant_name === undefined
   ) {
     return <></>
   }
@@ -111,13 +87,13 @@ export const Popup: React.FC = () => {
         assistant_url={assistant_url}
         prompt_field_value={prompt_field_value}
         set_prompt_field_value={set_prompt_field_value}
-        shortened_plain_text={shortened_plain_text}
+        plain_text={current_tab_hook.parsed_html?.plain_text}
       />
 
       <RecentPrompts
         prompt_field_value={prompt_field_value}
         assistant_url={assistant_url}
-        shortened_plain_text={shortened_plain_text}
+        plain_text={current_tab_hook.parsed_html?.plain_text}
       />
 
       <FooterLinks />

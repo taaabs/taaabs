@@ -9,7 +9,6 @@ export namespace ChatField {
     url: string
     title: string
     tokens: number
-    favicon: string
     is_pinned: boolean
     is_enabled: boolean
   }
@@ -87,7 +86,11 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
                 }}
                 title={item.title + ` (${item.tokens} tokens)`}
               >
-                {item.favicon && <img src={item.favicon} />}
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${
+                    new URL(item.url).hostname
+                  }&sz=32`}
+                />
                 <span>{item.title}</span>
               </button>
               <button
@@ -130,12 +133,14 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
       <div className={styles.footer}>
         <div className={styles.footer__models}></div>
         <div className={styles.footer__right}>
-          <div
-            className={styles.footer__right__total}
-            title="Total tokens of the prompt (estimated)"
-          >
-            {total_tokens}
-          </div>
+          {total_tokens > 0 && (
+            <div
+              className={styles.footer__right__total}
+              title="Total tokens of the prompt (estimated)"
+            >
+              {total_tokens}
+            </div>
+          )}
           <div className={styles.footer__right__submit}>
             <button onClick={props.on_submit}>
               <Icon variant="SEND" />

@@ -14,10 +14,9 @@ import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
   assistant_url: string
-  shortened_plain_text?: string
-}> = ({ prompt_field_value, assistant_url, shortened_plain_text }) => {
+  plain_text?: string
+}> = (props) => {
   const {
-    attach_text_switch_hook,
     text_selection_hook,
     vision_mode_hook,
     current_tab_hook,
@@ -38,9 +37,9 @@ export const RecentPrompts: React.FC<{
         action: 'send-prompt',
         is_touch_screen: 'ontouchstart' in window,
         assistant_name: selected_assistant_hook.selected_assistant_name!,
-        assistant_url,
+        assistant_url: props.assistant_url,
         prompt,
-        plain_text: text_selection_hook.selected_text || shortened_plain_text,
+        plain_text: text_selection_hook.selected_text || props.plain_text,
         open_in_new_tab: is_middle_click,
         window_height: window_dimensions_hook.dimensions!.height,
         window_width: window_dimensions_hook.dimensions!.width,
@@ -59,7 +58,7 @@ export const RecentPrompts: React.FC<{
       action: 'send-prompt',
       is_touch_screen: 'ontouchstart' in window,
       assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
-      assistant_url,
+      assistant_url: props.assistant_url,
       prompt,
       open_in_new_tab: is_middle_click,
       window_height: window_dimensions_hook.dimensions!.height,
@@ -81,7 +80,7 @@ export const RecentPrompts: React.FC<{
   // Quick select with keyboard numbers (1-9)
   useEffect(() => {
     const handle_key_down = (e: KeyboardEvent) => {
-      if (prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
+      if (props.prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
         const index = parseInt(e.key) - 1
         const recent_prompts = vision_mode_hook.is_vision_mode
           ? prompts_vision_history_hook.prompts_history
@@ -102,13 +101,13 @@ export const RecentPrompts: React.FC<{
     window.addEventListener('keydown', handle_key_down)
     return () => window.removeEventListener('keydown', handle_key_down)
   }, [
-    prompt_field_value,
+    props.prompt_field_value,
     prompts_history_hook.prompts_history,
     prompts_vision_history_hook.prompts_history,
     vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
     current_tab_hook.parsed_html,
-    shortened_plain_text,
+    props.plain_text,
     selected_assistant_hook.selected_assistant_name,
     window_dimensions_hook.dimensions,
   ])
@@ -124,12 +123,12 @@ export const RecentPrompts: React.FC<{
               ...prompts_vision_history_hook.prompts_history,
             ].reverse()}
             filter_phrase={
-              prompt_field_value &&
-              !default_vision_prompts.includes(prompt_field_value) &&
+              props.prompt_field_value &&
+              !default_vision_prompts.includes(props.prompt_field_value) &&
               !prompts_vision_history_hook.prompts_history.includes(
-                prompt_field_value,
+                props.prompt_field_value,
               )
-                ? prompt_field_value
+                ? props.prompt_field_value
                 : ''
             }
             default_prompts={default_vision_prompts}
@@ -159,13 +158,13 @@ export const RecentPrompts: React.FC<{
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                attach_text_switch_hook.is_checked &&
+                current_tab_hook.include_in_prompt &&
                 (current_tab_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
-                  prompt_field_value,
+                  props.prompt_field_value,
                 )
-                  ? prompt_field_value
+                  ? props.prompt_field_value
                   : ''
               }
               default_prompts={default_prompts}

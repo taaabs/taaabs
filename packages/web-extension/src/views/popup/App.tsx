@@ -1,7 +1,6 @@
 import { createRoot } from 'react-dom/client'
 import React, { createContext, useContext } from 'react'
 import { Popup } from './Popup'
-import { use_attach_text_switch } from './hooks/use-attach-text-switch'
 import { use_auth_state } from './hooks/use-auth-state'
 import { use_current_tab } from './hooks/use-current-tab'
 import { use_custom_assistant_url } from './hooks/use-custom-assistant-url'
@@ -21,7 +20,6 @@ import 'use-context-menu/styles.css'
 import 'simplebar-react/dist/simplebar.min.css'
 
 interface PopupContext {
-  attach_text_switch_hook: ReturnType<typeof use_attach_text_switch>
   auth_state_hook: ReturnType<typeof use_auth_state>
   current_tab_hook: ReturnType<typeof use_current_tab>
   custom_assistant_url_hook: ReturnType<typeof use_custom_assistant_url>
@@ -50,7 +48,6 @@ export const use_popup = () => {
 }
 
 export const App: React.FC = () => {
-  const attach_text_switch_hook = use_attach_text_switch()
   const auth_state_hook = use_auth_state()
   const current_tab_hook = use_current_tab()
   const custom_assistant_url_hook = use_custom_assistant_url()
@@ -66,7 +63,6 @@ export const App: React.FC = () => {
   const pinned_websites_hook = use_pinned_websites()
 
   const context_value: PopupContext = {
-    attach_text_switch_hook,
     auth_state_hook,
     current_tab_hook,
     custom_assistant_url_hook,

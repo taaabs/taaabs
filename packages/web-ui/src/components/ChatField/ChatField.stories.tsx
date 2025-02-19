@@ -20,7 +20,6 @@ export const Primary = () => {
             url: 'https://en.wikipedia.org/wiki/Atom',
             title: 'Atom - Wikipedia, wolna encyklopedia',
             tokens: 100,
-            favicon: 'https://platform.openai.com/favicon-platform.png',
             is_pinned: true,
             is_enabled: true,
           },
@@ -28,7 +27,6 @@ export const Primary = () => {
             url: 'https://en.wikipedia.org/wiki/Molecule',
             title: 'Molecule - Wikipedia, wolna encyklopedia',
             tokens: 100,
-            favicon: 'https://platform.openai.com/favicon-platform.png',
             is_pinned: false,
             is_enabled: true,
           },
@@ -44,9 +42,8 @@ export const Primary = () => {
             url: 'https://en.wikipedia.org/wiki/Molecule',
             title: 'Molecule - Wikipedia, wolna encyklopedia',
             tokens: 100,
-            favicon: '',
             is_pinned: false,
-            is_enabled: true,
+            is_enabled: false,
           },
         ]}
       />

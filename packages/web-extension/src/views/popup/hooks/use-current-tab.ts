@@ -9,11 +9,10 @@ import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 export const use_current_tab = () => {
   const [url, set_url] = useState<string>('')
   const [title, set_title] = useState<string>('')
-  const [favicon, set_favicon] = useState<string>('')
   const [is_new_tab_page, set_is_new_tab_page] = useState(false)
   const [is_youtube_video, set_is_youtube_video] = useState(false)
   const [parsed_html, set_parsed_html] =
-    useState<HtmlParser.ParsedResult | null>()
+    useState<HtmlParser.ParsedResult | null>(null)
   const [include_in_prompt, set_include_in_prompt] = useState<boolean>(true)
   const [current_tab, set_current_tab] = useState<browser.Tabs.Tab | null>(null)
 
@@ -72,36 +71,6 @@ export const use_current_tab = () => {
     browser.tabs.sendMessage(current_tab.id, get_parsed_html_message)
   }, [current_tab?.id])
 
-  // Fetch favicon
-  useEffect(() => {
-    if (!url) return
-
-    try {
-      const domain = new URL(url).hostname
-      if (!domain) return
-
-      const handle_favicon = (event: MessageEvent) => {
-        if (
-          event.source === window &&
-          event.data?.action == 'favicon' &&
-          event.data?.domain == domain
-        ) {
-          set_favicon(event.data.favicon || '')
-          window.removeEventListener('message', handle_favicon)
-        }
-      }
-
-      window.addEventListener('message', handle_favicon)
-      window.postMessage({ action: 'get-favicon', domain }, '*')
-
-      return () => {
-        window.removeEventListener('message', handle_favicon)
-      }
-    } catch (error) {
-      console.error('Error fetching favicon:', error)
-    }
-  }, [url])
-
   // Set up parsed HTML message listener
   useEffect(() => {
     const message_listener = (message: any, _: any, __: any): any => {
@@ -138,7 +107,6 @@ export const use_current_tab = () => {
   return {
     url,
     title,
-    favicon,
     is_new_tab_page,
     is_youtube_video,
     parsed_html,

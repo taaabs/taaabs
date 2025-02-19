@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import localforage from 'localforage'
 
 export interface StoredPinnedWebsite {
@@ -8,16 +8,15 @@ export interface StoredPinnedWebsite {
   pinned_at: number
 }
 
-export interface PinnedWebsiteStore {
-  [url: string]: StoredPinnedWebsite
-}
-
-// Initialize localforage instance for pinned websites
+// Initialize localforage instance for website data
 const STORE_NAME = 'pinned-websites'
-const pinned_websites_store = localforage.createInstance({
+const websites_store = localforage.createInstance({
   name: 'taaabs',
   storeName: STORE_NAME,
 })
+
+// Key for localStorage to store pinned websites order
+const PINNED_WEBSITES_KEY = 'taaabs:pinned-websites'
 
 type PinnedWebsite = {
   url: string
@@ -26,30 +25,105 @@ type PinnedWebsite = {
   is_enabled: boolean
 }
 
+interface StoredPinnedUrls {
+  urls: string[] // Array of pinned website URLs in order
+}
+
 export const use_pinned_websites = () => {
   const [pinned_websites, set_pinned_websites] = useState<PinnedWebsite[]>([])
 
+  // Load pinned websites from storage on mount
+  useEffect(() => {
+    const load_pinned_websites = async () => {
+      try {
+        // Get pinned URLs from localStorage
+        const stored = localStorage.getItem(PINNED_WEBSITES_KEY)
+        const pinnedUrls = stored
+          ? (JSON.parse(stored) as StoredPinnedUrls).urls
+          : []
+
+        const websites: PinnedWebsite[] = []
+
+        // Load website data for each pinned URL from localforage
+        for (const url of pinnedUrls) {
+          const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
+          if (stored) {
+            websites.push({
+              url: stored.url,
+              title: stored.title,
+              plain_text: stored.plain_text,
+              is_enabled: true, // Default to enabled when loading
+            })
+          }
+        }
+
+        set_pinned_websites(websites)
+      } catch (error) {
+        console.error('Error loading pinned websites:', error)
+      }
+    }
+
+    load_pinned_websites()
+  }, [])
+
   const pin_website = async (website: PinnedWebsite) => {
-    const stored_pinned_website: StoredPinnedWebsite = {
-      url: website.url,
-      title: website.title,
-      plain_text: website.plain_text,
-      pinned_at: Date.now(),
-    }
-    pinned_websites_store.setItem(website.url, stored_pinned_website)
+    try {
+      // Store website data in localforage
+      const stored_website: StoredPinnedWebsite = {
+        url: website.url,
+        title: website.title,
+        plain_text: website.plain_text,
+        pinned_at: Date.now(),
+      }
+      await websites_store.setItem(website.url, stored_website)
 
-    const pinned_website: PinnedWebsite = {
-      ...website,
-    }
+      // Update pinned URLs in localStorage
+      const stored = localStorage.getItem(PINNED_WEBSITES_KEY)
+      const pinned_urls = stored
+        ? (JSON.parse(stored) as StoredPinnedUrls).urls
+        : []
+      if (!pinned_urls.includes(website.url)) {
+        pinned_urls.push(website.url)
+        localStorage.setItem(
+          PINNED_WEBSITES_KEY,
+          JSON.stringify({ urls: pinned_urls }),
+        )
+      }
 
-    set_pinned_websites([...pinned_websites, pinned_website])
+      // Update state
+      const pinned_website: PinnedWebsite = {
+        ...website,
+      }
+      set_pinned_websites([...pinned_websites, pinned_website])
+    } catch (error) {
+      console.error('Error pinning website:', error)
+    }
   }
 
   const unpin_website = async (url: string) => {
-    const updated_pinned_websites = pinned_websites.filter(
-      (website) => website.url != url,
-    )
-    set_pinned_websites(updated_pinned_websites)
+    try {
+      // Remove URL from localStorage only
+      const stored = localStorage.getItem(PINNED_WEBSITES_KEY)
+      if (stored) {
+        const pinned_urls = (
+          JSON.parse(stored) as StoredPinnedUrls
+        ).urls.filter((storedUrl) => storedUrl !== url)
+        localStorage.setItem(
+          PINNED_WEBSITES_KEY,
+          JSON.stringify({ urls: pinned_urls }),
+        )
+      }
+
+      // Remove from state
+      const updated_pinned_websites = pinned_websites.filter(
+        (website) => website.url != url,
+      )
+      set_pinned_websites(updated_pinned_websites)
+
+      // Website data remains in localforage for future use
+    } catch (error) {
+      console.error('Error unpinning website:', error)
+    }
   }
 
   const toggle_is_enabled = (url: string) => {

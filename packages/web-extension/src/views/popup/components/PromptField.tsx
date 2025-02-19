@@ -13,7 +13,7 @@ import { ChatField } from '@web-ui/components/ChatField'
 
 export const PromptField: React.FC<{
   assistant_url: string
-  shortened_plain_text?: string
+  plain_text?: string
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
 }> = (props) => {
@@ -31,14 +31,14 @@ export const PromptField: React.FC<{
   } = use_popup()
 
   const websites = useMemo<ChatField.Website[]>(() => {
-    const websites = pinned_websites_hook.pinned_websites.map((website) => ({
-      url: website.url,
-      title: website.title,
-      tokens: Math.ceil(website.plain_text.length / 4),
-      favicon: '',
-      is_pinned: true,
-      is_enabled: website.is_enabled,
-    }))
+    const websites: ChatField.Website[] =
+      pinned_websites_hook.pinned_websites.map((website) => ({
+        url: website.url,
+        title: website.title,
+        tokens: Math.ceil(website.plain_text.length / 4),
+        is_pinned: true,
+        is_enabled: website.is_enabled,
+      }))
 
     // Add current tab if it's not already pinned and has content
     const is_current_tab_pinned = pinned_websites_hook.pinned_websites.some(
@@ -50,7 +50,6 @@ export const PromptField: React.FC<{
         url: current_tab_hook.url,
         title: current_tab_hook.title,
         tokens: Math.ceil(current_tab_hook.parsed_html.plain_text.length / 4),
-        favicon: current_tab_hook.favicon,
         is_pinned: false,
         is_enabled: current_tab_hook.include_in_prompt,
       })
@@ -89,18 +88,18 @@ export const PromptField: React.FC<{
           )
         }
 
-        let plain_text = ''
-
-        plain_text = pinned_websites_hook.pinned_websites
+        // Modified template usage
+        let plain_text = pinned_websites_hook.pinned_websites
           .filter((website) => website.is_enabled)
           .map(
             (website) =>
-              `<page title="${website.title}">${website.plain_text}</page>\n`,
+              `<page title="${website.title}">\n${wrap_in_cdata(
+                website.plain_text,
+              )}\n</page>\n`,
           )
-          .join('')
+          .join('\n')
 
         if (current_tab_hook.include_in_prompt) {
-          // Add current tab content if it's not already in pinned websites
           const is_current_tab_pinned =
             pinned_websites_hook.pinned_websites.some(
               (website) => website.url == current_tab_hook.url,
@@ -108,9 +107,11 @@ export const PromptField: React.FC<{
 
           if (!is_current_tab_pinned) {
             if (text_selection_hook.selected_text) {
-              plain_text += text_selection_hook.selected_text
-            } else if (props.shortened_plain_text) {
-              plain_text += `<page title="${current_tab_hook.title}">${props.shortened_plain_text}</page>`
+              plain_text += wrap_in_cdata(text_selection_hook.selected_text)
+            } else if (props.plain_text) {
+              plain_text += `<page title="${
+                current_tab_hook.title
+              }">\n${wrap_in_cdata(props.plain_text)}\n</page>`
             }
           }
         }
@@ -121,11 +122,7 @@ export const PromptField: React.FC<{
           assistant_name: selected_assistant_hook.selected_assistant_name!,
           assistant_url: props.assistant_url,
           prompt: props.prompt_field_value,
-          plain_text:
-            (current_tab_hook.include_in_prompt &&
-              (text_selection_hook.selected_text ||
-                props.shortened_plain_text)) ||
-            '',
+          plain_text,
           window_height: window_dimensions_hook.dimensions?.height,
           window_width: window_dimensions_hook.dimensions?.width,
         }
@@ -165,21 +162,6 @@ export const PromptField: React.FC<{
       is_history_enabled={
         current_tab_hook.include_in_prompt &&
         (!!current_tab_hook.parsed_html || !!text_selection_hook.selected_text)
-      }
-      is_plain_text_too_long={
-        ((!!current_tab_hook.parsed_html ||
-          !!text_selection_hook.selected_text) &&
-          current_tab_hook.parsed_html?.plain_text &&
-          props.shortened_plain_text &&
-          current_tab_hook.parsed_html?.plain_text.length >
-            props.shortened_plain_text?.length) ||
-        false
-      }
-      text_not_found={
-        !current_tab_hook.is_new_tab_page &&
-        !current_tab_hook.url.startsWith('https://taaabs.com') &&
-        current_tab_hook.parsed_html === null &&
-        !text_selection_hook.selected_text
       }
       autofocus={
         !(
@@ -228,23 +210,6 @@ export const PromptField: React.FC<{
           ? 'Attach selection'
           : get_attach_text_checkbox_label(current_tab_hook.url),
         active_input_placeholder_suffix: '(⇅ for history)',
-        plain_text_too_long: (
-          <>
-            ⚠ {current_tab_hook.is_youtube_video ? 'Transcript' : 'Text'} is{' '}
-            {calculate_shortening_percentage(
-              current_tab_hook.parsed_html?.plain_text,
-              props.shortened_plain_text,
-            )}
-            % over the limit for{' '}
-            {
-              assistants[selected_assistant_hook.selected_assistant_name!]
-                .display_name
-            }
-          </>
-        ),
-        text_not_found: current_tab_hook.is_youtube_video
-          ? '⚠ Transcript not found'
-          : '⚠ Unable to read this page',
       }}
     />
   ) : (
@@ -299,8 +264,6 @@ export const PromptField: React.FC<{
         ),
       ].reverse()}
       is_history_enabled={true}
-      is_plain_text_too_long={false}
-      text_not_found={false}
       autofocus={
         !(
           navigator.userAgent.includes('Firefox') &&
@@ -315,8 +278,6 @@ export const PromptField: React.FC<{
         }`,
         switch: 'Keep in recents',
         active_input_placeholder_suffix: '(⇅ for history)',
-        plain_text_too_long: <></>,
-        text_not_found: <></>,
       }}
     />
   )
@@ -350,19 +311,4 @@ const get_attach_text_checkbox_label = (url: string) => {
   return label
 }
 
-const calculate_shortening_percentage = (
-  full_text?: string,
-  shortened_text?: string,
-): number | undefined => {
-  if (!full_text || !shortened_text) {
-    return
-  }
-
-  const full_length = full_text.length
-  const shortened_length = shortened_text.length
-
-  const difference = full_length - shortened_length
-  const percentage = (difference / full_length) * 100
-
-  return Math.floor(percentage)
-}
+const wrap_in_cdata = (content: string) => `<![CDATA[\n${content}\n]]>`

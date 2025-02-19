@@ -73,18 +73,14 @@
       padding: 0 7px 0 4px;
       font-size: var(--font-size-12px);
       color: var(--text-color-dimmed);
-      font-style: italic;
       max-width: calc(100% - var(--height));
+      text-decoration: line-through;
       @include hover {
-        color: var(--text-color-normal);
-        background-color: var(--neutral100);
-        > svg {
-          fill: var(--red600);
-        }
+        color: var(--text-color-variant);
+        background-color: var(--neutral150);
       }
       > img {
         width: 13px;
-        opacity: var(--dimmed-opacity);
       }
       > span {
         display: block;
@@ -95,13 +91,11 @@
       }
       &--selected {
         color: var(--text-color-normal);
-        font-style: normal;
+        text-decoration: unset;
         font-weight: var(--font-weight-inter-medium);
         @include hover {
-          background-color: var(--neutral100);
-        }
-        > img {
-          opacity: 1;
+          color: var(--text-color-normal);
+          background-color: var(--neutral150);
         }
       }
     }

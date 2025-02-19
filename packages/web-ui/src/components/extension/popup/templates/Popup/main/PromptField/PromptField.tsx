@@ -10,8 +10,6 @@ export namespace PromptField {
     on_change: (value: string) => void
     is_history_enabled: boolean
     prompts_history: string[]
-    is_plain_text_too_long: boolean
-    text_not_found: boolean
     switches_slot: React.ReactNode
     autofocus: boolean
     websites?: ChatField.Website[]
@@ -22,8 +20,6 @@ export namespace PromptField {
       placeholder: string
       switch: string
       active_input_placeholder_suffix: string
-      plain_text_too_long: React.ReactNode
-      text_not_found: React.ReactNode
     }
   }
 }
@@ -100,17 +96,6 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
 
       {props.switches_slot && (
         <div className={styles.switches}>{props.switches_slot}</div>
-      )}
-
-      {props.is_plain_text_too_long && (
-        <div className={`${styles.alert} ${styles['alert--warn']}`}>
-          {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.text_not_found && (
-        <div className={`${styles.alert} ${styles['alert--error']}`}>
-          {props.translations.text_not_found}
-        </div>
       )}
     </div>
   )
