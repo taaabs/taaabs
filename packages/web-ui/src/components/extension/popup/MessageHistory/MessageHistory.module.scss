@@ -17,7 +17,7 @@
   border-radius: 50%;
   cursor: pointer;
   &:disabled {
-    pointer-events: none;
+    cursor: default;
     opacity: var(--dimmed-opacity);
   }
   @include hover {

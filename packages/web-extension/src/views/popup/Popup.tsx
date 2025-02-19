@@ -56,6 +56,7 @@ export const Popup: React.FC = () => {
       )
       message_history_hook.set_temp_current_tab(unpinned_website)
     } else {
+      pinned_websites_hook.replace_pinned_websites([])
       prompt_field_hook.update_value('')
       message_history_hook.set_temp_current_tab(undefined)
     }

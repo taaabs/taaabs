@@ -95,6 +95,9 @@
           color: rgba(0, 0, 0, 0.5);
           background-color: var(--neutral150);
         }
+        > img {
+          opacity: 0.5;
+        }
       }
     }
   }

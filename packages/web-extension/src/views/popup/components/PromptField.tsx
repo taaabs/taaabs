@@ -60,11 +60,21 @@ export const PromptField: React.FC<{
         is_pinned: true,
         is_enabled: website.is_enabled,
       })),
-      // Add current tab if it has content and isn't already pinned
-      ...(!pinned_websites_hook.pinned_websites.some(
-        (website) => website.url == current_tab_hook.url,
-      ) &&
-      (text_selection_hook.selected_text || current_tab_hook.parsed_html)
+      // Add temp current tab if present, otherwise add current tab if it has content and isn't already pinned
+      ...(message_history_hook.temp_current_tab
+        ? [
+            {
+              url: message_history_hook.temp_current_tab.url,
+              title: message_history_hook.temp_current_tab.title,
+              length: message_history_hook.temp_current_tab.length,
+              is_pinned: false,
+              is_enabled: message_history_hook.temp_current_tab.is_enabled,
+            },
+          ]
+        : !pinned_websites_hook.pinned_websites.some(
+            (website) => website.url == current_tab_hook.url,
+          ) &&
+          (text_selection_hook.selected_text || current_tab_hook.parsed_html)
         ? [
             {
               url: current_tab_hook.url,
@@ -84,6 +94,7 @@ export const PromptField: React.FC<{
     current_tab_hook.parsed_html,
     current_tab_hook.include_in_prompt,
     text_selection_hook.selected_text,
+    message_history_hook.temp_current_tab,
   ])
 
   // Determine if history should be enabled based on enabled pinned websites and attached text

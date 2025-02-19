@@ -15,7 +15,7 @@ interface Message {
 }
 
 const MESSAGE_HISTORY_KEY = 'messages'
-const MAX_SNAPSHOTS = 50
+const MAX_MESSAGES = 50
 
 export const use_message_history = () => {
   const [current_index, set_current_index] = useState<number>(-1)
@@ -47,7 +47,7 @@ export const use_message_history = () => {
       }
 
       // Add new snapshot and limit total number
-      const updated_messages = [...messages, new_message].slice(-MAX_SNAPSHOTS)
+      const updated_messages = [...messages, new_message].slice(-MAX_MESSAGES)
 
       // Store in localStorage
       localStorage.setItem(

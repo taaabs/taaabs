@@ -3,7 +3,7 @@ import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantS
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { ContextHistory } from '@web-ui/components/extension/popup/ContextHistory'
+import { MessageHistory } from '@web-ui/components/extension/popup/MessageHistory'
 
 export namespace PromptField {
   export type Props = {
@@ -78,7 +78,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           selected_name={props.selected_assistant_name}
           on_change={props.on_assistant_change}
         />
-        <ContextHistory
+        <MessageHistory
           on_history_back_click={props.on_history_back_click}
           on_history_forward_click={props.on_history_forward_click}
         />
