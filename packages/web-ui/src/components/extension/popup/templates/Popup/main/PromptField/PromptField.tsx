@@ -1,4 +1,5 @@
 import { ChatField } from '@web-ui/components/ChatField'
+import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantSelector'
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -18,9 +19,11 @@ export namespace PromptField {
     translations: {
       new_prompt: string
       placeholder: string
-      switch: string
       active_input_placeholder_suffix: string
     }
+    assistants: AssistantSelector.Assistant[]
+    selected_assistant_name: string
+    on_assistant_change: (name: string) => void
   }
 }
 
@@ -67,7 +70,11 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <span>{props.translations.new_prompt}</span>
+        <AssistantSelector
+          assistants={props.assistants}
+          selected_name={props.selected_assistant_name}
+          on_change={props.on_assistant_change}
+        />
       </div>
 
       <ChatField

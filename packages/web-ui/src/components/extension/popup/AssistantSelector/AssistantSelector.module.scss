@@ -1,0 +1,49 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  position: relative;
+  cursor: pointer;
+  @include hover {
+    > .selected {
+      border-color: var(--border-color-hover);
+    }
+  }
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px 0 8px;
+  height: 40px;
+  border-radius: var(--border-radius-8px);
+  background-color: var(--white);
+  border: var(--border-primary);
+  &__logo {
+    --size: 22px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: var(--border-radius-4px);
+  }
+  &__label {
+    font-size: var(--font-size-15px);
+    color: var(--text-color-normal);
+    font-weight: var(--font-weight-inter-medium);
+  }
+  &__chevron {
+    > svg {
+      width: 12px;
+    }
+  }
+}
+
+.select {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}

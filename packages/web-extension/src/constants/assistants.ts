@@ -12,62 +12,65 @@ export type AssistantName =
   | 'custom'
 
 export interface AssistantDetails {
-  display_name: string
+  label: string
   url: string
+  supports_vision: boolean
 }
 
 export const assistants: Record<AssistantName, AssistantDetails> = {
   chatgpt: {
-    display_name: 'ChatGPT',
+    label: 'ChatGPT',
     url: 'https://chatgpt.com/',
+    supports_vision: true,
   },
   gemini: {
-    display_name: 'Gemini',
+    label: 'Gemini',
     url: 'https://gemini.google.com/app',
+    supports_vision: false,
   },
   copilot: {
-    display_name: 'Copilot',
+    label: 'Copilot',
     url: 'https://copilot.microsoft.com/',
+    supports_vision: true,
   },
   claude: {
-    display_name: 'Claude',
+    label: 'Claude',
     url: 'https://claude.ai/new',
+    supports_vision: true,
   },
   aistudio: {
-    display_name: 'AI Studio',
+    label: 'AI Studio',
     url: 'https://aistudio.google.com/app/prompts/new_chat',
+    supports_vision: false,
   },
   grok: {
-    display_name: 'Grok',
+    label: 'Grok',
     url: 'https://x.com/i/grok',
+    supports_vision: true,
   },
   deepseek: {
-    display_name: 'DeepSeek',
+    label: 'DeepSeek',
     url: 'https://chat.deepseek.com/',
+    supports_vision: false,
   },
   // meta: {
   //   display_name: 'Meta AI',
   //   url: 'https://www.meta.ai/',
+  //   supports_vision: false,
   // },
   mistral: {
-    display_name: 'Mistral',
+    label: 'Mistral',
     url: 'https://chat.mistral.ai/chat',
+    supports_vision: true,
   },
   cohere: {
-    display_name: 'Cohere',
+    label: 'Cohere',
     url: 'https://coral.cohere.com/',
+    supports_vision: false,
   },
   custom: {
-    display_name: 'Custom',
+    label: 'Custom',
     url: '',
+    supports_vision: true,
   },
 }
-
-export const assistants_vision: AssistantName[] = [
-  'chatgpt',
-  'claude',
-  'grok',
-  'mistral',
-  'copilot',
-  'custom',
-]

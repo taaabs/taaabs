@@ -42,21 +42,15 @@ export const Primary = () => {
           value=""
           on_submit={() => {}}
           on_change={() => {}}
-          is_switch_checked={true}
-          on_switch_click={() => {}}
-          is_switch_visible={true}
           prompts_history={['a', 'b']}
           is_history_enabled={false}
-          is_plain_text_too_long={false}
-          text_not_found={false}
-          is_switch_disabled={false}
+          autofocus={true}
+          switches_slot={<>switches</>}
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
             switch: 'Send page',
             active_input_placeholder_suffix: '(⇅ for history)',
-            plain_text_too_long: 'Plain text too long',
-            text_not_found: 'Text not found',
           }}
         />
 
@@ -70,6 +64,7 @@ export const Primary = () => {
           filter_phrase=""
           on_recent_prompt_middle_click={() => {}}
           is_disabled={false}
+          on_remove_prompt={() => {}}
           recent_prompts={[
             'Summarize sflsd fjlksdjf lksda jf;lks faj;l kfajkl; sfaj;lksf sdlkfj sdlkfj sdlkjfjkdjf lksdjf  dskjflsdjf sdklj flksdj f',
             'Rewrite simplified',
@@ -89,6 +84,7 @@ export const Primary = () => {
         />
 
         <FooterLinks
+          on_link_click={() => {}}
           links={[
             {
               href: 'https://example.com',

@@ -1,6 +1,6 @@
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
 import { Switch as UiSwitch } from '@web-ui/components/Switch'
-import { assistants } from '@/constants/assistants'
+import { assistants, AssistantName } from '@/constants/assistants'
 import { use_popup } from '../App'
 import {
   default_prompts,
@@ -28,6 +28,23 @@ export const PromptField: React.FC<{
     save_prompt_switch_hook,
     pinned_websites_hook,
   } = use_popup()
+
+  const assistants_for_selector = useMemo(() => {
+    return Object.entries(assistants)
+      .filter(
+        ([_, assistant]) =>
+          !vision_mode_hook.is_vision_mode || assistant.supports_vision,
+      )
+      .map(([name, assistant]) => {
+        let logo_url: string | undefined
+        if (assistant.url) {
+          const hostname = new URL(assistant.url).hostname
+          logo_url = `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`
+        }
+        return { name, label: assistant.label, logo_url }
+      }, [])
+  }, [vision_mode_hook.is_vision_mode])
+
 
   const websites = useMemo<ChatField.Website[]>(() => {
     const websites: ChatField.Website[] =
@@ -142,6 +159,11 @@ export const PromptField: React.FC<{
         props.set_prompt_field_value(value)
       }}
       on_submit={handle_submit}
+      assistants={assistants_for_selector}
+      selected_assistant_name={selected_assistant_hook.selected_assistant_name!}
+      on_assistant_change={(name) =>
+        selected_assistant_hook.change_selected_assistant(name as AssistantName)
+      }
       switches_slot={
         !current_tab_hook.is_new_tab_page &&
         !current_tab_hook.url.startsWith('https://taaabs.com') && (
@@ -155,7 +177,7 @@ export const PromptField: React.FC<{
                 !save_prompt_switch_hook.is_checked,
               )
             }}
-            label={'Keep in recents'}
+            label={'Keep my prompt in recents'}
           />
         )
       }
@@ -210,12 +232,8 @@ export const PromptField: React.FC<{
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${
-          assistants[selected_assistant_hook.selected_assistant_name!]
-            .display_name
+          assistants[selected_assistant_hook.selected_assistant_name!].label
         }`,
-        switch: text_selection_hook.selected_text
-          ? 'Attach selection'
-          : get_attach_text_checkbox_label(current_tab_hook.url),
         active_input_placeholder_suffix: '(⇅ for history)',
       }}
     />
@@ -224,6 +242,15 @@ export const PromptField: React.FC<{
       value={props.prompt_field_value}
       on_change={props.set_prompt_field_value}
       on_submit={handle_submit}
+      assistants={assistants_for_selector}
+      selected_assistant_name={
+        selected_assistant_vision_hook.selected_assistant_name!
+      }
+      on_assistant_change={(name) =>
+        selected_assistant_vision_hook.change_selected_assistant(
+          name as AssistantName,
+        )
+      }
       switches_slot={
         <UiSwitch
           is_checked={vision_mode_hook.is_save_prompt_checked}
@@ -232,7 +259,7 @@ export const PromptField: React.FC<{
               !vision_mode_hook.is_save_prompt_checked,
             )
           }}
-          label={'Keep in recents'}
+          label={'Keep my prompt in recents'}
         />
       }
       prompts_history={[
@@ -251,9 +278,8 @@ export const PromptField: React.FC<{
         new_prompt: 'New chat',
         placeholder: `Ask ${
           assistants[selected_assistant_vision_hook.selected_assistant_name!]
-            .display_name
+            .label
         }`,
-        switch: 'Keep in recents',
         active_input_placeholder_suffix: '(⇅ for history)',
       }}
     />

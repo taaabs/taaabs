@@ -14,6 +14,7 @@ export const Primary = () => {
         translations={{
           title: 'Vision',
           restore: 'Restore',
+          loading: 'Loading...',
         }}
       />
     </div>

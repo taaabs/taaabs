@@ -1,5 +1,4 @@
 import browser from 'webextension-polyfill'
-import { AssistantName } from '../../constants/assistants'
 
 document
   .getElementById('open-assistant-in-new-tab')!
@@ -66,42 +65,13 @@ reset_history_button?.addEventListener('click', async () => {
   }
 })
 
-const default_assistant_select = document.getElementById(
-  'default-assistant',
-) as HTMLSelectElement
-const default_vision_assistant_select = document.getElementById(
-  'default-vision-assistant',
-) as HTMLSelectElement
-
-default_assistant_select.addEventListener('change', () => {
-  const selected_assistant = default_assistant_select.value as AssistantName
-  browser.storage.local.set({ last_used_chatbot_name: selected_assistant })
-})
-
-default_vision_assistant_select.addEventListener('change', () => {
-  const selected_assistant =
-    default_vision_assistant_select.value as AssistantName
-  browser.storage.local.set({
-    last_used_chatbot_vision_name: selected_assistant,
-  })
-})
-
 // Retrieve and set initial states from storage
 browser.storage.local
-  .get([
-    'open_chatbot_in_new_tab',
-    'custom_assistant_url',
-    'auth_data',
-    'last_used_chatbot_name',
-    'last_used_chatbot_vision_name',
-  ])
+  .get(['open_chatbot_in_new_tab', 'custom_assistant_url', 'auth_data'])
   .then((data: any) => {
     ;(
       document.getElementById('open-assistant-in-new-tab') as HTMLInputElement
     ).checked = data.open_chatbot_in_new_tab || false
     custom_assistant_url_input.value = data.custom_assistant_url || ''
     logout_button!.style.display = !data.auth_data ? 'none' : ''
-    default_assistant_select.value = data.last_used_chatbot_name || 'chatgpt'
-    default_vision_assistant_select.value =
-      data.last_used_chatbot_vision_name || 'copilot'
   })
