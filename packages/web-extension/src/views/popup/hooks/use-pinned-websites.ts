@@ -11,7 +11,7 @@ export interface StoredPinnedWebsite {
 
 // Initialize localforage instance for website data
 const STORE_NAME = 'pinned-websites'
-const websites_store = localforage.createInstance({
+export const websites_store = localforage.createInstance({
   name: 'taaabs',
   storeName: STORE_NAME,
 })

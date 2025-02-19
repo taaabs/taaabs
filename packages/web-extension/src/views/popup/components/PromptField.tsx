@@ -15,6 +15,8 @@ export const PromptField: React.FC<{
   plain_text?: string
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
+  on_history_back_click?: () => void
+  on_history_forward_click?: () => void
 }> = (props) => {
   const {
     prompts_history_hook,
@@ -27,6 +29,7 @@ export const PromptField: React.FC<{
     window_dimensions_hook,
     save_prompt_switch_hook,
     pinned_websites_hook,
+    context_history_hook,
   } = use_popup()
 
   const assistants_for_selector = useMemo(() => {
@@ -110,6 +113,11 @@ export const PromptField: React.FC<{
 
   const handle_submit = async () => {
     if (!props.prompt_field_value) return
+
+    await context_history_hook.save_snapshot(
+      props.prompt_field_value,
+      pinned_websites_hook.pinned_websites.map((w) => w.url),
+    )
 
     if (!vision_mode_hook.is_vision_mode) {
       if (is_history_enabled) {
@@ -240,6 +248,8 @@ export const PromptField: React.FC<{
           )
         }
       }}
+      on_history_back_click={props.on_history_back_click}
+      on_history_forward_click={props.on_history_forward_click}
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${

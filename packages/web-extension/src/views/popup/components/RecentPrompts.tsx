@@ -5,12 +5,9 @@ import {
   default_prompts,
   default_vision_prompts,
 } from '../data/default-prompts'
-import { SendPrompt_Message } from '@/types/messages'
-import browser from 'webextension-polyfill'
 import { useEffect, useMemo } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
-// Other imports...
 import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
 
 export const RecentPrompts: React.FC<{
@@ -26,6 +23,7 @@ export const RecentPrompts: React.FC<{
     selected_assistant_vision_hook,
     window_dimensions_hook,
     pinned_websites_hook,
+    context_history_hook,
   } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
@@ -34,6 +32,11 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
+    await context_history_hook.save_snapshot(
+      props.prompt_field_value,
+      pinned_websites_hook.pinned_websites.map((w) => w.url),
+    )
+
     const plain_text = get_aggregated_plain_text({
       pinned_websites: pinned_websites_hook.pinned_websites,
       current_tab: {

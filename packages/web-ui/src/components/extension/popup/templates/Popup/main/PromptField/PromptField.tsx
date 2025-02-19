@@ -3,6 +3,7 @@ import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantS
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { ContextHistory } from '@web-ui/components/extension/popup/ContextHistory'
 
 export namespace PromptField {
   export type Props = {
@@ -16,6 +17,8 @@ export namespace PromptField {
     websites?: ChatField.Website[]
     on_website_click?: (url: string) => void
     on_pin_click?: (url: string) => void
+    on_history_back_click?: () => void
+    on_history_forward_click?: () => void
     translations: {
       new_prompt: string
       placeholder: string
@@ -74,6 +77,10 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           assistants={props.assistants}
           selected_name={props.selected_assistant_name}
           on_change={props.on_assistant_change}
+        />
+        <ContextHistory
+          on_history_back_click={props.on_history_back_click}
+          on_history_forward_click={props.on_history_forward_click}
         />
       </div>
 

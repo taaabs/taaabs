@@ -9,6 +9,8 @@ import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_prompt_field } from './hooks/use-prompt-field'
 import { useEffect } from 'react'
+import { StoredPinnedWebsite } from './hooks/use-pinned-websites'
+import { websites_store } from './hooks/use-pinned-websites'
 
 export const Popup: React.FC = () => {
   const {
@@ -20,8 +22,61 @@ export const Popup: React.FC = () => {
     vision_mode_hook,
     current_tab_hook,
     text_selection_hook,
+    pinned_websites_hook,
+    context_history_hook,
   } = use_popup()
+
   const prompt_field_hook = use_prompt_field()
+
+  const handle_context_history_back = async () => {
+    const snapshot = context_history_hook.navigate_back()
+    if (snapshot) {
+      prompt_field_hook.update_value(snapshot.prompt)
+      // Restore pinned websites from URLs
+      pinned_websites_hook.pinned_websites.forEach((website) => {
+        pinned_websites_hook.unpin_website(website.url)
+      })
+      for (const url of snapshot.pinned_websites_urls) {
+        const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
+        if (stored) {
+          pinned_websites_hook.pin_website({
+            url: stored.url,
+            title: stored.title,
+            plain_text: stored.plain_text,
+            is_enabled: stored.is_enabled,
+          })
+        }
+      }
+    }
+  }
+
+  const handle_context_history_forward = async () => {
+    const snapshot = context_history_hook.navigate_forward()
+    if (snapshot) {
+      prompt_field_hook.update_value(snapshot.prompt)
+      // Restore pinned websites from URLs
+      pinned_websites_hook.pinned_websites.forEach((website) => {
+        pinned_websites_hook.unpin_website(website.url)
+      })
+      for (const url of snapshot.pinned_websites_urls) {
+        const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
+        if (stored) {
+          pinned_websites_hook.pin_website({
+            url: stored.url,
+            title: stored.title,
+            plain_text: stored.plain_text,
+            is_enabled: stored.is_enabled,
+          })
+        }
+      }
+    } else {
+      // Clear if we've returned to current state
+      prompt_field_hook.update_value('')
+      pinned_websites_hook.pinned_websites.forEach((website) => {
+        pinned_websites_hook.unpin_website(website.url)
+      })
+    }
+  }
 
   // Update the prompt field mode when vision mode changes
   useEffect(() => {
@@ -94,6 +149,16 @@ export const Popup: React.FC = () => {
         prompt_field_value={prompt_field_hook.value}
         set_prompt_field_value={prompt_field_hook.update_value}
         plain_text={current_tab_hook.parsed_html?.plain_text}
+        on_history_back_click={
+          context_history_hook.can_navigate_back
+            ? handle_context_history_back
+            : undefined
+        }
+        on_history_forward_click={
+          context_history_hook.can_navigate_forward
+            ? handle_context_history_forward
+            : undefined
+        }
       />
 
       <RecentPrompts

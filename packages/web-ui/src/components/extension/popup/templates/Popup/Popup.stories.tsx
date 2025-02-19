@@ -12,6 +12,25 @@ export default {
   component: Popup,
 }
 
+const ASSISTANTS = [
+  {
+    name: 'chatgpt',
+    label: 'ChatGPT',
+    logo_url: 'https://www.google.com/s2/favicons?domain=openai.com&sz=64',
+  },
+  {
+    name: 'gemini',
+    label: 'Gemini',
+    logo_url:
+      'https://www.google.com/s2/favicons?domain=gemini.google.com&sz=64',
+  },
+  {
+    name: 'claude',
+    label: 'Claude',
+    logo_url: 'https://www.google.com/s2/favicons?domain=claude.ai&sz=64',
+  },
+]
+
 export const Primary = () => {
   return (
     <div style={{ width: '360px', margin: '50px', border: '1px solid black' }}>
@@ -49,9 +68,13 @@ export const Primary = () => {
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',
-            switch: 'Send page',
             active_input_placeholder_suffix: '(⇅ for history)',
           }}
+          assistants={ASSISTANTS}
+          selected_assistant_name={'chatgpt'}
+          on_assistant_change={() => {}}
+          on_history_back_click={() =>{}}
+          on_history_forward_click={() =>{}}
         />
 
         <Separator />

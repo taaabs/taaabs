@@ -9,7 +9,8 @@
 
 .header {
   display: flex;
-  align-items: flex-start;
+  justify-content: space-between;
+  align-items: center;
   padding: var(--padding-10px) 0;
   > span {
     font-weight: var(--font-weight-inter-medium);

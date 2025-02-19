@@ -1,0 +1,39 @@
+// @type
+@use '../../../../styles/foundation' as *;
+
+.container {
+  display: flex;
+  gap: 4px;
+}
+
+.button {
+  --size: var(--button-size-34px);
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size);
+  height: var(--size);
+  border-radius: 50%;
+  cursor: pointer;
+  &:disabled {
+    pointer-events: none;
+    opacity: var(--dimmed-opacity);
+  }
+  @include hover {
+    background-color: var(--neutral200);
+  }
+  &:first-child {
+    > svg {
+      transform: rotate(90deg);
+    }
+  }
+  &:last-child {
+    > svg {
+      transform: rotate(-90deg);
+    }
+  }
+  > svg {
+    width: 14px;
+  }
+}
