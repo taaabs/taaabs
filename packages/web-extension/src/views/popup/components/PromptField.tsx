@@ -62,6 +62,28 @@ export const PromptField: React.FC<{
     current_tab_hook.include_in_prompt,
   ])
 
+  // Determine if history should be enabled based on enabled pinned websites and attached text
+  const is_history_enabled = useMemo(() => {
+    // Check if there are any enabled pinned websites
+    const has_enabled_pinned_websites =
+      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+
+    // Check if current tab text is enabled and available
+    const has_enabled_current_tab_text =
+      current_tab_hook.include_in_prompt &&
+      !pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
+
+    return has_enabled_pinned_websites || has_enabled_current_tab_text
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
+    current_tab_hook.parsed_html,
+  ])
+
   return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
       value={props.prompt_field_value}
@@ -69,26 +91,14 @@ export const PromptField: React.FC<{
         props.set_prompt_field_value(value)
       }}
       on_submit={() => {
-        if (
-          !props.prompt_field_value &&
-          !(
-            current_tab_hook.include_in_prompt &&
-            text_selection_hook.selected_text
-          )
-        )
-          return
+        if (!props.prompt_field_value) return
 
-        if (
-          current_tab_hook.include_in_prompt &&
-          save_prompt_switch_hook.is_checked &&
-          (current_tab_hook.parsed_html || text_selection_hook.selected_text)
-        ) {
+        if (is_history_enabled) {
           prompts_history_hook.update_stored_prompts_history(
             props.prompt_field_value,
           )
         }
 
-        // Modified template usage
         let plain_text = pinned_websites_hook.pinned_websites
           .filter((website) => website.is_enabled)
           .map(
@@ -135,15 +145,9 @@ export const PromptField: React.FC<{
           <>
             <UiSwitch
               is_checked={
-                current_tab_hook.include_in_prompt &&
-                save_prompt_switch_hook.is_checked &&
-                current_tab_hook.parsed_html !== null
+                is_history_enabled && save_prompt_switch_hook.is_checked
               }
-              is_disabled={
-                !current_tab_hook.include_in_prompt ||
-                (!current_tab_hook.parsed_html &&
-                  !text_selection_hook.selected_text)
-              }
+              is_disabled={!is_history_enabled}
               on_change={() => {
                 save_prompt_switch_hook.set_is_checked(
                   !save_prompt_switch_hook.is_checked,
@@ -159,10 +163,7 @@ export const PromptField: React.FC<{
           (prompt) => !default_prompts.includes(prompt),
         ),
       ].reverse()}
-      is_history_enabled={
-        current_tab_hook.include_in_prompt &&
-        (!!current_tab_hook.parsed_html || !!text_selection_hook.selected_text)
-      }
+      is_history_enabled={is_history_enabled}
       autofocus={
         !(
           navigator.userAgent.includes('Firefox') &&
@@ -171,12 +172,17 @@ export const PromptField: React.FC<{
       }
       websites={websites}
       on_pin_click={(url) => {
-        if (
-          pinned_websites_hook.pinned_websites.find(
-            (website) => website.url == url,
-          )
-        ) {
+        const pinned_website = pinned_websites_hook.pinned_websites.find(
+          (website) => website.url == url,
+        )
+        if (pinned_website) {
           pinned_websites_hook.unpin_website(url)
+          if (
+            pinned_website.url == current_tab_hook.url &&
+            !pinned_website.is_enabled
+          ) {
+            current_tab_hook.set_include_in_prompt(false)
+          }
         } else {
           pinned_websites_hook.pin_website({
             url: current_tab_hook.url,
@@ -311,4 +317,6 @@ const get_attach_text_checkbox_label = (url: string) => {
   return label
 }
 
-const wrap_in_cdata = (content: string) => `<![CDATA[\n${content}\n]]>`
+const wrap_in_cdata = (content: string) => {
+  return `<![CDATA[\n${content}\n]]>`
+}

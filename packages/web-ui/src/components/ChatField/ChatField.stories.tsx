@@ -15,6 +15,15 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
+        on_submit={() => {
+          alert('Submit!')
+        }}
+        on_website_click={(url) => {
+          alert(`Website clicked: ${url}`)
+        }}
+        on_pin_click={(url) => {
+          alert(`Pin clicked: ${url}`)
+        }}
         websites={[
           {
             url: 'https://en.wikipedia.org/wiki/Atom',
@@ -37,6 +46,15 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
+        on_submit={() => {
+          alert('Submit!')
+        }}
+        on_website_click={(url) => {
+          alert(`Website clicked: ${url}`)
+        }}
+        on_pin_click={(url) => {
+          alert(`Pin clicked: ${url}`)
+        }}
         websites={[
           {
             url: 'https://en.wikipedia.org/wiki/Molecule',
@@ -52,6 +70,15 @@ export const Primary = () => {
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
+        on_submit={() => {
+          alert('Submit!')
+        }}
+        on_website_click={(url) => {
+          alert(`Website clicked: ${url}`)
+        }}
+        on_pin_click={(url) => {
+          alert(`Pin clicked: ${url}`)
+        }}
         websites={[]}
       />
     </StorybookMargin>

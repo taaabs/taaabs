@@ -89,10 +89,12 @@
         overflow: hidden;
         text-overflow: ellipsis;
       }
-      &--selected {
+      &--pinned {
+        font-weight: var(--font-weight-inter-medium);
+      }
+      &--enabled {
         color: var(--text-color-normal);
         text-decoration: unset;
-        font-weight: var(--font-weight-inter-medium);
         @include hover {
           color: var(--text-color-normal);
           background-color: var(--neutral150);

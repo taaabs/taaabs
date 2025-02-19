@@ -7,7 +7,7 @@ import {
 } from '../data/default-prompts'
 import { SendPrompt_Message } from '@/types/messages'
 import browser from 'webextension-polyfill'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 
@@ -23,6 +23,7 @@ export const RecentPrompts: React.FC<{
     selected_assistant_hook,
     selected_assistant_vision_hook,
     window_dimensions_hook,
+    pinned_websites_hook,
   } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
@@ -112,6 +113,28 @@ export const RecentPrompts: React.FC<{
     window_dimensions_hook.dimensions,
   ])
 
+  // Determine if history should be enabled based on enabled pinned websites and attached text
+  const is_history_enabled = useMemo(() => {
+    // Check if there are any enabled pinned websites
+    const has_enabled_pinned_websites =
+      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+
+    // Check if current tab text is enabled and available
+    const has_enabled_current_tab_text =
+      current_tab_hook.include_in_prompt &&
+      !pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
+
+    return has_enabled_pinned_websites || has_enabled_current_tab_text
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
+    current_tab_hook.parsed_html,
+  ])
+
   return (
     <>
       {vision_mode_hook.is_vision_mode && (
@@ -173,10 +196,7 @@ export const RecentPrompts: React.FC<{
                 handle_quick_prompt_click(prompt, true)
               }}
               on_remove_prompt={handle_remove_prompt}
-              is_disabled={
-                !current_tab_hook.parsed_html &&
-                !text_selection_hook.selected_text
-              }
+              is_disabled={!is_history_enabled}
               translations={{
                 searching_heading: 'Searching...',
                 heading: 'Recently used prompts',

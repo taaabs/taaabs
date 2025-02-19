@@ -9,7 +9,8 @@ declare const styles: {
   readonly "websites": string;
   readonly "websites__item": string;
   readonly "websites__item__bar": string;
-  readonly "websites__item__bar--selected": string;
+  readonly "websites__item__bar--enabled": string;
+  readonly "websites__item__bar--pinned": string;
   readonly "websites__item__pin": string;
   readonly "websites__item__pin--pinned": string;
 };

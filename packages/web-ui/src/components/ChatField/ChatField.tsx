@@ -19,7 +19,7 @@ export namespace ChatField {
     is_disabled?: boolean
     autofocus?: boolean
     disable_enter_new_lines?: boolean
-    on_submit?: () => void
+    on_submit: () => void
     on_key_down?: (event: React.KeyboardEvent<any>) => void
     websites?: Website[]
     on_focus?: () => void
@@ -78,7 +78,8 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
             <div className={styles.websites__item} key={item.url}>
               <button
                 className={cn(styles.websites__item__bar, {
-                  [styles['websites__item__bar--selected']]: item.is_enabled,
+                  [styles['websites__item__bar--enabled']]: item.is_enabled,
+                  [styles['websites__item__bar--pinned']]: item.is_pinned,
                 })}
                 onClick={(e) => {
                   e.stopPropagation()
@@ -126,7 +127,7 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
           props.on_key_down?.(e)
           if (e.key == 'Enter') {
             if (props.disable_enter_new_lines) e.preventDefault()
-            props.on_submit?.()
+            props.on_submit()
           }
         }}
       />
@@ -142,7 +143,12 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
             </div>
           )}
           <div className={styles.footer__right__submit}>
-            <button onClick={props.on_submit}>
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                props.on_submit()
+              }}
+            >
               <Icon variant="SEND" />
             </button>
           </div>
