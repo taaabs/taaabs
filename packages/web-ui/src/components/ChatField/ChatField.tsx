@@ -1,7 +1,7 @@
 import cn from 'classnames'
 import styles from './ChatField.module.scss'
 import TextareaAutosize from 'react-textarea-autosize'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
 import { Icon } from '../Icon'
 
 export namespace ChatField {
@@ -54,6 +54,7 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
   const handle_focus = () => {
     set_is_focused(true)
     props.on_focus?.()
+    textarea_ref.current!.select()
   }
 
   const handle_blur = () => {
@@ -62,8 +63,15 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
   }
 
   const handle_container_click = () => {
-    textarea_ref.current?.focus()
+    textarea_ref.current!.focus()
   }
+
+  useEffect(() => {
+    if (props.autofocus) {
+      textarea_ref.current!.focus()
+      textarea_ref.current!.select()
+    }
+  }, [])
 
   return (
     <div
@@ -117,7 +125,6 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
         ref={textarea_ref}
         onChange={(e) => props.on_change(e.target.value)}
         value={props.value}
-        autoFocus={props.autofocus}
         placeholder={props.placeholder}
         minRows={1}
         maxRows={5}

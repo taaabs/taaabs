@@ -1,8 +1,6 @@
-import browser from 'webextension-polyfill'
 import { PromptField as Ui_extension_popup_templates_Popup_main_PromptField } from '@web-ui/components/extension/popup/templates/Popup/main/PromptField'
 import { Switch as UiSwitch } from '@web-ui/components/Switch'
 import { assistants } from '@/constants/assistants'
-import { SendPrompt_Message } from '@/types/messages'
 import { use_popup } from '../App'
 import {
   default_prompts,
@@ -10,6 +8,7 @@ import {
 } from '../data/default-prompts'
 import { useMemo } from 'react'
 import { ChatField } from '@web-ui/components/ChatField'
+import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
 
 export const PromptField: React.FC<{
   assistant_url: string
@@ -84,78 +83,80 @@ export const PromptField: React.FC<{
     current_tab_hook.parsed_html,
   ])
 
+  const handle_submit = async () => {
+    if (!props.prompt_field_value) return
+
+    if (!vision_mode_hook.is_vision_mode) {
+      if (is_history_enabled) {
+        prompts_history_hook.update_stored_prompts_history(
+          props.prompt_field_value,
+        )
+      }
+
+      const plain_text = get_aggregated_plain_text({
+        pinned_websites: pinned_websites_hook.pinned_websites,
+        current_tab: {
+          url: current_tab_hook.url,
+          title: current_tab_hook.title,
+          include_in_prompt: current_tab_hook.include_in_prompt,
+        },
+        selected_text: text_selection_hook.selected_text,
+        tab_plain_text: props.plain_text,
+      })
+
+      await send_prompt({
+        prompt: props.prompt_field_value,
+        assistant_name: selected_assistant_hook.selected_assistant_name!,
+        assistant_url: props.assistant_url,
+        plain_text,
+        window_dimensions: {
+          height: window_dimensions_hook.dimensions!.height,
+          width: window_dimensions_hook.dimensions!.width,
+        },
+      })
+    } else {
+      if (vision_mode_hook.is_save_prompt_checked) {
+        prompts_vision_history_hook.update_stored_prompts_history(
+          props.prompt_field_value,
+        )
+      }
+
+      await send_prompt({
+        prompt: props.prompt_field_value,
+        assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
+        assistant_url: props.assistant_url,
+        is_vision_mode: true,
+        image: vision_mode_hook.image!,
+        window_dimensions: {
+          height: window_dimensions_hook.dimensions!.height,
+          width: window_dimensions_hook.dimensions!.width,
+        },
+      })
+    }
+  }
+
   return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
       value={props.prompt_field_value}
       on_change={(value) => {
         props.set_prompt_field_value(value)
       }}
-      on_submit={() => {
-        if (!props.prompt_field_value) return
-
-        if (is_history_enabled) {
-          prompts_history_hook.update_stored_prompts_history(
-            props.prompt_field_value,
-          )
-        }
-
-        let plain_text = pinned_websites_hook.pinned_websites
-          .filter((website) => website.is_enabled)
-          .map(
-            (website) =>
-              `<page title="${website.title}">\n${wrap_in_cdata(
-                website.plain_text,
-              )}\n</page>\n`,
-          )
-          .join('\n')
-
-        if (current_tab_hook.include_in_prompt) {
-          const is_current_tab_pinned =
-            pinned_websites_hook.pinned_websites.some(
-              (website) => website.url == current_tab_hook.url,
-            )
-
-          if (!is_current_tab_pinned) {
-            if (text_selection_hook.selected_text) {
-              plain_text += wrap_in_cdata(text_selection_hook.selected_text)
-            } else if (props.plain_text) {
-              plain_text += `<page title="${
-                current_tab_hook.title
-              }">\n${wrap_in_cdata(props.plain_text)}\n</page>`
-            }
-          }
-        }
-
-        const message: SendPrompt_Message = {
-          action: 'send-prompt',
-          is_touch_screen: 'ontouchstart' in window,
-          assistant_name: selected_assistant_hook.selected_assistant_name!,
-          assistant_url: props.assistant_url,
-          prompt: props.prompt_field_value,
-          plain_text,
-          window_height: window_dimensions_hook.dimensions?.height,
-          window_width: window_dimensions_hook.dimensions?.width,
-        }
-        browser.runtime.sendMessage(message)
-        window.close()
-      }}
+      on_submit={handle_submit}
       switches_slot={
         !current_tab_hook.is_new_tab_page &&
         !current_tab_hook.url.startsWith('https://taaabs.com') && (
-          <>
-            <UiSwitch
-              is_checked={
-                is_history_enabled && save_prompt_switch_hook.is_checked
-              }
-              is_disabled={!is_history_enabled}
-              on_change={() => {
-                save_prompt_switch_hook.set_is_checked(
-                  !save_prompt_switch_hook.is_checked,
-                )
-              }}
-              label={'Keep in recents'}
-            />
-          </>
+          <UiSwitch
+            is_checked={
+              is_history_enabled && save_prompt_switch_hook.is_checked
+            }
+            is_disabled={!is_history_enabled}
+            on_change={() => {
+              save_prompt_switch_hook.set_is_checked(
+                !save_prompt_switch_hook.is_checked,
+              )
+            }}
+            label={'Keep in recents'}
+          />
         )
       }
       prompts_history={[
@@ -222,47 +223,17 @@ export const PromptField: React.FC<{
     <Ui_extension_popup_templates_Popup_main_PromptField
       value={props.prompt_field_value}
       on_change={props.set_prompt_field_value}
-      on_submit={() => {
-        if (!props.prompt_field_value) return
-
-        if (vision_mode_hook.is_save_prompt_checked) {
-          prompts_vision_history_hook.update_stored_prompts_history(
-            props.prompt_field_value,
-          )
-        }
-
-        const message: SendPrompt_Message = {
-          action: 'send-prompt',
-          is_touch_screen: 'ontouchstart' in window,
-          assistant_name:
-            selected_assistant_vision_hook.selected_assistant_name!,
-          assistant_url: props.assistant_url,
-          prompt: props.prompt_field_value,
-          window_height: window_dimensions_hook.dimensions!.height,
-          window_width: window_dimensions_hook.dimensions!.width,
-          image: vision_mode_hook.image!,
-        }
-        browser.runtime.sendMessage(message)
-        window.close()
-      }}
+      on_submit={handle_submit}
       switches_slot={
-        <>
-          <UiSwitch
-            is_checked={true}
-            is_disabled={true}
-            on_change={() => {}}
-            label={'Attach image'}
-          />
-          <UiSwitch
-            is_checked={vision_mode_hook.is_save_prompt_checked}
-            on_change={() => {
-              vision_mode_hook.set_is_save_prompt_checked(
-                !vision_mode_hook.is_save_prompt_checked,
-              )
-            }}
-            label={'Keep in recents'}
-          />
-        </>
+        <UiSwitch
+          is_checked={vision_mode_hook.is_save_prompt_checked}
+          on_change={() => {
+            vision_mode_hook.set_is_save_prompt_checked(
+              !vision_mode_hook.is_save_prompt_checked,
+            )
+          }}
+          label={'Keep in recents'}
+        />
       }
       prompts_history={[
         ...prompts_vision_history_hook.prompts_history.filter(
@@ -315,8 +286,4 @@ const get_attach_text_checkbox_label = (url: string) => {
     }
   }
   return label
-}
-
-const wrap_in_cdata = (content: string) => {
-  return `<![CDATA[\n${content}\n]]>`
 }

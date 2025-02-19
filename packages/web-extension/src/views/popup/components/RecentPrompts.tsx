@@ -10,6 +10,8 @@ import browser from 'webextension-polyfill'
 import { useEffect, useMemo } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
+// Other imports...
+import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
@@ -32,21 +34,33 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    if (text_selection_hook.selected_text || current_tab_hook.parsed_html) {
-      prompts_history_hook.update_stored_prompts_history(prompt)
-      const message: SendPrompt_Message = {
-        action: 'send-prompt',
-        is_touch_screen: 'ontouchstart' in window,
+    const plain_text = get_aggregated_plain_text({
+      pinned_websites: pinned_websites_hook.pinned_websites,
+      current_tab: {
+        url: current_tab_hook.url,
+        title: current_tab_hook.title,
+        include_in_prompt: current_tab_hook.include_in_prompt,
+      },
+      selected_text: text_selection_hook.selected_text,
+      tab_plain_text: props.plain_text,
+    })
+
+    // Only update history if there is content to process
+    if (!vision_mode_hook.is_vision_mode && plain_text) {
+      await send_prompt({
+        prompt,
         assistant_name: selected_assistant_hook.selected_assistant_name!,
         assistant_url: props.assistant_url,
-        prompt,
-        plain_text: text_selection_hook.selected_text || props.plain_text,
+        plain_text,
         open_in_new_tab: is_middle_click,
-        window_height: window_dimensions_hook.dimensions!.height,
-        window_width: window_dimensions_hook.dimensions!.width,
-      }
-      browser.runtime.sendMessage(message)
-      window.close()
+        window_dimensions: {
+          height: window_dimensions_hook.dimensions!.height,
+          width: window_dimensions_hook.dimensions!.width,
+        },
+        on_before_send: () => {
+          prompts_history_hook.update_stored_prompts_history(prompt)
+        },
+      })
     }
   }
 
@@ -54,20 +68,21 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    prompts_vision_history_hook.update_stored_prompts_history(prompt)
-    const message: SendPrompt_Message = {
-      action: 'send-prompt',
-      is_touch_screen: 'ontouchstart' in window,
+    await send_prompt({
+      prompt,
       assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
       assistant_url: props.assistant_url,
-      prompt,
-      open_in_new_tab: is_middle_click,
-      window_height: window_dimensions_hook.dimensions!.height,
-      window_width: window_dimensions_hook.dimensions!.width,
+      is_vision_mode: true,
       image: vision_mode_hook.image!,
-    }
-    browser.runtime.sendMessage(message)
-    window.close()
+      open_in_new_tab: is_middle_click,
+      window_dimensions: {
+        height: window_dimensions_hook.dimensions!.height,
+        width: window_dimensions_hook.dimensions!.width,
+      },
+      on_before_send: () => {
+        prompts_vision_history_hook.update_stored_prompts_history(prompt)
+      },
+    })
   }
 
   const handle_remove_prompt = async (prompt: string) => {
@@ -181,7 +196,7 @@ export const RecentPrompts: React.FC<{
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                current_tab_hook.include_in_prompt &&
+                is_history_enabled &&
                 (current_tab_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(

@@ -1,5 +1,4 @@
 import { Popup as Ui_extension_popup_templates_Popup } from '@web-ui/components/extension/popup/templates/Popup'
-import { useState } from 'react'
 import { assistants } from '@/constants/assistants'
 import { use_popup } from './App'
 import { Actions } from './components/Actions/Actions'
@@ -8,6 +7,8 @@ import { PromptField } from './components/PromptField'
 import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
+import { use_prompt_field } from './hooks/use-prompt-field'
+import { useEffect } from 'react'
 
 export const Popup: React.FC = () => {
   const {
@@ -20,7 +21,12 @@ export const Popup: React.FC = () => {
     current_tab_hook,
     text_selection_hook,
   } = use_popup()
-  const [prompt_field_value, set_prompt_field_value] = useState('')
+  const prompt_field_hook = use_prompt_field()
+
+  // Update the prompt field mode when vision mode changes
+  useEffect(() => {
+    prompt_field_hook.set_mode(vision_mode_hook.is_vision_mode)
+  }, [vision_mode_hook.is_vision_mode])
 
   let assistant_url = assistants['chatgpt'].url
   if (
@@ -85,13 +91,13 @@ export const Popup: React.FC = () => {
 
       <PromptField
         assistant_url={assistant_url}
-        prompt_field_value={prompt_field_value}
-        set_prompt_field_value={set_prompt_field_value}
+        prompt_field_value={prompt_field_hook.value}
+        set_prompt_field_value={prompt_field_hook.update_value}
         plain_text={current_tab_hook.parsed_html?.plain_text}
       />
 
       <RecentPrompts
-        prompt_field_value={prompt_field_value}
+        prompt_field_value={prompt_field_hook.value}
         assistant_url={assistant_url}
         plain_text={current_tab_hook.parsed_html?.plain_text}
       />
