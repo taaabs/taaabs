@@ -24,14 +24,19 @@ export const use_prompt_field = () => {
   useEffect(() => {
     const stored_data = localStorage.getItem(get_storage_key())
     if (stored_data) {
-      const parsed_data: StoredPrompt = JSON.parse(stored_data)
-      const current_time = Date.now()
+      try {
+        const parsed_data: StoredPrompt = JSON.parse(stored_data)
+        const current_time = Date.now()
 
-      // Only restore if the stored value is less than one hour old
-      if (current_time - parsed_data.timestamp <= ONE_HOUR_IN_MS) {
-        set_value(parsed_data.value)
-      } else {
-        // Clear expired data
+        // Only restore if the stored value is less than one hour old
+        if (current_time - parsed_data.timestamp <= ONE_HOUR_IN_MS) {
+          set_value(parsed_data.value)
+        } else {
+          // Clear expired data
+          localStorage.removeItem(get_storage_key())
+        }
+      } catch {
+        // Handle legacy format or invalid JSON
         localStorage.removeItem(get_storage_key())
       }
     }
