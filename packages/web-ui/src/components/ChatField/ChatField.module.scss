@@ -73,9 +73,7 @@
       padding: 0 7px 0 4px;
       font-size: var(--font-size-12px);
       max-width: calc(100% - var(--height));
-      text-decoration: line-through;
       @include hover {
-        color: var(--text-color-variant);
         background-color: var(--neutral150);
       }
       > img {
@@ -91,10 +89,10 @@
       &--pinned {
         font-weight: var(--font-weight-inter-medium);
       }
-      &--enabled {
-        text-decoration: unset;
+      &--disabled {
+        color: rgba(0, 0, 0, 0.4);
         @include hover {
-          color: var(--text-color-normal);
+          color: rgba(0, 0, 0, 0.5);
           background-color: var(--neutral150);
         }
       }

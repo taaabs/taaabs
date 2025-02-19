@@ -9,8 +9,8 @@ import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_prompt_field } from './hooks/use-prompt-field'
 import { useEffect } from 'react'
-import { StoredPinnedWebsite } from './hooks/use-pinned-websites'
-import { websites_store } from './hooks/use-pinned-websites'
+// import { StoredPinnedWebsite } from './hooks/use-pinned-websites'
+// import { websites_store } from './hooks/use-pinned-websites'
 
 export const Popup: React.FC = () => {
   const {
@@ -23,77 +23,41 @@ export const Popup: React.FC = () => {
     current_tab_hook,
     text_selection_hook,
     pinned_websites_hook,
-    context_history_hook,
+    message_history_hook,
   } = use_popup()
 
   const prompt_field_hook = use_prompt_field()
 
-  const handle_context_history_back = async () => {
-    const snapshot = context_history_hook.navigate_back()
-    if (snapshot) {
-      prompt_field_hook.update_value(snapshot.prompt)
-
-      // Batch all the website updates into a single operation
-      try {
-        // First gather all the stored website data
-        const websites_to_restore = await Promise.all(
-          snapshot.pinned_websites_urls.map(async (url) => {
-            const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
-            return stored
-              ? {
-                  url: stored.url,
-                  title: stored.title,
-                  plain_text: stored.plain_text,
-                  is_enabled: stored.is_enabled,
-                }
-              : null
-          }),
-        )
-
-        // Then update state in a single batch
-        const filtered_websites = websites_to_restore.filter(
-          (w): w is NonNullable<typeof w> => w !== null,
-        )
-        pinned_websites_hook.update_all_websites(filtered_websites)
-      } catch (error) {
-        console.error('Error restoring pinned websites:', error)
-      }
+  const handle_message_history_back = async () => {
+    const previous_message = message_history_hook.navigate_back()
+    if (previous_message) {
+      prompt_field_hook.update_value(previous_message.prompt)
+      pinned_websites_hook.replace_pinned_websites(
+        previous_message.websites.filter((website) => website.is_pinned),
+      )
+      // Set message that is not pinned as temp current tab
+      const unpinned_website = previous_message.websites.find(
+        (website) => !website.is_pinned,
+      )
+      message_history_hook.set_temp_current_tab(unpinned_website)
     }
   }
 
-  const handle_context_history_forward = async () => {
-    const snapshot = context_history_hook.navigate_forward()
-    if (snapshot) {
-      prompt_field_hook.update_value(snapshot.prompt)
-
-      try {
-        // First gather all the stored website data
-        const websites_to_restore = await Promise.all(
-          snapshot.pinned_websites_urls.map(async (url) => {
-            const stored = await websites_store.getItem<StoredPinnedWebsite>(url)
-            return stored
-              ? {
-                  url: stored.url,
-                  title: stored.title,
-                  plain_text: stored.plain_text,
-                  is_enabled: stored.is_enabled,
-                }
-              : null
-          }),
-        )
-
-        // Then update state in a single batch
-        const filtered_websites = websites_to_restore.filter(
-          (w): w is NonNullable<typeof w> => w !== null,
-        )
-        pinned_websites_hook.update_all_websites(filtered_websites)
-      } catch (error) {
-        console.error('Error restoring pinned websites:', error)
-      }
+  const handle_message_history_forward = async () => {
+    const next_message = message_history_hook.navigate_forward()
+    if (next_message) {
+      prompt_field_hook.update_value(next_message.prompt)
+      pinned_websites_hook.replace_pinned_websites(
+        next_message.websites.filter((website) => website.is_pinned),
+      )
+      // Set message that is not pinned as temp current tab
+      const unpinned_website = next_message.websites.find(
+        (website) => !website.is_pinned,
+      )
+      message_history_hook.set_temp_current_tab(unpinned_website)
     } else {
-      // Clear if we've returned to current state
       prompt_field_hook.update_value('')
-      pinned_websites_hook.update_all_websites([])
+      message_history_hook.set_temp_current_tab(undefined)
     }
   }
 
@@ -169,13 +133,13 @@ export const Popup: React.FC = () => {
         set_prompt_field_value={prompt_field_hook.update_value}
         plain_text={current_tab_hook.parsed_html?.plain_text}
         on_history_back_click={
-          context_history_hook.can_navigate_back
-            ? handle_context_history_back
+          message_history_hook.can_navigate_back
+            ? handle_message_history_back
             : undefined
         }
         on_history_forward_click={
-          context_history_hook.can_navigate_forward
-            ? handle_context_history_forward
+          message_history_hook.can_navigate_forward
+            ? handle_message_history_forward
             : undefined
         }
       />

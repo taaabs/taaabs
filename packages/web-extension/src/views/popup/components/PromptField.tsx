@@ -8,7 +8,8 @@ import {
 } from '../data/default-prompts'
 import { useMemo } from 'react'
 import { ChatField } from '@web-ui/components/ChatField'
-import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
+import { send_prompt } from '../utils/send-prompt'
+import { use_websites_store } from '../hooks/use-websites-store'
 
 export const PromptField: React.FC<{
   assistant_url: string
@@ -29,8 +30,9 @@ export const PromptField: React.FC<{
     window_dimensions_hook,
     save_prompt_switch_hook,
     pinned_websites_hook,
-    context_history_hook,
+    message_history_hook,
   } = use_popup()
+  const websites_store = use_websites_store()
 
   const assistants_for_selector = useMemo(() => {
     return Object.entries(assistants)
@@ -49,39 +51,34 @@ export const PromptField: React.FC<{
   }, [vision_mode_hook.is_vision_mode])
 
   const websites = useMemo<ChatField.Website[]>(() => {
-    const websites: ChatField.Website[] =
-      pinned_websites_hook.pinned_websites.map((website) => ({
+    return [
+      // Add pinned websites
+      ...pinned_websites_hook.pinned_websites.map((website) => ({
         url: website.url,
         title: website.title,
-        tokens: Math.ceil(website.plain_text.length / 4),
+        length: website.length,
         is_pinned: true,
         is_enabled: website.is_enabled,
-      }))
-
-    // Add current tab if it's not already pinned and has content
-    const is_current_tab_pinned = pinned_websites_hook.pinned_websites.some(
-      (website) => website.url == current_tab_hook.url,
-    )
-
-    if (
-      !is_current_tab_pinned &&
-      (text_selection_hook.selected_text ||
-        current_tab_hook.parsed_html?.plain_text)
-    ) {
-      websites.push({
-        url: current_tab_hook.url,
-        title: current_tab_hook.title,
-        tokens: Math.ceil(
-          (text_selection_hook.selected_text?.length ||
-            current_tab_hook.parsed_html?.plain_text.length ||
-            0) / 4,
-        ),
-        is_pinned: false,
-        is_enabled: current_tab_hook.include_in_prompt,
-      })
-    }
-
-    return websites
+      })),
+      // Add current tab if it has content and isn't already pinned
+      ...(!pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (text_selection_hook.selected_text || current_tab_hook.parsed_html)
+        ? [
+            {
+              url: current_tab_hook.url,
+              title: current_tab_hook.title || '',
+              length:
+                text_selection_hook.selected_text?.length ||
+                current_tab_hook.parsed_html?.plain_text.length ||
+                0,
+              is_pinned: false,
+              is_enabled: current_tab_hook.include_in_prompt,
+            },
+          ]
+        : []),
+    ]
   }, [
     pinned_websites_hook.pinned_websites,
     current_tab_hook.parsed_html,
@@ -114,28 +111,47 @@ export const PromptField: React.FC<{
   const handle_submit = async () => {
     if (!props.prompt_field_value) return
 
-    await context_history_hook.save_snapshot(
-      props.prompt_field_value,
-      pinned_websites_hook.pinned_websites.map((w) => w.url),
-    )
-
     if (!vision_mode_hook.is_vision_mode) {
+      // Save message
+      await message_history_hook.save_message(
+        props.prompt_field_value,
+        websites.map((website) => ({
+          url: website.url,
+          title: website.title,
+          length: website.length,
+          is_pinned: website.is_pinned,
+          is_enabled: website.is_enabled,
+        })),
+      )
+
       if (is_history_enabled) {
         prompts_history_hook.update_stored_prompts_history(
           props.prompt_field_value,
         )
       }
 
-      const plain_text = get_aggregated_plain_text({
-        pinned_websites: pinned_websites_hook.pinned_websites,
-        current_tab: {
-          url: current_tab_hook.url,
-          title: current_tab_hook.title,
-          include_in_prompt: current_tab_hook.include_in_prompt,
-        },
-        selected_text: text_selection_hook.selected_text,
-        tab_plain_text: props.plain_text,
-      })
+      // each website should be wrapped in <page title=""></page>
+      let plain_text = ''
+      const enabled_websites = websites.filter((website) => website.is_enabled)
+      for (const website of enabled_websites) {
+        // Add plain text from pinned website
+        if (website.url == current_tab_hook.url) {
+          // For current tab, use selected text or parsed HTML
+          const text =
+            text_selection_hook.selected_text ||
+            current_tab_hook.parsed_html?.plain_text ||
+            ''
+          if (text) {
+            plain_text += `<page title="${website.title}"><![CDATA[${text}]]></page>\n\n`
+          }
+        } else {
+          // For pinned websites, get stored website data
+          const stored = await websites_store.get_website(website.url)
+          if (stored?.plain_text) {
+            plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>\n\n`
+          }
+        }
+      }
 
       await send_prompt({
         prompt: props.prompt_field_value,
@@ -165,6 +181,64 @@ export const PromptField: React.FC<{
           width: window_dimensions_hook.dimensions!.width,
         },
       })
+    }
+  }
+
+  const handle_pin_click = async (url: string) => {
+    const websites_store = use_websites_store()
+
+    // Check if URL is already pinned
+    const is_pinned = pinned_websites_hook.pinned_websites.find(
+      (w) => w.url == url,
+    )
+
+    if (is_pinned) {
+      // If URL is pinned, unpin it
+      pinned_websites_hook.unpin_website(url)
+    } else {
+      // If URL is not pinned and it's current tab
+      if (url == current_tab_hook.url) {
+        // Store current tab data
+        if (current_tab_hook.parsed_html) {
+          await websites_store.store_website({
+            url: current_tab_hook.url,
+            title: current_tab_hook.title || '',
+            plain_text:
+              text_selection_hook.selected_text ||
+              current_tab_hook.parsed_html.plain_text ||
+              '',
+          })
+        }
+      }
+
+      // Pin the website
+      pinned_websites_hook.pin_website({
+        url: url,
+        title: current_tab_hook.title || '',
+        length:
+          text_selection_hook.selected_text?.length ||
+          current_tab_hook.parsed_html?.plain_text.length ||
+          0,
+      })
+    }
+  }
+
+  const handle_website_click = async (url: string) => {
+    // Check if URL is in pinned websites
+    const pinned_website = pinned_websites_hook.pinned_websites.find(
+      (w) => w.url == url,
+    )
+
+    if (pinned_website) {
+      // If it's a pinned website, toggle its enabled state
+      pinned_websites_hook.toggle_website_enabled(url)
+    } else {
+      // If it's the current tab, toggle the include_in_prompt state
+      if (url == current_tab_hook.url) {
+        current_tab_hook.set_include_in_prompt(
+          !current_tab_hook.include_in_prompt,
+        )
+      }
     }
   }
 
@@ -210,44 +284,8 @@ export const PromptField: React.FC<{
         )
       }
       websites={websites}
-      on_pin_click={(url) => {
-        const pinned_website = pinned_websites_hook.pinned_websites.find(
-          (website) => website.url == url,
-        )
-        if (pinned_website) {
-          pinned_websites_hook.unpin_website(url)
-          if (
-            pinned_website.url == current_tab_hook.url &&
-            !pinned_website.is_enabled
-          ) {
-            current_tab_hook.set_include_in_prompt(false)
-          }
-        } else {
-          pinned_websites_hook.pin_website({
-            url: current_tab_hook.url,
-            title: current_tab_hook.title,
-            plain_text:
-              text_selection_hook.selected_text ||
-              current_tab_hook.parsed_html?.plain_text ||
-              '',
-            is_enabled: true,
-          })
-          current_tab_hook.set_include_in_prompt(true)
-        }
-      }}
-      on_website_click={(url) => {
-        if (
-          pinned_websites_hook.pinned_websites.find(
-            (website) => website.url == url,
-          )
-        ) {
-          pinned_websites_hook.toggle_is_enabled(url)
-        } else {
-          current_tab_hook.set_include_in_prompt(
-            !current_tab_hook.include_in_prompt,
-          )
-        }
-      }}
+      on_pin_click={handle_pin_click}
+      on_website_click={handle_website_click}
       on_history_back_click={props.on_history_back_click}
       on_history_forward_click={props.on_history_forward_click}
       translations={{

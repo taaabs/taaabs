@@ -8,7 +8,7 @@ export namespace ChatField {
   export type Website = {
     url: string
     title: string
-    tokens: number
+    length: number
     is_pinned: boolean
     is_enabled: boolean
   }
@@ -41,14 +41,14 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
     if (props.websites) {
       total += props.websites
         .filter((item) => item.is_enabled)
-        .reduce((sum, item) => sum + item.tokens, 0)
+        .reduce((sum, item) => sum + item.length / 4, 0)
     }
 
     // Estimate tokens from input text (approximate 4 chars per token)
-    const input_text_tokens = Math.ceil(props.value.length / 4)
+    const input_text_tokens = props.value.length / 4
     total += input_text_tokens
 
-    return total
+    return Math.ceil(total)
   }, [props.value, props.websites])
 
   const handle_focus = () => {
@@ -86,14 +86,14 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
             <div className={styles.websites__item} key={item.url}>
               <button
                 className={cn(styles.websites__item__bar, {
-                  [styles['websites__item__bar--enabled']]: item.is_enabled,
+                  [styles['websites__item__bar--disabled']]: !item.is_enabled,
                   [styles['websites__item__bar--pinned']]: item.is_pinned,
                 })}
                 onClick={(e) => {
                   e.stopPropagation()
                   props.on_website_click?.(item.url)
                 }}
-                title={item.title + ` (${item.tokens} tokens)`}
+                title={item.title + ` (${Math.ceil(item.length / 4)} tokens)`}
               >
                 <img
                   src={`https://www.google.com/s2/favicons?domain=${

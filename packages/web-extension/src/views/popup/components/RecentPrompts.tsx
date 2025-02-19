@@ -8,7 +8,7 @@ import {
 import { useEffect, useMemo } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
-import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
+import { send_prompt } from '../utils/send-prompt'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
@@ -23,7 +23,7 @@ export const RecentPrompts: React.FC<{
     selected_assistant_vision_hook,
     window_dimensions_hook,
     pinned_websites_hook,
-    context_history_hook,
+    message_history_hook,
   } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
@@ -32,29 +32,29 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    await context_history_hook.save_snapshot(
-      props.prompt_field_value,
-      pinned_websites_hook.pinned_websites.map((w) => w.url),
-    )
+    // await context_history_hook.save_snapshot(
+    //   props.prompt_field_value,
+    //   pinned_websites_hook.pinned_websites.map((w) => w.url),
+    // )
 
-    const plain_text = get_aggregated_plain_text({
-      pinned_websites: pinned_websites_hook.pinned_websites,
-      current_tab: {
-        url: current_tab_hook.url,
-        title: current_tab_hook.title,
-        include_in_prompt: current_tab_hook.include_in_prompt,
-      },
-      selected_text: text_selection_hook.selected_text,
-      tab_plain_text: props.plain_text,
-    })
+    // const plain_text = get_aggregated_plain_text({
+    //   pinned_websites: pinned_websites_hook.pinned_websites,
+    //   current_tab: {
+    //     url: current_tab_hook.url,
+    //     title: current_tab_hook.title,
+    //     include_in_prompt: current_tab_hook.include_in_prompt,
+    //   },
+    //   selected_text: text_selection_hook.selected_text,
+    //   tab_plain_text: props.plain_text,
+    // })
 
     // Only update history if there is content to process
-    if (!vision_mode_hook.is_vision_mode && plain_text) {
+    if (!vision_mode_hook.is_vision_mode) {
       await send_prompt({
         prompt,
         assistant_name: selected_assistant_hook.selected_assistant_name!,
         assistant_url: props.assistant_url,
-        plain_text,
+        plain_text: '',
         open_in_new_tab: is_middle_click,
         window_dimensions: {
           height: window_dimensions_hook.dimensions!.height,
@@ -133,19 +133,20 @@ export const RecentPrompts: React.FC<{
 
   // Determine if history should be enabled based on enabled pinned websites and attached text
   const is_history_enabled = useMemo(() => {
-    // Check if there are any enabled pinned websites
-    const has_enabled_pinned_websites =
-      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+    // // Check if there are any enabled pinned websites
+    // const has_enabled_pinned_websites =
+    //   pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
 
-    // Check if current tab text is enabled and available
-    const has_enabled_current_tab_text =
-      current_tab_hook.include_in_prompt &&
-      !pinned_websites_hook.pinned_websites.some(
-        (website) => website.url == current_tab_hook.url,
-      ) &&
-      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
+    // // Check if current tab text is enabled and available
+    // const has_enabled_current_tab_text =
+    //   current_tab_hook.include_in_prompt &&
+    //   !pinned_websites_hook.pinned_websites.some(
+    //     (website) => website.url == current_tab_hook.url,
+    //   ) &&
+    //   (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
 
-    return has_enabled_pinned_websites || has_enabled_current_tab_text
+    // return has_enabled_pinned_websites || has_enabled_current_tab_text
+    return true
   }, [
     pinned_websites_hook.pinned_websites,
     current_tab_hook.include_in_prompt,
