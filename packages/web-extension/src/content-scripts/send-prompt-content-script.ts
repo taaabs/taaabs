@@ -295,20 +295,10 @@ namespace QuirksMitigation {
         }, 500)
       })
     } else if (params.assistant_name == 'mistral') {
-      await new Promise(async (resolve) => {
-        while (document.querySelector('span[data-radix-focus-guard]')) {
-          await new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(true)
-            }, 100)
-          })
-        }
-        resolve(null)
-      })
       await new Promise((resolve) => {
         setTimeout(() => {
           resolve(true)
-        }, 100)
+        }, 500)
       })
     } else if (params.assistant_name == 'copilot') {
       // Chat sometimes shows captcha

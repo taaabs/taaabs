@@ -1,4 +1,4 @@
-import { Input } from '@web-ui/components/Input'
+import { ChatField } from '@web-ui/components/ChatField'
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
@@ -10,17 +10,16 @@ export namespace PromptField {
     on_change: (value: string) => void
     is_history_enabled: boolean
     prompts_history: string[]
-    is_plain_text_too_long: boolean
-    text_not_found: boolean
     switches_slot: React.ReactNode
     autofocus: boolean
+    websites?: ChatField.Website[]
+    on_website_click?: (url: string) => void
+    on_pin_click?: (url: string) => void
     translations: {
       new_prompt: string
       placeholder: string
       switch: string
       active_input_placeholder_suffix: string
-      plain_text_too_long: React.ReactNode
-      text_not_found: React.ReactNode
     }
   }
 }
@@ -30,7 +29,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
   const [prompts_history_index, set_prompts_history_index] =
     useState<number>(-1)
 
-  const handle_key_down = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handle_key_down = (e: React.KeyboardEvent<any>) => {
     if (!props.is_history_enabled) return
 
     if (is_focused) {
@@ -71,47 +70,32 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         <span>{props.translations.new_prompt}</span>
       </div>
 
-      <Input
+      <ChatField
         value={props.value}
         on_change={handle_change}
-        min_lines={2}
-        max_lines={6}
         disable_enter_new_lines={true}
         autofocus={props.autofocus}
-        on_enter_pressed={props.on_submit}
+        on_submit={props.on_submit}
         placeholder={
           props.translations.placeholder +
           (is_focused && props.is_history_enabled
             ? ` ${props.translations.active_input_placeholder_suffix}`
             : '')
         }
-        on_focus={(e) => {
+        on_focus={() => {
           set_is_focused(true)
-          e.target.select()
         }}
         on_blur={() => {
           set_is_focused(false)
         }}
-        suffix_action={{
-          icon_variant: 'SEND',
-          on_click: props.on_submit,
-        }}
         on_key_down={handle_key_down}
+        websites={props.websites}
+        on_pin_click={props.on_pin_click}
+        on_website_click={props.on_website_click}
       />
 
       {props.switches_slot && (
         <div className={styles.switches}>{props.switches_slot}</div>
-      )}
-
-      {props.is_plain_text_too_long && (
-        <div className={`${styles.alert} ${styles['alert--warn']}`}>
-          {props.translations.plain_text_too_long}
-        </div>
-      )}
-      {props.text_not_found && (
-        <div className={`${styles.alert} ${styles['alert--error']}`}>
-          {props.translations.text_not_found}
-        </div>
       )}
     </div>
   )

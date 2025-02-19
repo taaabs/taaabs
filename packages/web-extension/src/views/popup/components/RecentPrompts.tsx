@@ -1,31 +1,32 @@
 import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
-import { usePopup } from '../App'
+import { use_popup } from '../App'
 import {
   default_prompts,
   default_vision_prompts,
 } from '../data/default-prompts'
 import { SendPrompt_Message } from '@/types/messages'
 import browser from 'webextension-polyfill'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
+// Other imports...
+import { send_prompt, get_aggregated_plain_text } from '../utils/send-prompt'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
   assistant_url: string
-  shortened_plain_text?: string
-}> = ({ prompt_field_value, assistant_url, shortened_plain_text }) => {
+  plain_text?: string
+}> = (props) => {
   const {
-    parsed_html_hook,
-    attach_text_switch_hook,
     text_selection_hook,
     vision_mode_hook,
-    current_url_hook,
+    current_tab_hook,
     selected_assistant_hook,
     selected_assistant_vision_hook,
     window_dimensions_hook,
-  } = usePopup()
+    pinned_websites_hook,
+  } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
 
@@ -33,21 +34,33 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    if (text_selection_hook.selected_text || parsed_html_hook.parsed_html) {
-      prompts_history_hook.update_stored_prompts_history(prompt)
-      const message: SendPrompt_Message = {
-        action: 'send-prompt',
-        is_touch_screen: 'ontouchstart' in window,
-        assistant_name: selected_assistant_hook.selected_assistant_name!,
-        assistant_url,
+    const plain_text = get_aggregated_plain_text({
+      pinned_websites: pinned_websites_hook.pinned_websites,
+      current_tab: {
+        url: current_tab_hook.url,
+        title: current_tab_hook.title,
+        include_in_prompt: current_tab_hook.include_in_prompt,
+      },
+      selected_text: text_selection_hook.selected_text,
+      tab_plain_text: props.plain_text,
+    })
+
+    // Only update history if there is content to process
+    if (!vision_mode_hook.is_vision_mode && plain_text) {
+      await send_prompt({
         prompt,
-        plain_text: text_selection_hook.selected_text || shortened_plain_text,
+        assistant_name: selected_assistant_hook.selected_assistant_name!,
+        assistant_url: props.assistant_url,
+        plain_text,
         open_in_new_tab: is_middle_click,
-        window_height: window_dimensions_hook.dimensions!.height,
-        window_width: window_dimensions_hook.dimensions!.width,
-      }
-      browser.runtime.sendMessage(message)
-      window.close()
+        window_dimensions: {
+          height: window_dimensions_hook.dimensions!.height,
+          width: window_dimensions_hook.dimensions!.width,
+        },
+        on_before_send: () => {
+          prompts_history_hook.update_stored_prompts_history(prompt)
+        },
+      })
     }
   }
 
@@ -55,20 +68,21 @@ export const RecentPrompts: React.FC<{
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    prompts_vision_history_hook.update_stored_prompts_history(prompt)
-    const message: SendPrompt_Message = {
-      action: 'send-prompt',
-      is_touch_screen: 'ontouchstart' in window,
-      assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
-      assistant_url,
+    await send_prompt({
       prompt,
-      open_in_new_tab: is_middle_click,
-      window_height: window_dimensions_hook.dimensions!.height,
-      window_width: window_dimensions_hook.dimensions!.width,
+      assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
+      assistant_url: props.assistant_url,
+      is_vision_mode: true,
       image: vision_mode_hook.image!,
-    }
-    browser.runtime.sendMessage(message)
-    window.close()
+      open_in_new_tab: is_middle_click,
+      window_dimensions: {
+        height: window_dimensions_hook.dimensions!.height,
+        width: window_dimensions_hook.dimensions!.width,
+      },
+      on_before_send: () => {
+        prompts_vision_history_hook.update_stored_prompts_history(prompt)
+      },
+    })
   }
 
   const handle_remove_prompt = async (prompt: string) => {
@@ -82,7 +96,7 @@ export const RecentPrompts: React.FC<{
   // Quick select with keyboard numbers (1-9)
   useEffect(() => {
     const handle_key_down = (e: KeyboardEvent) => {
-      if (prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
+      if (props.prompt_field_value == '' && /^[1-9]$/.test(e.key)) {
         const index = parseInt(e.key) - 1
         const recent_prompts = vision_mode_hook.is_vision_mode
           ? prompts_vision_history_hook.prompts_history
@@ -103,15 +117,37 @@ export const RecentPrompts: React.FC<{
     window.addEventListener('keydown', handle_key_down)
     return () => window.removeEventListener('keydown', handle_key_down)
   }, [
-    prompt_field_value,
+    props.prompt_field_value,
     prompts_history_hook.prompts_history,
     prompts_vision_history_hook.prompts_history,
     vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
-    parsed_html_hook.parsed_html,
-    shortened_plain_text,
+    current_tab_hook.parsed_html,
+    props.plain_text,
     selected_assistant_hook.selected_assistant_name,
     window_dimensions_hook.dimensions,
+  ])
+
+  // Determine if history should be enabled based on enabled pinned websites and attached text
+  const is_history_enabled = useMemo(() => {
+    // Check if there are any enabled pinned websites
+    const has_enabled_pinned_websites =
+      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+
+    // Check if current tab text is enabled and available
+    const has_enabled_current_tab_text =
+      current_tab_hook.include_in_prompt &&
+      !pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
+
+    return has_enabled_pinned_websites || has_enabled_current_tab_text
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
+    current_tab_hook.parsed_html,
   ])
 
   return (
@@ -125,12 +161,12 @@ export const RecentPrompts: React.FC<{
               ...prompts_vision_history_hook.prompts_history,
             ].reverse()}
             filter_phrase={
-              prompt_field_value &&
-              !default_vision_prompts.includes(prompt_field_value) &&
+              props.prompt_field_value &&
+              !default_vision_prompts.includes(props.prompt_field_value) &&
               !prompts_vision_history_hook.prompts_history.includes(
-                prompt_field_value,
+                props.prompt_field_value,
               )
-                ? prompt_field_value
+                ? props.prompt_field_value
                 : ''
             }
             default_prompts={default_vision_prompts}
@@ -150,8 +186,8 @@ export const RecentPrompts: React.FC<{
       )}
 
       {!vision_mode_hook.is_vision_mode &&
-        !current_url_hook.is_new_tab_page &&
-        !current_url_hook.url.startsWith('https://taaabs.com') && (
+        !current_tab_hook.is_new_tab_page &&
+        !current_tab_hook.url.startsWith('https://taaabs.com') && (
           <>
             <Ui_extension_popup_templates_Popup_main_Separator />
 
@@ -160,13 +196,13 @@ export const RecentPrompts: React.FC<{
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                attach_text_switch_hook.is_checked &&
-                (parsed_html_hook.parsed_html ||
+                is_history_enabled &&
+                (current_tab_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
-                  prompt_field_value,
+                  props.prompt_field_value,
                 )
-                  ? prompt_field_value
+                  ? props.prompt_field_value
                   : ''
               }
               default_prompts={default_prompts}
@@ -175,10 +211,7 @@ export const RecentPrompts: React.FC<{
                 handle_quick_prompt_click(prompt, true)
               }}
               on_remove_prompt={handle_remove_prompt}
-              is_disabled={
-                !parsed_html_hook.parsed_html &&
-                !text_selection_hook.selected_text
-              }
+              is_disabled={!is_history_enabled}
               translations={{
                 searching_heading: 'Searching...',
                 heading: 'Recently used prompts',

@@ -41,6 +41,7 @@ import Note from '../../assets/icons/note.svg'
 import Notifications from '../../assets/icons/notifications.svg'
 import NotificationsFilled from '../../assets/icons/notifications-filled.svg'
 import Pin from '../../assets/icons/pin.svg'
+import PinFilled from '../../assets/icons/pin-filled.svg'
 import Play from '../../assets/icons/play.svg'
 import Recent from '../../assets/icons/recent.svg'
 import Resize from '../../assets/icons/resize.svg'
@@ -108,6 +109,7 @@ export namespace Icon {
     | 'NOTIFICATIONS'
     | 'NOTIFICATIONS_FILLED'
     | 'PIN'
+    | 'PIN_FILLED'
     | 'PLAY'
     | 'RECENT'
     | 'RESIZE'
@@ -267,6 +269,9 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'PIN':
       icon = <Pin />
+      break
+    case 'PIN_FILLED':
+      icon = <PinFilled />
       break
     case 'PLAY':
       icon = <Play />

@@ -1,11 +1,9 @@
 import { createRoot } from 'react-dom/client'
 import React, { createContext, useContext } from 'react'
 import { Popup } from './Popup'
-import { use_attach_text_switch } from './hooks/use-attach-text-switch'
 import { use_auth_state } from './hooks/use-auth-state'
-import { use_current_url } from './hooks/use-current-url'
+import { use_current_tab } from './hooks/use-current-tab'
 import { use_custom_assistant_url } from './hooks/use-custom-assistant-url'
-import { use_parsed_html } from './hooks/use-parsed-html'
 import { use_prompts_history } from './hooks/use-prompts-history'
 import { use_prompts_vision_history } from './hooks/use-prompts-vision-history'
 import { use_save_prompt_switch } from './hooks/use-save-prompt-switch'
@@ -15,17 +13,16 @@ import { use_selected_assistant_vision } from './hooks/use-selected-assistant-vi
 import { use_text_selection } from './hooks/use-text-selection'
 import { use_vision_mode } from './hooks/use-vision-mode'
 import { use_window_dimensions } from './hooks/use-window-dimensions'
+import { use_pinned_websites } from './hooks/use-pinned-websites'
 
 import '@web-ui/styles/style.scss'
 import 'use-context-menu/styles.css'
 import 'simplebar-react/dist/simplebar.min.css'
 
 interface PopupContext {
-  attach_text_switch_hook: ReturnType<typeof use_attach_text_switch>
   auth_state_hook: ReturnType<typeof use_auth_state>
-  current_url_hook: ReturnType<typeof use_current_url>
+  current_tab_hook: ReturnType<typeof use_current_tab>
   custom_assistant_url_hook: ReturnType<typeof use_custom_assistant_url>
-  parsed_html_hook: ReturnType<typeof use_parsed_html>
   prompts_history_hook: ReturnType<typeof use_prompts_history>
   prompts_vision_history_hook: ReturnType<typeof use_prompts_vision_history>
   save_prompt_switch_hook: ReturnType<typeof use_save_prompt_switch>
@@ -37,11 +34,12 @@ interface PopupContext {
   text_selection_hook: ReturnType<typeof use_text_selection>
   vision_mode_hook: ReturnType<typeof use_vision_mode>
   window_dimensions_hook: ReturnType<typeof use_window_dimensions>
+  pinned_websites_hook: ReturnType<typeof use_pinned_websites>
 }
 
 const PopupContext = createContext<PopupContext | undefined>(undefined)
 
-export const usePopup = () => {
+export const use_popup = () => {
   const context = useContext(PopupContext)
   if (!context) {
     throw new Error('usePopupContext must be used within a PopupProvider')
@@ -50,11 +48,9 @@ export const usePopup = () => {
 }
 
 export const App: React.FC = () => {
-  const attach_text_switch_hook = use_attach_text_switch()
   const auth_state_hook = use_auth_state()
-  const current_url_hook = use_current_url()
+  const current_tab_hook = use_current_tab()
   const custom_assistant_url_hook = use_custom_assistant_url()
-  const parsed_html_hook = use_parsed_html()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
   const save_prompt_switch_hook = use_save_prompt_switch()
@@ -64,13 +60,12 @@ export const App: React.FC = () => {
   const text_selection_hook = use_text_selection()
   const vision_mode_hook = use_vision_mode()
   const window_dimensions_hook = use_window_dimensions()
+  const pinned_websites_hook = use_pinned_websites()
 
   const context_value: PopupContext = {
-    attach_text_switch_hook,
     auth_state_hook,
-    current_url_hook,
+    current_tab_hook,
     custom_assistant_url_hook,
-    parsed_html_hook,
     prompts_history_hook,
     prompts_vision_history_hook,
     save_prompt_switch_hook,
@@ -80,6 +75,7 @@ export const App: React.FC = () => {
     text_selection_hook,
     vision_mode_hook,
     window_dimensions_hook,
+    pinned_websites_hook,
   }
 
   return (
