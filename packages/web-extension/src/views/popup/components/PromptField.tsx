@@ -45,7 +45,6 @@ export const PromptField: React.FC<{
       }, [])
   }, [vision_mode_hook.is_vision_mode])
 
-
   const websites = useMemo<ChatField.Website[]>(() => {
     const websites: ChatField.Website[] =
       pinned_websites_hook.pinned_websites.map((website) => ({
@@ -61,11 +60,19 @@ export const PromptField: React.FC<{
       (website) => website.url == current_tab_hook.url,
     )
 
-    if (!is_current_tab_pinned && current_tab_hook.parsed_html?.plain_text) {
+    if (
+      !is_current_tab_pinned &&
+      (text_selection_hook.selected_text ||
+        current_tab_hook.parsed_html?.plain_text)
+    ) {
       websites.push({
         url: current_tab_hook.url,
         title: current_tab_hook.title,
-        tokens: Math.ceil(current_tab_hook.parsed_html.plain_text.length / 4),
+        tokens: Math.ceil(
+          (text_selection_hook.selected_text?.length ||
+            current_tab_hook.parsed_html?.plain_text.length ||
+            0) / 4,
+        ),
         is_pinned: false,
         is_enabled: current_tab_hook.include_in_prompt,
       })
@@ -76,6 +83,7 @@ export const PromptField: React.FC<{
     pinned_websites_hook.pinned_websites,
     current_tab_hook.parsed_html,
     current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
   ])
 
   // Determine if history should be enabled based on enabled pinned websites and attached text
@@ -210,7 +218,10 @@ export const PromptField: React.FC<{
           pinned_websites_hook.pin_website({
             url: current_tab_hook.url,
             title: current_tab_hook.title,
-            plain_text: current_tab_hook.parsed_html?.plain_text || '',
+            plain_text:
+              text_selection_hook.selected_text ||
+              current_tab_hook.parsed_html?.plain_text ||
+              '',
             is_enabled: true,
           })
           current_tab_hook.set_include_in_prompt(true)
