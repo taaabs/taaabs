@@ -15,6 +15,7 @@ import { use_vision_mode } from './hooks/use-vision-mode'
 import { use_window_dimensions } from './hooks/use-window-dimensions'
 import { use_pinned_websites } from './hooks/use-pinned-websites'
 import { use_message_history } from './hooks/use-message-history'
+import { use_prompt_field } from './hooks/use-prompt-field'
 
 import '@web-ui/styles/style.scss'
 import 'use-context-menu/styles.css'
@@ -37,6 +38,7 @@ interface PopupContext {
   window_dimensions_hook: ReturnType<typeof use_window_dimensions>
   pinned_websites_hook: ReturnType<typeof use_pinned_websites>
   message_history_hook: ReturnType<typeof use_message_history>
+  prompt_field_hook: ReturnType<typeof use_prompt_field>
 }
 
 const PopupContext = createContext<PopupContext | undefined>(undefined)
@@ -64,6 +66,7 @@ export const App: React.FC = () => {
   const window_dimensions_hook = use_window_dimensions()
   const pinned_websites_hook = use_pinned_websites()
   const message_history_hook = use_message_history()
+  const prompt_field_hook = use_prompt_field()
 
   const context_value: PopupContext = {
     auth_state_hook,
@@ -80,6 +83,7 @@ export const App: React.FC = () => {
     window_dimensions_hook,
     pinned_websites_hook,
     message_history_hook,
+    prompt_field_hook,
   }
 
   return (

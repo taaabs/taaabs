@@ -39,14 +39,12 @@ export const Primary = () => {
           <Header
             settings_on_click={() => {}}
             vision_mode_on_click={() => {}}
-            is_vision_mode_available={true}
             logo_on_click={() => {}}
             translations={{
               trigger_popup_shortcut: 'Trigger popup shortcut',
             }}
           />
         }
-        should_set_height={true}
       >
         <Actions>
           <Button on_click={() => {}}>Test 1</Button>

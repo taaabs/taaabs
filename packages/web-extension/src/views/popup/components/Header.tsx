@@ -21,10 +21,6 @@ export const Header: React.FC = () => {
   ) : (
     <Ui_extension_popup_templates_Popup_Header
       vision_mode_on_click={vision_mode_hook.enter_vision_mode}
-      is_vision_mode_available={
-        !current_tab_hook.is_new_tab_page &&
-        !current_tab_hook.url.startsWith('https://taaabs.com')
-      }
       settings_on_click={() => {
         browser.runtime.openOptionsPage()
         // Firefox requires closing manually

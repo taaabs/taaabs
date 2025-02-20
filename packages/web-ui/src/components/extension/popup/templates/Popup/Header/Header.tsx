@@ -5,7 +5,6 @@ export namespace Header {
   export type Props = {
     settings_on_click: () => void
     vision_mode_on_click: () => void
-    is_vision_mode_available: boolean
     logo_on_click?: () => void
     translations: {
       trigger_popup_shortcut: string
@@ -18,13 +17,11 @@ export const Header: React.FC<Header.Props> = (props) => {
 
   return (
     <div className={styles.container}>
-      {props.is_vision_mode_available && (
-        <div className={styles.vision}>
-          <button onClick={props.vision_mode_on_click}>
-            <Icon variant="SCREENSHOT" />
-          </button>
-        </div>
-      )}
+      <div className={styles.vision}>
+        <button onClick={props.vision_mode_on_click}>
+          <Icon variant="SCREENSHOT" />
+        </button>
+      </div>
       <button
         className={styles.logo}
         style={props.logo_on_click ? undefined : { pointerEvents: 'none' }}

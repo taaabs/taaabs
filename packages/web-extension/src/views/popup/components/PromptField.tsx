@@ -17,8 +17,6 @@ export const PromptField: React.FC<{
   is_history_enabled: boolean
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
-  on_history_back_click?: () => void
-  on_history_forward_click?: () => void
 }> = (props) => {
   const {
     prompts_history_hook,
@@ -32,6 +30,7 @@ export const PromptField: React.FC<{
     save_prompt_switch_hook,
     pinned_websites_hook,
     message_history_hook,
+    prompt_field_hook,
   } = use_popup()
   const websites_store = use_websites_store()
 
@@ -192,6 +191,40 @@ export const PromptField: React.FC<{
     }
   }
 
+  const handle_message_history_back = async () => {
+    const previous_message = message_history_hook.navigate_back()
+    if (previous_message) {
+      prompt_field_hook.update_value(previous_message.prompt)
+      pinned_websites_hook.replace_pinned_websites(
+        previous_message.websites.filter((website) => website.is_pinned),
+      )
+      // Set message that is not pinned as temp current tab
+      const unpinned_website = previous_message.websites.find(
+        (website) => !website.is_pinned,
+      )
+      message_history_hook.set_temp_current_tab(unpinned_website)
+    }
+  }
+
+  const handle_message_history_forward = async () => {
+    const next_message = message_history_hook.navigate_forward()
+    if (next_message) {
+      prompt_field_hook.update_value(next_message.prompt)
+      pinned_websites_hook.replace_pinned_websites(
+        next_message.websites.filter((website) => website.is_pinned),
+      )
+      // Set message that is not pinned as temp current tab
+      const unpinned_website = next_message.websites.find(
+        (website) => !website.is_pinned,
+      )
+      message_history_hook.set_temp_current_tab(unpinned_website)
+    } else {
+      pinned_websites_hook.replace_pinned_websites([])
+      prompt_field_hook.update_value('')
+      message_history_hook.set_temp_current_tab(undefined)
+    }
+  }
+
   return !vision_mode_hook.is_vision_mode ? (
     <Ui_extension_popup_templates_Popup_main_PromptField
       value={props.prompt_field_value}
@@ -236,8 +269,17 @@ export const PromptField: React.FC<{
       websites={props.websites}
       on_pin_click={handle_pin_click}
       on_website_click={handle_website_click}
-      on_history_back_click={props.on_history_back_click}
-      on_history_forward_click={props.on_history_forward_click}
+      on_history_back_click={
+        message_history_hook.can_navigate_back
+          ? handle_message_history_back
+          : undefined
+      }
+      on_history_forward_click={
+        message_history_hook.can_navigate_forward
+          ? handle_message_history_forward
+          : undefined
+      }
+      is_message_history_enabled={true}
       translations={{
         new_prompt: 'New chat',
         placeholder: `Ask ${
@@ -293,32 +335,4 @@ export const PromptField: React.FC<{
       }}
     />
   )
-}
-
-const get_attach_text_checkbox_label = (url: string) => {
-  const chat = 'Attach chat'
-  const label_map = {
-    'https://www.youtube.com/watch': 'Attach transcript',
-    'https://m.youtube.com/watch': 'Attach transcript',
-    'https://x.com': 'Attach tweet',
-    'https://twitter.com': 'Attach tweet',
-    'https://www.reddit.com/r/': 'Attach post',
-    'https://gemini.google.com/app/': chat,
-    'https://chatgpt.com/c/': chat,
-    'https://claude.ai/chat/': chat,
-    'https://chat.mistral.ai/chat/': chat,
-    'https://coral.cohere.com/c/': chat,
-    'https://aistudio.google.com/app/prompts/': chat,
-    'https://mail.google.com/mail/': 'Attach e-mail',
-  }
-
-  let label = 'Attach page' // Default label
-
-  for (const prefix in label_map) {
-    if (url.startsWith(prefix)) {
-      label = (label_map as any)[prefix]
-      break
-    }
-  }
-  return label
 }

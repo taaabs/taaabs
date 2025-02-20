@@ -7,11 +7,8 @@ import { PromptField } from './components/PromptField'
 import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
-import { use_prompt_field } from './hooks/use-prompt-field'
 import { useEffect, useMemo } from 'react'
 import { ChatField } from '@web-ui/components/ChatField'
-// import { StoredPinnedWebsite } from './hooks/use-pinned-websites'
-// import { websites_store } from './hooks/use-pinned-websites'
 
 export const Popup: React.FC = () => {
   const {
@@ -25,43 +22,8 @@ export const Popup: React.FC = () => {
     text_selection_hook,
     pinned_websites_hook,
     message_history_hook,
+    prompt_field_hook,
   } = use_popup()
-
-  const prompt_field_hook = use_prompt_field()
-
-  const handle_message_history_back = async () => {
-    const previous_message = message_history_hook.navigate_back()
-    if (previous_message) {
-      prompt_field_hook.update_value(previous_message.prompt)
-      pinned_websites_hook.replace_pinned_websites(
-        previous_message.websites.filter((website) => website.is_pinned),
-      )
-      // Set message that is not pinned as temp current tab
-      const unpinned_website = previous_message.websites.find(
-        (website) => !website.is_pinned,
-      )
-      message_history_hook.set_temp_current_tab(unpinned_website)
-    }
-  }
-
-  const handle_message_history_forward = async () => {
-    const next_message = message_history_hook.navigate_forward()
-    if (next_message) {
-      prompt_field_hook.update_value(next_message.prompt)
-      pinned_websites_hook.replace_pinned_websites(
-        next_message.websites.filter((website) => website.is_pinned),
-      )
-      // Set message that is not pinned as temp current tab
-      const unpinned_website = next_message.websites.find(
-        (website) => !website.is_pinned,
-      )
-      message_history_hook.set_temp_current_tab(unpinned_website)
-    } else {
-      pinned_websites_hook.replace_pinned_websites([])
-      prompt_field_hook.update_value('')
-      message_history_hook.set_temp_current_tab(undefined)
-    }
-  }
 
   // Update the prompt field mode when vision mode changes
   useEffect(() => {
@@ -196,14 +158,7 @@ export const Popup: React.FC = () => {
   }
 
   return (
-    <Ui_extension_popup_templates_Popup
-      should_set_height={
-        // Cases when not showing recent prompts which adjust its height dynamically
-        !current_tab_hook.is_new_tab_page &&
-        !current_tab_hook.url.startsWith('https://taaabs.com')
-      }
-      header_slot={<Header />}
-    >
+    <Ui_extension_popup_templates_Popup header_slot={<Header />}>
       {!current_tab_hook.url.startsWith('https://taaabs.com') &&
         !vision_mode_hook.is_vision_mode && <Actions />}
 
@@ -213,16 +168,6 @@ export const Popup: React.FC = () => {
         is_history_enabled={is_history_enabled}
         prompt_field_value={prompt_field_hook.value}
         set_prompt_field_value={prompt_field_hook.update_value}
-        on_history_back_click={
-          message_history_hook.can_navigate_back
-            ? handle_message_history_back
-            : undefined
-        }
-        on_history_forward_click={
-          message_history_hook.can_navigate_forward
-            ? handle_message_history_forward
-            : undefined
-        }
       />
 
       <RecentPrompts

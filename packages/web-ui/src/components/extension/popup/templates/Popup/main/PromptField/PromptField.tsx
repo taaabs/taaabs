@@ -19,6 +19,7 @@ export namespace PromptField {
     on_pin_click?: (url: string) => void
     on_history_back_click?: () => void
     on_history_forward_click?: () => void
+    is_message_history_enabled?: boolean
     translations: {
       new_prompt: string
       placeholder: string
@@ -78,10 +79,15 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
           selected_name={props.selected_assistant_name}
           on_change={props.on_assistant_change}
         />
-        <MessageHistory
-          on_history_back_click={props.on_history_back_click}
-          on_history_forward_click={props.on_history_forward_click}
-        />
+
+        <div>
+          {props.is_message_history_enabled && (
+            <MessageHistory
+              on_history_back_click={props.on_history_back_click}
+              on_history_forward_click={props.on_history_forward_click}
+            />
+          )}
+        </div>
       </div>
 
       <ChatField
