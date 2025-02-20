@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { websites_store } from './use-websites-store'
 
 export type Website = {
   url: string
@@ -15,7 +16,7 @@ interface Message {
 }
 
 const MESSAGE_HISTORY_KEY = 'messages'
-const MAX_MESSAGES = 50
+const MAX_MESSAGES = 100
 
 export const use_message_history = () => {
   const [current_index, set_current_index] = useState<number>(-1)
@@ -38,6 +39,43 @@ export const use_message_history = () => {
     }
   }, [])
 
+  const cleanup_unused_websites = async (
+    removed_messages: Message[],
+    remaining_messages: Message[],
+  ) => {
+    try {
+      // Create a set of all website URLs used in removed messages
+      const removed_urls = new Set(
+        removed_messages.flatMap((message) =>
+          message.websites
+            .filter((website) => !website.is_pinned) // Only consider non-pinned websites
+            .map((website) => website.url),
+        ),
+      )
+
+      // Create a set of all website URLs still in use by remaining messages
+      const active_urls = new Set(
+        remaining_messages.flatMap((message) =>
+          message.websites
+            .filter((website) => !website.is_pinned)
+            .map((website) => website.url),
+        ),
+      )
+
+      // Find URLs that are in removed messages but not in any remaining message
+      const urls_to_delete = Array.from(removed_urls).filter(
+        (url) => !active_urls.has(url),
+      )
+
+      // Delete unused websites from IndexedDB
+      for (const url of urls_to_delete) {
+        await websites_store.removeItem(url)
+      }
+    } catch (error) {
+      console.error('Error cleaning up unused websites:', error)
+    }
+  }
+
   const save_message = async (prompt: string, websites: Website[]) => {
     try {
       const new_message: Message = {
@@ -45,6 +83,12 @@ export const use_message_history = () => {
         websites,
         timestamp: Date.now(),
       }
+
+      // Store messages that will be removed due to MAX_MESSAGES limit
+      const messages_to_remove =
+        messages.length >= MAX_MESSAGES
+          ? messages.slice(0, messages.length - MAX_MESSAGES + 1)
+          : []
 
       // Add new snapshot and limit total number
       const updated_messages = [...messages, new_message].slice(-MAX_MESSAGES)
@@ -57,6 +101,11 @@ export const use_message_history = () => {
 
       set_messages(updated_messages)
       set_current_index(-1) // Reset to latest after new submission
+
+      // Clean up websites from removed messages that are no longer used
+      if (messages_to_remove.length > 0) {
+        await cleanup_unused_websites(messages_to_remove, updated_messages)
+      }
     } catch (error) {
       console.error('Error saving message:', error)
     }

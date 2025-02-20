@@ -5,15 +5,18 @@ import {
   default_prompts,
   default_vision_prompts,
 } from '../data/default-prompts'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 import { send_prompt } from '../utils/send-prompt'
+import { use_websites_store } from '../hooks/use-websites-store'
+import { ChatField } from '@web-ui/components/ChatField'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
+  websites: ChatField.Website[]
+  is_history_enabled: boolean
   assistant_url: string
-  plain_text?: string
 }> = (props) => {
   const {
     text_selection_hook,
@@ -22,49 +25,57 @@ export const RecentPrompts: React.FC<{
     selected_assistant_hook,
     selected_assistant_vision_hook,
     window_dimensions_hook,
-    pinned_websites_hook,
     message_history_hook,
   } = use_popup()
   const prompts_history_hook = use_prompts_history()
   const prompts_vision_history_hook = use_prompts_vision_history()
+  const websites_store = use_websites_store()
 
   const handle_quick_prompt_click = async (
     prompt: string,
     is_middle_click?: boolean,
   ) => {
-    // await context_history_hook.save_snapshot(
-    //   props.prompt_field_value,
-    //   pinned_websites_hook.pinned_websites.map((w) => w.url),
-    // )
+    // Save message
+    await message_history_hook.save_message(prompt, props.websites)
 
-    // const plain_text = get_aggregated_plain_text({
-    //   pinned_websites: pinned_websites_hook.pinned_websites,
-    //   current_tab: {
-    //     url: current_tab_hook.url,
-    //     title: current_tab_hook.title,
-    //     include_in_prompt: current_tab_hook.include_in_prompt,
-    //   },
-    //   selected_text: text_selection_hook.selected_text,
-    //   tab_plain_text: props.plain_text,
-    // })
-
-    // Only update history if there is content to process
-    if (!vision_mode_hook.is_vision_mode) {
-      await send_prompt({
-        prompt,
-        assistant_name: selected_assistant_hook.selected_assistant_name!,
-        assistant_url: props.assistant_url,
-        plain_text: '',
-        open_in_new_tab: is_middle_click,
-        window_dimensions: {
-          height: window_dimensions_hook.dimensions!.height,
-          width: window_dimensions_hook.dimensions!.width,
-        },
-        on_before_send: () => {
-          prompts_history_hook.update_stored_prompts_history(prompt)
-        },
-      })
+    let plain_text = ''
+    // Get plain text content from enabled websites
+    const enabled_websites = props.websites.filter(
+      (website) => website.is_enabled,
+    )
+    for (const website of enabled_websites) {
+      if (website.url == current_tab_hook.url) {
+        // For current tab, use selected text or parsed HTML
+        const text =
+          text_selection_hook.selected_text ||
+          current_tab_hook.parsed_html?.plain_text ||
+          ''
+        if (text) {
+          plain_text += `<page title="${website.title}"><![CDATA[${text}]]></page>\n\n`
+        }
+      } else {
+        // For pinned websites, get stored website data
+        const stored = await websites_store.get_website(website.url)
+        if (stored?.plain_text) {
+          plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>\n\n`
+        }
+      }
     }
+
+    await send_prompt({
+      prompt,
+      assistant_name: selected_assistant_hook.selected_assistant_name!,
+      assistant_url: props.assistant_url,
+      plain_text,
+      open_in_new_tab: is_middle_click,
+      window_dimensions: {
+        height: window_dimensions_hook.dimensions!.height,
+        width: window_dimensions_hook.dimensions!.width,
+      },
+      on_before_send: () => {
+        prompts_history_hook.update_stored_prompts_history(prompt)
+      },
+    })
   }
 
   const handle_quick_prompt_vision_click = async (
@@ -126,32 +137,8 @@ export const RecentPrompts: React.FC<{
     vision_mode_hook.is_vision_mode,
     text_selection_hook.selected_text,
     current_tab_hook.parsed_html,
-    props.plain_text,
     selected_assistant_hook.selected_assistant_name,
     window_dimensions_hook.dimensions,
-  ])
-
-  // Determine if history should be enabled based on enabled pinned websites and attached text
-  const is_history_enabled = useMemo(() => {
-    // // Check if there are any enabled pinned websites
-    // const has_enabled_pinned_websites =
-    //   pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
-
-    // // Check if current tab text is enabled and available
-    // const has_enabled_current_tab_text =
-    //   current_tab_hook.include_in_prompt &&
-    //   !pinned_websites_hook.pinned_websites.some(
-    //     (website) => website.url == current_tab_hook.url,
-    //   ) &&
-    //   (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
-
-    // return has_enabled_pinned_websites || has_enabled_current_tab_text
-    return true
-  }, [
-    pinned_websites_hook.pinned_websites,
-    current_tab_hook.include_in_prompt,
-    text_selection_hook.selected_text,
-    current_tab_hook.parsed_html,
   ])
 
   return (
@@ -200,7 +187,7 @@ export const RecentPrompts: React.FC<{
                 ...prompts_history_hook.prompts_history,
               ].reverse()}
               filter_phrase={
-                is_history_enabled &&
+                props.is_history_enabled &&
                 (current_tab_hook.parsed_html ||
                   text_selection_hook.selected_text) &&
                 !prompts_history_hook.prompts_history.includes(
@@ -215,7 +202,7 @@ export const RecentPrompts: React.FC<{
                 handle_quick_prompt_click(prompt, true)
               }}
               on_remove_prompt={handle_remove_prompt}
-              is_disabled={!is_history_enabled}
+              is_disabled={!props.is_history_enabled}
               translations={{
                 searching_heading: 'Searching...',
                 heading: 'Recently used prompts',

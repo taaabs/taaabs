@@ -8,7 +8,8 @@ import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { use_prompt_field } from './hooks/use-prompt-field'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
+import { ChatField } from '@web-ui/components/ChatField'
 // import { StoredPinnedWebsite } from './hooks/use-pinned-websites'
 // import { websites_store } from './hooks/use-pinned-websites'
 
@@ -106,6 +107,84 @@ export const Popup: React.FC = () => {
     }
   }, [vision_mode_hook.is_vision_mode])
 
+  const websites = useMemo<ChatField.Website[]>(() => {
+    return [
+      // Add pinned websites
+      ...pinned_websites_hook.pinned_websites.map((website) => ({
+        url: website.url,
+        title: website.title,
+        length: website.length,
+        is_pinned: true,
+        is_enabled: website.is_enabled,
+      })),
+      // Add temp current tab if present, otherwise add current tab if it has content and isn't already pinned
+      ...(message_history_hook.temp_current_tab
+        ? [
+            {
+              url: message_history_hook.temp_current_tab.url,
+              title: message_history_hook.temp_current_tab.title,
+              length: message_history_hook.temp_current_tab.length,
+              is_pinned: false,
+              is_enabled: message_history_hook.temp_current_tab.is_enabled,
+            },
+          ]
+        : !pinned_websites_hook.pinned_websites.some(
+            (website) => website.url == current_tab_hook.url,
+          ) &&
+          (text_selection_hook.selected_text || current_tab_hook.parsed_html)
+        ? [
+            {
+              url: current_tab_hook.url,
+              title: current_tab_hook.title || '',
+              length:
+                text_selection_hook.selected_text?.length ||
+                current_tab_hook.parsed_html?.plain_text.length ||
+                0,
+              is_pinned: false,
+              is_enabled: current_tab_hook.include_in_prompt,
+            },
+          ]
+        : []),
+    ]
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.parsed_html,
+    current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
+    message_history_hook.temp_current_tab,
+  ])
+
+  const is_history_enabled = useMemo(() => {
+    // Check if there are any enabled pinned websites
+    const has_enabled_pinned_websites =
+      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+
+    // Check if temp current tab is enabled
+    const has_enabled_temp_current_tab =
+      message_history_hook.temp_current_tab?.is_enabled
+
+    // Check if current tab text is enabled and available
+    const has_enabled_current_tab_text =
+      !message_history_hook.temp_current_tab && // Only check current tab if no temp tab
+      current_tab_hook.include_in_prompt &&
+      !pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
+
+    return (
+      has_enabled_pinned_websites ||
+      has_enabled_temp_current_tab ||
+      has_enabled_current_tab_text
+    )
+  }, [
+    pinned_websites_hook.pinned_websites,
+    current_tab_hook.include_in_prompt,
+    text_selection_hook.selected_text,
+    current_tab_hook.parsed_html,
+    message_history_hook.temp_current_tab,
+  ])
+
   if (
     auth_state_hook.is_authenticated === undefined ||
     (auth_state_hook.is_authenticated &&
@@ -130,9 +209,10 @@ export const Popup: React.FC = () => {
 
       <PromptField
         assistant_url={assistant_url}
+        websites={websites}
+        is_history_enabled={is_history_enabled}
         prompt_field_value={prompt_field_hook.value}
         set_prompt_field_value={prompt_field_hook.update_value}
-        plain_text={current_tab_hook.parsed_html?.plain_text}
         on_history_back_click={
           message_history_hook.can_navigate_back
             ? handle_message_history_back
@@ -147,8 +227,9 @@ export const Popup: React.FC = () => {
 
       <RecentPrompts
         prompt_field_value={prompt_field_hook.value}
+        websites={websites}
+        is_history_enabled={is_history_enabled}
         assistant_url={assistant_url}
-        plain_text={current_tab_hook.parsed_html?.plain_text}
       />
 
       <FooterLinks />

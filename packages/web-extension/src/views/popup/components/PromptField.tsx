@@ -13,7 +13,8 @@ import { use_websites_store } from '../hooks/use-websites-store'
 
 export const PromptField: React.FC<{
   assistant_url: string
-  plain_text?: string
+  websites: ChatField.Website[]
+  is_history_enabled: boolean
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void
   on_history_back_click?: () => void
@@ -50,75 +51,6 @@ export const PromptField: React.FC<{
       }, [])
   }, [vision_mode_hook.is_vision_mode])
 
-  const websites = useMemo<ChatField.Website[]>(() => {
-    return [
-      // Add pinned websites
-      ...pinned_websites_hook.pinned_websites.map((website) => ({
-        url: website.url,
-        title: website.title,
-        length: website.length,
-        is_pinned: true,
-        is_enabled: website.is_enabled,
-      })),
-      // Add temp current tab if present, otherwise add current tab if it has content and isn't already pinned
-      ...(message_history_hook.temp_current_tab
-        ? [
-            {
-              url: message_history_hook.temp_current_tab.url,
-              title: message_history_hook.temp_current_tab.title,
-              length: message_history_hook.temp_current_tab.length,
-              is_pinned: false,
-              is_enabled: message_history_hook.temp_current_tab.is_enabled,
-            },
-          ]
-        : !pinned_websites_hook.pinned_websites.some(
-            (website) => website.url == current_tab_hook.url,
-          ) &&
-          (text_selection_hook.selected_text || current_tab_hook.parsed_html)
-        ? [
-            {
-              url: current_tab_hook.url,
-              title: current_tab_hook.title || '',
-              length:
-                text_selection_hook.selected_text?.length ||
-                current_tab_hook.parsed_html?.plain_text.length ||
-                0,
-              is_pinned: false,
-              is_enabled: current_tab_hook.include_in_prompt,
-            },
-          ]
-        : []),
-    ]
-  }, [
-    pinned_websites_hook.pinned_websites,
-    current_tab_hook.parsed_html,
-    current_tab_hook.include_in_prompt,
-    text_selection_hook.selected_text,
-    message_history_hook.temp_current_tab,
-  ])
-
-  // Determine if history should be enabled based on enabled pinned websites and attached text
-  const is_history_enabled = useMemo(() => {
-    // Check if there are any enabled pinned websites
-    const has_enabled_pinned_websites =
-      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
-
-    // Check if current tab text is enabled and available
-    const has_enabled_current_tab_text =
-      current_tab_hook.include_in_prompt &&
-      !pinned_websites_hook.pinned_websites.some(
-        (website) => website.url == current_tab_hook.url,
-      ) &&
-      (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
-
-    return has_enabled_pinned_websites || has_enabled_current_tab_text
-  }, [
-    pinned_websites_hook.pinned_websites,
-    current_tab_hook.include_in_prompt,
-    text_selection_hook.selected_text,
-    current_tab_hook.parsed_html,
-  ])
-
   const handle_submit = async () => {
     if (!props.prompt_field_value) return
 
@@ -126,7 +58,7 @@ export const PromptField: React.FC<{
       // Save message
       await message_history_hook.save_message(
         props.prompt_field_value,
-        websites.map((website) => ({
+        props.websites.map((website) => ({
           url: website.url,
           title: website.title,
           length: website.length,
@@ -135,15 +67,16 @@ export const PromptField: React.FC<{
         })),
       )
 
-      if (is_history_enabled) {
+      if (save_prompt_switch_hook.is_checked && props.is_history_enabled) {
         prompts_history_hook.update_stored_prompts_history(
           props.prompt_field_value,
         )
       }
 
-      // each website should be wrapped in <page title=""></page>
       let plain_text = ''
-      const enabled_websites = websites.filter((website) => website.is_enabled)
+      const enabled_websites = props.websites.filter(
+        (website) => website.is_enabled,
+      )
       for (const website of enabled_websites) {
         // Add plain text from pinned website
         if (website.url == current_tab_hook.url) {
@@ -153,13 +86,13 @@ export const PromptField: React.FC<{
             current_tab_hook.parsed_html?.plain_text ||
             ''
           if (text) {
-            plain_text += `<page title="${website.title}"><![CDATA[${text}]]></page>\n\n`
+            plain_text += `<page title="${website.title}">\n<![CDATA[\n${text}\n]]>\n</page>\n\n`
           }
         } else {
           // For pinned websites, get stored website data
           const stored = await websites_store.get_website(website.url)
           if (stored?.plain_text) {
-            plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>\n\n`
+            plain_text += `<page title="${stored.title}">\n<![CDATA[\n${stored.plain_text}\n]]>\n</page>\n\n`
           }
         }
       }
@@ -243,6 +176,12 @@ export const PromptField: React.FC<{
     if (pinned_website) {
       // If it's a pinned website, toggle its enabled state
       pinned_websites_hook.toggle_website_enabled(url)
+    } else if (message_history_hook.temp_current_tab?.url == url) {
+      // If it's the temp current tab, toggle its enabled state using set_temp_current_tab
+      message_history_hook.set_temp_current_tab({
+        ...message_history_hook.temp_current_tab,
+        is_enabled: !message_history_hook.temp_current_tab.is_enabled,
+      })
     } else {
       // If it's the current tab, toggle the include_in_prompt state
       if (url == current_tab_hook.url) {
@@ -270,9 +209,9 @@ export const PromptField: React.FC<{
         !current_tab_hook.url.startsWith('https://taaabs.com') && (
           <UiSwitch
             is_checked={
-              is_history_enabled && save_prompt_switch_hook.is_checked
+              props.is_history_enabled && save_prompt_switch_hook.is_checked
             }
-            is_disabled={!is_history_enabled}
+            is_disabled={!props.is_history_enabled}
             on_change={() => {
               save_prompt_switch_hook.set_is_checked(
                 !save_prompt_switch_hook.is_checked,
@@ -287,14 +226,14 @@ export const PromptField: React.FC<{
           (prompt) => !default_prompts.includes(prompt),
         ),
       ].reverse()}
-      is_history_enabled={is_history_enabled}
+      is_history_enabled={props.is_history_enabled}
       autofocus={
         !(
           navigator.userAgent.includes('Firefox') &&
           navigator.userAgent.includes('Mobile')
         )
       }
-      websites={websites}
+      websites={props.websites}
       on_pin_click={handle_pin_click}
       on_website_click={handle_website_click}
       on_history_back_click={props.on_history_back_click}

@@ -16,12 +16,16 @@
   height: var(--size);
   border-radius: 50%;
   cursor: pointer;
-  &:disabled {
-    cursor: default;
-    opacity: var(--dimmed-opacity);
-  }
   @include hover {
     background-color: var(--neutral200);
+    &:disabled {
+      background-color: unset;
+    }
+  }
+  &:disabled {
+    // We don't use pointer events none because it causes unexpected text selections on repeated clicks
+    cursor: default;
+    opacity: var(--dimmed-opacity);
   }
   &:first-child {
     > svg {
