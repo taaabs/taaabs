@@ -3,13 +3,14 @@
   "license": "AGPL-3.0-or-later",
   "scripts": {
     "dev": "webpack serve --mode development",
-    "build": "webpack --mode production && node create-firefox-build.js",
+    "build": "webpack --mode production && node create-firefox-build.js && node create-extension-zips.js",
     "start": "webpack serve --mode development --open"
   },
   "dependencies": {
     "@taaabs/repositories": "workspace:*",
     "@taaabs/shared": "workspace:*",
     "@taaabs/web-ui": "workspace:*",
+    "archiver": "^7.0.1",
     "beautiful-react-hooks": "^5.0.2",
     "ky": "^1.5.0",
     "localforage": "^1.10.0",

@@ -32,9 +32,8 @@ delete firefox_manifest.action
 delete firefox_manifest.commands
 
 // Adjust permissions
-// Remove 'background' permission if present
 firefox_manifest.permissions = firefox_manifest.permissions.filter(
-  (perm) => perm != 'background',
+  (p) => p != 'alarms',
 )
 
 // Add '<all_urls>' permission so that the extension can request favicons and cover

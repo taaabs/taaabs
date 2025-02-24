@@ -1,3 +1,5 @@
 /node_modules
 /dist
 /dist-firefox
+/extension-chrome*.zip
+/extension-firefox*.zip
