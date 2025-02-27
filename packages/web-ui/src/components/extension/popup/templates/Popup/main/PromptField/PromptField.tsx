@@ -1,4 +1,4 @@
-import { ChatField } from '@web-ui/components/extension/popup/ChatField'
+import { Textarea } from '@web-ui/components/extension/popup/Textarea'
 import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantSelector'
 import styles from './PromptField.module.scss'
 import { useState } from 'react'
@@ -14,7 +14,7 @@ export namespace PromptField {
     prompts_history: string[]
     switches_slot: React.ReactNode
     autofocus: boolean
-    websites?: ChatField.Website[]
+    websites?: Textarea.Website[]
     on_website_click?: (url: string) => void
     on_pin_click?: (url: string) => void
     on_history_back_click?: () => void
@@ -90,7 +90,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         </div>
       </div>
 
-      <ChatField
+      <Textarea
         value={props.value}
         on_change={handle_change}
         disable_enter_new_lines={true}

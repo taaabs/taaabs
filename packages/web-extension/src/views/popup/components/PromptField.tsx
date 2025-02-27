@@ -7,13 +7,13 @@ import {
   default_vision_prompts,
 } from '../data/default-prompts'
 import { useMemo } from 'react'
-import { ChatField } from '@web-ui/components/extension/popup/ChatField'
+import { Textarea as Ui_extension_popup_Textarea } from '@web-ui/components/extension/popup/Textarea'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
 
 export const PromptField: React.FC<{
   assistant_url: string
-  websites: ChatField.Website[]
+  websites: Ui_extension_popup_Textarea.Website[]
   is_history_enabled: boolean
   prompt_field_value: string
   set_prompt_field_value: (value: string) => void

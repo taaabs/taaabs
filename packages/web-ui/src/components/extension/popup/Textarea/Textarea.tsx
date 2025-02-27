@@ -1,10 +1,10 @@
 import cn from 'classnames'
-import styles from './ChatField.module.scss'
+import styles from './Textarea.module.scss'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { Icon } from '../../../Icon'
 
-export namespace ChatField {
+export namespace Textarea {
   export type Website = {
     url: string
     title: string
@@ -29,7 +29,7 @@ export namespace ChatField {
   }
 }
 
-export const ChatField: React.FC<ChatField.Props> = (props) => {
+export const Textarea: React.FC<Textarea.Props> = (props) => {
   const textarea_ref = useRef<HTMLTextAreaElement>(null)
   const [is_focused, set_is_focused] = useState(false)
 

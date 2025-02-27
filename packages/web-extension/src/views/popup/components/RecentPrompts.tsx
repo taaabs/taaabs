@@ -10,11 +10,11 @@ import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
-import { ChatField } from '@web-ui/components/extension/popup/ChatField'
+import { Textarea } from '@web-ui/components/extension/popup/Textarea'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
-  websites: ChatField.Website[]
+  websites: Textarea.Website[]
   is_history_enabled: boolean
   assistant_url: string
 }> = (props) => {

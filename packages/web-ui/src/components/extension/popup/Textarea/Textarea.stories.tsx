@@ -1,9 +1,9 @@
 import { StorybookMargin, StorybookSpacer } from '@web-ui/helpers/storybook'
-import { ChatField } from './ChatField'
+import { Textarea } from './Textarea'
 import { useState } from 'react'
 
 export default {
-  component: ChatField,
+  component: Textarea,
 }
 
 export const Primary = () => {
@@ -11,7 +11,7 @@ export const Primary = () => {
 
   return (
     <StorybookMargin>
-      <ChatField
+      <Textarea
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
@@ -42,7 +42,7 @@ export const Primary = () => {
         ]}
       />
       <StorybookSpacer />
-      <ChatField
+      <Textarea
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}
@@ -66,7 +66,7 @@ export const Primary = () => {
         ]}
       />
       <StorybookSpacer />
-      <ChatField
+      <Textarea
         value={value}
         placeholder="Ask anything!"
         on_change={set_value}

@@ -8,7 +8,7 @@ import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useMemo } from 'react'
-import { ChatField } from '@web-ui/components/extension/popup/ChatField'
+import { Textarea } from '@web-ui/components/extension/popup/Textarea'
 
 export const Popup: React.FC = () => {
   const {
@@ -69,7 +69,7 @@ export const Popup: React.FC = () => {
     }
   }, [vision_mode_hook.is_vision_mode])
 
-  const websites = useMemo<ChatField.Website[]>(() => {
+  const websites = useMemo<Textarea.Website[]>(() => {
     return [
       // Add pinned websites
       ...pinned_websites_hook.pinned_websites.map((website) => ({
