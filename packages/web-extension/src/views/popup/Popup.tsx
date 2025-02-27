@@ -69,8 +69,12 @@ export const Popup: React.FC = () => {
     }
   }, [vision_mode_hook.is_vision_mode])
 
+  // Check if we're navigating through history (current_index >= 0)
+  const is_navigating_history = message_history_hook.current_index >= 0
+
   const websites = useMemo<Textarea.Website[]>(() => {
-    return [
+    // First collect all websites that would normally be shown
+    const normal_websites = [
       // Add pinned websites
       ...pinned_websites_hook.pinned_websites.map((website) => ({
         url: website.url,
@@ -108,12 +112,39 @@ export const Popup: React.FC = () => {
           ]
         : []),
     ]
+
+    // If we're navigating history and the current URL isn't already in the list,
+    // add it in a disabled state (if it has content)
+    if (
+      is_navigating_history &&
+      !normal_websites.some(
+        (website) => website.url === current_tab_hook.url,
+      ) &&
+      (text_selection_hook.selected_text || current_tab_hook.parsed_html) &&
+      !current_tab_hook.url.startsWith('https://taaabs.com')
+    ) {
+      normal_websites.push({
+        url: current_tab_hook.url,
+        title: current_tab_hook.title || '',
+        length:
+          text_selection_hook.selected_text?.length ||
+          current_tab_hook.parsed_html?.plain_text.length ||
+          0,
+        is_pinned: false,
+        is_enabled: false, // Always disabled when added this way
+      })
+    }
+
+    return normal_websites
   }, [
     pinned_websites_hook.pinned_websites,
     current_tab_hook.parsed_html,
     current_tab_hook.include_in_prompt,
+    current_tab_hook.url,
+    current_tab_hook.title,
     text_selection_hook.selected_text,
     message_history_hook.temp_current_tab,
+    is_navigating_history,
   ])
 
   const is_history_enabled = useMemo(() => {

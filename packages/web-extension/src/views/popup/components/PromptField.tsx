@@ -54,10 +54,15 @@ export const PromptField: React.FC<{
     if (!props.prompt_field_value) return
 
     if (!vision_mode_hook.is_vision_mode) {
-      // Save message
+      // Filter out disabled websites before saving the message
+      const enabled_websites = props.websites.filter(
+        (website) => website.is_enabled,
+      )
+
+      // Save message with only enabled websites
       await message_history_hook.save_message(
         props.prompt_field_value,
-        props.websites.map((website) => ({
+        enabled_websites.map((website) => ({
           url: website.url,
           title: website.title,
           length: website.length,
@@ -73,9 +78,7 @@ export const PromptField: React.FC<{
       }
 
       let plain_text = ''
-      const enabled_websites = props.websites.filter(
-        (website) => website.is_enabled,
-      )
+
       for (const website of enabled_websites) {
         // Add plain text from pinned website
         if (website.url == current_tab_hook.url) {
