@@ -3,9 +3,9 @@ import browser from 'webextension-polyfill'
 import { default_prompts } from '../data/default-prompts'
 
 export const use_prompts_history = () => {
-  const [prompts_history, set_prompts_history] = useState<string[]>(
-    default_prompts.reverse(),
-  )
+  const [prompts_history, set_prompts_history] = useState<string[]>([
+    ...default_prompts,
+  ])
 
   const update_stored_prompts_history = (prompt: string) => {
     const new_prompts_history = prompts_history.filter((p) => p != prompt)
