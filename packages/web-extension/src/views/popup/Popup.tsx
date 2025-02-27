@@ -50,12 +50,14 @@ export const Popup: React.FC = () => {
     }
   }
 
-  if (
-    !text_selection_hook.selected_text &&
-    !current_tab_hook.url.startsWith('https://taaabs.com')
-  ) {
-    current_tab_hook.get_parsed_html()
-  }
+  useUpdateEffect(() => {
+    if (
+      !text_selection_hook.selected_text &&
+      !current_tab_hook.url.startsWith('https://taaabs.com')
+    ) {
+      current_tab_hook.get_parsed_html()
+    }
+  }, [text_selection_hook.selected_text, current_tab_hook.url])
 
   // Change popup width in vision mode. Value is set in index.html
   useUpdateEffect(() => {
@@ -113,8 +115,7 @@ export const Popup: React.FC = () => {
         : []),
     ]
 
-    // If we're navigating history and the current URL isn't already in the list,
-    // add it in a disabled state (if it has content)
+    // If we're navigating history and the current URL isn't already in the list, add it
     if (
       is_navigating_history &&
       !normal_websites.some(
@@ -131,7 +132,7 @@ export const Popup: React.FC = () => {
           current_tab_hook.parsed_html?.plain_text.length ||
           0,
         is_pinned: false,
-        is_enabled: false, // Always disabled when added this way
+        is_enabled: current_tab_hook.include_in_prompt,
       })
     }
 

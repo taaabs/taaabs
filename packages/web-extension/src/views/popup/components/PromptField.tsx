@@ -54,15 +54,10 @@ export const PromptField: React.FC<{
     if (!props.prompt_field_value) return
 
     if (!vision_mode_hook.is_vision_mode) {
-      // Filter out disabled websites before saving the message
-      const enabled_websites = props.websites.filter(
-        (website) => website.is_enabled,
-      )
-
-      // Save message with only enabled websites
+      // Save message
       await message_history_hook.save_message(
         props.prompt_field_value,
-        enabled_websites.map((website) => ({
+        props.websites.map((website) => ({
           url: website.url,
           title: website.title,
           length: website.length,
@@ -78,7 +73,9 @@ export const PromptField: React.FC<{
       }
 
       let plain_text = ''
-
+      const enabled_websites = props.websites.filter(
+        (website) => website.is_enabled,
+      )
       for (const website of enabled_websites) {
         // Add plain text from pinned website
         if (website.url == current_tab_hook.url) {
@@ -195,6 +192,7 @@ export const PromptField: React.FC<{
   }
 
   const handle_message_history_back = async () => {
+    current_tab_hook.set_include_in_prompt(false)
     const previous_message = message_history_hook.navigate_back()
     if (previous_message) {
       prompt_field_hook.update_value(previous_message.prompt)
@@ -210,6 +208,7 @@ export const PromptField: React.FC<{
   }
 
   const handle_message_history_forward = async () => {
+    current_tab_hook.set_include_in_prompt(false)
     const next_message = message_history_hook.navigate_forward()
     if (next_message) {
       prompt_field_hook.update_value(next_message.prompt)
