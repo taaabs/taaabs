@@ -7,7 +7,7 @@ import {
   default_vision_prompts,
 } from '../data/default-prompts'
 import { useMemo } from 'react'
-import { ChatField } from '@web-ui/components/ChatField'
+import { ChatField } from '@web-ui/components/extension/popup/ChatField'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
 

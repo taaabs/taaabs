@@ -8,7 +8,7 @@ import { FooterLinks } from './components/FooterLinks'
 import { RecentPrompts } from './components/RecentPrompts'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { useEffect, useMemo } from 'react'
-import { ChatField } from '@web-ui/components/ChatField'
+import { ChatField } from '@web-ui/components/extension/popup/ChatField'
 
 export const Popup: React.FC = () => {
   const {

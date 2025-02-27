@@ -2,7 +2,7 @@ import cn from 'classnames'
 import styles from './ChatField.module.scss'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useState, useRef, useMemo, useEffect } from 'react'
-import { Icon } from '../Icon'
+import { Icon } from '../../../Icon'
 
 export namespace ChatField {
   export type Website = {
@@ -95,11 +95,11 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
                 }}
                 title={item.title + ` (${Math.ceil(item.length / 4)} tokens)`}
               >
-                <img
-                  src={`https://www.google.com/s2/favicons?domain=${
-                    new URL(item.url).hostname
-                  }&sz=32`}
-                />
+                  <img
+                    src={`https://www.google.com/s2/favicons?domain=${
+                      new URL(item.url).hostname
+                    }&sz=32`}
+                  />
                 <span>{item.title}</span>
               </button>
               <button
@@ -126,8 +126,8 @@ export const ChatField: React.FC<ChatField.Props> = (props) => {
         onChange={(e) => props.on_change(e.target.value)}
         value={props.value}
         placeholder={props.placeholder}
-        minRows={1}
-        maxRows={5}
+        minRows={2}
+        maxRows={7}
         onFocus={handle_focus}
         onBlur={handle_blur}
         onKeyDown={(e) => {

@@ -10,7 +10,7 @@
   box-shadow: var(--box-shadow-inset);
   cursor: text;
   @include hover {
-    border-color: var(--neutral250);
+    border-color: var(--border-color-hover);
   }
   > textarea {
     border: none;
@@ -76,9 +76,6 @@
       @include hover {
         background-color: var(--neutral150);
       }
-      > img {
-        width: 13px;
-      }
       > span {
         display: block;
         max-width: 100%;
@@ -98,6 +95,10 @@
         > img {
           opacity: 0.5;
         }
+      }
+      > img {
+        flex-shrink: 0;
+        width: 13px;
       }
     }
   }

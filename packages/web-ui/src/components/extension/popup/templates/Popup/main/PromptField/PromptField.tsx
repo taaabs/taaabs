@@ -1,4 +1,4 @@
-import { ChatField } from '@web-ui/components/ChatField'
+import { ChatField } from '@web-ui/components/extension/popup/ChatField'
 import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantSelector'
 import styles from './PromptField.module.scss'
 import { useState } from 'react'

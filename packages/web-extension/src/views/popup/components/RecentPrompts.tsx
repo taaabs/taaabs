@@ -10,7 +10,7 @@ import { use_prompts_history } from '../hooks/use-prompts-history'
 import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
-import { ChatField } from '@web-ui/components/ChatField'
+import { ChatField } from '@web-ui/components/extension/popup/ChatField'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
