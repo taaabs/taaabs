@@ -60,11 +60,7 @@ const handle_image_upload = async (params: {
     file_input.files = data_transfer.files
     file_input.dispatchEvent(new Event('change', { bubbles: true }))
     if (params.assistant_name == 'chatgpt') {
-      await new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(true)
-        }, 500)
-      })
+      await new Promise((resolve) => requestAnimationFrame(() => resolve(true)))
       await new Promise(async (resolve) => {
         while (
           document.querySelector('button[data-testid="send-button"][disabled]')
