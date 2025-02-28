@@ -16,7 +16,7 @@ interface Message {
 }
 
 const MESSAGE_HISTORY_KEY = 'messages'
-const MAX_MESSAGES = 100
+const MAX_MESSAGES = 50
 
 export const use_message_history = () => {
   const [current_index, set_current_index] = useState<number>(-1)

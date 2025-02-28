@@ -95,28 +95,43 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                 }}
                 title={item.title + ` (${Math.ceil(item.length / 4)} tokens)`}
               >
-                  <img
-                    src={`https://www.google.com/s2/favicons?domain=${
-                      new URL(item.url).hostname
-                    }&sz=32`}
-                  />
+                <img
+                  src={`https://www.google.com/s2/favicons?domain=${
+                    new URL(item.url).hostname
+                  }&sz=32`}
+                />
                 <span>{item.title}</span>
               </button>
-              <button
-                className={cn(styles.websites__item__pin, {
-                  [styles['websites__item__pin--pinned']]: item.is_pinned,
-                })}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  props.on_pin_click?.(item.url)
-                }}
-              >
-                {item.is_pinned ? (
-                  <Icon variant="PIN_FILLED" />
-                ) : (
-                  <Icon variant="PIN" />
-                )}
-              </button>
+              <div className={styles.websites__item__actions}>
+                <button
+                  className={cn(styles.websites__item__actions__include, {
+                    [styles['websites__item__actions__include--included']]:
+                      item.is_enabled,
+                  })}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    props.on_website_click?.(item.url)
+                  }}
+                >
+                  <Icon variant="ATTACHMENT" />
+                </button>
+                <button
+                  className={cn(styles.websites__item__actions__pin, {
+                    [styles['websites__item__actions__pin--pinned']]:
+                      item.is_pinned,
+                  })}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    props.on_pin_click?.(item.url)
+                  }}
+                >
+                  {item.is_pinned ? (
+                    <Icon variant="PIN_FILLED" />
+                  ) : (
+                    <Icon variant="PIN" />
+                  )}
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -156,7 +171,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                 props.on_submit()
               }}
             >
-              <Icon variant="SEND" />
+              <Icon variant="ARROW_RIGHT" />
             </button>
           </div>
         </div>

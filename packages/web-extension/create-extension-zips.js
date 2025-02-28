@@ -58,12 +58,12 @@ async function main() {
   try {
     await create_zip_from_directory(
       dist_dir,
-      path.join(base_dir, `extension-chrome-${version}.zip`),
+      path.join(base_dir, `extension-${version}-chrome.zip`),
     )
 
     await create_zip_from_directory(
       firefox_dist_dir,
-      path.join(base_dir, `extension-firefox-${version}.zip`),
+      path.join(base_dir, `extension-${version}-firefox.zip`),
     )
   } catch (error) {
     console.error('Error creating ZIP archives:', error)

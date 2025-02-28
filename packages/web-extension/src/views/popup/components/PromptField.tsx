@@ -134,8 +134,8 @@ export const PromptField: React.FC<{
         is_vision_mode: true,
         image: vision_mode_hook.image!,
         window_dimensions: {
-          width: window_dimensions_hook.dimensions!.width,
-          height: window_dimensions_hook.dimensions!.height,
+          width: window_dimensions_hook.dimensions?.width,
+          height: window_dimensions_hook.dimensions?.height,
         },
       })
     }
@@ -326,6 +326,9 @@ export const PromptField: React.FC<{
         message_history_hook.can_navigate_forward
           ? handle_message_history_forward
           : undefined
+      }
+      current_history_entry_timestamp={
+        message_history_hook.current_message?.timestamp
       }
       is_message_history_enabled={true}
       translations={{

@@ -63,6 +63,8 @@ import ThemeLight from '../../assets/icons/theme-light.svg'
 import ThreeDots from '../../assets/icons/three-dots.svg'
 import User from '../../assets/icons/user.svg'
 import UserFilled from '../../assets/icons/user-filled.svg'
+import ArrowRight from '../../assets/icons/arrow-right.svg'
+import Attachment from '../../assets/icons/attachment.svg'
 
 export namespace Icon {
   export type Variant =
@@ -131,6 +133,8 @@ export namespace Icon {
     | 'THREE_DOTS'
     | 'USER'
     | 'USER_FILLED'
+    | 'ARROW_RIGHT'
+    | 'ATTACHMENT'
 
   export type Props = {
     variant: Variant
@@ -335,6 +339,12 @@ export const Icon: React.FC<Icon.Props> = ({ variant }) => {
       break
     case 'USER_FILLED':
       icon = <UserFilled />
+      break
+    case 'ARROW_RIGHT':
+      icon = <ArrowRight />
+      break
+    case 'ATTACHMENT':
+      icon = <Attachment />
       break
   }
 

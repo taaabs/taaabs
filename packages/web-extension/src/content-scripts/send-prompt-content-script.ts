@@ -60,6 +60,11 @@ const handle_image_upload = async (params: {
     file_input.files = data_transfer.files
     file_input.dispatchEvent(new Event('change', { bubbles: true }))
     if (params.assistant_name == 'chatgpt') {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
+      })
       await new Promise(async (resolve) => {
         while (
           document.querySelector('button[data-testid="send-button"][disabled]')
@@ -90,6 +95,20 @@ const handle_image_upload = async (params: {
             '.hover\\:scale-105.transition.p-1.rounded-full.-translate-y-1\\/2.-translate-x-1\\/2.hover\\:text-oncolor-100.hover\\:bg-danger-100.bg-bg-000.text-text-500.border-border-200.border-0\\.5',
           )
         ) {
+          await new Promise((resolve) => {
+            setTimeout(() => {
+              resolve(true)
+            }, 100)
+          })
+        }
+        resolve(null)
+      })
+    } else if (
+      params.assistant_name == 'grok' ||
+      params.assistant_name == 'grok_on_x'
+    ) {
+      await new Promise(async (resolve) => {
+        while (document.querySelector('button[type="submit"][disabled]')) {
           await new Promise((resolve) => {
             setTimeout(() => {
               resolve(true)
@@ -255,6 +274,11 @@ namespace QuirksMitigation {
           })
         }
         resolve(null)
+      })
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
       })
     } else if (params.assistant_name == 'gemini') {
       await new Promise(async (resolve) => {

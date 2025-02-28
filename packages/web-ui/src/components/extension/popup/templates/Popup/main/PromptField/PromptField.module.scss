@@ -12,6 +12,7 @@
   justify-content: space-between;
   align-items: center;
   padding: var(--padding-10px) 0;
+  gap: var(--padding-8px);
   > span {
     font-weight: var(--font-weight-inter-medium);
   }

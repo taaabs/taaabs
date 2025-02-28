@@ -4,11 +4,12 @@
 .container {
   display: flex;
   gap: var(--padding-2px);
+  align-items: center;
 }
 
 .button {
   --size: var(--button-size-34px);
-  all: unset;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -23,16 +24,16 @@
     }
   }
   &:disabled {
-    // We don't use pointer events none because it causes unexpected text selections on repeated clicks
+    // We don't use "pointer events: none" because it causes unexpected text selections on repeated clicks
     cursor: default;
     opacity: var(--dimmed-opacity);
   }
-  &:first-child {
+  &:first-of-type {
     > svg {
       transform: rotate(90deg) translateY(1px);
     }
   }
-  &:last-child {
+  &:last-of-type {
     > svg {
       transform: rotate(-90deg) translateY(1px);
     }
@@ -40,4 +41,12 @@
   > svg {
     width: 14px;
   }
+}
+
+.timestamp {
+  font-size: 12px;
+  color: var(--text-color-dimmed);
+  margin-right: var(--padding-4px);
+  text-align: right;
+  font-family: var(--font-family-inter-tight);
 }

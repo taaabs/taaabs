@@ -19,6 +19,7 @@ export namespace PromptField {
     on_pin_click?: (url: string) => void
     on_history_back_click?: () => void
     on_history_forward_click?: () => void
+    current_history_entry_timestamp?: number
     is_message_history_enabled?: boolean
     translations: {
       new_prompt: string
@@ -83,6 +84,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         <div>
           {props.is_message_history_enabled && (
             <MessageHistory
+              timestamp={props.current_history_entry_timestamp}
               on_history_back_click={props.on_history_back_click}
               on_history_forward_click={props.on_history_forward_click}
             />

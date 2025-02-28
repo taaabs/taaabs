@@ -42,25 +42,55 @@
     &:nth-child(even) {
       background-color: var(--neutral50);
     }
-    &__pin {
-      flex-shrink: 0;
+    &__actions {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      width: var(--height);
-      border-radius: var(--border-radius);
-      > svg {
-        fill: var(--accent-color);
-        width: 9px;
-      }
-      @include hover {
-        background-color: var(--neutral100);
-      }
-      &--pinned {
+      &__include {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--height);
+        border-radius: var(--border-radius);
+        font-size: 16px;
+        > svg {
+          fill: var(--neutral400);
+          width: 9px;
+        }
         @include hover {
-          background-color: var(--red50);
           > svg {
-            fill: var(--red600);
+            fill: var(--neutral500);
+          }
+          background-color: var(--neutral100);
+        }
+        &--included {
+          > svg {
+            fill: var(--black);
+          }
+          @include hover {
+            > svg {
+              fill: var(--black);
+            }
+          }
+        }
+      }
+      &__pin {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--height);
+        border-radius: var(--border-radius);
+        > svg {
+          fill: var(--black);
+          width: 9px;
+        }
+        @include hover {
+          background-color: var(--neutral100);
+        }
+        &--pinned {
+          @include hover {
+            background-color: var(--red50);
+            > svg {
+              fill: var(--red600);
+            }
           }
         }
       }
@@ -72,7 +102,7 @@
       border-radius: var(--border-radius);
       padding: 0 7px 0 4px;
       font-size: var(--font-size-12px);
-      max-width: calc(100% - var(--height));
+      max-width: calc(100% - var(--height) * 2);
       @include hover {
         background-color: var(--neutral150);
       }
@@ -82,6 +112,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-family: var(--font-family-inter-tight);
       }
       &--pinned {
         font-weight: var(--font-weight-inter-medium);
@@ -114,7 +145,7 @@
   &__right {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: var(--padding-8px);
     &__total {
       color: var(--text-color-dimmed);
       font-size: var(--font-size-12px);
@@ -127,8 +158,13 @@
         justify-content: center;
         width: var(--button-size-28px);
         height: var(--button-size-28px);
+        background-color: var(--blue100);
+        border-radius: 50%;
+        @include hover {
+          background-color: var(--blue200);
+        }
         > svg {
-          width: 19px;
+          width: 12px;
           fill: var(--accent-color);
         }
       }
