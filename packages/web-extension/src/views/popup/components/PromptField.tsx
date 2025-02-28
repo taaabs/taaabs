@@ -6,7 +6,7 @@ import {
   default_prompts,
   default_vision_prompts,
 } from '../data/default-prompts'
-import { useMemo } from 'react'
+import { useMemo, useRef, useEffect } from 'react'
 import { Textarea as Ui_extension_popup_Textarea } from '@web-ui/components/extension/popup/Textarea'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
@@ -33,6 +33,20 @@ export const PromptField: React.FC<{
     prompt_field_hook,
   } = use_popup()
   const websites_store = use_websites_store()
+
+  // Store original state to restore when returning to current prompt
+  const original_state_ref = useRef<{
+    pinned_websites: typeof pinned_websites_hook.pinned_websites
+    include_current_tab: boolean
+    prompt_value: string // Added to store the prompt text
+  } | null>(null)
+
+  useEffect(() => {
+    // Reset original state reference when not navigating history
+    if (message_history_hook.current_index == -1) {
+      original_state_ref.current = null
+    }
+  }, [message_history_hook.current_index])
 
   const assistants_for_selector = useMemo(() => {
     return Object.entries(assistants)
@@ -191,22 +205,6 @@ export const PromptField: React.FC<{
     }
   }
 
-  const handle_message_history_back = async () => {
-    current_tab_hook.set_include_in_prompt(false)
-    const previous_message = message_history_hook.navigate_back()
-    if (previous_message) {
-      prompt_field_hook.update_value(previous_message.prompt)
-      pinned_websites_hook.replace_pinned_websites(
-        previous_message.websites.filter((website) => website.is_pinned),
-      )
-      // Set message that is not pinned as temp current tab
-      const unpinned_website = previous_message.websites.find(
-        (website) => !website.is_pinned,
-      )
-      message_history_hook.set_temp_current_tab(unpinned_website)
-    }
-  }
-
   const handle_message_history_forward = async () => {
     current_tab_hook.set_include_in_prompt(false)
     const next_message = message_history_hook.navigate_forward()
@@ -221,9 +219,57 @@ export const PromptField: React.FC<{
       )
       message_history_hook.set_temp_current_tab(unpinned_website)
     } else {
-      pinned_websites_hook.replace_pinned_websites([])
-      prompt_field_hook.update_value('')
-      message_history_hook.set_temp_current_tab(undefined)
+      // We're returning to the current state (most recent)
+      if (original_state_ref.current) {
+        // Restore original pinned websites
+        pinned_websites_hook.replace_pinned_websites(
+          original_state_ref.current.pinned_websites,
+        )
+
+        // Restore current tab inclusion state
+        current_tab_hook.set_include_in_prompt(
+          original_state_ref.current.include_current_tab,
+        )
+
+        // Clear the temp current tab
+        message_history_hook.set_temp_current_tab(undefined)
+
+        // Restore the original prompt text that was typed in
+        prompt_field_hook.update_value(original_state_ref.current.prompt_value)
+
+        // Clear the saved original state as we're back at current
+        original_state_ref.current = null
+      } else {
+        // Fallback to previous behavior if no original state was saved
+        pinned_websites_hook.replace_pinned_websites([])
+        prompt_field_hook.update_value('')
+        message_history_hook.set_temp_current_tab(undefined)
+      }
+    }
+  }
+
+  const handle_message_history_back = async () => {
+    // Save original state if this is the first navigation
+    if (message_history_hook.current_index == -1) {
+      original_state_ref.current = {
+        pinned_websites: [...pinned_websites_hook.pinned_websites],
+        include_current_tab: current_tab_hook.include_in_prompt,
+        prompt_value: props.prompt_field_value,
+      }
+    }
+
+    current_tab_hook.set_include_in_prompt(false)
+    const previous_message = message_history_hook.navigate_back()
+    if (previous_message) {
+      prompt_field_hook.update_value(previous_message.prompt)
+      pinned_websites_hook.replace_pinned_websites(
+        previous_message.websites.filter((website) => website.is_pinned),
+      )
+      // Set message that is not pinned as temp current tab
+      const unpinned_website = previous_message.websites.find(
+        (website) => !website.is_pinned,
+      )
+      message_history_hook.set_temp_current_tab(unpinned_website)
     }
   }
 
@@ -252,7 +298,7 @@ export const PromptField: React.FC<{
                 !save_prompt_switch_hook.is_checked,
               )
             }}
-            label={'Keep my prompt in recents'}
+            label={'Keep this prompt in recents'}
           />
         )
       }
@@ -312,7 +358,7 @@ export const PromptField: React.FC<{
               !vision_mode_hook.is_save_prompt_checked,
             )
           }}
-          label={'Keep my prompt in recents'}
+          label={'Keep this prompt in recents'}
         />
       }
       prompts_history={[
