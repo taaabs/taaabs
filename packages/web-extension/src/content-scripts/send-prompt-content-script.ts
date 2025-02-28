@@ -267,7 +267,10 @@ namespace QuirksMitigation {
         }
         resolve(null)
       })
-    } else if (params.assistant_name == 'grok') {
+    } else if (
+      params.assistant_name == 'grok' ||
+      params.assistant_name == 'grok_on_x'
+    ) {
       await new Promise(async (resolve) => {
         while (!document.querySelector('textarea')) {
           await new Promise((resolve) => {
@@ -350,7 +353,9 @@ namespace QuirksMitigation {
       claude: 'div[contenteditable=true]',
       gemini: 'div[contenteditable=true]', // Needed in mobile viewport
       grok: 'textarea', // Needed in mobile viewport
+      grok_on_x: 'textarea', // Needed in mobile viewport
       deepseek: 'textarea', // Needed in mobile viewport
+      huggingchat: 'textarea',
     }
 
     const selector = chatbot_selectors[assistant_name]

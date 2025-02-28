@@ -69,8 +69,8 @@ export const RecentPrompts: React.FC<{
       plain_text,
       open_in_new_tab: is_middle_click,
       window_dimensions: {
-        height: window_dimensions_hook.dimensions!.height,
-        width: window_dimensions_hook.dimensions!.width,
+        height: window_dimensions_hook.dimensions?.height,
+        width: window_dimensions_hook.dimensions?.width,
       },
       on_before_send: () => {
         prompts_history_hook.update_stored_prompts_history(prompt)
@@ -90,8 +90,8 @@ export const RecentPrompts: React.FC<{
       image: vision_mode_hook.image!,
       open_in_new_tab: is_middle_click,
       window_dimensions: {
-        height: window_dimensions_hook.dimensions!.height,
-        width: window_dimensions_hook.dimensions!.width,
+        height: window_dimensions_hook.dimensions?.height,
+        width: window_dimensions_hook.dimensions?.width,
       },
       on_before_send: () => {
         prompts_vision_history_hook.update_stored_prompts_history(prompt)

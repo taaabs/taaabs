@@ -116,8 +116,8 @@ export const PromptField: React.FC<{
         assistant_url: props.assistant_url,
         plain_text,
         window_dimensions: {
-          height: window_dimensions_hook.dimensions!.height,
-          width: window_dimensions_hook.dimensions!.width,
+          width: window_dimensions_hook.dimensions?.width,
+          height: window_dimensions_hook.dimensions?.height,
         },
       })
     } else {
@@ -134,8 +134,8 @@ export const PromptField: React.FC<{
         is_vision_mode: true,
         image: vision_mode_hook.image!,
         window_dimensions: {
-          height: window_dimensions_hook.dimensions!.height,
           width: window_dimensions_hook.dimensions!.width,
+          height: window_dimensions_hook.dimensions!.height,
         },
       })
     }

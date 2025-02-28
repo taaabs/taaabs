@@ -5,6 +5,8 @@ export type AssistantName =
   | 'claude'
   | 'aistudio'
   | 'grok'
+  | 'grok_on_x'
+  |'huggingchat'
   // | 'meta'
   | 'mistral'
   | 'cohere'
@@ -45,12 +47,22 @@ export const assistants: Record<AssistantName, AssistantDetails> = {
   },
   grok: {
     label: 'Grok',
+    url: 'https://grok.com/',
+    supports_vision: true,
+  },
+  grok_on_x: {
+    label: 'Grok on X',
     url: 'https://x.com/i/grok',
     supports_vision: true,
   },
   deepseek: {
     label: 'DeepSeek',
     url: 'https://chat.deepseek.com/',
+    supports_vision: false,
+  },
+  huggingchat: {
+    label: 'HuggingChat',
+    url: 'https://huggingface.co/chat/',
     supports_vision: false,
   },
   // meta: {

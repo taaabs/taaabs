@@ -11,8 +11,8 @@ type SendPromptParams = {
   image?: string
   open_in_new_tab?: boolean
   window_dimensions: {
-    height: number
-    width: number
+    width?: number
+    height?: number
   }
   on_before_send?: () => void
 }
@@ -38,8 +38,8 @@ export const send_prompt = async ({
     assistant_name,
     assistant_url,
     prompt,
-    window_height: window_dimensions.height,
-    window_width: window_dimensions.width,
+    window_height: window_dimensions?.height,
+    window_width: window_dimensions?.width,
   }
 
   // Add vision mode properties if needed
