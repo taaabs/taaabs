@@ -2,6 +2,10 @@ const fs = require('fs')
 const path = require('path')
 const archiver = require('archiver')
 
+const prefix = '[create-extension-zips]'
+const log = (message) => console.log(`${prefix} ${message}`)
+const errorLog = (message) => console.error(`${prefix} ${message}`)
+
 /**
  * Gets the current version from the manifest.json file
  * @returns {string} The version string
@@ -32,7 +36,6 @@ function create_zip_from_directory(source_dir, output_path) {
     })
 
     output.on('close', () => {
-      console.log(`Created ${output_path} (${archive.pointer()} bytes)`)
       resolve()
     })
 
@@ -47,6 +50,26 @@ function create_zip_from_directory(source_dir, output_path) {
 }
 
 /**
+ * Deletes old ZIP archives except for the current version
+ * @param {string} current_version - The current version to keep
+ * @returns {void}
+ */
+function delete_old_zip_archives(current_version) {
+  const files = fs.readdirSync(__dirname)
+  const zipPattern = /extension-(.+)-(chrome|firefox)\.zip$/
+  let deleted_files = 0
+
+  files.forEach((file) => {
+    const match = file.match(zipPattern)
+    if (match && match[1] != current_version) {
+      const filePath = path.join(__dirname, file)
+      fs.unlinkSync(filePath)
+      deleted_files++
+    }
+  })
+}
+
+/**
  * Main function to create ZIP archives for both Chrome and Firefox extensions
  */
 async function main() {
@@ -56,6 +79,9 @@ async function main() {
   const version = get_version()
 
   try {
+    // Delete old archives before creating new ones
+    delete_old_zip_archives(version)
+
     await create_zip_from_directory(
       dist_dir,
       path.join(base_dir, `extension-${version}-chrome.zip`),
@@ -65,8 +91,10 @@ async function main() {
       firefox_dist_dir,
       path.join(base_dir, `extension-${version}-firefox.zip`),
     )
+
+    log(`Successfully created ZIP archives for version ${version}`)
   } catch (error) {
-    console.error('Error creating ZIP archives:', error)
+    errorLog(`Error creating ZIP archives: ${error}`)
     process.exit(1)
   }
 }
