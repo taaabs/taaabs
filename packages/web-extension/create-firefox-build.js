@@ -89,4 +89,4 @@ fs.writeFileSync(
   JSON.stringify(firefox_manifest, null, 2),
 )
 
-console.log('[create-firefox-build] Firefox manifest created successfully')
+console.log('[create-firefox-build] Firefox build created successfully')
