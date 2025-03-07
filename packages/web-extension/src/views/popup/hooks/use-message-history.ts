@@ -187,6 +187,7 @@ export const use_message_history = () => {
 
   return {
     current_index,
+    set_current_index,
     current_message:
       current_index >= 0 ? messages[messages.length - 1 - current_index] : null,
     can_navigate_back: current_index < messages.length - 1,

@@ -141,6 +141,27 @@ export const PromptField: React.FC<{
     }
   }
 
+  // Helper function to exit history mode and restore original state
+  const exit_history_mode = () => {
+    if (original_state_ref.current) {
+      // Restore original state
+      pinned_websites_hook.replace_pinned_websites(
+        original_state_ref.current.pinned_websites,
+      )
+      current_tab_hook.set_include_in_prompt(
+        original_state_ref.current.include_current_tab,
+      )
+      prompt_field_hook.update_value(original_state_ref.current.prompt_value)
+      message_history_hook.set_temp_current_tab(undefined)
+
+      // Reset history index
+      message_history_hook.set_current_index(-1)
+
+      // Clear original state reference
+      original_state_ref.current = null
+    }
+  }
+
   const handle_pin_click = async (url: string) => {
     const websites_store = use_websites_store()
 
@@ -153,9 +174,57 @@ export const PromptField: React.FC<{
       // If URL is pinned, unpin it
       pinned_websites_hook.unpin_website(url)
     } else {
-      // If URL is not pinned and it's current tab
-      if (url == current_tab_hook.url) {
-        // Store current tab data
+      // Check if we're in history mode
+      const is_history_mode = message_history_hook.current_index >= 0
+      const is_temp_current_tab =
+        message_history_hook.temp_current_tab &&
+        message_history_hook.temp_current_tab.url == url
+
+      // If we're in history mode and the URL is the temp current tab,
+      // use the title and length from the temp current tab
+      if (is_history_mode && is_temp_current_tab) {
+        // Check if the URL exists in original pinned websites
+        const existing_pinned_index =
+          original_state_ref.current?.pinned_websites.findIndex(
+            (p) => p.url == url,
+          )
+
+        if (existing_pinned_index == -1) {
+          // If URL is not pinned, add it to both current and original states
+          pinned_websites_hook.pin_website({
+            url,
+            title: message_history_hook.temp_current_tab!.title,
+            length: message_history_hook.temp_current_tab!.length,
+          })
+
+          original_state_ref.current?.pinned_websites.push({
+            url,
+            title: message_history_hook.temp_current_tab!.title,
+            length: message_history_hook.temp_current_tab!.length,
+            is_enabled: true,
+          })
+        } else {
+          // If URL is already pinned but disabled, enable it in both states
+          const updated_websites = pinned_websites_hook.pinned_websites.map(
+            (website) =>
+              website.url == url ? { ...website, is_enabled: true } : website,
+          )
+          pinned_websites_hook.replace_pinned_websites(updated_websites)
+
+          if (original_state_ref.current) {
+            original_state_ref.current.pinned_websites =
+              original_state_ref.current.pinned_websites.map((website) =>
+                website.url == url
+                  ? { ...website, is_enabled: true }
+                  : website,
+              )
+          }
+        }
+
+        // Exit history mode after pinning/enabling
+        exit_history_mode()
+      } else if (url == current_tab_hook.url) {
+        // If URL is the current tab, store current tab data
         if (current_tab_hook.parsed_html) {
           await websites_store.store_website({
             url: current_tab_hook.url,
@@ -166,17 +235,30 @@ export const PromptField: React.FC<{
               '',
           })
         }
-      }
 
-      // Pin the website
-      pinned_websites_hook.pin_website({
-        url: url,
-        title: current_tab_hook.title || '',
-        length:
-          text_selection_hook.selected_text?.length ||
-          current_tab_hook.parsed_html?.plain_text.length ||
-          0,
-      })
+        // Pin the current website
+        pinned_websites_hook.pin_website({
+          url,
+          title: current_tab_hook.title || '',
+          length:
+            text_selection_hook.selected_text?.length ||
+            current_tab_hook.parsed_html?.plain_text.length ||
+            0,
+        })
+      } else if (is_history_mode) {
+        // This is a website from history (not the temp current tab)
+        const website = props.websites.find((w) => w.url == url)
+        if (website) {
+          pinned_websites_hook.pin_website({
+            url,
+            title: website.title,
+            length: website.length,
+          })
+
+          // Exit history mode after pinning
+          exit_history_mode()
+        }
+      }
     }
   }
 

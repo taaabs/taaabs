@@ -10,7 +10,6 @@ export const use_current_tab = () => {
   const [url, set_url] = useState<string>('')
   const [title, set_title] = useState<string>('')
   const [is_new_tab_page, set_is_new_tab_page] = useState(false)
-  const [is_youtube_video, set_is_youtube_video] = useState(false)
   const [parsed_html, set_parsed_html] =
     useState<HtmlParser.ParsedResult | null>(null)
   const [include_in_prompt, set_include_in_prompt] = useState<boolean>(true)
@@ -54,10 +53,6 @@ export const use_current_tab = () => {
       url.startsWith('chrome://') ||
         url.startsWith('moz-extension://') ||
         url == 'about:newtab',
-    )
-    set_is_youtube_video(
-      cleaned_url.startsWith('https://www.youtube.com/watch') ||
-        cleaned_url.startsWith('https://m.youtube.com/watch'),
     )
   }, [current_tab])
 
@@ -108,7 +103,6 @@ export const use_current_tab = () => {
     url,
     title,
     is_new_tab_page,
-    is_youtube_video,
     parsed_html,
     get_parsed_html,
     include_in_prompt,

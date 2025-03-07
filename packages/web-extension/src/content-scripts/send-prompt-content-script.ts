@@ -23,7 +23,7 @@ browser.runtime.onMessage.addListener(async (message, _, __) => {
 
     // Send prompt
     const prompt = message.plain_text
-      ? `${message.prompt}\n<text>\n${message.plain_text}\n</text>`
+      ? `${message.prompt}\n${message.plain_text}`
       : message.prompt
     send_prompt({ prompt, assistant_name })
   }

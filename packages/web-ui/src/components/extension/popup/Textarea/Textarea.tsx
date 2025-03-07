@@ -112,6 +112,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                     e.stopPropagation()
                     props.on_website_click?.(item.url)
                   }}
+                  title="Attach"
                 >
                   <Icon variant="ATTACHMENT" />
                 </button>
@@ -124,6 +125,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                     e.stopPropagation()
                     props.on_pin_click?.(item.url)
                   }}
+                  title="Pin"
                 >
                   {item.is_pinned ? (
                     <Icon variant="PIN_FILLED" />
