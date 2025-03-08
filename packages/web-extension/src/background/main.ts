@@ -2,7 +2,6 @@ import browser from 'webextension-polyfill'
 import { url_cleaner } from '@shared/utils/url-cleaner/url-cleaner'
 import { get_url_is_saved } from './get-url-is-saved'
 import { update_icon } from './helpers/update-icon'
-import { LocalDataStore } from '@/types/local-data-store'
 import { message_listeners } from './message-listeners'
 import { ensure_tab_is_ready } from './helpers/ensure-tab-is-ready'
 import { get_auth_data } from '@/helpers/get-auth-data'
@@ -23,8 +22,11 @@ message_listeners()
 const handle_tab_change = async (tab_id: number, url: string) => {
   if (url.startsWith('https://taaabs.com')) {
     update_icon(tab_id)
-    // We need to wait for the page to load before we can read from local storage
-    setTimeout(async () => {
+
+    // Wait for the tab to be fully loaded before attempting to communicate
+    await ensure_tab_is_ready(tab_id)
+
+    try {
       const auth_data = (await browser.tabs.sendMessage(tab_id, {
         action: 'get-auth-data',
       })) as any
@@ -34,38 +36,16 @@ const handle_tab_change = async (tab_id: number, url: string) => {
         await browser.storage.local.set({ auth_data: parsed_auth_data })
         console.debug('[handle_tab_change] Auth data saved.', parsed_auth_data)
       } else {
-        const oldData = await browser.storage.local.get('auth_data')
-        if (oldData) {
+        const old_data = await browser.storage.local.get('auth_data')
+        if (old_data) {
           await browser.storage.local.remove('auth_data')
           console.debug('[handle_tab_change] Old auth data has been deleted.')
         }
         console.debug('[handle_tab_change] Auth data not found.')
       }
-
-      const response = (await browser.tabs.sendMessage(tab_id, {
-        action: 'get-theme',
-      })) as any
-
-      if (response.theme) {
-        const data = (await browser.storage.local.get(
-          'theme',
-        )) as LocalDataStore
-        if (data?.theme != response.theme) {
-          await browser.storage.local.set({ theme: response.theme })
-          console.debug('[handle_tab_change] Theme saved.', response.theme)
-        }
-      } else {
-        const data = (await browser.storage.local.get(
-          'theme',
-        )) as LocalDataStore
-        if (data?.theme) {
-          await browser.storage.local.remove('theme')
-          console.debug('[handle_tab_change] Theme removed.')
-        }
-      }
-    }, 1000)
-
-    await ensure_tab_is_ready(tab_id)
+    } catch (error) {
+      console.debug('[handle_tab_change] Error communicating with tab:', error)
+    }
   } else if (
     url.startsWith('chrome://') ||
     url.startsWith('chrome-extension://') ||
@@ -90,9 +70,6 @@ browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
     browser.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
     updated_tab_ids.add(tabId)
     setTimeout(() => {
-      // Other option could be await handle tab change and not use this timeout
-      // but on taaabs.com handle_tab_change runs instantly thus is not preventing
-      // browser.webNavigation.onCommitted listener.
       updated_tab_ids.delete(tabId)
     }, 500)
     handle_tab_change(tabId, changeInfo.url)
@@ -120,8 +97,8 @@ if (!browser.browserAction) {
   const create_keep_alive_alarm = async () => {
     try {
       chrome.alarms.create('keep-alive', {
-        when: Date.now() + 1000 * 60,
-      }) // 1 minute interval
+        when: Date.now() + 1000 * 30,
+      }) // 30 second interval
     } catch (error) {
       console.error('Error creating KeepAlive alarm:', error)
     }

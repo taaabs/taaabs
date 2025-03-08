@@ -4,6 +4,5 @@ export interface LocalDataStore {
     refresh_token: string;
     encryption_key: Array<number>;
   };
-  theme?: 'light' | 'dark';
   open_chatbot_in_new_tab?: boolean;
 }

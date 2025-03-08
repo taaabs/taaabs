@@ -2,18 +2,22 @@ import { FooterLinks as Ui_extension_popup_templates_Popup_main_FooterLinks } fr
 import browser from 'webextension-polyfill'
 
 export const FooterLinks: React.FC = () => {
+  const is_chrome = browser.runtime.getURL('').startsWith('chrome-extension://')
+
   const links = [
     {
       href: 'https://github.com/taaabs/taaabs',
-      text: 'Star on GitHub',
+      text: 'GitHub',
+    },
+    {
+      href: is_chrome
+        ? 'https://chromewebstore.google.com/detail/taaabs-free-zero-knowledg/mfpmbjjgeklnhjmpahigldafhcdoaona'
+        : 'https://addons.mozilla.org/pl/firefox/addon/taaabs/',
+      text: 'Rate extension',
     },
     {
       href: 'https://buymeacoffee.com/robertpiosik',
-      text: 'Buy me a coffee',
-    },
-    {
-      href: 'https://github.com/taaabs/taaabs/discussions',
-      text: 'Send feedback',
+      text: 'Donate',
     },
   ]
 
@@ -22,6 +26,10 @@ export const FooterLinks: React.FC = () => {
       links={links}
       on_link_click={(url) => {
         browser.tabs.create({ url })
+        window.close()
+      }}
+      on_get_help_click={() => {
+        browser.tabs.create({ url: 'https://taaabs.com/' })
         window.close()
       }}
     />

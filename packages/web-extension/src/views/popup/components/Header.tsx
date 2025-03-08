@@ -30,11 +30,7 @@ export const Header: React.FC = () => {
         !current_tab_hook.url.startsWith('https://taaabs.com')
           ? async () => {
               if (current_tab_hook.is_new_tab_page) {
-                const [current_tab] = await browser.tabs.query({
-                  active: true,
-                  currentWindow: true,
-                })
-                await browser.tabs.update(current_tab.id, {
+                await browser.tabs.update({
                   url: 'https://taaabs.com/',
                 })
               } else {

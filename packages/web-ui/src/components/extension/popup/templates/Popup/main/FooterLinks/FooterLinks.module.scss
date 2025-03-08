@@ -3,16 +3,19 @@
 
 .container {
   display: flex;
-  justify-content: center;
-  gap: var(--padding-4px);
-  padding: var(--padding-8px) 0;
+  justify-content: space-between;
+  padding: var(--padding-8px) var(--padding-16px);
   font-size: var(--font-size-13px);
   color: var(--text-color-dimmed);
   background-color: var(--white);
   border-top: var(--border-primary);
-  > a {
+  a {
     @include hover {
       @include text-decoration-underlinie-thin;
     }
+  }
+  > div {
+    display: flex;
+    gap: var(--padding-4px);
   }
 }

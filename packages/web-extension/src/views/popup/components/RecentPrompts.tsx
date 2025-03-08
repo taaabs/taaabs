@@ -11,6 +11,7 @@ import { use_prompts_vision_history } from '../hooks/use-prompts-vision-history'
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
 import { Textarea } from '@web-ui/components/extension/popup/Textarea'
+import { is_youtube_video } from '@/utils/is-youtube-video'
 
 export const RecentPrompts: React.FC<{
   prompt_field_value: string
@@ -51,13 +52,21 @@ export const RecentPrompts: React.FC<{
           current_tab_hook.parsed_html?.plain_text ||
           ''
         if (text) {
-          plain_text += `<page title="${website.title}"><![CDATA[${text}]]></page>\n\n`
+          if (is_youtube_video(website.url)) {
+            plain_text += `<transcript title="${website.title}">${text}</transcript>`
+          } else {
+            plain_text += `<page title="${website.title}"><![CDATA[${text}</page>`
+          }
         }
       } else {
         // For pinned websites, get stored website data
         const stored = await websites_store.get_website(website.url)
         if (stored?.plain_text) {
-          plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>\n\n`
+          if (is_youtube_video(website.url)) {
+            plain_text += `<transcript title="${stored.title}">${stored.plain_text}</transcript>`
+          } else {
+            plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>`
+          }
         }
       }
     }

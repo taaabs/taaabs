@@ -112,10 +112,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        font-family: var(--font-family-inter-tight);
-      }
-      &--pinned {
-        font-weight: var(--font-weight-inter-medium);
       }
       &--disabled {
         color: rgba(0, 0, 0, 0.4);

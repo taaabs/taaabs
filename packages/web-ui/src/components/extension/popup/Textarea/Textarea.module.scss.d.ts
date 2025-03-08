@@ -15,7 +15,6 @@ declare const styles: {
   readonly "websites__item__actions__pin--pinned": string;
   readonly "websites__item__bar": string;
   readonly "websites__item__bar--disabled": string;
-  readonly "websites__item__bar--pinned": string;
 };
 export = styles;
 

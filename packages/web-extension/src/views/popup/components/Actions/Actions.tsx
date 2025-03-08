@@ -8,11 +8,7 @@ import { use_delete_bookmark } from './use-delete-bookmark'
 import { FlexRow as Ui_extension_popup_templates_Popup_main_Actions_FlexRow } from '@web-ui/components/extension/popup/templates/Popup/main/Actions/FlexRow'
 
 export const Actions: React.FC = () => {
-  const {
-    auth_state_hook,
-    current_tab_hook,
-    saved_check_hook,
-  } = use_popup()
+  const { auth_state_hook, current_tab_hook, saved_check_hook } = use_popup()
   const create_bookmark_hook = use_create_bookmark({
     set_is_saved: saved_check_hook.set_is_saved,
   })
@@ -91,11 +87,7 @@ export const Actions: React.FC = () => {
         on_click={async (e) => {
           e.preventDefault()
           if (current_tab_hook.is_new_tab_page) {
-            const [current_tab] = await browser.tabs.query({
-              active: true,
-              currentWindow: true,
-            })
-            browser.tabs.update(current_tab.id, {
+            await browser.tabs.update({
               url: 'https://taaabs.com/library',
             })
           } else {

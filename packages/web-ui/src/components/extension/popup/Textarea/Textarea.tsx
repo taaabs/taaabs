@@ -87,7 +87,6 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
               <button
                 className={cn(styles.websites__item__bar, {
                   [styles['websites__item__bar--disabled']]: !item.is_enabled,
-                  [styles['websites__item__bar--pinned']]: item.is_pinned,
                 })}
                 onClick={(e) => {
                   e.stopPropagation()

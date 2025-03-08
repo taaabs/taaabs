@@ -10,17 +10,12 @@ export const use_vision_mode = () => {
     useState<boolean>(true)
 
   const request_screenshot = async () => {
-    const [tab] = await browser.tabs.query({
-      active: true,
-      currentWindow: true,
+    // Directly capture the current tab without querying first
+    const image_data = await browser.tabs.captureVisibleTab(undefined, {
+      format: 'png',
     })
-    if (tab.id) {
-      const image_data = await browser.tabs.captureVisibleTab(tab.windowId, {
-        format: 'png',
-      })
-      set_original_image(image_data)
-      set_image(image_data)
-    }
+    set_original_image(image_data)
+    set_image(image_data)
   }
 
   const enter_vision_mode = () => {
