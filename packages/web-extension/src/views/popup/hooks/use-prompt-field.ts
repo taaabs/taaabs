@@ -54,6 +54,12 @@ export const use_prompt_field = () => {
     localStorage.setItem(get_storage_key(), JSON.stringify(data_to_store))
   }
 
+  // Clear the stored value from localStorage
+  const clear_stored_value = () => {
+    localStorage.removeItem(get_storage_key())
+    set_value('')
+  }
+
   // Update vision mode state
   const set_mode = (vision_mode: boolean) => {
     if (vision_mode != is_vision_mode) {
@@ -93,6 +99,7 @@ export const use_prompt_field = () => {
   return {
     value,
     update_value,
+    clear_stored_value, // Add the new function to the return object
     set_mode,
   }
 }

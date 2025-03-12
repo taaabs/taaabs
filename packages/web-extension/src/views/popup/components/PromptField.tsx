@@ -101,9 +101,9 @@ export const PromptField: React.FC<{
             ''
           if (text) {
             if (is_youtube_video(website.url)) {
-              plain_text += `<transcript title="${website.title}">${text}</transcript>\n\n`
+              plain_text += `<transcript title="${website.title}"><![CDATA[${text}]]></transcript>\n`
             } else {
-              plain_text += `<page title="${website.title}">\n<![CDATA[\n${text}\n\n</page>\n\n`
+              plain_text += `<text title="${website.title}"><![CDATA[${text}]]></text>\n`
             }
           }
         } else {
@@ -111,9 +111,9 @@ export const PromptField: React.FC<{
           const stored = await websites_store.get_website(website.url)
           if (stored?.plain_text) {
             if (is_youtube_video(website.url)) {
-              plain_text += `<transcript title="${stored.title}">${stored.plain_text}</transcript>\n\n`
+              plain_text += `<transcript title="${stored.title}"><![CDATA[${stored.plain_text}]]></transcript>\n`
             } else {
-              plain_text += `<page title="${stored.title}">\n<![CDATA[\n${stored.plain_text}\n]]>\n</page>\n\n`
+              plain_text += `<text title="${stored.title}"><![CDATA[${stored.plain_text}]]></text>\n`
             }
           }
         }
@@ -129,6 +129,8 @@ export const PromptField: React.FC<{
           height: window_dimensions_hook.dimensions?.height,
         },
       })
+
+      prompt_field_hook.clear_stored_value()
     } else {
       if (vision_mode_hook.is_save_prompt_checked) {
         prompts_vision_history_hook.update_stored_prompts_history(
@@ -147,6 +149,9 @@ export const PromptField: React.FC<{
           height: window_dimensions_hook.dimensions?.height,
         },
       })
+
+      // Clear the stored prompt value after submitting in vision mode as well
+      prompt_field_hook.clear_stored_value()
     }
   }
 
@@ -223,9 +228,7 @@ export const PromptField: React.FC<{
           if (original_state_ref.current) {
             original_state_ref.current.pinned_websites =
               original_state_ref.current.pinned_websites.map((website) =>
-                website.url == url
-                  ? { ...website, is_enabled: true }
-                  : website,
+                website.url == url ? { ...website, is_enabled: true } : website,
               )
           }
         }

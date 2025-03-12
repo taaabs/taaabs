@@ -104,7 +104,7 @@ export namespace HtmlParser {
       if (el.matches(params.user_selector)) {
         const content = el.textContent?.trim() || ''
         messages.push({ role: 'user', content })
-        plain_text += `<user>\n${content}\n</user>\n`
+        plain_text += `<user><![CDATA[${content}]]></user>`
       } else if (el.matches(params.assistant_selector)) {
         const parser = new DOMParser()
         const doc = parser.parseFromString(el.innerHTML, 'text/html')
@@ -114,7 +114,7 @@ export namespace HtmlParser {
           role: 'assistant',
           content,
         })
-        plain_text += `<assistant>\n${content}\n</assistant>${
+        plain_text += `<assistant><![CDATA[${content}]]></assistant>${
           i != message_divs.length - 1 ? '\n' : ''
         }`
       }

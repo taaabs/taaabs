@@ -211,7 +211,10 @@ const send_prompt = async (params: {
             '.hover\\:bg-mushroom-100.text-mushroom-800.ease-in-out.transition.rounded.justify-center.items-center.flex-shrink-0.flex.md\\:my-4.ml-1.my-2.w-8.h-8',
           ) as HTMLElement
         )?.click()
-      } else if (params.assistant_name == 'grok') {
+      } else if (
+        params.assistant_name == 'grok' ||
+        params.assistant_name == 'grok_on_x'
+      ) {
         await new Promise((resolve) => {
           setTimeout(() => {
             resolve(true)

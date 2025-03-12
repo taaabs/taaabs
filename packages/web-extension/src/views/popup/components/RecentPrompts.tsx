@@ -55,7 +55,7 @@ export const RecentPrompts: React.FC<{
           if (is_youtube_video(website.url)) {
             plain_text += `<transcript title="${website.title}">${text}</transcript>`
           } else {
-            plain_text += `<page title="${website.title}"><![CDATA[${text}</page>`
+            plain_text += `<text title="${website.title}"><![CDATA[${text}]]></text>`
           }
         }
       } else {
@@ -65,7 +65,7 @@ export const RecentPrompts: React.FC<{
           if (is_youtube_video(website.url)) {
             plain_text += `<transcript title="${stored.title}">${stored.plain_text}</transcript>`
           } else {
-            plain_text += `<page title="${stored.title}"><![CDATA[${stored.plain_text}]]></page>`
+            plain_text += `<text title="${stored.title}"><![CDATA[${stored.plain_text}]]></text>`
           }
         }
       }

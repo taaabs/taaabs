@@ -97,7 +97,7 @@
     }
     &__bar {
       display: flex;
-      gap: 4px;
+      gap: 5px;
       align-items: center;
       border-radius: var(--border-radius);
       padding: 0 7px 0 4px;
@@ -112,6 +112,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        font-weight: var(--font-weight-inter-medium);
       }
       &--disabled {
         color: rgba(0, 0, 0, 0.4);
