@@ -64,15 +64,15 @@ const handle_tab_change = async (tab_id: number, url: string) => {
 
 const updated_tab_ids = new Set()
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (changeInfo.url) {
+browser.tabs.onUpdated.addListener((tab_id, change_info) => {
+  if (change_info.url) {
     // It throws error when Popup is not injected, we want to ignore that
-    browser.tabs.sendMessage(tabId, { action: 'close-popup' }).catch(() => {})
-    updated_tab_ids.add(tabId)
+    browser.tabs.sendMessage(tab_id, { action: 'close-popup' }).catch(() => {})
+    updated_tab_ids.add(tab_id)
     setTimeout(() => {
-      updated_tab_ids.delete(tabId)
+      updated_tab_ids.delete(tab_id)
     }, 500)
-    handle_tab_change(tabId, changeInfo.url)
+    handle_tab_change(tab_id, change_info.url)
   }
 })
 

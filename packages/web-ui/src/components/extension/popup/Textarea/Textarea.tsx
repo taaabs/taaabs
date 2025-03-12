@@ -157,12 +157,12 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
       <div className={styles.footer}>
         <div className={styles.footer__models}></div>
         <div className={styles.footer__right}>
-          {total_tokens > 0 && (
+          {total_tokens > 1 && (
             <div
               className={styles.footer__right__total}
-              title="Total tokens of the prompt (estimated)"
+              title="Estimated number of tokens in the message"
             >
-              {total_tokens}
+              {total_tokens} tokens
             </div>
           )}
           <div className={styles.footer__right__submit}>

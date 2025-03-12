@@ -19,7 +19,9 @@ export const use_window_dimensions = () => {
         const message: GetWindowDimensions_Message = {
           action: 'get-window-dimensions',
         }
-        browser.tabs.sendMessage(current_tab.id!, message)
+        browser.tabs.sendMessage(current_tab.id!, message).catch(() => {
+          // Silence error on a new tab
+        })
       })
 
     browser.runtime.onMessage.addListener((message: any, _, __): any => {

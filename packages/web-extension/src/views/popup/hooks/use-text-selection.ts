@@ -16,7 +16,9 @@ export const use_text_selection = () => {
         const message: GetSelectedText_Message = {
           action: 'get-selected-text',
         }
-        browser.tabs.sendMessage(current_tab.id!, message)
+        browser.tabs.sendMessage(current_tab.id!, message).catch(() => {
+          // Silence error on a new tab
+        })
       })
 
     browser.runtime.onMessage.addListener((message: any, _, __): any => {

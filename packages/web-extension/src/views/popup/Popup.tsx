@@ -51,10 +51,7 @@ export const Popup: React.FC = () => {
   }
 
   useUpdateEffect(() => {
-    if (
-      !text_selection_hook.selected_text &&
-      !current_tab_hook.url.startsWith('https://taaabs.com')
-    ) {
+    if (!text_selection_hook.selected_text) {
       current_tab_hook.get_parsed_html()
     }
   }, [text_selection_hook.selected_text, current_tab_hook.url])

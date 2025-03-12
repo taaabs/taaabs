@@ -35,6 +35,7 @@ export const use_current_tab = () => {
       })
       .then(([tab]) => {
         if (tab) {
+          console.log(tab)
           set_current_tab(tab)
         }
       })
@@ -56,16 +57,6 @@ export const use_current_tab = () => {
     )
   }, [current_tab])
 
-  // Send message to content script to get parsed HTML
-  useEffect(() => {
-    if (!current_tab?.id) return
-
-    const get_parsed_html_message: GetParsedHtml_Message = {
-      action: 'get-parsed-html',
-    }
-    browser.tabs.sendMessage(current_tab.id, get_parsed_html_message)
-  }, [current_tab?.id])
-
   // Set up parsed HTML message listener
   useEffect(() => {
     const message_listener = (message: any, _: any, __: any): any => {
@@ -86,12 +77,12 @@ export const use_current_tab = () => {
   }, [include_in_prompt])
 
   const get_parsed_html = () => {
-    if (!current_tab?.id) return
-
     const message: GetParsedHtml_Message = {
       action: 'get-parsed-html',
     }
-    browser.tabs.sendMessage(current_tab.id, message)
+    browser.tabs.sendMessage(current_tab!.id!, message).catch(() => {
+      // Silence error on a new tab
+    })
     browser.runtime.onMessage.addListener((message: any, _, __): any => {
       if (is_message(message) && message.action == 'parsed-html') {
         set_parsed_html(message.parsed_html)
