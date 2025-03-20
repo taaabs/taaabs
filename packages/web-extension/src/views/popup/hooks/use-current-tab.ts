@@ -35,7 +35,6 @@ export const use_current_tab = () => {
       })
       .then(([tab]) => {
         if (tab) {
-          console.log(tab)
           set_current_tab(tab)
         }
       })
