@@ -6,9 +6,9 @@
   flex-direction: column;
   background-color: var(--background);
   height: 100svh;
-  min-height: 600px;
+  min-height: 550px;
   @media (hover: hover) and (pointer: fine) {
-    height: 600px;
+    height: 550px;
     min-height: unset;
   }
   &__scroll {
