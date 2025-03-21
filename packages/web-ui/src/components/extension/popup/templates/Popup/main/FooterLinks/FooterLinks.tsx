@@ -1,5 +1,5 @@
-import React from 'react'
-import styles from './FooterLinks.module.scss'
+import { Fragment } from 'react'
+import styles from './FooterLinks.scss'
 
 type Props = {
   links: {
@@ -24,7 +24,7 @@ export const FooterLinks: React.FC<Props> = (props) => {
       </a>
       <div>
         {props.links.map((link, i) => (
-          <React.Fragment key={link.href}>
+          <Fragment key={link.href}>
             <a
               href={link.href}
               onClick={(e) => {
@@ -35,7 +35,7 @@ export const FooterLinks: React.FC<Props> = (props) => {
               {link.text}
             </a>
             {i < props.links.length - 1 && <span>·</span>}
-          </React.Fragment>
+          </Fragment>
         ))}
       </div>
     </div>

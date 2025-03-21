@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './RecentPrompts.module.scss'
+import styles from './RecentPrompts.scss'
 import cn from 'classnames'
 import SimpleBar from 'simplebar-react'
 import { useContextMenu } from 'use-context-menu'

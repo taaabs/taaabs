@@ -1,5 +1,5 @@
 import cn from 'classnames'
-import styles from './Textarea.module.scss'
+import styles from './Textarea.scss'
 import TextareaAutosize from 'react-textarea-autosize'
 import { useState, useRef, useMemo, useEffect } from 'react'
 import { Icon } from '../../../Icon'

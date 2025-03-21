@@ -1,4 +1,4 @@
-import styles from './Popup.module.scss'
+import styles from './Popup.scss'
 
 export namespace Popup {
   export type Props = {

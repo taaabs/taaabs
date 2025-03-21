@@ -1,5 +1,5 @@
 import { Icon } from '@web-ui/components/Icon'
-import styles from './AssistantSelector.module.scss'
+import styles from './AssistantSelector.scss'
 import { useRef } from 'react'
 
 export namespace AssistantSelector {

@@ -1,5 +1,5 @@
 import { Icon } from '@web-ui/components/Icon'
-import styles from './MessageHistory.module.scss'
+import styles from './MessageHistory.scss'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 

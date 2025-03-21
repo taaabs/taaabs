@@ -1,6 +1,6 @@
 import { Textarea } from '@web-ui/components/extension/popup/Textarea'
 import { AssistantSelector } from '@web-ui/components/extension/popup/AssistantSelector'
-import styles from './PromptField.module.scss'
+import styles from './PromptField.scss'
 import { useState } from 'react'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'
 import { MessageHistory } from '@web-ui/components/extension/popup/MessageHistory'

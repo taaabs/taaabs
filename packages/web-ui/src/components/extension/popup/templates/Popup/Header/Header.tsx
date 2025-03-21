@@ -1,5 +1,5 @@
 import { Icon } from '@web-ui/components/Icon'
-import styles from './Header.module.scss'
+import styles from './Header.scss'
 
 export namespace Header {
   export type Props = {

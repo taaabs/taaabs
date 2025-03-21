@@ -1,4 +1,4 @@
-import styles from './Actions.module.scss'
+import styles from './Actions.scss'
 
 export namespace Actions {
   export type Props = {

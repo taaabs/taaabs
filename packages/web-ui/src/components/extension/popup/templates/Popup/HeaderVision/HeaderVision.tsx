@@ -1,5 +1,5 @@
 import { Icon } from '@web-ui/components/Icon'
-import styles from './HeaderVision.module.scss'
+import styles from './HeaderVision.scss'
 import React, { useState, useRef, memo, useEffect } from 'react'
 import cn from 'classnames'
 import useUpdateEffect from 'beautiful-react-hooks/useUpdateEffect'

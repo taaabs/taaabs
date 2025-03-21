@@ -1,5 +1,4 @@
-import React from 'react'
-import styles from './FlexRow.module.scss'
+import styles from './FlexRow.scss'
 
 export namespace FlexRow {
   export type Props = {
