@@ -187,26 +187,30 @@ export const Popup: React.FC = () => {
   }
 
   return (
-    <Ui_extension_popup_templates_Popup header_slot={<Header />}>
-      {!current_tab_hook.url.startsWith('https://taaabs.com') &&
-        !vision_mode_hook.is_vision_mode && <Actions />}
-
-      <PromptField
-        assistant_url={assistant_url}
-        websites={websites}
-        is_history_enabled={is_history_enabled}
-        prompt_field_value={prompt_field_hook.value}
-        set_prompt_field_value={prompt_field_hook.update_value}
-      />
-
-      <RecentPrompts
-        prompt_field_value={prompt_field_hook.value}
-        websites={websites}
-        is_history_enabled={is_history_enabled}
-        assistant_url={assistant_url}
-      />
-
-      <FooterLinks />
-    </Ui_extension_popup_templates_Popup>
+    <Ui_extension_popup_templates_Popup 
+      header_slot={<Header />}
+      actions_slot={
+        !current_tab_hook.url.startsWith('https://taaabs.com') &&
+        !vision_mode_hook.is_vision_mode ? <Actions /> : undefined
+      }
+      prompt_field_slot={
+        <PromptField
+          assistant_url={assistant_url}
+          websites={websites}
+          is_history_enabled={is_history_enabled}
+          prompt_field_value={prompt_field_hook.value}
+          set_prompt_field_value={prompt_field_hook.update_value}
+        />
+      }
+      recent_prompts_slot={
+        <RecentPrompts
+          prompt_field_value={prompt_field_hook.value}
+          websites={websites}
+          is_history_enabled={is_history_enabled}
+          assistant_url={assistant_url}
+        />
+      }
+      footer_links_slot={<FooterLinks />}
+    />
   )
 }
