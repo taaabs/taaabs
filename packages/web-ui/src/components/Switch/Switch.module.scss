@@ -2,14 +2,13 @@
 @use '../../styles/foundation' as *;
 
 .container {
-  --swich-width: 32px;
   display: flex;
   align-items: center;
-  position: relative;
   cursor: pointer;
   user-select: none;
   .label {
     padding-left: var(--padding-8px);
+    color: var(--text-color-variant);
   }
   &--label-left {
     flex-direction: row-reverse;
@@ -43,7 +42,8 @@
   }
 }
 .switch {
-  width: var(--swich-width);
+  position: relative;
+  width: 32px;
   height: 22px;
   border-radius: 999px;
   background-color: var(--neutral300);

@@ -2,7 +2,7 @@
 @use '../../../../../../../styles/foundation' as *;
 
 .container {
-  padding: 0 var(--padding-16px) var(--padding-12px) var(--padding-16px);
+  padding: 0 var(--padding-16px);
   display: flex;
   flex-direction: column;
 }
@@ -18,11 +18,12 @@
   }
 }
 
-.switches {
-  align-self: flex-start;
+.switch {
+  align-self: flex-end;
   display: flex;
   gap: var(--padding-14px);
   margin-top: var(--padding-12px);
+  margin-right: 7.5px;
   font-size: var(--font-size-14px);
 }
 

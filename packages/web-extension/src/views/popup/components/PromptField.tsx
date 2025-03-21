@@ -392,7 +392,8 @@ export const PromptField: React.FC<{
                 !save_prompt_switch_hook.is_checked,
               )
             }}
-            label={'Keep this prompt in recents'}
+            label={'Keep in recent prompts'}
+            label_position="left"
           />
         )
       }
@@ -455,7 +456,8 @@ export const PromptField: React.FC<{
               !vision_mode_hook.is_save_prompt_checked,
             )
           }}
-          label={'Keep this prompt in recents'}
+          label={'Keep in recent prompts'}
+          label_position="left"
         />
       }
       prompts_history={[

@@ -20,7 +20,7 @@ export const FooterLinks: React.FC<Props> = (props) => {
           props.on_get_help_click()
         }}
       >
-        Get help
+        taaabs.com
       </a>
       <div>
         {props.links.map((link, i) => (

@@ -117,7 +117,7 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
       />
 
       {props.switches_slot && (
-        <div className={styles.switches}>{props.switches_slot}</div>
+        <div className={styles.switch}>{props.switches_slot}</div>
       )}
     </div>
   )

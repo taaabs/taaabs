@@ -30,15 +30,10 @@ export const Switch: React.FC<Switch.Props> = (props) => {
       })}
       onClick={handle_change}
     >
-      {props.label && label_position == 'left' && (
-        <span className={styles.label}>{props.label}</span>
-      )}
       <div className={styles.switch}>
         <div className={styles.thumb} />
       </div>
-      {props.label && label_position == 'right' && (
-        <span className={styles.label}>{props.label}</span>
-      )}
+      <span className={styles.label}>{props.label}</span>
     </div>
   )
 }

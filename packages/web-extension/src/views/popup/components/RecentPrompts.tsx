@@ -1,4 +1,3 @@
-import { Separator as Ui_extension_popup_templates_Popup_main_Separator } from '@web-ui/components/extension/popup/templates/Popup/main/Separator'
 import { RecentPrompts as Ui_extension_popup_templates_Popup_main_RecentPrompts } from '@web-ui/components/extension/popup/templates/Popup/main/RecentPrompts'
 import { use_popup } from '../App'
 import {
@@ -153,68 +152,60 @@ export const RecentPrompts: React.FC<{
   return (
     <>
       {vision_mode_hook.is_vision_mode && (
-        <>
-          <Ui_extension_popup_templates_Popup_main_Separator />
-
-          <Ui_extension_popup_templates_Popup_main_RecentPrompts
-            recent_prompts={[
-              ...prompts_vision_history_hook.prompts_history,
-            ].reverse()}
-            filter_phrase={
-              props.prompt_field_value &&
-              !default_vision_prompts.includes(props.prompt_field_value) &&
-              !prompts_vision_history_hook.prompts_history.includes(
-                props.prompt_field_value,
-              )
-                ? props.prompt_field_value
-                : ''
-            }
-            default_prompts={default_vision_prompts}
-            on_recent_prompt_click={handle_quick_prompt_vision_click}
-            on_recent_prompt_middle_click={(prompt) => {
-              handle_quick_prompt_vision_click(prompt, true)
-            }}
-            on_remove_prompt={handle_remove_prompt}
-            is_disabled={false}
-            translations={{
-              searching_heading: 'Searching...',
-              heading: 'Recently used prompts',
-              delete: 'Delete',
-            }}
-          />
-        </>
+        <Ui_extension_popup_templates_Popup_main_RecentPrompts
+          recent_prompts={[
+            ...prompts_vision_history_hook.prompts_history,
+          ].reverse()}
+          filter_phrase={
+            props.prompt_field_value &&
+            !default_vision_prompts.includes(props.prompt_field_value) &&
+            !prompts_vision_history_hook.prompts_history.includes(
+              props.prompt_field_value,
+            )
+              ? props.prompt_field_value
+              : ''
+          }
+          default_prompts={default_vision_prompts}
+          on_recent_prompt_click={handle_quick_prompt_vision_click}
+          on_recent_prompt_middle_click={(prompt) => {
+            handle_quick_prompt_vision_click(prompt, true)
+          }}
+          on_remove_prompt={handle_remove_prompt}
+          is_disabled={false}
+          translations={{
+            searching_heading: 'Searching...',
+            heading: 'Recent prompts',
+            delete: 'Delete',
+          }}
+        />
       )}
 
       {!vision_mode_hook.is_vision_mode && (
-        <>
-          <Ui_extension_popup_templates_Popup_main_Separator />
-
-          <Ui_extension_popup_templates_Popup_main_RecentPrompts
-            recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
-            filter_phrase={
-              props.is_history_enabled &&
-              (current_tab_hook.parsed_html ||
-                text_selection_hook.selected_text) &&
-              !prompts_history_hook.prompts_history.includes(
-                props.prompt_field_value,
-              )
-                ? props.prompt_field_value
-                : ''
-            }
-            default_prompts={default_prompts}
-            on_recent_prompt_click={handle_quick_prompt_click}
-            on_recent_prompt_middle_click={(prompt) => {
-              handle_quick_prompt_click(prompt, true)
-            }}
-            on_remove_prompt={handle_remove_prompt}
-            is_disabled={!props.is_history_enabled}
-            translations={{
-              searching_heading: 'Searching...',
-              heading: 'Recently used prompts',
-              delete: 'Delete',
-            }}
-          />
-        </>
+        <Ui_extension_popup_templates_Popup_main_RecentPrompts
+          recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
+          filter_phrase={
+            props.is_history_enabled &&
+            (current_tab_hook.parsed_html ||
+              text_selection_hook.selected_text) &&
+            !prompts_history_hook.prompts_history.includes(
+              props.prompt_field_value,
+            )
+              ? props.prompt_field_value
+              : ''
+          }
+          default_prompts={default_prompts}
+          on_recent_prompt_click={handle_quick_prompt_click}
+          on_recent_prompt_middle_click={(prompt) => {
+            handle_quick_prompt_click(prompt, true)
+          }}
+          on_remove_prompt={handle_remove_prompt}
+          is_disabled={!props.is_history_enabled}
+          translations={{
+            searching_heading: 'Searching...',
+            heading: 'Recent prompts',
+            delete: 'Delete',
+          }}
+        />
       )}
     </>
   )
