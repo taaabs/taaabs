@@ -380,22 +380,19 @@ export const PromptField: React.FC<{
         selected_assistant_hook.change_selected_assistant(name as AssistantName)
       }
       switches_slot={
-        !current_tab_hook.is_new_tab_page &&
-        !current_tab_hook.url.startsWith('https://taaabs.com') && (
-          <UiSwitch
-            is_checked={
-              props.is_history_enabled && save_prompt_switch_hook.is_checked
-            }
-            is_disabled={!props.is_history_enabled}
-            on_change={() => {
-              save_prompt_switch_hook.set_is_checked(
-                !save_prompt_switch_hook.is_checked,
-              )
-            }}
-            label={'Keep in recent prompts'}
-            label_position="left"
-          />
-        )
+        <UiSwitch
+          is_checked={
+            props.is_history_enabled && save_prompt_switch_hook.is_checked
+          }
+          is_disabled={!props.is_history_enabled}
+          on_change={() => {
+            save_prompt_switch_hook.set_is_checked(
+              !save_prompt_switch_hook.is_checked,
+            )
+          }}
+          label={'Keep in recent prompts'}
+          label_position="left"
+        />
       }
       prompts_history={[
         ...prompts_history_hook.prompts_history.filter(
