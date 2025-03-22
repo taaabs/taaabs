@@ -149,20 +149,31 @@ export const RecentPrompts: React.FC<{
     window_dimensions_hook.dimensions,
   ])
 
+  // Check if we're navigating through message history
+  const is_in_history_navigation = message_history_hook.current_index >= 0
+
+  // Determine if we should show the filter phrase in non-vision mode
+  const should_show_filter_phrase =
+    props.is_history_enabled &&
+    props.prompt_field_value &&
+    // Either we're in history navigation mode (don't need page content)
+    ((is_in_history_navigation &&
+      !prompts_history_hook.prompts_history.includes(
+        props.prompt_field_value,
+      )) ||
+      // Or we have content AND the prompt isn't already in history
+      ((current_tab_hook.parsed_html || text_selection_hook.selected_text) &&
+        !prompts_history_hook.prompts_history.includes(
+          props.prompt_field_value,
+        )))
+
   return (
     <>
       {!vision_mode_hook.is_vision_mode && (
         <Ui_extension_popup_templates_Popup_main_RecentPrompts
           recent_prompts={[...prompts_history_hook.prompts_history].reverse()}
           filter_phrase={
-            props.is_history_enabled &&
-            (current_tab_hook.parsed_html ||
-              text_selection_hook.selected_text) &&
-            !prompts_history_hook.prompts_history.includes(
-              props.prompt_field_value,
-            )
-              ? props.prompt_field_value
-              : ''
+            should_show_filter_phrase ? props.prompt_field_value : ''
           }
           default_prompts={default_prompts}
           on_recent_prompt_click={handle_quick_prompt_click}
