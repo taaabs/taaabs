@@ -8,32 +8,14 @@
     pointer-events: none;
     opacity: var(--dimmed-opacity);
   }
-  &__heading {
-    font-weight: var(--font-weight-inter-medium);
-    padding: 0 var(--padding-16px) var(--padding-2px)
-      var(--padding-16px);
-  }
   &__button {
     display: flex;
     font-weight: var(--font-weight-inter-regular);
     padding: var(--padding-8px) var(--padding-16px) 9px var(--padding-16px);
     position: relative;
-    &::before {
-      content: '';
-      position: absolute;
-      top: -1px;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background-color: var(--neutral100);
-      opacity: 0;
-    }
     @include hover {
       cursor: pointer;
       background-color: var(--neutral100);
-      &::before {
-        opacity: 1;
-      }
     }
     &::after {
       content: '';

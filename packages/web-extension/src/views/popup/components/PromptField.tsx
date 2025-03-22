@@ -101,9 +101,9 @@ export const PromptField: React.FC<{
             ''
           if (text) {
             if (is_youtube_video(website.url)) {
-              plain_text += `<transcript title="${website.title}"><![CDATA[${text}]]></transcript>\n`
+              plain_text += `<transcript title="${website.title}">\n<![CDATA[\n${text}\n]]>\n</transcript>\n`
             } else {
-              plain_text += `<text title="${website.title}"><![CDATA[${text}]]></text>\n`
+              plain_text += `<text title="${website.title}">\n<![CDATA[\n${text}\n]]>\n</text>\n`
             }
           }
         } else {
@@ -111,9 +111,9 @@ export const PromptField: React.FC<{
           const stored = await websites_store.get_website(website.url)
           if (stored?.plain_text) {
             if (is_youtube_video(website.url)) {
-              plain_text += `<transcript title="${stored.title}"><![CDATA[${stored.plain_text}]]></transcript>\n`
+              plain_text += `<transcript title="${stored.title}">\n<![CDATA[\n${stored.plain_text}\n]]>\n</transcript>\n`
             } else {
-              plain_text += `<text title="${stored.title}"><![CDATA[${stored.plain_text}]]></text>\n`
+              plain_text += `<text title="${stored.title}">\n<![CDATA[\n${stored.plain_text}\n]]>\n</text>\n`
             }
           }
         }
@@ -379,7 +379,7 @@ export const PromptField: React.FC<{
       on_assistant_change={(name) =>
         selected_assistant_hook.change_selected_assistant(name as AssistantName)
       }
-      switches_slot={
+      switch_slot={
         <UiSwitch
           is_checked={
             props.is_history_enabled && save_prompt_switch_hook.is_checked
@@ -391,7 +391,6 @@ export const PromptField: React.FC<{
             )
           }}
           label={'Keep in recent prompts'}
-          label_position="left"
         />
       }
       prompts_history={[
@@ -445,7 +444,7 @@ export const PromptField: React.FC<{
           name as AssistantName,
         )
       }
-      switches_slot={
+      switch_slot={
         <UiSwitch
           is_checked={vision_mode_hook.is_save_prompt_checked}
           on_change={() => {
@@ -453,8 +452,7 @@ export const PromptField: React.FC<{
               !vision_mode_hook.is_save_prompt_checked,
             )
           }}
-          label={'Keep in recent prompts'}
-          label_position="left"
+          label={'Keep in recent prompts:'}
         />
       }
       prompts_history={[

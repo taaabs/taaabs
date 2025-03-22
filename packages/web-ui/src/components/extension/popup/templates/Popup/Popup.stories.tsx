@@ -62,7 +62,7 @@ export const Primary = () => {
           prompts_history={['a', 'b']}
           is_history_enabled={false}
           autofocus={true}
-          switches_slot={<>switches</>}
+          switch_slot={<>switches</>}
           translations={{
             new_prompt: 'New chat',
             placeholder: 'Message ChatGPT',

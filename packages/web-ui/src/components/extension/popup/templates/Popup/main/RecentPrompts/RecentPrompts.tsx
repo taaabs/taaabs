@@ -14,8 +14,6 @@ export type Props = {
   is_disabled: boolean
   filter_phrase: string
   translations: {
-    heading: string
-    searching_heading: string
     delete: string
   }
 }
@@ -75,11 +73,6 @@ export const RecentPrompts: React.FC<Props> = (props) => {
           [styles['prompts--disabled']]: props.is_disabled,
         })}
       >
-        <div className={styles.prompts__heading}>
-          {props.filter_phrase && filtered_prompts.length > 0
-            ? props.translations.searching_heading
-            : props.translations.heading}
-        </div>
         {prompts_to_display.map((prompt, i) => {
           const original_prompt =
             typeof prompt == 'string' ? prompt : prompt.original_prompt

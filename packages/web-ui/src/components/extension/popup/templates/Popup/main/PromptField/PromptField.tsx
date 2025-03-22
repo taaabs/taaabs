@@ -12,7 +12,7 @@ export namespace PromptField {
     on_change: (value: string) => void
     is_history_enabled: boolean
     prompts_history: string[]
-    switches_slot: React.ReactNode
+    switch_slot: React.ReactNode
     autofocus: boolean
     websites?: Textarea.Website[]
     on_website_click?: (url: string) => void
@@ -116,8 +116,8 @@ export const PromptField: React.FC<PromptField.Props> = (props) => {
         on_website_click={props.on_website_click}
       />
 
-      {props.switches_slot && (
-        <div className={styles.switch}>{props.switches_slot}</div>
+      {props.switch_slot && (
+        <div className={styles.switch}>{props.switch_slot}</div>
       )}
     </div>
   )
