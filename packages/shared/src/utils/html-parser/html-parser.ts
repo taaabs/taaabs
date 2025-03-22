@@ -554,11 +554,10 @@ export namespace HtmlParser {
         })
         const article = new Readability(doc, { keepClasses: true }).parse()
         if (article) {
-          const content = turndown_service.turndown(article.content)
           const title = article.title || title_element_text
-          const plain_text = `${
-            title ? `# ${title}\n\n` : ''
-          }${strip_markdown_links(content)}`
+          const content = turndown_service.turndown(article.content)
+          let plain_text = strip_markdown_links(content)
+          plain_text = remove_markdown_images(plain_text)
           return {
             reader_data: JSON.stringify({
               type: ReaderData.ContentType.ARTICLE,
@@ -583,4 +582,11 @@ export namespace HtmlParser {
 // Replace "[TEXT](URL)" with "[TEXT]()"
 const strip_markdown_links = (text: string) => {
   return text.replace(/\[([^\]]*)\]\(([^)]*)\)/g, (_, text) => `[${text}]()`)
+}
+
+const remove_markdown_images = (text: string) => {
+  // First remove the image markdown
+  const without_images = text.replace(/!\[([^\]]*)\]\(([^)]*)\)/g, '')
+  // Then remove any resulting empty lines (two or more consecutive newlines)
+  return without_images.replace(/\n{3,}/g, '\n\n')
 }
