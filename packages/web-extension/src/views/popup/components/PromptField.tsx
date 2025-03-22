@@ -91,15 +91,24 @@ export const PromptField: React.FC<{
       const enabled_websites = props.websites.filter(
         (website) => website.is_enabled,
       )
+
+      // Store all enabled websites content before sending prompt
       for (const website of enabled_websites) {
-        // Add plain text from pinned website
         if (website.url == current_tab_hook.url) {
-          // For current tab, use selected text or parsed HTML
           const text =
             text_selection_hook.selected_text ||
             current_tab_hook.parsed_html?.plain_text ||
             ''
+
           if (text) {
+            // Store current tab content in website store regardless of pinned status
+            await websites_store.store_website({
+              url: website.url,
+              title: website.title,
+              plain_text: text,
+            })
+
+            // Add to plain text for the prompt
             if (is_youtube_video(website.url)) {
               plain_text += `<transcript title="${website.title}">\n<![CDATA[\n${text}\n]]>\n</transcript>\n`
             } else {
@@ -107,7 +116,7 @@ export const PromptField: React.FC<{
             }
           }
         } else {
-          // For pinned websites, get stored website data
+          // For other websites, get stored website data
           const stored = await websites_store.get_website(website.url)
           if (stored?.plain_text) {
             if (is_youtube_video(website.url)) {
