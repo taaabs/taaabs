@@ -58,6 +58,7 @@ export const RecentPrompts: React.FC<{
             url: website.url,
             title: website.title,
             plain_text: text,
+            favicon: website.favicon,
           })
 
           if (is_youtube_video(website.url)) {

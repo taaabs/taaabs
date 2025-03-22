@@ -7,6 +7,7 @@ export type Website = {
   length: number
   is_pinned: boolean
   is_enabled: boolean
+  favicon?: string
 }
 
 interface Message {

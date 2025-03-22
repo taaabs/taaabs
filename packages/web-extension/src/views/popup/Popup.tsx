@@ -81,6 +81,7 @@ export const Popup: React.FC = () => {
         length: website.length,
         is_pinned: true,
         is_enabled: website.is_enabled,
+        favicon: website.favicon || undefined,
       })),
       // Add temp current tab if present, otherwise add current tab if it has content and isn't already pinned
       ...(message_history_hook.temp_current_tab
@@ -91,6 +92,8 @@ export const Popup: React.FC = () => {
               length: message_history_hook.temp_current_tab.length,
               is_pinned: false,
               is_enabled: message_history_hook.temp_current_tab.is_enabled,
+              favicon:
+                message_history_hook.temp_current_tab.favicon || undefined,
             },
           ]
         : !pinned_websites_hook.pinned_websites.some(
@@ -107,6 +110,7 @@ export const Popup: React.FC = () => {
                 0,
               is_pinned: false,
               is_enabled: current_tab_hook.include_in_prompt,
+              favicon: current_tab_hook.favicon || undefined,
             },
           ]
         : []),
@@ -130,6 +134,7 @@ export const Popup: React.FC = () => {
           0,
         is_pinned: false,
         is_enabled: current_tab_hook.include_in_prompt,
+        favicon: current_tab_hook.favicon || undefined,
       })
     }
 
@@ -140,6 +145,7 @@ export const Popup: React.FC = () => {
     current_tab_hook.include_in_prompt,
     current_tab_hook.url,
     current_tab_hook.title,
+    current_tab_hook.favicon,
     text_selection_hook.selected_text,
     message_history_hook.temp_current_tab,
     is_navigating_history,
@@ -187,11 +193,13 @@ export const Popup: React.FC = () => {
   }
 
   return (
-    <Ui_extension_popup_templates_Popup 
+    <Ui_extension_popup_templates_Popup
       header_slot={<Header />}
       actions_slot={
         !current_tab_hook.url.startsWith('https://taaabs.com') &&
-        !vision_mode_hook.is_vision_mode ? <Actions /> : undefined
+        !vision_mode_hook.is_vision_mode ? (
+          <Actions />
+        ) : undefined
       }
       prompt_field_slot={
         <PromptField

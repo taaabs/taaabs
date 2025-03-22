@@ -11,6 +11,7 @@ export namespace Textarea {
     length: number
     is_pinned: boolean
     is_enabled: boolean
+    favicon?: string
   }
   export type Props = {
     value: string
@@ -94,11 +95,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                 }}
                 title={item.title + ` (${Math.ceil(item.length / 4)} tokens)`}
               >
-                <img
-                  src={`https://www.google.com/s2/favicons?domain=${
-                    new URL(item.url).hostname
-                  }&sz=32`}
-                />
+                {item.favicon && <img src={item.favicon} alt="Favicon" />}
                 <span>{item.title}</span>
               </button>
               <div className={styles.websites__item__actions}>

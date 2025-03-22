@@ -4,12 +4,14 @@ export type StoredWebsite = {
   url: string
   title: string
   plain_text: string
+  favicon?: string
 }
 
 export type Website = {
   url: string
   title: string
   plain_text: string
+  favicon?: string
 }
 
 // Initialize localforage instance for website data
@@ -26,6 +28,7 @@ export const use_websites_store = () => {
         url: website.url,
         title: website.title,
         plain_text: website.plain_text,
+        favicon: website.favicon,
       }
       await websites_store.setItem(website.url, stored_website)
     } catch (error) {
@@ -41,6 +44,7 @@ export const use_websites_store = () => {
           url: stored.url,
           title: stored.title,
           plain_text: stored.plain_text,
+          favicon: stored.favicon,
         }
       }
       return null

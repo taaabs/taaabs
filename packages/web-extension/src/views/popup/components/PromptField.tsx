@@ -78,6 +78,7 @@ export const PromptField: React.FC<{
           length: website.length,
           is_pinned: website.is_pinned,
           is_enabled: website.is_enabled,
+          favicon: website.favicon,
         })),
       )
 
@@ -106,6 +107,7 @@ export const PromptField: React.FC<{
               url: website.url,
               title: website.title,
               plain_text: text,
+              favicon: website.favicon,
             })
 
             // Add to plain text for the prompt
@@ -218,14 +220,18 @@ export const PromptField: React.FC<{
             url,
             title: message_history_hook.temp_current_tab!.title,
             length: message_history_hook.temp_current_tab!.length,
+            favicon: message_history_hook.temp_current_tab!.favicon, // Include favicon
           })
 
-          original_state_ref.current?.pinned_websites.push({
-            url,
-            title: message_history_hook.temp_current_tab!.title,
-            length: message_history_hook.temp_current_tab!.length,
-            is_enabled: true,
-          })
+          if (original_state_ref.current) {
+            original_state_ref.current.pinned_websites.push({
+              url,
+              title: message_history_hook.temp_current_tab!.title,
+              length: message_history_hook.temp_current_tab!.length,
+              is_enabled: true,
+              favicon: message_history_hook.temp_current_tab!.favicon, // Include favicon
+            })
+          }
         } else {
           // If URL is already pinned but disabled, enable it in both states
           const updated_websites = pinned_websites_hook.pinned_websites.map(
@@ -254,6 +260,7 @@ export const PromptField: React.FC<{
               text_selection_hook.selected_text ||
               current_tab_hook.parsed_html.plain_text ||
               '',
+            favicon: current_tab_hook.favicon || undefined,
           })
         }
 
@@ -265,6 +272,7 @@ export const PromptField: React.FC<{
             text_selection_hook.selected_text?.length ||
             current_tab_hook.parsed_html?.plain_text.length ||
             0,
+          favicon: current_tab_hook.favicon || undefined,
         })
       } else if (is_history_mode) {
         // This is a website from history (not the temp current tab)
@@ -274,6 +282,7 @@ export const PromptField: React.FC<{
             url,
             title: website.title,
             length: website.length,
+            favicon: website.favicon, // Include favicon
           })
 
           // Exit history mode after pinning

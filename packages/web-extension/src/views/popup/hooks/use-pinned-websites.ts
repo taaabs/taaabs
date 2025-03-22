@@ -7,6 +7,7 @@ export type PinnedWebsite = {
   title: string
   length: number
   is_enabled: boolean
+  favicon?: string
 }
 
 interface StoredPinnedUrls {
@@ -35,6 +36,7 @@ export const use_pinned_websites = () => {
     url: string
     title: string
     length: number
+    favicon?: string
   }) => {
     try {
       if (!pinned_websites.some((website) => website.url == params.url)) {
@@ -43,6 +45,7 @@ export const use_pinned_websites = () => {
           title: params.title,
           length: params.length,
           is_enabled: true, // New websites are enabled by default
+          favicon: params.favicon,
         }
         const updated_websites = [...pinned_websites, new_website]
 
