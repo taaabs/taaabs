@@ -44,34 +44,6 @@
     }
     &__actions {
       display: flex;
-      &__include {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: var(--height);
-        border-radius: var(--border-radius);
-        font-size: 16px;
-        > svg {
-          fill: var(--neutral400);
-          width: 9px;
-        }
-        @include hover {
-          > svg {
-            fill: var(--neutral500);
-          }
-          background-color: var(--neutral100);
-        }
-        &--included {
-          > svg {
-            fill: var(--black);
-          }
-          @include hover {
-            > svg {
-              fill: var(--black);
-            }
-          }
-        }
-      }
       &__pin {
         display: flex;
         align-items: center;
@@ -113,16 +85,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         font-weight: var(--font-weight-inter-medium);
-      }
-      &--disabled {
-        color: rgba(0, 0, 0, 0.4);
-        @include hover {
-          color: rgba(0, 0, 0, 0.5);
-          background-color: var(--neutral150);
-        }
-        > img {
-          opacity: 0.5;
-        }
       }
       > img {
         flex-shrink: 0;

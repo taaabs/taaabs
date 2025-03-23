@@ -39,12 +39,8 @@ export const RecentPrompts: React.FC<{
     await message_history_hook.save_message(prompt, props.websites)
 
     let plain_text = ''
-    // Get plain text content from enabled websites
-    const enabled_websites = props.websites.filter(
-      (website) => website.is_enabled,
-    )
 
-    for (const website of enabled_websites) {
+    for (const website of props.websites) {
       if (website.url == current_tab_hook.url) {
         // For current tab, use selected text or parsed HTML
         const text =

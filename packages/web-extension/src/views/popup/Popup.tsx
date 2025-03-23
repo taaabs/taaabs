@@ -72,34 +72,40 @@ export const Popup: React.FC = () => {
   const is_navigating_history = message_history_hook.current_index >= 0
 
   const websites = useMemo<Textarea.Website[]>(() => {
-    // First collect all websites that would normally be shown
-    const normal_websites = [
-      // Add pinned websites
+    // If navigating through history, show websites from that history item
+    if (is_navigating_history && message_history_hook.current_message) {
+      // Create a set of pinned website URLs for efficient lookup
+      const pinned_website_urls = new Set(
+        pinned_websites_hook.pinned_websites.map((website) => website.url),
+      )
+
+      return message_history_hook.current_message.websites.map((website) => ({
+        url: website.url,
+        title: website.title,
+        length: website.length,
+        // Check if this history website is currently pinned
+        is_pinned: pinned_website_urls.has(website.url),
+        favicon: website.favicon || undefined,
+      }))
+    }
+
+    // Not navigating history, show current websites
+    const all_websites = [
+      // Include pinned websites with their true pinned status
       ...pinned_websites_hook.pinned_websites.map((website) => ({
         url: website.url,
         title: website.title,
         length: website.length,
-        is_pinned: true,
-        is_enabled: website.is_enabled,
+        is_pinned: true, // Always true for pinned websites
+        is_enabled: true, // Always enabled
         favicon: website.favicon || undefined,
       })),
-      // Add temp current tab if present, otherwise add current tab if it has content and isn't already pinned
-      ...(message_history_hook.temp_current_tab
-        ? [
-            {
-              url: message_history_hook.temp_current_tab.url,
-              title: message_history_hook.temp_current_tab.title,
-              length: message_history_hook.temp_current_tab.length,
-              is_pinned: false,
-              is_enabled: message_history_hook.temp_current_tab.is_enabled,
-              favicon:
-                message_history_hook.temp_current_tab.favicon || undefined,
-            },
-          ]
-        : !pinned_websites_hook.pinned_websites.some(
-            (website) => website.url == current_tab_hook.url,
-          ) &&
-          (text_selection_hook.selected_text || current_tab_hook.parsed_html)
+
+      // Add current tab if it has content and isn't already in the list
+      ...(!pinned_websites_hook.pinned_websites.some(
+        (website) => website.url == current_tab_hook.url,
+      ) &&
+      (text_selection_hook.selected_text || current_tab_hook.parsed_html)
         ? [
             {
               url: current_tab_hook.url,
@@ -109,37 +115,18 @@ export const Popup: React.FC = () => {
                 current_tab_hook.parsed_html?.plain_text.length ||
                 0,
               is_pinned: false,
-              is_enabled: current_tab_hook.include_in_prompt,
+              is_enabled: true, // Always enabled
               favicon: current_tab_hook.favicon || undefined,
             },
           ]
         : []),
     ]
 
-    // If we're navigating history and the current URL isn't already in the list, add it
-    if (
-      is_navigating_history &&
-      !normal_websites.some(
-        (website) => website.url === current_tab_hook.url,
-      ) &&
-      (text_selection_hook.selected_text || current_tab_hook.parsed_html) &&
-      !current_tab_hook.url.startsWith('https://taaabs.com')
-    ) {
-      normal_websites.push({
-        url: current_tab_hook.url,
-        title: current_tab_hook.title || '',
-        length:
-          text_selection_hook.selected_text?.length ||
-          current_tab_hook.parsed_html?.plain_text.length ||
-          0,
-        is_pinned: false,
-        is_enabled: current_tab_hook.include_in_prompt,
-        favicon: current_tab_hook.favicon || undefined,
-      })
-    }
-
-    return normal_websites
+    return all_websites
   }, [
+    is_navigating_history,
+    message_history_hook.current_message,
+    message_history_hook.current_index,
     pinned_websites_hook.pinned_websites,
     current_tab_hook.parsed_html,
     current_tab_hook.include_in_prompt,
@@ -147,39 +134,34 @@ export const Popup: React.FC = () => {
     current_tab_hook.title,
     current_tab_hook.favicon,
     text_selection_hook.selected_text,
-    message_history_hook.temp_current_tab,
-    is_navigating_history,
   ])
 
   const is_history_enabled = useMemo(() => {
-    // Check if there are any enabled pinned websites
-    const has_enabled_pinned_websites =
-      pinned_websites_hook.pinned_websites.some((website) => website.is_enabled)
+    // Since all websites are now always enabled, we just need to check if there are any websites
 
-    // Check if temp current tab is enabled
-    const has_enabled_temp_current_tab =
-      message_history_hook.temp_current_tab?.is_enabled
+    // When navigating history, enable if the current message has websites
+    if (is_navigating_history && message_history_hook.current_message) {
+      return message_history_hook.current_message.websites.length > 0
+    }
 
-    // Check if current tab text is enabled and available
-    const has_enabled_current_tab_text =
-      !message_history_hook.temp_current_tab && // Only check current tab if no temp tab
-      current_tab_hook.include_in_prompt &&
+    // Check if there are any pinned websites
+    const has_pinned_websites = pinned_websites_hook.pinned_websites.length > 0
+
+    // Check if current tab text is available
+    const has_current_tab_text =
       !pinned_websites_hook.pinned_websites.some(
         (website) => website.url == current_tab_hook.url,
       ) &&
       (!!text_selection_hook.selected_text || !!current_tab_hook.parsed_html)
 
-    return (
-      has_enabled_pinned_websites ||
-      has_enabled_temp_current_tab ||
-      has_enabled_current_tab_text
-    )
+    return has_pinned_websites || has_current_tab_text
   }, [
+    is_navigating_history,
+    message_history_hook.current_message,
     pinned_websites_hook.pinned_websites,
     current_tab_hook.include_in_prompt,
     text_selection_hook.selected_text,
     current_tab_hook.parsed_html,
-    message_history_hook.temp_current_tab,
   ])
 
   if (

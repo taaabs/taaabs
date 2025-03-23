@@ -9,12 +9,9 @@ declare const styles: {
   readonly "websites": string;
   readonly "websites__item": string;
   readonly "websites__item__actions": string;
-  readonly "websites__item__actions__include": string;
-  readonly "websites__item__actions__include--included": string;
   readonly "websites__item__actions__pin": string;
   readonly "websites__item__actions__pin--pinned": string;
   readonly "websites__item__bar": string;
-  readonly "websites__item__bar--disabled": string;
 };
 export = styles;
 

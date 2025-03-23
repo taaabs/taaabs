@@ -10,7 +10,6 @@ export namespace Textarea {
     title: string
     length: number
     is_pinned: boolean
-    is_enabled: boolean
     favicon?: string
   }
   export type Props = {
@@ -40,9 +39,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
 
     // Add tokens from pinned context items
     if (props.websites) {
-      total += props.websites
-        .filter((item) => item.is_enabled)
-        .reduce((sum, item) => sum + item.length / 4, 0)
+      total += props.websites.reduce((sum, item) => sum + item.length / 4, 0)
     }
 
     // Estimate tokens from input text (approximate 4 chars per token)
@@ -86,9 +83,7 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
           {props.websites.map((item) => (
             <div className={styles.websites__item} key={item.url}>
               <button
-                className={cn(styles.websites__item__bar, {
-                  [styles['websites__item__bar--disabled']]: !item.is_enabled,
-                })}
+                className={styles.websites__item__bar}
                 onClick={(e) => {
                   e.stopPropagation()
                   props.on_website_click?.(item.url)
@@ -99,19 +94,6 @@ export const Textarea: React.FC<Textarea.Props> = (props) => {
                 <span>{item.title}</span>
               </button>
               <div className={styles.websites__item__actions}>
-                <button
-                  className={cn(styles.websites__item__actions__include, {
-                    [styles['websites__item__actions__include--included']]:
-                      item.is_enabled,
-                  })}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    props.on_website_click?.(item.url)
-                  }}
-                  title="Attach"
-                >
-                  <Icon variant="ATTACHMENT" />
-                </button>
                 <button
                   className={cn(styles.websites__item__actions__pin, {
                     [styles['websites__item__actions__pin--pinned']]:

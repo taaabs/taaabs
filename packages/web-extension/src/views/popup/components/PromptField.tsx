@@ -11,6 +11,7 @@ import { Textarea as Ui_extension_popup_Textarea } from '@web-ui/components/exte
 import { send_prompt } from '../utils/send-prompt'
 import { use_websites_store } from '../hooks/use-websites-store'
 import { is_youtube_video } from '@/utils/is-youtube-video'
+import browser from 'webextension-polyfill'
 
 export const PromptField: React.FC<{
   assistant_url: string
@@ -37,9 +38,8 @@ export const PromptField: React.FC<{
 
   // Store original state to restore when returning to current prompt
   const original_state_ref = useRef<{
-    pinned_websites: typeof pinned_websites_hook.pinned_websites
     include_current_tab: boolean
-    prompt_value: string // Added to store the prompt text
+    prompt_value: string
   } | null>(null)
 
   useEffect(() => {
@@ -77,7 +77,6 @@ export const PromptField: React.FC<{
           title: website.title,
           length: website.length,
           is_pinned: website.is_pinned,
-          is_enabled: website.is_enabled,
           favicon: website.favicon,
         })),
       )
@@ -89,12 +88,11 @@ export const PromptField: React.FC<{
       }
 
       let plain_text = ''
-      const enabled_websites = props.websites.filter(
-        (website) => website.is_enabled,
-      )
+      // All websites are enabled now, so we don't need to filter
+      const websites_to_include = props.websites
 
-      // Store all enabled websites content before sending prompt
-      for (const website of enabled_websites) {
+      // Store all websites content before sending prompt
+      for (const website of websites_to_include) {
         if (website.url == current_tab_hook.url) {
           const text =
             text_selection_hook.selected_text ||
@@ -130,7 +128,8 @@ export const PromptField: React.FC<{
         }
       }
 
-      await send_prompt({
+      prompt_field_hook.clear_stored_value()
+      send_prompt({
         prompt: props.prompt_field_value,
         assistant_name: selected_assistant_hook.selected_assistant_name!,
         assistant_url: props.assistant_url,
@@ -140,8 +139,6 @@ export const PromptField: React.FC<{
           height: window_dimensions_hook.dimensions?.height,
         },
       })
-
-      prompt_field_hook.clear_stored_value()
     } else {
       if (vision_mode_hook.is_save_prompt_checked) {
         prompts_vision_history_hook.update_stored_prompts_history(
@@ -149,7 +146,8 @@ export const PromptField: React.FC<{
         )
       }
 
-      await send_prompt({
+      prompt_field_hook.clear_stored_value()
+      send_prompt({
         prompt: props.prompt_field_value,
         assistant_name: selected_assistant_vision_hook.selected_assistant_name!,
         assistant_url: props.assistant_url,
@@ -160,35 +158,12 @@ export const PromptField: React.FC<{
           height: window_dimensions_hook.dimensions?.height,
         },
       })
-
-      // Clear the stored prompt value after submitting in vision mode as well
-      prompt_field_hook.clear_stored_value()
-    }
-  }
-
-  // Helper function to exit history mode and restore original state
-  const exit_history_mode = () => {
-    if (original_state_ref.current) {
-      // Restore original state
-      pinned_websites_hook.replace_pinned_websites(
-        original_state_ref.current.pinned_websites,
-      )
-      current_tab_hook.set_include_in_prompt(
-        original_state_ref.current.include_current_tab,
-      )
-      prompt_field_hook.update_value(original_state_ref.current.prompt_value)
-      message_history_hook.set_temp_current_tab(undefined)
-
-      // Reset history index
-      message_history_hook.set_current_index(-1)
-
-      // Clear original state reference
-      original_state_ref.current = null
     }
   }
 
   const handle_pin_click = async (url: string) => {
     const websites_store = use_websites_store()
+    const is_in_history_mode = message_history_hook.current_index >= 0
 
     // Check if URL is already pinned
     const is_pinned = pinned_websites_hook.pinned_websites.find(
@@ -199,59 +174,39 @@ export const PromptField: React.FC<{
       // If URL is pinned, unpin it
       pinned_websites_hook.unpin_website(url)
     } else {
-      // Check if we're in history mode
-      const is_history_mode = message_history_hook.current_index >= 0
-      const is_temp_current_tab =
-        message_history_hook.temp_current_tab &&
-        message_history_hook.temp_current_tab.url == url
-
-      // If we're in history mode and the URL is the temp current tab,
-      // use the title and length from the temp current tab
-      if (is_history_mode && is_temp_current_tab) {
-        // Check if the URL exists in original pinned websites
-        const existing_pinned_index =
-          original_state_ref.current?.pinned_websites.findIndex(
-            (p) => p.url == url,
+      // If we're in history mode, handle pinning from history
+      if (is_in_history_mode && message_history_hook.current_message) {
+        // Find the website in the current history message
+        const history_website =
+          message_history_hook.current_message.websites.find(
+            (w) => w.url == url,
           )
 
-        if (existing_pinned_index == -1) {
-          // If URL is not pinned, add it to both current and original states
-          pinned_websites_hook.pin_website({
-            url,
-            title: message_history_hook.temp_current_tab!.title,
-            length: message_history_hook.temp_current_tab!.length,
-            favicon: message_history_hook.temp_current_tab!.favicon, // Include favicon
-          })
+        if (history_website) {
+          // Get stored content or use placeholder
+          const stored = await websites_store.get_website(url)
 
-          if (original_state_ref.current) {
-            original_state_ref.current.pinned_websites.push({
-              url,
-              title: message_history_hook.temp_current_tab!.title,
-              length: message_history_hook.temp_current_tab!.length,
-              is_enabled: true,
-              favicon: message_history_hook.temp_current_tab!.favicon, // Include favicon
+          // If content is not already in the websites store, we need to store a placeholder
+          // In a real implementation, you might have the content stored with the history
+          if (!stored) {
+            await websites_store.store_website({
+              url: history_website.url,
+              title: history_website.title || '',
+              plain_text: '(Historical content)', // Placeholder or actual content if available
+              favicon: history_website.favicon || undefined,
             })
           }
-        } else {
-          // If URL is already pinned but disabled, enable it in both states
-          const updated_websites = pinned_websites_hook.pinned_websites.map(
-            (website) =>
-              website.url == url ? { ...website, is_enabled: true } : website,
-          )
-          pinned_websites_hook.replace_pinned_websites(updated_websites)
 
-          if (original_state_ref.current) {
-            original_state_ref.current.pinned_websites =
-              original_state_ref.current.pinned_websites.map((website) =>
-                website.url == url ? { ...website, is_enabled: true } : website,
-              )
-          }
+          // Pin the website from history
+          pinned_websites_hook.pin_website({
+            url,
+            title: history_website.title || '',
+            length: history_website.length || 0,
+            favicon: history_website.favicon || undefined,
+          })
         }
-
-        // Exit history mode after pinning/enabling
-        exit_history_mode()
       } else if (url == current_tab_hook.url) {
-        // If URL is the current tab, store current tab data
+        // Standard case: If URL is the current tab, store current tab data
         if (current_tab_hook.parsed_html) {
           await websites_store.store_website({
             url: current_tab_hook.url,
@@ -274,97 +229,18 @@ export const PromptField: React.FC<{
             0,
           favicon: current_tab_hook.favicon || undefined,
         })
-      } else if (is_history_mode) {
-        // This is a website from history (not the temp current tab)
-        const website = props.websites.find((w) => w.url == url)
-        if (website) {
-          pinned_websites_hook.pin_website({
-            url,
-            title: website.title,
-            length: website.length,
-            favicon: website.favicon, // Include favicon
-          })
-
-          // Exit history mode after pinning
-          exit_history_mode()
-        }
       }
     }
   }
 
-  const handle_website_click = async (url: string) => {
-    // Check if URL is in pinned websites
-    const pinned_website = pinned_websites_hook.pinned_websites.find(
-      (w) => w.url == url,
-    )
-
-    if (pinned_website) {
-      // If it's a pinned website, toggle its enabled state
-      pinned_websites_hook.toggle_website_enabled(url)
-    } else if (message_history_hook.temp_current_tab?.url == url) {
-      // If it's the temp current tab, toggle its enabled state using set_temp_current_tab
-      message_history_hook.set_temp_current_tab({
-        ...message_history_hook.temp_current_tab,
-        is_enabled: !message_history_hook.temp_current_tab.is_enabled,
-      })
-    } else {
-      // If it's the current tab, toggle the include_in_prompt state
-      if (url == current_tab_hook.url) {
-        current_tab_hook.set_include_in_prompt(
-          !current_tab_hook.include_in_prompt,
-        )
-      }
-    }
-  }
-
-  const handle_message_history_forward = async () => {
-    current_tab_hook.set_include_in_prompt(false)
-    const next_message = message_history_hook.navigate_forward()
-    if (next_message) {
-      prompt_field_hook.update_value(next_message.prompt)
-      pinned_websites_hook.replace_pinned_websites(
-        next_message.websites.filter((website) => website.is_pinned),
-      )
-      // Set message that is not pinned as temp current tab
-      const unpinned_website = next_message.websites.find(
-        (website) => !website.is_pinned,
-      )
-      message_history_hook.set_temp_current_tab(unpinned_website)
-    } else {
-      // We're returning to the current state (most recent)
-      if (original_state_ref.current) {
-        // Restore original pinned websites
-        pinned_websites_hook.replace_pinned_websites(
-          original_state_ref.current.pinned_websites,
-        )
-
-        // Restore current tab inclusion state
-        current_tab_hook.set_include_in_prompt(
-          original_state_ref.current.include_current_tab,
-        )
-
-        // Clear the temp current tab
-        message_history_hook.set_temp_current_tab(undefined)
-
-        // Restore the original prompt text that was typed in
-        prompt_field_hook.update_value(original_state_ref.current.prompt_value)
-
-        // Clear the saved original state as we're back at current
-        original_state_ref.current = null
-      } else {
-        // Fallback to previous behavior if no original state was saved
-        pinned_websites_hook.replace_pinned_websites([])
-        prompt_field_hook.update_value('')
-        message_history_hook.set_temp_current_tab(undefined)
-      }
-    }
+  const handle_website_click = (url: string) => {
+    browser.tabs.create({ url, active: false })
   }
 
   const handle_message_history_back = async () => {
-    // Save original state if this is the first navigation
+    // Save original state if this is first time going into history
     if (message_history_hook.current_index == -1) {
       original_state_ref.current = {
-        pinned_websites: [...pinned_websites_hook.pinned_websites],
         include_current_tab: current_tab_hook.include_in_prompt,
         prompt_value: props.prompt_field_value,
       }
@@ -374,14 +250,33 @@ export const PromptField: React.FC<{
     const previous_message = message_history_hook.navigate_back()
     if (previous_message) {
       prompt_field_hook.update_value(previous_message.prompt)
-      pinned_websites_hook.replace_pinned_websites(
-        previous_message.websites.filter((website) => website.is_pinned),
-      )
-      // Set message that is not pinned as temp current tab
-      const unpinned_website = previous_message.websites.find(
-        (website) => !website.is_pinned,
-      )
-      message_history_hook.set_temp_current_tab(unpinned_website)
+    }
+  }
+
+  const handle_message_history_forward = async () => {
+    current_tab_hook.set_include_in_prompt(false)
+    const next_message = message_history_hook.navigate_forward()
+    if (next_message) {
+      prompt_field_hook.update_value(next_message.prompt)
+    } else {
+      // We're returning to the current state (most recent)
+      if (original_state_ref.current) {
+        // Don't restore pinned websites
+
+        // Restore current tab inclusion state
+        current_tab_hook.set_include_in_prompt(
+          original_state_ref.current.include_current_tab,
+        )
+
+        // Restore the original prompt text
+        prompt_field_hook.update_value(original_state_ref.current.prompt_value)
+
+        // Clear the saved original state
+        original_state_ref.current = null
+      } else {
+        // Don't clear pinned websites
+        prompt_field_hook.update_value('')
+      }
     }
   }
 

@@ -6,7 +6,6 @@ export type PinnedWebsite = {
   url: string
   title: string
   length: number
-  is_enabled: boolean
   favicon?: string
 }
 
@@ -44,7 +43,6 @@ export const use_pinned_websites = () => {
           url: params.url,
           title: params.title,
           length: params.length,
-          is_enabled: true, // New websites are enabled by default
           favicon: params.favicon,
         }
         const updated_websites = [...pinned_websites, new_website]
@@ -94,37 +92,10 @@ export const use_pinned_websites = () => {
     }
   }
 
-  const toggle_website_enabled = (url: string) => {
-    try {
-      const updated_websites = pinned_websites.map((website) =>
-        website.url == url
-          ? { ...website, is_enabled: !website.is_enabled }
-          : website,
-      )
-
-      // Update localStorage
-      localStorage.setItem(
-        PINNED_URLS_KEY,
-        JSON.stringify({ websites: updated_websites }),
-      )
-
-      // Update state
-      set_pinned_websites(updated_websites)
-    } catch (error) {
-      console.error('Error toggling website enabled state:', error)
-    }
-  }
-
-  const replace_pinned_websites = (websites: PinnedWebsite[]) => {
-    set_pinned_websites(websites)
-  }
-
   return {
     pinned_websites,
     pin_website,
-    replace_pinned_websites,
     unpin_website,
     update_websites_order,
-    toggle_website_enabled,
   }
 }
