@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "author": "Robert Piosik",
-  "name": "Taaabs - Free zero-knowledge bookmarks & AI",
+  "name": "Taaabs - free end-to-end encrypted bookmarks",
   "short_name": "taaabs",
-  "description": "Unleash the joy of your web research. Save bookmarks to your personal library. Assist browsing with AI.",
+  "description": "Save bookmarks to your personal library. Assist browsing with AI.",
   "version": "0.3.62",
   "homepage_url": "https://github.com/taaabs/taaabs",
   "action": {

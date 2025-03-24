@@ -1,7 +1,7 @@
 <h3 align="center">Taaabs</h3>
 
 <p align="center">
-    <b>Unleash the joy of your web research.</b>
+    <b>Smiles start with shared links.</b>
     <br />
     Privately clip any page to your personal library. Assist browsing with ChatGPT.
     <br />
@@ -20,7 +20,7 @@ Perfect for students, professionals, and curious minds.
 
 ## Browser extension
 
-Our extension is completely free and open-source. The built-in AI assistant parses generic articles and various popular sites:
+Our extension is 100% free and open-source. Get AI assitance in your favorite chatbot with
 
 - youtube videos with transcripts,
 - reddit posts,
@@ -30,18 +30,14 @@ Our extension is completely free and open-source. The built-in AI assistant pars
 - github issues and discussions,
 - conversations AI chatbots, and more!
 
-The extension's AI integration supports virtually any site via its Vision Mode.
-
-Add Taaabs to your browser and unleash the joy of your web research!
-
 - [Chrome Web Store](https://chromewebstore.google.com/detail/taaabs-zero-knowledge-boo/mfpmbjjgeklnhjmpahigldafhcdoaona)
 - [Firefox Browser Add-ons](https://addons.mozilla.org/en-US/firefox/addon/taaabs/)
 
 ## Author
 
-Designed and programmed by [Robert Piosik](https://x.com/robertpiosik), standing on the shoulders of giants. All the programming is done from a beautiful city of Poznań, Poland. Reach out when you come by!
+[Robert Piosik](https://x.com/robertpiosik)
 
-## Send feedback, get help
+## Send feedback
 
 Please visit [discussions](https://github.com/taaabs/taaabs/discussions) tab.
 

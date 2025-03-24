@@ -13,8 +13,8 @@ export const dictionary: Dictionary = {
     about: {
       hero: {
         heading: {
-          first_line: 'Pełna swoboda',
-          second_line: 'odkrywania Internetu',
+          first_line: 'Pełna radość',
+          second_line: 'z odkrywania Internetu',
         },
         subheading:
           'Stwórz bibliotekę zakładek. Znajdź podobnych sobie ludzi.',
