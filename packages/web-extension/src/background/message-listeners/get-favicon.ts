@@ -14,18 +14,29 @@ export const get_favicon = () => {
   })
 }
 
+const is_absolute_url = (url: string): boolean => {
+  try {
+    new URL(url)
+    return true
+  } catch {
+    return false
+  }
+}
+
 const get_favicon_url = (html: string) => {
-  const regex = /<link[^>]*rel=["']([^"']+)["'][^>]*\shref=["']([^"']+)["'][^>]*>/gi
+  const regex =
+    /<link[^>]*rel=["']([^"']+)["'][^>]*\shref=["']([^"']+)["'][^>]*>/gi
   const matches = [...html.matchAll(regex)]
   const favicon_rels = [
     'icon',
+    'alternate icon',
     'shortcut icon',
-    'apple-touch-icon'
+    'apple-touch-icon',
   ]
 
   for (let rel of favicon_rels) {
     for (let match of matches) {
-      if (match[1] == rel) {
+      if (match[1] == rel && is_absolute_url(match[2])) {
         return match[2]
       }
     }
