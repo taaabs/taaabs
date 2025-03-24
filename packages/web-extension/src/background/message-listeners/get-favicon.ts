@@ -16,13 +16,18 @@ export const get_favicon = () => {
 
 const get_favicon_url = (html: string) => {
   const regex =
-    /<link[^>]*rel=["'](icon|shortcut icon|apple-touch-icon)["'][^>]*href=["']([^"']+)["']/gi
+    /<link[^>]*rel=["'](icon|alternate icon|shortcut icon|apple-touch-icon)["'][^>]*href=["']([^"']+)["']/gi
   const matches = [...html.matchAll(regex)]
-  const favicon_rels = ['icon', 'shortcut icon', 'apple-touch-icon']
+  const favicon_rels = [
+    'icon',
+    'alternate icon',
+    'shortcut icon',
+    'apple-touch-icon',
+  ]
 
   for (let rel of favicon_rels) {
     for (let match of matches) {
-      if (match[1] == rel) {
+      if (match[1] == rel && !match[2].endsWith('.svg')) {
         return match[2]
       }
     }

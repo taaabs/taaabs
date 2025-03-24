@@ -354,6 +354,12 @@ namespace QuirksMitigation {
         }
         resolve(null)
       })
+    } else if (params.assistant_name == 'deepseek') {
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(true)
+        }, 500)
+      })
     } else if (is_open_webui) {
       await new Promise(async (resolve) => {
         while (!document.querySelector('img[src="/static/favicon.png"]')) {
