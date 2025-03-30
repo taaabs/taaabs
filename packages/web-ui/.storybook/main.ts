@@ -40,8 +40,22 @@ const config: StorybookConfig = {
       },
       css: {
         modules: {
-          generateScopedName: '[name]_[local]___[hash:base64:5]',
+          generateScopedName: (name, filename) => {
+            const is_module = /\.module\.(scss|css)$/i.test(filename)
+            if (is_module) {
+              const module_name = path
+                .basename(filename)
+                .replace(/\.module\.(scss|css)$/i, '')
+              return `${module_name}__${name}`
+            }
+            return name
+          }
         },
+        preprocessorOptions: {
+          scss: {
+            additionalData: `@use "${path.resolve(__dirname, '../src/styles/foundation')}" as *;`
+          }
+        }
       },
     }
   },
