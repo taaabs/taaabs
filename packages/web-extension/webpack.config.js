@@ -78,7 +78,6 @@ module.exports = (_, argv) => {
         },
         {
           test: /\.scss$/,
-          exclude: /style\.scss$/,
           use: [
             MiniCssExtractPlugin.loader,
             {
@@ -89,12 +88,16 @@ module.exports = (_, argv) => {
                 },
               },
             },
-            'sass-loader',
+            {
+              loader: 'sass-loader',
+              options: {
+                additionalData: `@use "${path.resolve(
+                  __dirname,
+                  '../web-ui/src/styles/foundation',
+                )}" as *;`,
+              },
+            },
           ],
-        },
-        {
-          test: /style\.scss$/,
-          use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
         },
         {
           test: /\.svg$/i,
