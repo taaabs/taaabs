@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-vite'
 const path = require('path')
 import svgr from 'vite-plugin-svgr'
+const crypto = require('crypto')
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.tsx'],
@@ -41,21 +42,32 @@ const config: StorybookConfig = {
       css: {
         modules: {
           generateScopedName: (name, filename) => {
-            const is_module = /\.module\.(scss|css)$/i.test(filename)
-            if (is_module) {
-              const module_name = path
+            const isModule = /\.module\.(scss|css)$/i.test(filename)
+            if (isModule) {
+              const moduleName = path
                 .basename(filename)
                 .replace(/\.module\.(scss|css)$/i, '')
-              return `${module_name}__${name}`
+
+              // Generate a hash based on the filename and class name
+              const hash = crypto
+                .createHash('md5')
+                .update(`${filename}${name}`)
+                .digest('hex')
+                .substring(0, 5)
+
+              return `${moduleName}__${name}__${hash}`
             }
             return name
-          }
+          },
         },
         preprocessorOptions: {
           scss: {
-            additionalData: `@use "${path.resolve(__dirname, '../src/styles/foundation')}" as *;`
-          }
-        }
+            additionalData: `@use "${path.resolve(
+              __dirname,
+              '../src/styles/foundation',
+            )}" as *;`,
+          },
+        },
       },
     }
   },

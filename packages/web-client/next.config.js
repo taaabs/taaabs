@@ -1,24 +1,6 @@
 /** @type {import('next').NextConfig} */
-const crypto = require('crypto')
 const path = require('path')
-
-// https://stackoverflow.com/a/69166434/3998651
-// Nextjs 14 needs this change to the above answer: https://stackoverflow.com/a/76852889/3998651
-const hash_only_ident = (context, _, export_name) => {
-  const hash = crypto.createHash('sha256')
-  hash.update(
-    Buffer.from(
-      `filePath:${path
-        .relative(context.rootContext, context.resourcePath)
-        .replace(/\\+/g, '/')}#className:${export_name}`,
-    ),
-  )
-  return hash
-    .digest('base64')
-    .replace(/[^a-zA-Z0-9-_]/g, '_')
-    .replace(/^(-?\d|--)/, '_$1')
-    .slice(0, 5)
-}
+const crypto = require('crypto')
 
 const next_config = {
   transpilePackages: [
@@ -56,7 +38,15 @@ const next_config = {
               const moduleName = path
                 .basename(filename)
                 .replace(/\.module\.(scss|css)$/i, '')
-              return `${moduleName}__${exportName}`
+
+              // Create a hash from the file path and class name
+              const hash = crypto
+                .createHash('md5')
+                .update(`${filename}${exportName}`)
+                .digest('hex')
+                .substring(0, 5)
+
+              return `${moduleName}__${exportName}__${hash}`
             }
             return exportName
           }
