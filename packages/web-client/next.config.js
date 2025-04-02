@@ -30,7 +30,7 @@ const next_config = {
           moduleLoader.options.modules.getLocalIdent = (
             context,
             _,
-            exportName,
+            localName,
           ) => {
             const filename = context.resourcePath
             const isModule = /\.module\.(scss|css)$/i.test(filename)
@@ -38,17 +38,14 @@ const next_config = {
               const moduleName = path
                 .basename(filename)
                 .replace(/\.module\.(scss|css)$/i, '')
-
-              // Create a hash from the file path and class name
               const hash = crypto
                 .createHash('md5')
-                .update(`${filename}${exportName}`)
+                .update(`${filename}${localName}`)
                 .digest('hex')
                 .substring(0, 5)
-
-              return `${moduleName}__${exportName}__${hash}`
+              return `${moduleName}__${localName}__${hash}`
             }
-            return exportName
+            return localName
           }
         }
 
