@@ -175,7 +175,7 @@ const send_prompt = async (params: {
         })
         ;(
           document.querySelector(
-            'fieldset > div:first-child button',
+            'fieldset button.bg-accent-main-000',
           ) as HTMLElement
         ).click()
       } else if (form) {
